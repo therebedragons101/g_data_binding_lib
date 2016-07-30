@@ -1,5 +1,12 @@
 namespace G
 {
+	/**
+	 * PropertyBinding is reimplementation of GBinding with added functionality.
+	 * Main purpose for this class is handling data transfer between two
+	 * properties based on how they were connected
+	 * 
+	 * @since 0.1
+	 */
 	public class PropertyBinding : Object, BindingInterface, DataFloodDetection
 	{
 		// used to avoid delay on sync, no relation with thread safety
@@ -26,6 +33,11 @@ namespace G
 		// freeze counter, set with freeze()/unfreeze()
 		private int freeze_counter = 0;
 
+		/**
+		 * Flood detection active or not
+		 * 
+		 * @since 0.1
+		 */
 		public bool flood_detection { 
 			get { return (_flags.HAS_FLOOD_DETECTION()); } 
 			set {
@@ -36,14 +48,47 @@ namespace G
 			}
 		}
 
+		/**
+		 * Flood detection activation interval (in ms)
+		 * 
+		 * Flooding will be activated if promote_flood_limit consecutive amount
+		 * of events happen in shorter intervals than specified with 
+		 * flood_interval.
+		 * 
+		 * Note that flood_interval specifies amount for one event, not all 
+		 * 
+		 * @since 0.1
+		 */
 		public uint flood_interval { get; set; default = 100; }
 
 		private uint _promote_flood_limit = 5;
+		/**
+		 * Sets amount of needed consecutive events in order to promote flood
+		 * 
+		 * Flooding will be activated if promote_flood_limit consecutive amount
+		 * of events happen in shorter intervals than specified with 
+		 * flood_interval.
+		 * 
+		 * Note that flood_interval specifies amount for one event, not all 
+		 * 
+		 * @since 0.1
+		 */
 		public uint promote_flood_limit { 
 			get { return (_promote_flood_limit); }
 			set { _promote_flood_limit = value; }
 		}
 
+		/**
+		 * Delay interval (in ms)
+		 * 
+		 * Delays data transfer by specified amount of time on each event. If
+		 * next event is emited in shorter interval than delay, then another
+		 * delay wait is added
+		 * 
+		 * Note that flood_interval specifies amount for one event, not all 
+		 * 
+		 * @since 0.1
+		 */
 		public uint delay_interval { get; set; default = 400; }
 
 		private bool __is_active() 
@@ -53,8 +98,13 @@ namespace G
 			         (is_valid == true));
 		}
 
-		// same as __is_active except not reflecting
+		/**
+		 * Returns if binding is active or not
+		 * 
+		 * @since 0.1
+		 */
 		public bool is_active {
+			// same as __is_active except not reflecting. Just slower
 			get { return (__is_active()); }
 		}
 
@@ -87,11 +137,21 @@ namespace G
 		}
 
 		private StrictWeakReference<Object?>? _source = null;
-		public Object? source { 
+		/**
+		 * Source object data is being transfered from
+		 * 
+		 * @delay 0.1
+		 */
+		public Object? source {
 			get { return (_source.target); }
 		}
 
 		private ParamSpec? _source_property = null;
+		/**
+		 * Source property name
+		 * 
+		 * @since 0.1
+		 */
 		public string source_property { 
 			get { 
 				if (_source_property == null)
@@ -101,11 +161,21 @@ namespace G
 		}
 
 		private StrictWeakReference<Object?>? _target = null;
+		/**
+		 * Target object data is being transfered to
+		 * 
+		 * @delay 0.1
+		 */
 		public Object? target { 
 			get { return (_target.target); }
 		}
 
 		private ParamSpec? _target_property = null;
+		/**
+		 * Target property name
+		 * 
+		 * @since 0.1
+		 */
 		public string target_property { 
 			get { 
 				if (_target_property == null)
@@ -115,16 +185,32 @@ namespace G
 		}
 
 		private BindFlags _flags = BindFlags.DEFAULT;
+		/**
+		 * Binding flags that represent how binding was created and also
+		 * state binding is in as well
+		 * 
+		 * @since 0.1
+		 */
 		public BindFlags flags { 
 			get { return (_flags); }
 		}
 
 		private PropertyBindingTransformFunc? _transform_to = null;
+		/**
+		 * Custom method to transform data from source value to target value
+		 * 
+		 * @since 0.1
+		 */
 		public PropertyBindingTransformFunc? transform_to {
 			get { return (_transform_to); }
 		}
 
 		private PropertyBindingTransformFunc? _transform_from = null;
+		/**
+		 * Custom method to transform data from target value to source value
+		 * 
+		 * @since 0.1
+		 */
 		public PropertyBindingTransformFunc? transform_from {
 			get { return (_transform_from); }
 		}
@@ -183,6 +269,17 @@ namespace G
 					target.notify[target_property].disconnect (notify_transfer_from_target);
 		}
 
+		/**
+		 * Increments freeze counter by 1 and stops transfer of data. Transfer
+		 * can be restored with equal amount of calls to unfreeze()
+		 * 
+		 * @since 0.1
+		 * @param hard_freeze Specifies how freeze should act. Soft freeze is
+		 *                    just ignoring signals and not transfering data,
+		 *                    while hard freeze drops signals completely. This
+		 *                    is aiming for cases when there is need for best 
+		 *                    performance possible
+		 */
 		public void freeze (bool hard_freeze = false)
 		{
 			freeze_counter++;
@@ -196,6 +293,13 @@ namespace G
 				disconnect_signals();
 		}
 
+		/**
+		 * Decrements freeze counter by 1 and if counter is 0 it restores it to
+		 * normal functionality. Hard/soft freeze() does not play role here.
+		 * Transfer will be restored in both cases
+		 * 
+		 * @since 0.1
+		 */
 		public bool unfreeze()
 		{
 			if (freeze_counter <= 0)
@@ -382,11 +486,21 @@ namespace G
 			__update_from_source (set_default);
 		}
 
+		/**
+		 * Triggers manual update from source 
+		 * 
+		 * @since 0.1
+		 */
 		public void update_default_from_source()
 		{
 			_update_from_source (true);
 		}
 
+		/**
+		 * Triggers manual update from source 
+		 * 
+		 * @since 0.1
+		 */
 		public void update_from_source()
 		{
 			_update_from_source (false);
@@ -428,11 +542,21 @@ namespace G
 			__update_from_target (set_default);
 		}
 
+		/**
+		 * Triggers manual update from target 
+		 * 
+		 * @since 0.1
+		 */
 		public void update_default_from_target()
 		{
 			_update_from_target (true);
 		}
 
+		/**
+		 * Triggers manual update from target 
+		 * 
+		 * @since 0.1
+		 */
 		public void update_from_target()
 		{
 			_update_from_target (false);
@@ -446,8 +570,32 @@ namespace G
 			initial_data_update();
 		}
 
-		// do all safety checking before creation as this will only be valid until imposed fixed conditions
-		// are present
+		/**
+		 * Invokes binding creation and connection. Note that this is default
+		 * method being called by Binder.bind()
+		 * 
+		 * The main requirement for this is that creation must be strict and 
+		 * fail if passed parameters are wrong
+		 * 
+		 * NOTE!
+		 * transform_from and transform_to can work in two ways. If value return
+		 * is true, then newly converted value is assigned to property, if
+		 * return is false, then that doesn't happen which can be used to assign
+		 * property values directly and avoiding value conversion
+		 *   
+		 * @since 0.1
+		 * @param source Source object
+		 * @param source_property Source property name
+		 * @param target Target object
+		 * @param target_property Target property name
+		 * @param flags Flags describing property binding creation
+		 * @param transform_to Custom method to transform data from source value
+		 *                     to target value
+		 * @param transform_from Custom method to transform data from source 
+		 *                       value to target value
+		 * @return Newly create BindingInterface (note that PropertyBinding is
+		 *         implementing it) or null if creation failed
+		 */
 		public static PropertyBinding? bind (Object? source, string source_property, Object? target, string target_property, 
 		                                     BindFlags bind_flags = BindFlags.DEFAULT, owned PropertyBindingTransformFunc? transform_to = null, 
 		                                     owned PropertyBindingTransformFunc? transform_from = null)
@@ -556,6 +704,13 @@ namespace G
 			}
 		}
 
+		/**
+		 * Unbind drops property binding and stops data transfer. It also
+		 * drops its own permanent holding reference which means that if there
+		 * is no other live reference, object will be disposed
+		 * 
+		 * @since 0.1
+		 */
 		public void unbind()
 		{
 			_unbind();

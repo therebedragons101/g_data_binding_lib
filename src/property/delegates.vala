@@ -1,10 +1,27 @@
 namespace G
 {
-	// result false can also be used differently by skipping value handling. method handler can simply
-	// set property value as needed and then return false
+	/**
+	 * Delegate used to transform one value into another during binding
+	 * 
+	 * NOTE!
+	 * Result false can also be used differently by skipping value handling. 
+	 * Method handler can simply set property value directly as needed and then
+	 * return false. If value was assigned directly and return was true value
+	 * will be wrongly overriden
+	 * 
+	 * @since 0.1
+	 */
 	public delegate bool PropertyBindingTransformFunc (BindingInterface binding, Value source_value, ref Value target_value);
 
-	public delegate BindingInterface? CreatePropertyBinding (Object? source, string source_property, Object? target, string target_property,
-	                                                         BindFlags flags, owned PropertyBindingTransformFunc? transform_to = null, 
-	                                                         owned PropertyBindingTransformFunc? transform_from = null);
+	/**
+	 * Delegate used to specify BindingInterface creation in Binder class
+	 * 
+	 * @since 0.1
+	 */ 
+	public delegate BindingInterface? CreatePropertyBinding (
+		Object? source, string source_property, Object? target, 
+		string target_property, BindFlags flags, 
+		owned PropertyBindingTransformFunc? transform_to = null, 
+	    owned PropertyBindingTransformFunc? transform_from = null
+	);
 }

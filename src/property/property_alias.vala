@@ -15,6 +15,12 @@ namespace G
 		list.add (alias_pair);
 	}
 
+	/**
+	 * Returns AliasArray for complete structure of defined aliases and at the
+	 * same time taps into modifications as ObjectArray is also GLib.ListModel
+	 * 
+	 * @since 0.1
+	 */ 
 	public static AliasArray track_property_aliases()
 	{
 		AliasArray list = new AliasArray();
@@ -27,6 +33,15 @@ namespace G
 		return (list);
 	}
 
+	/**
+	 * Storage for property aliases for any of possible reasons.
+	 * - Need for relation to differently named properties in different classes
+	 * - Simple property registration 
+	 * 
+	 * Stored aliases will be valid for whole application lifetime
+	 * 
+	 * @since 0.1
+	 */
 	public class PropertyAlias
 	{
 		internal class AliasSignal
@@ -42,42 +57,75 @@ namespace G
 			public signal void added_alias (string alias_name);
 		}
 
-		private static HashTable<string, PropertyAlias> _property_hash = null;
+		private static HashTable<string, PropertyAlias> _alias_hash = null;
 
 		private HashTable<Type, string> _hash = null;
 
 		private string _name = "";
+		/**
+		 * Alias name specifies name under which something needs to be 
+		 * accessible
+		 * 
+		 * @since 0.1
+		 */ 
 		public string name {
 			get { return (_name); }
 		}
 
-		public static bool contains (string property_name)
+		/**
+		 * Checks if alias storage exists or not
+		 * 
+		 * @since 0.1
+		 * @param alias_name Name of property alias
+		 * @return true if exists, false if not
+		 */
+		public static bool contains (string alias_name)
 		{
-			if (_property_hash == null)
+			if (_alias_hash == null)
 				init_prop_hash();
-			return (_property_hash.get(property_name) != null);
+			return (_alias_hash.get(alias_name) != null);
 		}
 
 		private static void init_prop_hash()
 		{
-			if (_property_hash == null)
-				_property_hash = new HashTable<string, PropertyAlias>(str_hash, str_equal);
+			if (_alias_hash == null)
+				_alias_hash = new HashTable<string, PropertyAlias>(str_hash, str_equal);
 		}
 
+		/**
+		 * Searches for specified PropertyAlias with searched name and if it
+		 * does not exists, creates new one
+		 * 
+		 * @since 0.1
+		 * @param alias_name Name of property alias
+		 * @return PropertyAlias instance that was either found or created if
+		 *         needed
+		 */
 		public static PropertyAlias get_instance (string alias_name)
 		{
-			if (_property_hash == null)
+			if (_alias_hash == null)
 				init_prop_hash();
 
-			PropertyAlias? props = _property_hash.get (alias_name);
+			PropertyAlias? props = _alias_hash.get (alias_name);
 			if (props == null) {
 				props = new PropertyAlias (alias_name);
-				_property_hash.insert (alias_name, props);
+				_alias_hash.insert (alias_name, props);
 				AliasSignal.get_instance().added_alias (alias_name);
 			}
 			return (props);
 		}
 
+		/**
+		 * Registers existing property for specified type in PropertyAlias
+		 * container
+		 * 
+		 * @since 0.1
+		 * @param type Object type alias is registered for
+		 * @param property Existing property in specified type that should be
+		 *                 represented as alias container name
+		 * @return This storage reference in order to allow chain method code
+		 *         for objective languages
+		 */
 		public PropertyAlias register (Type type, string property)
 		{
 			string? res = _hash.get (type);
@@ -97,6 +145,15 @@ namespace G
 			return (this);
 		}
 
+		/**
+		 * Same as get_for() with one exception. If type is not found it returns
+		 * original value instead
+		 * 
+		 * @since 0.1
+		 * @param type Object type alias property name was requested for
+		 * @param original_val Original value
+		 * @return Alias if found and original value if not
+		 */
 		public string safe_get_for (Type type, string original_val)
 		{
 			string? res = _hash.get (type);
@@ -105,6 +162,15 @@ namespace G
 			return ((res != null) ? res : original_val);
 		}
 
+		/**
+		 * Searches for registered alias for specified type. If type is not 
+		 * found it returns null
+		 * 
+		 * @since 0.1
+		 * @param type Object type alias property name was requested for
+		 * @param original_val Original value
+		 * @return Alias if found and null if not
+		 */
 		public string? get_for (Type type)
 		{
 			return (_hash.get (type));
@@ -122,8 +188,8 @@ namespace G
 
 		internal static void foreach_alias (Func<string> method)
 		{
-			if (_property_hash != null)
-				_property_hash.for_each ((s,p) => {
+			if (_alias_hash != null)
+				_alias_hash.for_each ((s,p) => {
 					method(s);
 				});
 		}
@@ -134,6 +200,13 @@ namespace G
 				_hash.for_each (method);
 		}
 
+		/**
+		 * Signal emitted when new type property alias is registered
+		 * 
+		 * @since 0.1
+		 * @param type Type alias was registered for
+		 * @param property_name Name of property alias was registered for
+		 */
 		public signal void added_type_alias (Type type, string property_name);
 
 		private PropertyAlias(string name)
