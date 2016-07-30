@@ -1,3 +1,5 @@
+# this makefile is based on work from https://github.com/antono/vala-object/blob/master/Makefile
+
 export LD_LIBRARY_PATH := $(shell pwd)
 export GI_TYPELIB_PATH := $(shell pwd)
 LIB_MAJOR := 0
@@ -57,7 +59,7 @@ SOURCES := library.vala \
 
 PACKAGES := --pkg gio-2.0
 
-########## Vala Stuff ##########
+# Vala
 
 c-source:
 	valac \
@@ -86,7 +88,7 @@ g_data_binding_lib-${LIB_VERSION}.typelib:
 		--output=g_data_binding_lib-${LIB_VERSION}.typelib \
 		g_data_binding_lib-${LIB_VERSION}.gir
 
-########## Other ##########
+# other
 
 clean:
 	rm -fr $(shell cat .gitignore)

@@ -1,2 +1,6 @@
-Need better build, this is just provisional temporary test as I have
-not yet dealt with gir and vapi files (and documentation generation)
+- Need better build, this is just provisional temporary test as I have
+  not yet dealt with gir and vapi files (and documentation generation)
+
+- Add demo and tutorial from poc project
+
+- Write documentation

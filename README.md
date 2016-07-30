@@ -13,10 +13,11 @@ IMPLEMENTATION STAGES
           (done, but needs better build system)
 - Stage 3 (add advanced feature demos)
           (add prebuilt mapping system)
-- Stage 4 (rewrite final product in C if I don't decide to stay in Vala,
+- Stage 4 (rewrite final product in C if I don't decide to stay in Vala, but
            chances of rewrite are really slim and getting slimmer with moments.
-           i stopped seeing point of this getting in upstream as it would only
-           introduce drawbacks and gain absolutely nothing.
+           my original plan was to try and get inclusion in GLib, but somewhere
+           along the line i stopped seeing point of this getting in upstream
+           as it would only introduce drawbacks and gain absolutely nothing.
 
            if it stays its own library it can
            - target older GLib than the one where included and support a lot
