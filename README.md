@@ -1,8 +1,8 @@
-# Data binding POC in Vala
+# Data binding library in Vala (GLib)
 
 License (GPL/LGPL)
 
-Databinding POC implementation in vala (later to be rewriten in C)???. Vala
+Databinding implementation in vala (later to be rewriten in C)???. Vala
 is chosen for simple reason, I'm far more familiar with it and that
 makes it much faster to prototype the end case scenario.
 
