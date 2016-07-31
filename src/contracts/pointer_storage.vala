@@ -23,6 +23,13 @@ namespace G
 		list.add (pair);
 	}
 
+	/**
+	 * Returns PointerArray for complete structure of defined pointers and
+	 * their groups. At the same time taps into modifications as ObjectArray is 
+	 * also GLib.ListModel
+	 * 
+	 * @since 0.1
+	 */ 
 	public static PointerArray track_pointer_storage()
 	{
 		PointerArray list = new PointerArray();
@@ -35,9 +42,12 @@ namespace G
 		return (list);
 	}
 
-	// storage for pointers in order to have guaranteed reference when
-	// there is no need for local variable or to have them globally 
-	// accessible by name
+	/**
+	 * Storage for pointers in order to have guaranteed reference when there is 
+	 * no need for local variable or to have them globally accessible by name
+	 * 
+	 * @since 0.1
+	 */
 	public class PointerStorage : Object
 	{
 		internal class StorageSignal
@@ -76,11 +86,25 @@ namespace G
 				_storages = new HashTable<string, PointerStorage> (str_hash, str_equal);
 		}
 
+		/**
+		 * Resolves default pointer storage
+		 * 
+		 * @since 0.1
+		 * @return Default contract storage
+		 */
 		public static PointerStorage get_default()
 		{
 			return (get_storage (__DEFAULT__));
 		}
 
+		/**
+		 * Resolves pointer storage by specified name. Unlike find() this
+		 * method guarantees resulting storage. If storage is not found new one
+		 * with that name is created
+		 * 
+		 * @since 0.1
+		 * @return Pointer storage reference
+		 */
 		public static PointerStorage? get_storage (string name)
 		{
 			_check();
@@ -93,6 +117,12 @@ namespace G
 			return (store);
 		}
 
+		/**
+		 * Resolves pointer storage by specified name
+		 * 
+		 * @since 0.1
+		 * @return Pointer storage reference if found and null if not
+		 */
 		public BindingPointer? find (string name)
 		{
 			if (_objects == null)
@@ -100,6 +130,17 @@ namespace G
 			return (_objects.get (name));
 		}
 
+		/**
+		 * Adds pointer into storage
+		 * 
+		 * Note! Pointers with same name are not supported
+		 * 
+		 * @since 0.1
+		 * @param name Name under which contract should be stored
+		 * @param obj Contract that needs to be stored
+		 * @return Pointer reference in order to allow API chaining in 
+		 *         objective languages
+		 */
 		public BindingPointer? add (string name, BindingPointer? obj)
 		{
 			if (obj == null) {
@@ -117,6 +158,12 @@ namespace G
 			return (obj);
 		}
 
+		/**
+		 * Removes pointer from storage if found
+		 * 
+		 * @since 0.1
+		 * @param name Pointer name that needs to be removed
+		 */
 		public void remove (string name)
 		{
 			BindingPointer obj = find (name);
@@ -126,10 +173,29 @@ namespace G
 			removed (name, obj);
 		}
 
+		/**
+		 * Signal emited when new pointer is added to storage
+		 * 
+		 * @since 0.1
+		 * @param name Name under which pointer was stored
+		 * @param obj Pointer that was stored
+		 */
 		public signal void added (string name, BindingPointer obj);
 
+		/**
+		 * Signal emited when pointer is removed from storage
+		 * 
+		 * @since 0.1
+		 * @param name Name under which pointer was removed
+		 * @param obj Pointer that was removed
+		 */
 		public signal void removed (string name, BindingPointer obj);
 
+		/**
+		 * Creates new PointerStorage
+		 * 
+		 * @since 0.1
+		 */
 		public PointerStorage()
 		{
 			_objects = new HashTable<string, BindingPointer> (str_hash, str_equal);

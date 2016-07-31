@@ -1,5 +1,12 @@
 namespace G
 {
+	/**
+	 * Checks if object is BindingPointer or its subclass
+	 * 
+	 * @since 0.1
+	 * @param obj Object being checked
+	 * @return true if object is BindingPointer or subclass, false if not
+	 */
 	public static bool is_binding_pointer (Object? obj)
 	{
 		if (obj == null)

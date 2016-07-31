@@ -1,6 +1,6 @@
 namespace G
 {
-	/*
+	/**
 	 * Flags specified upon creation of new BindingInterface to describe how
 	 * binding should act
 	 * 

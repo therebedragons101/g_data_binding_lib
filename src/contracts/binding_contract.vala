@@ -1,12 +1,39 @@
 namespace G
 {
-	public class BindingContract : BindingPointer, IBindingStateObjects, IBindingValueObjects
+	//TODO, finalize contract group activities
+	/**
+	 * IMPORTANT! Best and easiest method to understand binding contracts is to
+	 * run tutorial demo. Demo focuses on visually exposing all internals and
+	 * events and makes something complex something really trivial. It will be
+	 * difference between minutes and god knows how long 
+	 * 
+	 * BindingContract is derived from BindingPointer which makes it versatile 
+	 * in how data chain can be specified and how data source notifications are 
+	 * presented in order to keep that chain as flexible as possible.
+	 * 
+	 * Binding contract extends the Binding Pointer by adding possibility to 
+	 * handle property bindings on specified source by adding/removing. Bindings
+	 * can either be added/removed as single entity or as group. Their addition 
+	 * checks if reference for specified binding already exists or not. If 
+	 * binding is present its lock counter is increased by 1, if not binding 
+	 * is added to the contract. when removing binding does not get removed if 
+	 * lock counter didn't reach 0. this and group handling makes it available 
+	 * for groups to share bindings with no worry
+	 * 
+	 * @since 0.1
+	 */
+	public class BindingContract : BindingPointer, BindingStateObjects, BindingValueObjects, BindingGroup
 	{
 		private bool finalizing_in_progress = false;
 
 		private GLib.Array<BindingInformationReference> _items = new GLib.Array<BindingInformationReference>();
 		private WeakReference<Object?> last_source = new WeakReference<Object?>(null);
 
+		/**
+		 * Number of bindings in contract
+		 * 
+		 * @since 0.1
+		 */
 		public uint length {
 			get { 
 				if (_items == null)
@@ -16,6 +43,13 @@ namespace G
 		}
 
 		private bool _suspended = false;
+		/**
+		 * Controls contract suspension state. When contract enters suspension
+		 * all active bindings are removed and they are restored back when
+		 * contract exits suspension state
+		 * 
+		 * @since 0.1
+		 */
 		public bool suspended {
 			get { return (_suspended == true); }
 			set {
@@ -29,16 +63,57 @@ namespace G
 			}
 		}
 
+		/**
+		 * Returns true if binding is possible, false if not
+		 * 
+		 * @since 0.1
+		 */
 		public bool can_bind {
 			get { return ((_suspended == false) && (get_source() != null)); }
 		}
 
 		private bool _last_valid_state = false;
+		/**
+		 * Returns if source data is valid or not.
+		 * 
+		 * Validity is checked first against valid source and then updated on
+		 * each property value transfer where bind() specified specific way to
+		 * check if data is valid or not. This way source validity always checks
+		 * for correct conditions even when property bindings are added or 
+		 * removed. When property binding is added, so is its condition and same
+		 * for removal where property binding condition is removed as well
+		 * 
+		 * Note that there is no way to check if whole source is valid or not by
+		 * design. If that is needed then binding state objects should be used
+		 * instead.
+		 * 
+		 * This is usefull to have static binding to button "Apply" or similar
+		 * uses and removes all the need for validity check. If source is
+		 * changed, bindings added/removed or data is edited then "is-valid" is
+		 * recalculated
+		 * 
+		 * @since 0.1
+		 */
 		public bool is_valid {
 			get { return (_last_valid_state); }
 		}
 
 		private BindingPointer? _default_target = null;
+		/**
+		 * Setting default target is mere convenience for handling other side
+		 * when binding two object with multiple properties.
+		 * 
+		 * Internally it creates binding pointer and when properties are bound
+		 * to it, they can be updated with same efficiency as when binding with
+		 * normal BindingPointer while allowing to control target with single 
+		 * point of action.
+		 * 
+		 * There is no limit on mixing default and non default properties.
+		 * 
+		 * This is automatically used when calling contract.bind_default()
+		 * 
+		 * @since 0.1
+		 */
 		public Object? default_target {
 			get { return (_default_target.data); }
 			set {
@@ -51,6 +126,18 @@ namespace G
 		}
 
 		private Binder? _binder = null;
+		/**
+		 * Binder object which is used to create property bindings. If binder
+		 * is not specified then Binder.get_default() is used.
+		 * 
+		 * Note that contract does not cache this value and this is why it is 
+		 * possible to control binder with Binder.set_default() even when it is
+		 * not specified.
+		 * 
+		 * This allows easy tapping into binding internals
+		 * 
+		 * @since 0.1 
+		 */
 		public Binder? binder {
 			owned get { 
 				if (_binder == null)
@@ -92,6 +179,7 @@ namespace G
 				return;
 		}
 
+		//TODO? Remove this????? It is supperset of already existing structure
 		protected override void handle_weak_ref(Object obj)
 		{
 			disolve_contract(get_source() == null);
@@ -132,6 +220,12 @@ namespace G
 			handle_is_valid (null);
 		}
 
+		/**
+		 * Resolves binding at specified index
+		 * 
+		 * @since 0.1
+		 * @param index Index at which binding was requested
+		 */
 		public BindingInformationInterface? get_item_at_index (int index)
 		{
 			if ((index < 0) || (index >= length))
@@ -157,20 +251,47 @@ namespace G
 			}
 		}
 
+		/**
+		 * Adds group to contract
+		 * 
+		 * In case of specified overlapping bindings, they increase counter
+		 * and these bindings are only removed once counter reaches 0. This 
+		 * makes overlapping possible
+		 * 
+		 * @since 0.1
+		 * @param group BindingGroup being added to contract
+		 */
 		public void bind_group (BindingGroup? group)
 			requires (group != null)
 		{
 			for (int cnt = 0; cnt<group.length; cnt++)
-				bind_information (group.get_item_at (cnt));
+				bind_information (group.get_item_at_index (cnt));
 		}
 
+		/**
+		 * Removes group from contract
+		 * 
+		 * In case of specified overlapping bindings, they decrease counter
+		 * and these bindings are only removed once counter reaches 0. This 
+		 * makes overlapping possible
+		 * 
+		 * @since 0.1
+		 * @param group BindingGroup being removed from contract
+		 */
 		public void unbind_group (BindingGroup? group)
 			requires (group != null)
 		{
 			for (int cnt = 0; cnt<group.length; cnt++)
-				unbind (group.get_item_at (cnt));
+				unbind (group.get_item_at_index (cnt));
 		}
 
+		/**
+		 * Binds specific BindingInformationInterface and activates it
+		 * 
+		 * @since 0.1
+		 * @param info Binding information being added
+		 * @return Reference to BindingInformationInterface
+		 */
 		public BindingInformationInterface? bind_information (BindingInformationInterface? info)
 		{
 			if (info == null)
@@ -185,6 +306,34 @@ namespace G
 			return (info);
 		}
 
+		/**
+		 * Invokes creation of BindingInformation for specified parameters.
+		 * If contract is active and everything is in order this also creates
+		 * BindingInterface and activates data transfer 
+		 * 
+		 * Main reasoning for this method is to allow chain API in objective 
+		 * languages which makes code much simpler to follow 
+		 * 
+		 * NOTE!
+		 * transform_from and transform_to can work in two ways. If value return
+		 * is true, then newly converted value is assigned to property, if
+		 * return is false, then that doesn't happen which can be used to assign
+		 * property values directly and avoiding value conversion
+		 *   
+		 * @since 0.1
+		 * @param source_property Source property name
+		 * @param target Target object
+		 * @param target_property Target property name
+		 * @param flags Flags describing property binding creation
+		 * @param transform_to Custom method to transform data from source value
+		 *                     to target value
+		 * @param transform_from Custom method to transform data from source 
+		 *                       value to target value
+		 * @param source_validation Specifies custom method to validate this
+		 *                          particular property in source object. When
+		 *                          this is not specified, validity is true
+		 * @return Newly create BindingInformation
+		 */
 		public BindingInformation bind (string source_property, Object target, string target_property, BindFlags flags = BindFlags.DEFAULT, 
 		                                owned PropertyBindingTransformFunc? transform_to = null, owned PropertyBindingTransformFunc? transform_from = null,
 		                                owned SourceValidationFunc? source_validation = null)
@@ -194,6 +343,35 @@ namespace G
 			return ((BindingInformation) bind_information (new BindingInformation (this, source_property, target, target_property, flags, (owned) transform_to, (owned) transform_from, (owned) source_validation)));
 		}
 
+		/**
+		 * Invokes creation of BindingInformation for specified parameters with
+		 * exception of using default_target as the target object.
+		 * 
+		 * If contract is active and everything is in order this also creates
+		 * BindingInterface and activates data transfer 
+		 * 
+		 * Main reasoning for this method is to allow chain API in objective 
+		 * languages which makes code much simpler to follow 
+		 * 
+		 * NOTE!
+		 * transform_from and transform_to can work in two ways. If value return
+		 * is true, then newly converted value is assigned to property, if
+		 * return is false, then that doesn't happen which can be used to assign
+		 * property values directly and avoiding value conversion
+		 *   
+		 * @since 0.1
+		 * @param source_property Source property name
+		 * @param target_property Target property name
+		 * @param flags Flags describing property binding creation
+		 * @param transform_to Custom method to transform data from source value
+		 *                     to target value
+		 * @param transform_from Custom method to transform data from source 
+		 *                       value to target value
+		 * @param source_validation Specifies custom method to validate this
+		 *                          particular property in source object. When
+		 *                          this is not specified, validity is true
+		 * @return Newly create BindingInformation
+		 */
 		public BindingInformation bind_default (string source_property, string target_property, BindFlags flags = BindFlags.DEFAULT, 
 		                                        owned PropertyBindingTransformFunc? transform_to = null, owned PropertyBindingTransformFunc? transform_from = null,
 		                                        owned SourceValidationFunc? source_validation = null)
@@ -203,6 +381,13 @@ namespace G
 			return ((BindingInformation) bind_information (new BindingInformation (this, source_property, _default_target, target_property, flags, (owned) transform_to, (owned) transform_from, (owned) source_validation)));
 		}
 
+		/**
+		 * Removes binding from set of its bindings
+		 * 
+		 * @since 0.1
+		 * @param information Binding information being removed
+		 * @param all_references Ignore internal lock count and remove if true
+		 */
 		public void unbind (BindingInformationInterface information, bool all_references = false)
 		{
 			for (int i=0; i<length; i++) {
@@ -222,16 +407,40 @@ namespace G
 			}
 		}
 
+		/**
+		 * Unbinds all added bindings
+		 * 
+		 * @since 0.1
+		 */
 		public void unbind_all()
 		{
 			while (length > 0)
 				unbind(get_item_at_index((int)length-1));
 		}
 
+		/**
+		 * Singnal sent when contract is renewed/disolved or when source changes
+		 * 
+		 * @since 0.1
+		 * @param contract Contract that changed
+		 */
 		public signal void contract_changed (BindingContract contract);
 
+		/**
+		 * Singnal sent when bindings in contract change
+		 * 
+		 * @since 0.1
+		 * @param contract Contract that changed bindings
+		 * @param change_type Specifies if binding was ADDED or REMOVED
+		 * @param binding Binding that is subject of this signal
+		 */
 		public signal void bindings_changed (BindingContract contract, ContractChangeType change_type, BindingInformation binding);
 
+		/**
+		 * Handles contract disconnection on object reference being destroyed
+		 * 
+		 * @since 0.1
+		 */
 		protected virtual void disconnect_contract()
 		{
 			if (finalizing_in_progress == true)
@@ -250,17 +459,66 @@ namespace G
 			disconnect_contract();
 		}
 
-		public BindingContract.add_to_manager (ContractStorage contract_manager, string name, Object? data = null, BindingReferenceType reference_type = BindingReferenceType.WEAK, BindingPointerUpdateType update_type = BindingPointerUpdateType.PROPERTY)
+		/**
+		 * Creates new BindingContract and adds it to specified ContractStorage
+		 * 
+		 * @since 0.1
+		 * @param contract_storage Storage where contract should be stored into
+		 * @param name Name under which contract is added to ContractStorage
+		 * @param data Data used as initial source. If data is pointer or 
+		 *             contract this leads to chaining them. More on chaining
+		 *             in tutorial application
+		 * @param reference_type Specifies how source reference should be 
+		 *                       treated. Value can be WEAK, STRONG or DEFAULT
+		 * @param update_type Defines if source can be treated by connecting to
+		 *                    its properties or source will specify its own 
+		 *                    handling. In case of chaining this is also taking
+		 *                    effect in chain. More on chaining in tutorial 
+		 *                    application
+		 */
+		public BindingContract.add_to_storage (ContractStorage contract_storage, string name, Object? data = null, BindingReferenceType reference_type = BindingReferenceType.WEAK, BindingPointerUpdateType update_type = BindingPointerUpdateType.PROPERTY)
 		{
 			this (data, reference_type, update_type);
-			contract_manager.add (name, this);
+			contract_storage.add (name, this);
 		}
 
-		public BindingContract.add_to_default_manager (string name, Object? data = null, BindingReferenceType reference_type = BindingReferenceType.WEAK, BindingPointerUpdateType update_type = BindingPointerUpdateType.PROPERTY)
+		/**
+		 * Creates new BindingContract and adds it to 
+		 * ContractStorage.get_default()
+		 * 
+		 * @since 0.1
+		 * @param name Name under which contract is added to ContractStorage
+		 * @param data Data used as initial source. If data is pointer or 
+		 *             contract this leads to chaining them. More on chaining
+		 *             in tutorial application
+		 * @param reference_type Specifies how source reference should be 
+		 *                       treated. Value can be WEAK, STRONG or DEFAULT
+		 * @param update_type Defines if source can be treated by connecting to
+		 *                    its properties or source will specify its own 
+		 *                    handling. In case of chaining this is also taking
+		 *                    effect in chain. More on chaining in tutorial 
+		 *                    application
+		 */
+		public BindingContract.add_to_default_storage (string name, Object? data = null, BindingReferenceType reference_type = BindingReferenceType.WEAK, BindingPointerUpdateType update_type = BindingPointerUpdateType.PROPERTY)
 		{
-			this.add_to_manager (ContractStorage.get_default(), name, data, reference_type, update_type);
+			this.add_to_storage (ContractStorage.get_default(), name, data, reference_type, update_type);
 		}
 
+		/**
+		 * Creates new BindingContract
+		 * 
+		 * @since 0.1
+		 * @param data Data used as initial source. If data is pointer or 
+		 *             contract this leads to chaining them. More on chaining
+		 *             in tutorial application
+		 * @param reference_type Specifies how source reference should be 
+		 *                       treated. Value can be WEAK, STRONG or DEFAULT
+		 * @param update_type Defines if source can be treated by connecting to
+		 *                    its properties or source will specify its own 
+		 *                    handling. In case of chaining this is also taking
+		 *                    effect in chain. More on chaining in tutorial 
+		 *                    application
+		 */
 		public BindingContract (Object? data = null, BindingReferenceType reference_type = BindingReferenceType.WEAK, BindingPointerUpdateType update_type = BindingPointerUpdateType.PROPERTY)
 		{
 			base (null, reference_type, update_type);
