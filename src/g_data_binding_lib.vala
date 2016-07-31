@@ -23,6 +23,6 @@ namespace G.Data
 	 */
 	public static string get_version()
 	{
-		return ("%s.%s".printf (MAJOR_VERSION, MINOR_VERSION));
+		return ("%i.%i".printf (MAJOR_VERSION, MINOR_VERSION));
 	}
 }
