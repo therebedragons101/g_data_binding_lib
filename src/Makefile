@@ -7,7 +7,7 @@ LIB_MINOR := 1
 LIB_VERSION := ${LIB_MAJOR}.${LIB_MINOR}
 
 all: g_data_binding_lib.so \
-	demoandtutorial \
+	demo-and-tutorial \
 	g_data_binding_lib-${LIB_VERSION}.typelib
 #	csource \
 
@@ -93,7 +93,7 @@ g_data_binding_lib-${LIB_VERSION}.typelib:
 		--output=g_data_binding_lib-${LIB_VERSION}.typelib \
 		g_data_binding_lib-${LIB_VERSION}.gir
 
-demoandtutorial:
+demo-and-tutorial:
 	valac \
 		${PACKAGES} \
 		${DEMO_PACKAGES} \
