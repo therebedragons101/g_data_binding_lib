@@ -5,9 +5,9 @@ Few coding rules for this project
 Conditions MUST always be full and separated into lines, code is longer
 but in long term it is far easier to read. As such this is accepted
 ```csharp
-	if ((myvar == true) ||
-	    (myvar2 < 4)) &&
-	   (myvar3 == "something"))
+	if (((myvar == true) ||
+	     (myvar2 < 4)) &&
+	    (myvar3 == "something"))
 ```
 
 it is all well and swell that one can fit as much as possible in one 
