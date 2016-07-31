@@ -11,3 +11,4 @@ export LD_LIBRARY_PATH=../..
 DIR=`pwd`
 cd ./demos/demo_and_tutorial/
 ./demo_and_tutorial
+cd "$DIR"
