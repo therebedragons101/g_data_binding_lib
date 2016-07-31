@@ -46,9 +46,10 @@
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Introduction&lt;/b&gt;&lt;/big&gt;
 
-Main purpose of this demo and tutorial is to show not only implementation and examples, tutorial also delves into visually representing what is happening internally.
+&lt;b&gt;Main purpose of this demo and tutorial is to show not only implementation and examples, tutorial also delves into visually representing what is happening 
+internally.&lt;/b&gt;
 &lt;small&gt;
-&lt;b&gt;- I WOULD JUST ASK ONE THING THAT COMMENTING ON CODE STYLE IS NOT DONE UNLESS "CODING_RULES" WERE READ
+&lt;b&gt;- I WOULD JUST ASK ONE THING THAT COMMENTING ON CODE STYLE IS NOT DONE UNLESS "CODING_STYLE" RULES WERE READ
 - YOU ARE WELCOME TO COMMENT ON NAMING AND API AS THIS IS MAJOR CONCERN AT THIS STAGE AS IT WILL HELP MAKING PUBLIC API BEST POSSIBLE&lt;/b&gt;&lt;/small&gt;
 </property>
                     <property name="use_markup">True</property>
