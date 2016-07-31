@@ -2,8 +2,9 @@ Few coding rules for this project
 
 # Conditions
 
-Conditions MUST always be full and separated into lines, code is longer
-but in long term it is far easier to read. As such this is accepted
+Conditions MUST always be full and if complex they need to be separated 
+into lines, code is longer but in long term it is far easier to read. As 
+such this is accepted
 ```csharp
 	if (((myvar == true) ||
 	     (myvar2 < 4)) &&
