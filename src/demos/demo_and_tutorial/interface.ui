@@ -50,7 +50,7 @@
 internally.&lt;/b&gt;
 &lt;small&gt;
 &lt;b&gt;- I WOULD JUST ASK ONE THING THAT COMMENTING ON CODE STYLE IS NOT DONE UNLESS "CODING_STYLE" RULES WERE READ
-- YOU ARE WELCOME TO COMMENT ON NAMING AND API AS THIS IS MAJOR CONCERN AT THIS STAGE AS IT WILL HELP MAKING PUBLIC API BEST POSSIBLE&lt;/b&gt;&lt;/small&gt;
+- YOU ARE WELCOME TO COMMENT ON NAMING AND API AS THIS IS MAJOR CONCERN AT THIS STAGE AND IT WILL HELP MAKING PUBLIC API BEST POSSIBLE&lt;/b&gt;&lt;/small&gt;
 </property>
                     <property name="use_markup">True</property>
                     <property name="xalign">0</property>
