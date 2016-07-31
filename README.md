@@ -35,7 +35,8 @@ make
 #             - shared library
 #             - vapi file
 #             - c header
-#             - gir file```
+#             - gir file
+```
 
 IMPLEMENTATION STAGES ON TODO LIST
 

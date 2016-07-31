@@ -49,7 +49,8 @@ second example
 	public int myvar {
 		get { return (_myvar); }
 		set { _myvar = value; }
-	}```
+	}
+```
 is again much better code as it allows full control of what is 
 happening underneath and how. at this point reading and writing
 data from _myvar 
