@@ -32,10 +32,15 @@ make
 ./run_demo_and_tutorial.sh
 # note last step is temporarily hackish and requires to be run when in src
 # This is it and build should produce
-#             - shared library
+#             - shared library g_data_bindings_libX 
+#                    for g-object-introspection and for use everywhere
+#             - shared library g_data_bindings_generics_libX 
+#                    provides extended capabilities for use with vala
 #             - vapi file
 #             - c header
 #             - gir file
+#             - typedir file (bugged out until all generics are moved out)
+#             - demo_and_tutorial
 ```
 
 IMPLEMENTATION STAGES ON TODO LIST
