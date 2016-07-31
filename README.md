@@ -28,11 +28,17 @@ consists of following
 HOW TO RUN DEMO
 
    cd src
+   
    make
+   
    # This is it and build should produce 
+   
    #             - shared library
+   
    #             - vapi file 
+   
    #             - c header
+   
    #             - gir file
 
 IMPLEMENTATION STAGES ON TODO LIST
