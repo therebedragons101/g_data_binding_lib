@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * Flags specified upon creation of new BindingInterface to describe how

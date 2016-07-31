@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * Specifies type of update which should be handled on source pointed out by

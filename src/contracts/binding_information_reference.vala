@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	// class used to store bindings in contracts. adds locking so
 	// same binding can be added more than once and then removed 

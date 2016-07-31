@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * StrictWeakReference is different from WeakReference in two

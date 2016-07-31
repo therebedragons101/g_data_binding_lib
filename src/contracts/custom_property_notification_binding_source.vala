@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * CustomPropertyNotificationBindingSource is base class for value and state

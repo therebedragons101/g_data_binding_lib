@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * Delegate used to transform one value into another during binding

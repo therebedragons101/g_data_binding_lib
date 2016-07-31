@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * CompareDataBy specifies how objects stored in ObjectArray are compared

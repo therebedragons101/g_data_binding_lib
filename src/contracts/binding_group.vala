@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * Interface designed for handling group add/remove of property bindings

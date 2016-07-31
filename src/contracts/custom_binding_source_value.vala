@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * CustomBindingSourceValue is one of value objects implementations. It

@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * Delegate used to validate value of property in order to determine

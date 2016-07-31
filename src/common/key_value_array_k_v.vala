@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * Type simplification for ObjectArray that specifies KeyValuePair as its

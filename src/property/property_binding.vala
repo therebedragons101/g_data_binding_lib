@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * PropertyBinding is reimplementation of GBinding with added functionality.

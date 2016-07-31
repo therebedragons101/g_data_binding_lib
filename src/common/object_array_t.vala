@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * ObjectArray is holding list of objects and emits signals when objects are

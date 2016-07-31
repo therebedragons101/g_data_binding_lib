@@ -7,14 +7,16 @@ LIB_MINOR := 1
 LIB_VERSION := ${LIB_MAJOR}.${LIB_MINOR}
 
 all: g_data_binding_lib.so \
-	g_data_binding_lib-${LIB_VERSION}.typelib \
-	c-source
+	demoandtutorial \
+	g_data_binding_lib-${LIB_VERSION}.typelib
+#	csource \
 
 run: run-g_data_binding_lib 
 
 run-g_data_binding_lib: 
 
-SOURCES := library.vala \
+#valac --library=test_shared -H test_shared.h test_shared.vala -X -fPIC -X -shared -o test_shared.so
+SOURCES := g_data_binding_lib.vala \
 	common/compare_data_by.vala \
 	common/delegates.vala \
 	common/key_value_array_k_v.vala \
@@ -58,12 +60,13 @@ SOURCES := library.vala \
 	property/property_binding.vala
 
 PACKAGES := --pkg gio-2.0
+DEMO_PACKAGES := --pkg gtk+-3.0
 
 # Vala
 
-c-source:
+csource:
 	valac \
-	-H g_data_binding_lib${LIB_MAJOR}.h \
+	-H g_data_binding_lib.h \
 	-C \
 	--vapi=g_data_binding_lib${LIB_MAJOR}.vapi \
 	--library=g_data_binding_lib${LIB_MAJOR} \
@@ -72,6 +75,8 @@ c-source:
 
 g_data_binding_lib.so:
 	valac \
+		-H g_data_binding_lib.h \
+		--vapi=g_data_binding_lib${LIB_MAJOR}.vapi \
 		-X \
 		-fPIC \
 		-X \
@@ -87,6 +92,16 @@ g_data_binding_lib-${LIB_VERSION}.typelib:
 		--shared-library=g_data_binding_lib${LIB_MAJOR}.so \
 		--output=g_data_binding_lib-${LIB_VERSION}.typelib \
 		g_data_binding_lib-${LIB_VERSION}.gir
+
+demoandtutorial:
+	valac \
+		${PACKAGES} \
+		${DEMO_PACKAGES} \
+		demos/demo_and_tutorial/main.vala \
+		g_data_binding_lib0.vapi \
+		-X -I. \
+		-X g_data_binding_lib0.so \
+		-o demos/demo_and_tutorial/demo_and_tutorial
 
 # other
 

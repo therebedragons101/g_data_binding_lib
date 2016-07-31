@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * Type simplification for KeyValueArray of KeyValueArrays. Generic 

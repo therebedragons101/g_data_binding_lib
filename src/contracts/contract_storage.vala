@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	private static void add_storage (string s, ContractArray list)
 	{

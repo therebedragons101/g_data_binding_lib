@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * Binder class is multipurpose class that can be used for different reasons

@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * ContractArray is merely type definition to simplify code where used

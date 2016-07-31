@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	public class BindingSuspensionGroup : Object
 	{

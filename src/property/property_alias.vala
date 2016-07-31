@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	private static void add_alias (string s, AliasArray list)
 	{

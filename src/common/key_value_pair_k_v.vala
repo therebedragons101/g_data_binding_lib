@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * KeyValuePair specifies class that contains key and value which can

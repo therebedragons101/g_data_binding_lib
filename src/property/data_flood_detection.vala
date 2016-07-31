@@ -1,4 +1,4 @@
-namespace G
+namespace G.Data
 {
 	/**
 	 * DataFloodDetection interface defines basic flood detection functionality
