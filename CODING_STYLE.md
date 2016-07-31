@@ -84,3 +84,10 @@ Tabs are must. When line is split in more than one like some if
 condition then Tabs can only be until if start and then followed
 by spaces. This guarantees correct showing no matter the tab or
 space settings
+
+
+
+# Strings
+
+Avoid @"$myvar some text $myvar", use printf as it is much more 
+readable.
