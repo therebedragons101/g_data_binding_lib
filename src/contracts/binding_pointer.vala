@@ -398,7 +398,7 @@ namespace G.Data
 
 		/** 
 		 * Signal is sent after get_source() points to new data.
-		 *  
+		 * 
 		 * @since 0.1
 		 * @param source Pointer sending this notification
 		 */

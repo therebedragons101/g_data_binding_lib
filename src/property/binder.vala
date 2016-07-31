@@ -115,7 +115,7 @@ namespace G.Data
 			else
 				binding = default_create (source, source_property, target, target_property, flags,
 				                          (owned) transform_to, (owned) transform_from);
-
+			
 			if (binding != null)
 				binding_created (binding);
 			return (binding);

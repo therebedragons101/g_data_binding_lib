@@ -396,7 +396,7 @@ public class test_data_bindings : Gtk.Application
 		}), new string[1] { "required" }));
 
 		// adding custom value to contract
-		selection_contract.add_source_value (new CustomBindingSourceData<string> ("length", selection_contract, 
+		selection_contract.add_source_value (new G.Data.Generics.CustomBindingSourceData<string> ("length", selection_contract, 
 			((src) => {
 				return ("(cumulative of string lengths)=>%i".printf((src.data != null) ? ((Person) src.data).name.length + ((Person) src.data).surname.length + ((Person) src.data).required.length : 0));
 			}), 
@@ -414,7 +414,7 @@ public class test_data_bindings : Gtk.Application
 		// which makes it perfectly ok to use simple binding as this connection will be stable for whole contract life
 		PropertyBinding.bind (selection_contract.get_source_value ("length"), "data", custom_data, "label", BindFlags.SYNC_CREATE, 
 			(binding, srcval, ref targetval) => {
-				targetval.set_string (((CustomBindingSourceData<string>) binding.source).data);
+				targetval.set_string (((G.Data.Generics.CustomBindingSourceData<string>) binding.source).data);
 				return true;
 			});
 
@@ -988,7 +988,7 @@ public class test_data_bindings : Gtk.Application
 		my_contract.bind ("required", ui_builder.get_object ("evvo_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 
 		// adding custom value to contract
-		my_contract.add_source_value (new CustomBindingSourceData<string> ("length", my_contract, 
+		my_contract.add_source_value (new G.Data.Generics.CustomBindingSourceData<string> ("length", my_contract, 
 			((src) => {
 				return ("(cumulative of string lengths)=>%i".printf((src.data != null) ? ((Person) src.data).name.length + ((Person) src.data).surname.length + ((Person) src.data).required.length : 0));
 			}), 
@@ -999,7 +999,7 @@ public class test_data_bindings : Gtk.Application
 		// which makes it perfectly ok to use simple binding as this connection will be stable for whole contract life
 		PropertyBinding.bind (my_contract.get_source_value ("length"), "data", ui_builder.get_object ("evvo_4"), "&", BindFlags.SYNC_CREATE, 
 			(binding, srcval, ref targetval) => {
-				targetval.set_string (((CustomBindingSourceData<string>) binding.source).data);
+				targetval.set_string (((G.Data.Generics.CustomBindingSourceData<string>) binding.source).data);
 				return true;
 			});
 	}

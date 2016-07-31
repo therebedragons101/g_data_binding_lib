@@ -1,4 +1,4 @@
-namespace G.Data
+namespace G.Data.Generics
 {
 	/**
 	 * CustomBindingSourceData<T> is one of value objects implementations. It
