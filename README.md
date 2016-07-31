@@ -6,50 +6,43 @@ Databinding implementation in vala (later to be rewriten in C)???. Vala
 is chosen for simple reason, I'm far more familiar with it and that
 makes it much faster to prototype the end case scenario.
 
-IMPORTANT!
+**IMPORTANT!
 To get as simple and best possible overview running "demo_and_tutorial" is
 probably by far best method as tutorial not only shows how to do bindings,
 it also taps into innards to visually represent whole design. Difference in
 needed time to understand logic by looking at tutorial (Note that demo
-consists of following
+consists of following**
 - Demo page where everything is thrown into your face (Demo). This is 
   not the page where one would want to learn from, its only purpose is 
   showing HOW MUCH CAN ONE SINGLE LINE MEAN gui wise when mapping is done
   well
 - Demo map - picture representing mapping on Demo page
-- Tutorial (basic usage) - NOTE THAT BASIC IS FAR FROM BASIC. BASIC IS 
-                           USED AS FAR AS IMPLEMENTATIONS IN DEMO GO
-                           THIS IS MOST VALUABLE LEARNING POINT AS IT 
-                           EXPLAINS EVERYTHING STEP BY STEP AND VISUALLY 
-                           SHOWS INTERNALS IN ORDER TO BE REALLY EASY TO 
-                           UNDERSTAND
+- Tutorial (basic usage)
+       NOTE THAT BASIC IS FAR FROM BASIC. BASIC IS USED AS FAR AS IMPLEMENTATIONS
+       IN DEMO GO THIS IS MOST VALUABLE LEARNING POINT AS IT EXPLAINS EVERYTHING
+       STEP BY STEP AND VISUALLY SHOWS INTERNALS IN ORDER TO BE REALLY EASY TO
+       UNDERSTAND
 - Rest of demo and tutorial is still on TODO
 
-HOW TO RUN DEMO
+**HOW TO RUN DEMO**
 
-   cd src
-   
-   make
-   
-   ./run_demo_and_tutorial.sh 
-   
-   # note last step is temporarily hackish and requires to be run when in src
-   
-   # This is it and build should produce 
-   
-   #             - shared library
-   
-   #             - vapi file 
-   
-   #             - c header
-   
-   #             - gir file
+```bash
+cd src
+make
+./run_demo_and_tutorial.sh
+# note last step is temporarily hackish and requires to be run when in src
+# This is it and build should produce
+#             - shared library
+#             - vapi file
+#             - c header
+#             - gir file```
 
 IMPLEMENTATION STAGES ON TODO LIST
 
-- Stage 1 (
+- Stage 1
+          (
           - getting basic databinding in order (temporarily removed
-            signal/custom BindingPointer and its demo is still needed) 
+            signal/custom BindingPointer and its demo is still needed)
             95% DONE
           - other thing that needs to be done for getting basic databinding
             in order is finishing move on StrictWeakReference where this is
@@ -61,18 +54,21 @@ IMPLEMENTATION STAGES ON TODO LIST
             major version 2. at that point only incremental api changes
             can occur
           )
-- Stage 2 (
+- Stage 2
+          (
           - split files/move to library DONE 
           - get feedback on public api if possible NOT_UP_TO_ME
           - better, simpler and more complete build system IN_PROGRESS
           - add demo and tutorial from data_binding_poc_vala_project DONE
           - simplify demo and tutorial as much code is still not clean
           )
-- Stage 3 (
+- Stage 3
+          (
           - add advanced feature demos)
           - add prebuilt mapping system
           )
-- Stage 4 (
+- Stage 4
+          (
           rewrite final product in C if I don't decide to stay in Vala, but
           chances of rewrite are really slim and getting slimmer with moments.
           my original plan was to try and get inclusion in GLib, but somewhere
