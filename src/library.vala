@@ -1,12 +1,12 @@
 using GLib;
 
-namespace g_data_binding_lib
+namespace G
 {
-	public class MyClass
+	public const int MAJOR_VERSION = 0;
+	public const int MINOR_VERSION = 1;
+
+	public static string get_version()
 	{
-		public void printf()
-		{
-			stdout.printf ("bla\n");
-		}
+		return (@"$MAJOR_VERSION.$MINOR_VERSION");
 	}
 }

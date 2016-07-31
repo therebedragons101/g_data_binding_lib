@@ -24,7 +24,7 @@ namespace G
 		 * 
 		 * @since 0.1
 		 */
-		public abstract int length { get; }
+		public abstract uint length { get; }
 		/**
 		 * Returns binding at specified index
 		 * 

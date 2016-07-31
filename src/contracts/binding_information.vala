@@ -83,6 +83,9 @@ namespace G
 		private string _target_property = "";
 		/**
 		 * Target property name
+		 *
+		 * @since 0.1
+		 */
 		public string target_property {
 			get { return (_target_property); }
 		}
