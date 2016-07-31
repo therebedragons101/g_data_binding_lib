@@ -117,9 +117,9 @@ as bad as improper tab use.
 # Strings
 
 Avoid
-```
+```csharp
 str = @"$myvar some text $myvar"
-```,
+```
 use
 ```csharp
 str = "%s some text %s".printf (myvar, myvar);
