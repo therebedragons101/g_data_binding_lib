@@ -1,4 +1,5 @@
-Few coding rules for this project
+Few coding rules for this project (note that it is broken when viewed in 
+browser, fixing this markup is on TODO)
 
 # Conditions 
 
@@ -73,3 +74,13 @@ and at that point its "target" is automatically set to null.
 Other thing that StrictWeakReference allows is default and 
 maintained connection to targets weak_unref where it allows to
 specify handler on creation.
+
+
+
+
+# Tab and space use
+
+Tabs are must. When line is split in more than one like some if
+condition then Tabs can only be until if start and then followed
+by spaces. This guarantees correct showing no matter the tab or
+space settings
