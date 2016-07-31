@@ -31,6 +31,10 @@ HOW TO RUN DEMO
    
    make
    
+   ./run_demo_and_tutorial.sh 
+   
+   # note last step is temporarily hackish and requires to be run when in src
+   
    # This is it and build should produce 
    
    #             - shared library
