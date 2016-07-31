@@ -1,6 +1,4 @@
-using G;
-
-namespace G
+namespace G.Data
 {
 	public static string get_info_str (ObjectInformation? obj)
 	{
