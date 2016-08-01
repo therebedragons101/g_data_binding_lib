@@ -1,8 +1,7 @@
 namespace G.Data
 {
 	/**
-	 * StrictWeakReference is different from WeakReference in two
-	 * things. 
+	 * Non-generic class StrictWeakRef is different from WeakRef in two things. 
 	 * 
 	 * - Target is always correct as it is connected to pointed object with
 	 *   weak_ref
@@ -12,7 +11,7 @@ namespace G.Data
 	 *
 	 * @since 0.1
 	 */
-	internal class StrictWeakReference<T> : WeakReference<T>
+	public class StrictWeakRef : WeakRef
 	{
 		private WeakReferenceInvalid? _notify_method = null;
 
@@ -33,42 +32,39 @@ namespace G.Data
 		 * @param new_target Specifies new target as pointed object
 		 * @return true if new target was set, false if not
 		 */
-		public override bool set_new_target (T? new_target)
+		public override bool set_new_target (Object? new_target)
 		{
 			if (_target == new_target)
 				return (false);
 			if (_target != null)
-				((Object) _target).weak_unref (handle_weak_ref); 
+				_target.weak_unref (handle_weak_ref); 
 			base.set_new_target (new_target);
 			if (_target != null)
-				((Object) _target).weak_ref (handle_weak_ref); 
+				_target.weak_ref (handle_weak_ref); 
 			return (true);
 		}
 
-		~StrictWeakReference()
+		~StrictWeakRef()
 		{
 			if (_target != null) {
-				((Object) _target).weak_unref (handle_weak_ref); 
+				_target.weak_unref (handle_weak_ref); 
 				_target = null;
 			}
 		}
 
 		/**
-		 * Creates new StrictWeakReference and points it to specified object
+		 * Creates new StrictWeakRef and points it to specified object
 		 *
 		 * @since 0.1
 		 *
 		 * @param set_to_target Specifies object being pointed with target
 		 */
-		public StrictWeakReference (T? set_to_target, owned WeakReferenceInvalid? notify_method = null)
+		public StrictWeakRef (Object? set_to_target, owned WeakReferenceInvalid? notify_method = null)
 		{
 			base (set_to_target);
 			_notify_method = (owned) notify_method;
-			if (_target is GLib.Object)
+			if (_target != null)
 				((Object) _target).weak_ref (handle_weak_ref); 
-			else
-				if (_target != null)
-					GLib.warning ("Cannot set weak_ref on non GLib.Object");
 		}
 	}
 }

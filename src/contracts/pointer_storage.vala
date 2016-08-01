@@ -1,47 +1,5 @@
 namespace G.Data
 {
-	private static void add_ptr_storage (string s, PointerArray list)
-	{
-		KeyValueArray<string, WeakReference<BindingPointer>> sub_list = new KeyValueArray<string, WeakReference<BindingPointer>>();
-		PointerStorage storage = PointerStorage.get_storage (s);
-		storage.foreach_registration ((t, p) => {
-			sub_list.add (new KeyValuePair<string, WeakReference<BindingPointer>> (t, new WeakReference<BindingPointer>(p)));
-		});
-		storage.added.connect ((t, p) => {
-			sub_list.add (new KeyValuePair<string, WeakReference<BindingPointer>> (t, new WeakReference<BindingPointer>(p)));
-		});
-		storage.removed.connect ((t, p) => {
-			for (int i=0; i<sub_list.length; i++) {
-				if (p == sub_list.data[i].val.target) {
-					sub_list.remove_at_index(i);
-					return;
-				}
-			}
-		});
-		KeyValuePair<string, KeyValueArray<string, WeakReference<BindingPointer>>> pair = 
-			new KeyValuePair<string, KeyValueArray<string, WeakReference<BindingPointer>>>(s, sub_list);
-		list.add (pair);
-	}
-
-	/**
-	 * Returns PointerArray for complete structure of defined pointers and
-	 * their groups. At the same time taps into modifications as ObjectArray is 
-	 * also GLib.ListModel
-	 * 
-	 * @since 0.1
-	 */ 
-	public static PointerArray track_pointer_storage()
-	{
-		PointerArray list = new PointerArray();
-		PointerStorage.foreach_storage ((s) => {
-			add_ptr_storage (s, list);
-		});
-		PointerStorage.StorageSignal.get_instance().added_storage.connect ((s) => {
-			add_ptr_storage (s, list);
-		});
-		return (list);
-	}
-
 	/**
 	 * Storage for pointers in order to have guaranteed reference when there is 
 	 * no need for local variable or to have them globally accessible by name
@@ -50,20 +8,29 @@ namespace G.Data
 	 */
 	public class PointerStorage : Object
 	{
-		internal class StorageSignal
+		public class Signals
 		{
-			private static StorageSignal? _instance = null;
-			public static StorageSignal get_instance()
+			private static Signals? _instance = null;
+			internal static Signals get_instance()
 			{
 				if (_instance == null)
-					_instance = new StorageSignal();
+					_instance = new Signals();
 				return (_instance);
 			}
 
 			public signal void added_storage (string storage_name);
 		}
 
-		internal static void foreach_storage (Func<string> method)
+		/**
+		 * Access to global storage signals
+		 * 
+		 * @since 0.1
+		 */
+		public static Signals signals {
+			owned get { return (Signals.get_instance()); }
+		}
+
+		public static void foreach_storage (StorageDelegateFunc method)
 		{
 			if (_storages != null)
 				_storages.for_each ((s,p) => {
@@ -71,10 +38,12 @@ namespace G.Data
 				});
 		}
 
-		internal void foreach_registration (HFunc<string, BindingContract> method)
+		public void foreach (PointerStorageDelegateFunc method)
 		{
 			if (_objects != null)
-				_objects.for_each (method);
+				_objects.for_each ((k,v) => {
+					method(k,v);
+				});
 		}
 
 		private static HashTable<string, PointerStorage>? _storages = null;
@@ -112,7 +81,7 @@ namespace G.Data
 			if (store == null) {
 				store = new PointerStorage();
 				_storages.insert (name, store);
-				StorageSignal.get_instance().added_storage (name);
+				signals.added_storage (name);
 			}
 			return (store);
 		}

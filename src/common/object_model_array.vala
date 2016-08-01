@@ -1,8 +1,8 @@
 namespace G.Data
 {
 	/**
-	 * ObjectArray is holding list of objects and emits signals when objects are
-	 * added or removed.
+	 * ObjectModelArray is holding list of objects and emits signals when 
+	 * objects are added or removed.
 	 * 
 	 * Second trade it provides is also guarantee of unique objects in list if
 	 * specified on creation.
@@ -12,7 +12,7 @@ namespace G.Data
 	 * 
 	 * @since 0.1
 	 */ 
-	public class ObjectArray<T> : Object, ListModel
+	public class ObjectModelArray : Object, ListModel
 	{
 		/**
 		 * This method is GLib.ListModel implementation requirement and resolves
@@ -28,6 +28,20 @@ namespace G.Data
 			return (((position < 0) || (position >= length)) ? null : (Object?) data[position]);
 		}
 
+		private Type? _accepted_type = null;
+		/**
+		 * Specifies object type that can be added to list
+		 * 
+		 * @since 0.1
+		 */
+		public Type accepted_type {
+			get {
+				if (_accepted_type == null)
+					return (typeof(Object)); 
+				return (_accepted_type); 
+			}
+		}
+
 		/**
 		 * This method is GLib.ListModel implementation requirement and resolves
 		 * type of stored items
@@ -38,7 +52,7 @@ namespace G.Data
 		 */ 
 		public Type get_item_type ()
 		{
-			return (typeof(T));
+			return (accepted_type);
 		}
 		
 		/**
@@ -64,22 +78,14 @@ namespace G.Data
 		 */ 
 		public bool force_unique { get; private set; default = false; }
 		
-		private GLib.Array<T>? _array = new GLib.Array<T>();
-		/**
-		 * Returns reference to internally use GLib.Array
-		 * 
-		 * @since 0.1
-		 */
-		public GLib.Array<T> array {
-			get { return (_array); }
-		}
+		private GLib.Array<Object>? _array = new GLib.Array<Object>();
 
 		/**
 		 * Returns reference to data array
 		 * 
 		 * @since 0.1
 		 */
-		public T[] data {
+		public Object?[] data {
 			get { return (_array.data); }
 		}
 
@@ -118,7 +124,7 @@ namespace G.Data
 		 * 
 		 * @return Index of specified element or -1 if not found
 		 */
-		public int find (T object)
+		public int find (Object object)
 		{
 			for (int i=0; i<_array.length; i++)
 				if (_compare_delegate(_array.data[i], object) == 0)
@@ -152,7 +158,7 @@ namespace G.Data
 		 * 
 		 * @param object Object being added into ObjectArray
 		 */
-		public void add (T object)
+		public void add (Object object)
 		{
 			if (force_unique == true) {
 				add_unique (object);
@@ -180,7 +186,7 @@ namespace G.Data
 		 * @return If object exists, existing is returned, if not then it
 		 *         returns the newly added object
 		 */
-		public T add_unique (T object, bool nosearch = false)
+		public Object add_unique (Object object, bool nosearch = false)
 		{
 			if (nosearch == false) {
 				int i = find (object);
@@ -288,12 +294,12 @@ namespace G.Data
 
 		private CompareFunc<T> _compare_delegate;
 
-		private static int compare___by_reference (T object1, T object2)
+		private static int compare___by_reference (Object object1, Object object2)
 		{
 			return ((object1 == object2) ? 0 : -1);
 		}
 
-		private static int compare___by_properties (T object1, T object2)
+		private static int compare___by_properties (Object object1, Object object2)
 		{
 			return (((UniqueByProperies) object1).compare_to ((UniqueByProperies) object2));
 		}
@@ -305,7 +311,7 @@ namespace G.Data
 		 * 
 		 * @param element New element that was added
 		 */
-		public signal void element_added (T element);		
+		public signal void element_added (Object element);
 
 		/**
 		 * Signal being emited before element is removed from the list
@@ -315,7 +321,7 @@ namespace G.Data
 		 * @param element Element that will be removed
 		 * @param index Position of removedelement in ObjectArray 
 		 */
-		public signal void before_removing_element (T element, int index);		
+		public signal void before_removing_element (Object element, int index);
 
 		/**
 		 * Signal being emited after element is removed from the list
@@ -324,7 +330,7 @@ namespace G.Data
 		 * 
 		 * @param element Element that was removed
 		 */
-		public signal void element_removed (T element);		
+		public signal void element_removed (Object element);
 
 		/**
 		 * Signal being emited after ObjectArray was cleared of all elements.
@@ -333,75 +339,42 @@ namespace G.Data
 		 * 
 		 * @since 0.1
 		 */
-		public signal void array_cleared();		
+		public signal void array_cleared();
 
 		/**
 		 * Signal being emited after sorting of elements in ObjectArray
 		 * 
 		 * @since 0.1
 		 */
-		public signal void array_sorted();		
+		public signal void array_sorted();
 
 		/**
-		 * Creates new ObjectArray that is defined with force_unique.
+		 * Creates new ObjectModelArray that is defined with force_unique.
 		 * 
 		 * @since 0.1
 		 * 
+		 * @param accepted_type Accepted type
 		 * @param compare_by Specifies how elements are compared for uniqueness
 		 * @param compare_method Method being used to compare elements
 		 */
-		public ObjectArray.unique (CompareDataBy compare_by = CompareDataBy.REFERENCE, owned CompareFunc<T>? compare_method = null)
+		public ObjectModelArray.unique (Type accepted_type, CompareDataBy compare_by = CompareDataBy.REFERENCE, owned CompareFunc<T>? compare_method = null)
 		{
-			this (compare_by, compare_method);
+			this (accepted_type, compare_by, compare_method);
 			force_unique = true;
 		}
 
 		/**
-		 * Creates new ObjectArray by wrapping already preexisting GLib.Array
-		 * as its data
+		 * Creates new ObjectModelArray
 		 * 
 		 * @since 0.1
 		 * 
-		 * @param from_array GLib.Array that is wrapped as initial data
+		 * @param accepted_type Accepted type
 		 * @param compare_by Specifies how elements are compared for uniqueness
 		 * @param compare_method Method being used to compare elements
 		 */
-		public ObjectArray.from_array (GLib.Array<T> from_array, CompareDataBy compare_by = CompareDataBy.REFERENCE, owned CompareFunc<T>? compare_method = null)
+		public ObjectModelArray (Type accepted_type = typeof(Object), CompareDataBy compare_by = CompareDataBy.REFERENCE, CompareFunc<T>? compare_method = null)
 		{
-			this (compare_by, compare_method);
-			_array = from_array;
-		}
-
-		/**
-		 * Creates new ObjectArray by wrapping already preexisting GLib.Array
-		 * as its data and specifies elements must be unique
-		 * 
-		 * Note that no unique validation is executed when wrapping. This is
-		 * solely application responsability
-		 * 
-		 * @since 0.1
-		 * 
-		 * @param from_array GLib.Array that is wrapped as initial data
-		 * @param compare_by Specifies how elements are compared for uniqueness
-		 * @param compare_method Method being used to compare elements
-		 */
-		public ObjectArray.unique_from_array (GLib.Array<T> from_array, CompareDataBy compare_by = CompareDataBy.REFERENCE, owned CompareFunc<T>? compare_method = null)
-		{
-			this (compare_by, compare_method);
-			force_unique = true;
-			_array = from_array;
-		}
-		
-		/**
-		 * Creates new ObjectArray
-		 * 
-		 * @since 0.1
-		 * 
-		 * @param compare_by Specifies how elements are compared for uniqueness
-		 * @param compare_method Method being used to compare elements
-		 */
-		public ObjectArray (CompareDataBy compare_by = CompareDataBy.REFERENCE, CompareFunc<T>? compare_method = null)
-		{
+			_accepted_type = accepted_type;
 			if (compare_by == CompareDataBy.REFERENCE)
 				_compare_delegate = ((a, b) => { return (compare___by_reference (a, b)); });
 			else if (compare_by == CompareDataBy.UNIQUE_OBJECTS)

@@ -17,13 +17,11 @@ run: run-g_data_binding_lib
 run-g_data_binding_lib: 
 
 #valac --library=test_shared -H test_shared.h test_shared.vala -X -fPIC -X -shared -o test_shared.so
+#	common/object_model_array.vala \
+
 SOURCES := g_data_binding_lib.vala \
 	common/compare_data_by.vala \
 	common/delegates.vala \
-	common/key_value_array_k_v.vala \
-	common/key_value_pair_k_v.vala \
-	common/master_slave_array_mk_k_v.vala \
-	common/object_array_t.vala \
 	common/strict_weak_reference_t.vala \
 	common/unique_by_properties.vala \
 	common/weak_reference_t.vala \
@@ -40,7 +38,6 @@ SOURCES := g_data_binding_lib.vala \
 	contracts/binding_state_objects.vala \
 	contracts/binding_value_objects.vala \
 	contracts/consts.vala \
-	contracts/contract_array.vala \
 	contracts/contract_change_type.vala \
 	contracts/contract_storage.vala \
 	contracts/custom_binding_source_state.vala \
@@ -48,11 +45,9 @@ SOURCES := g_data_binding_lib.vala \
 	contracts/custom_property_notification_binding_source.vala \
 	contracts/delegates.vala \
 	contracts/methods.vala \
-	contracts/pointer_array.vala \
 	contracts/pointer_storage.vala \
 	contracts/signal_controlled_binding_pointer.vala \
 	contracts/timer_controlled_binding_pointer.vala \
-	property/alias_array.vala \
 	property/bind_flags.vala \
 	property/binder.vala \
 	property/binding_interface.vala \
@@ -62,13 +57,20 @@ SOURCES := g_data_binding_lib.vala \
 	property/property_binding.vala
 
 GENERICS_SOURCES := g_data_binding_generics_lib.vala \
+	generics/common/delegates.vala \
 	generics/common/key_value_array_k_v.vala \
 	generics/common/key_value_pair_k_v.vala \
 	generics/common/master_slave_array_mk_k_v.vala \
 	generics/common/object_array_t.vala \
 	generics/common/strict_weak_reference_t.vala \
 	generics/common/weak_reference_t.vala \
-	generics/contracts/custom_binding_source_data_t.vala
+	generics/contracts/contract_array.vala \
+	generics/contracts/contract_storage.vala \
+	generics/contracts/custom_binding_source_data_t.vala \
+	generics/contracts/pointer_array.vala \
+	generics/contracts/pointer_storage.vala \
+	generics/property/alias_array.vala \
+	generics/property/property_alias.vala
 
 PACKAGES := --pkg gio-2.0
 DEMO_PACKAGES := --pkg gtk+-3.0

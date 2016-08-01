@@ -1,7 +1,7 @@
 namespace G.Data
 {
 	/**
-	 * .Net C# WeakReference like implementation
+	 * .Net C# Non-generic WeakRef like implementation
 	 *
 	 * Main purpose is always having safe minimal object that can be used in hash
 	 * tables or arrays and that object always being valid no matter its contents
@@ -15,16 +15,16 @@ namespace G.Data
 	 *
 	 * @since 0.1
 	 */
-	internal class WeakReference<T> 
+	public class WeakRef 
 	{
-		protected weak T? _target;
+		protected weak Object? _target;
 		/**
 		 * Specifies currently pointed target and does not guarantee its validity
 		 * If validity is required, then StrictWeakReference should be used
 		 *
 		 * @since 0.1
 		 */
-		public T? target { 
+		public Object? target { 
 			get { return (_target); }
 		}
 
@@ -36,7 +36,7 @@ namespace G.Data
 		 * @param new_target Specifies new target as pointed object
 		 * @return true if new target was set, false if not
 		 */
-		public virtual bool set_new_target (T? new_target)
+		public virtual bool set_new_target (Object? new_target)
 		{
 			if (_target == new_target)
 				return (false);
@@ -61,7 +61,7 @@ namespace G.Data
 		 *
 		 * @param set_to_target Specifies object being pointed with target
 		 */
-		public WeakReference (T? set_to_target)
+		public WeakRef (Object? set_to_target)
 		{
 			_target = set_to_target;
 		}

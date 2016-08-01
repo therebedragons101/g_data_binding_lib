@@ -1,38 +1,5 @@
 namespace G.Data
 {
-	private static void add_alias (string s, AliasArray list)
-	{
-		KeyValueArray<Type, string> prop_list = new KeyValueArray<Type, string>();
-		PropertyAlias alias = PropertyAlias.get_instance (s);
-		alias.foreach_registration ((t, p) => {
-			prop_list.add (new KeyValuePair<Type, string> (t, p));
-		});
-		alias.added_type_alias.connect ((t, p) => {
-			prop_list.add (new KeyValuePair<Type, string> (t, p));
-		});
-		KeyValuePair<string, KeyValueArray<Type, string>> alias_pair = 
-			new KeyValuePair<string, KeyValueArray<Type, string>>(s, prop_list);
-		list.add (alias_pair);
-	}
-
-	/**
-	 * Returns AliasArray for complete structure of defined aliases and at the
-	 * same time taps into modifications as ObjectArray is also GLib.ListModel
-	 * 
-	 * @since 0.1
-	 */ 
-	public static AliasArray track_property_aliases()
-	{
-		AliasArray list = new AliasArray();
-		PropertyAlias.foreach_alias ((s) => {
-			add_alias (s, list);
-		});
-		PropertyAlias.AliasSignal.get_instance().added_alias.connect ((s) => {
-			add_alias (s, list);
-		});
-		return (list);
-	}
-
 	/**
 	 * Storage for property aliases for any of possible reasons.
 	 * - Need for relation to differently named properties in different classes
@@ -44,17 +11,26 @@ namespace G.Data
 	 */
 	public class PropertyAlias
 	{
-		internal class AliasSignal
+		public class Signals
 		{
-			private static AliasSignal? _instance = null;
-			public static AliasSignal get_instance()
+			private static Signals? _instance = null;
+			internal static Signals get_instance()
 			{
 				if (_instance == null)
-					_instance = new AliasSignal();
+					_instance = new Signals();
 				return (_instance);
 			}
 
 			public signal void added_alias (string alias_name);
+		}
+
+		/**
+		 * Access to global storage signals
+		 * 
+		 * @since 0.1
+		 */
+		public static Signals signals {
+			owned get { return (Signals.get_instance()); }
 		}
 
 		private static HashTable<string, PropertyAlias> _alias_hash = null;
@@ -110,7 +86,7 @@ namespace G.Data
 			if (props == null) {
 				props = new PropertyAlias (alias_name);
 				_alias_hash.insert (alias_name, props);
-				AliasSignal.get_instance().added_alias (alias_name);
+				signals.added_alias (alias_name);
 			}
 			return (props);
 		}
@@ -186,7 +162,7 @@ namespace G.Data
 			return (type1 == type2);
 		}
 
-		internal static void foreach_alias (Func<string> method)
+		public static void foreach_alias (StorageDelegateFunc method)
 		{
 			if (_alias_hash != null)
 				_alias_hash.for_each ((s,p) => {
@@ -194,10 +170,12 @@ namespace G.Data
 				});
 		}
 
-		internal void foreach_registration (HFunc<Type, string> method)
+		public void foreach (AliasStorageDelegateFunc method)
 		{
 			if (_hash != null)
-				_hash.for_each (method);
+				_hash.for_each ((k,v) => {
+					method(k,v);
+				});
 		}
 
 		/**

@@ -1,4 +1,5 @@
 using G.Data;
+using G.Data.Generics;
 
 namespace G.Data
 {
@@ -323,8 +324,8 @@ public class test_data_bindings : Gtk.Application
 		base.startup ();
 
 		// allocate "default" property as "&"
-		PropertyAlias def = PropertyAlias.get_instance ("&");
-		def.register (typeof(Gtk.Entry), "text")
+		PropertyAlias.get_instance ("&")
+			.register (typeof(Gtk.Entry), "text")
 			.register (typeof(Gtk.Label), "label")
 			.register (typeof(Gtk.ToggleButton), "active")
 			.register (typeof(Gtk.SpinButton), "value")
@@ -396,7 +397,7 @@ public class test_data_bindings : Gtk.Application
 		}), new string[1] { "required" }));
 
 		// adding custom value to contract
-		selection_contract.add_source_value (new G.Data.Generics.CustomBindingSourceData<string> ("length", selection_contract, 
+		selection_contract.add_source_value (new CustomBindingSourceData<string> ("length", selection_contract, 
 			((src) => {
 				return ("(cumulative of string lengths)=>%i".printf((src.data != null) ? ((Person) src.data).name.length + ((Person) src.data).surname.length + ((Person) src.data).required.length : 0));
 			}), 
@@ -414,7 +415,7 @@ public class test_data_bindings : Gtk.Application
 		// which makes it perfectly ok to use simple binding as this connection will be stable for whole contract life
 		PropertyBinding.bind (selection_contract.get_source_value ("length"), "data", custom_data, "label", BindFlags.SYNC_CREATE, 
 			(binding, srcval, ref targetval) => {
-				targetval.set_string (((G.Data.Generics.CustomBindingSourceData<string>) binding.source).data);
+				targetval.set_string (((CustomBindingSourceData<string>) binding.source).data);
 				return true;
 			});
 
@@ -988,7 +989,7 @@ public class test_data_bindings : Gtk.Application
 		my_contract.bind ("required", ui_builder.get_object ("evvo_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 
 		// adding custom value to contract
-		my_contract.add_source_value (new G.Data.Generics.CustomBindingSourceData<string> ("length", my_contract, 
+		my_contract.add_source_value (new CustomBindingSourceData<string> ("length", my_contract, 
 			((src) => {
 				return ("(cumulative of string lengths)=>%i".printf((src.data != null) ? ((Person) src.data).name.length + ((Person) src.data).surname.length + ((Person) src.data).required.length : 0));
 			}), 
@@ -999,7 +1000,7 @@ public class test_data_bindings : Gtk.Application
 		// which makes it perfectly ok to use simple binding as this connection will be stable for whole contract life
 		PropertyBinding.bind (my_contract.get_source_value ("length"), "data", ui_builder.get_object ("evvo_4"), "&", BindFlags.SYNC_CREATE, 
 			(binding, srcval, ref targetval) => {
-				targetval.set_string (((G.Data.Generics.CustomBindingSourceData<string>) binding.source).data);
+				targetval.set_string (((CustomBindingSourceData<string>) binding.source).data);
 				return true;
 			});
 	}
@@ -1015,22 +1016,20 @@ public class test_data_bindings : Gtk.Application
 		BindingContract info_contract = ContractStorage.get_storage("example-relay").add ("info-contract", new BindingContract(infoptr));
 		BindingContract parent_contract = ContractStorage.get_storage("example-relay").add ("parent-contract", new BindingContract(parentptr));
 
-		my_contract.bind ("name", ui_builder.get_object ("e7_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-		my_contract.bind ("surname", ui_builder.get_object ("e7_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-		my_contract.bind ("required", ui_builder.get_object ("e7_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+		my_contract.bind ("name", ui_builder.get_object ("e7_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.bind ("surname", ui_builder.get_object ("e7_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.bind ("required", ui_builder.get_object ("e7_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 
 		info_contract.bind ("some_num", ui_builder.get_object ("e7_s1_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 
-		parent_contract.bind ("name", ui_builder.get_object ("e7_s2_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-		parent_contract.bind ("surname", ui_builder.get_object ("e7_s2_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-		parent_contract.bind ("required", ui_builder.get_object ("e7_s2_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+		parent_contract.bind ("name", ui_builder.get_object ("e7_s2_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.bind ("surname", ui_builder.get_object ("e7_s2_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.bind ("required", ui_builder.get_object ("e7_s2_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 
 		PropertyBinding.bind(parent_contract, "is-valid", ui_builder.get_object ("e7_s2_g"), "visible", BindFlags.SYNC_CREATE);
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e7_events"), _e7_events);
-//		connect_binding_contract_events (my_contract, _e7_events);
 		connect_binding_contract_events (parent_contract, _e7_events);
-//		connect_binding_pointer_events (parentptr, _e7_events);
 	}
 
 	protected override void shutdown ()

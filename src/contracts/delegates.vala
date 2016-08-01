@@ -1,6 +1,35 @@
 namespace G.Data
 {
 	/**
+	 * Delegate used to connect to enumeration of for 3 tracking storages
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param storage_name Storage name
+	 */
+	public delegate void StorageDelegateFunc (string storage_name);
+
+	/**
+	 * Delegate used to connect to enumeration of stored contracts
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param name Contract name
+	 * @param contract Contract reference
+	 */
+	public delegate void ContractStorageDelegateFunc (string name, BindingContract contract);
+
+	/**
+	 * Delegate used to connect to enumeration of stored contracts
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param name Contract name
+	 * @param pointer Pointer reference
+	 */
+	public delegate void PointerStorageDelegateFunc (string name, BindingPointer pointer);
+
+	/**
 	 * Delegate used to validate value of property in order to determine
 	 * source data validity
 	 * 

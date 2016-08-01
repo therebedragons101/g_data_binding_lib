@@ -90,6 +90,10 @@ namespace G.Data
 		 * 
 		 * There is extensive visual demonstration of internals in tutorial demo
 		 * 
+		 * When data is assigned, invocation of type safety check call to
+		 * validate_data_type() occurs. If validation is not valid null is
+		 * assigned instead.
+		 * 
 		 * @since 0.1
 		 */
 		[Description (nick="Data", blurb="Data object pointed by binding pointer")]
@@ -105,8 +109,12 @@ namespace G.Data
 					unchain_pointer();
 				if (value == this)
 					_data = new StrictWeakReference<Object?>(SELF, handle_strict_ref);
-				else
-					_data = new StrictWeakReference<Object?>(value, handle_strict_ref);
+				else {
+					if ((value != null) && (validate_data_type(value) == false))
+						_data = new StrictWeakReference<Object?>(null, handle_strict_ref);
+					else
+						_data = new StrictWeakReference<Object?>(value, handle_strict_ref);
+				}
 				if (data != null)
 					chain_pointer();
 				reference_data();
@@ -116,6 +124,19 @@ namespace G.Data
 				if (get_source() != null)
 					connect_notifications (get_source());
 			}
+		}
+
+		/**
+		 * Enables type restriction validation for subclassing needs
+		 * 
+		 * Note that null value is handled internally. Default return in binding
+		 * pointer is true
+		 * 
+		 * @since 0.1
+		 */
+		protected bool validate_data_type (Object obj)
+		{
+			return (true);
 		}
 
 		/**
@@ -204,11 +225,6 @@ namespace G.Data
 			data_disposed = true;
 		}
 
-		private void handle_store_weak_ref (Object obj)
-		{
-			unref();
-		}
-
 		private void sub_source_changed (BindingPointer pointer)
 		{
 			source_changed (this);
@@ -262,6 +278,13 @@ namespace G.Data
 			((BindingPointer) data).disconnect_notifications.disconnect (handle_disconnect_notifications);
 			((BindingPointer) data).data_changed.disconnect (handle_data_changed);
 			((BindingPointer) data).notify["data"].disconnect (data_dispatch_notify);
+		}
+
+		private void handle_store_weak_ref (Object obj)
+		{
+			// since this means that object was somehow unref+1 from hold
+			// nothing is to be done
+			// unref(); // does not need to happen
 		}
 
 		/**

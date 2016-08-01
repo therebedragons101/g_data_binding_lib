@@ -1,6 +1,16 @@
 namespace G.Data
 {
 	/**
+	 * Delegate used to connect to enumeration of stored aliases
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param type Type that registered property alias
+	 * @param property_name Real property name
+	 */
+	public delegate void AliasStorageDelegateFunc (Type type, string property_name);
+
+	/**
 	 * Delegate used to transform one value into another during binding
 	 * 
 	 * NOTE!
@@ -22,6 +32,6 @@ namespace G.Data
 		Object? source, string source_property, Object? target, 
 		string target_property, BindFlags flags, 
 		owned PropertyBindingTransformFunc? transform_to = null, 
-	    owned PropertyBindingTransformFunc? transform_from = null
+		owned PropertyBindingTransformFunc? transform_from = null
 	);
 }
