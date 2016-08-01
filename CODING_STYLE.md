@@ -14,6 +14,17 @@ allowed in any library that will generate .gir and .typelib files
 
 
 
+# Dependencies
+
+Only dependendencies allows for library are
+- g_data_binding_lib => **GLib**
+- g_data_binding_generics_lib => **GLib**
+- g_data_binding_gtk_lib => **GLib and Gtk**
+- g_data_binding_gtk_generics_lib => **GLib and Gtk**
+
+
+
+
 # Conditions
 
 Conditions MUST always be full and if complex they need to be separated 

@@ -34,8 +34,13 @@ make
 # This is it and build should produce
 #             - shared library g_data_bindings_libX 
 #                    for g-object-introspection and for use everywhere
+#                    only depends on GLib
 #             - shared library g_data_bindings_generics_libX 
 #                    provides extended capabilities for use with vala
+#                    only depends on GLib
+#             - shared library g_data_bindings_gtk_libX
+#                    for g-object-introspection and for use everywhere
+#                    depends on GLib and Gtk
 #             - vapi file
 #             - c header
 #             - gir file
