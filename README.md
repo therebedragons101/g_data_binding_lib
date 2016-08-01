@@ -24,7 +24,7 @@ consists of following**
        UNDERSTAND
 - Rest of demo and tutorial is still on TODO
 
-**HOW TO RUN DEMO**
+**HOW TO COMPILE AND RUN DEMO**
 
 ```bash
 cd src
