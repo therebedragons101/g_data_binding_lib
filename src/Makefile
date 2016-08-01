@@ -55,7 +55,8 @@ SOURCES := g_data_binding_lib.vala \
 	property/data_flood_detection.vala \
 	property/delegates.vala \
 	property/property_alias.vala \
-	property/property_binding.vala
+	property/property_binding.vala \
+	row_models/row_model.vala
 
 GENERICS_SOURCES := g_data_binding_generics_lib.vala \
 	generics/common/delegates.vala \
