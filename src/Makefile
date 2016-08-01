@@ -26,12 +26,12 @@ SOURCES := g_data_binding_lib.vala \
 	common/strict_weak_reference_t.vala \
 	common/unique_by_properties.vala \
 	common/weak_reference_t.vala \
+	contracts/binding_pointer.vala \
 	contracts/binding_contract.vala \
 	contracts/binding_group.vala \
 	contracts/binding_information.vala \
 	contracts/binding_information_interface.vala \
 	contracts/binding_information_reference.vala \
-	contracts/binding_pointer.vala \
 	contracts/binding_pointer_from_property_value.vala \
 	contracts/binding_pointer_update_type.vala \
 	contracts/binding_reference_type.vala \

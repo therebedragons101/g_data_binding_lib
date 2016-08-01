@@ -318,11 +318,11 @@ namespace GData
 		{
 			Value srcval = Value(_source_property.value_type);
 			Value tgtval = Value(_target_property.value_type);
-			if (set_default == true) {
+/*			if (set_default == true) {
 				unowned Value val1 = _source_property.get_default_value();
 				val1.copy(ref srcval);
 			}
-			else
+			else*/
 				source.get_property (source_property, ref srcval);
 
 			bool res = true;
@@ -343,11 +343,11 @@ namespace GData
 		{
 			Value srcval = Value(_source_property.value_type);
 			Value tgtval = Value(_target_property.value_type);
-			if (set_default == true) {
+/*			if (set_default == true) {
 				unowned Value val1 = _target_property.get_default_value();
 				val1.copy(ref tgtval);
 			}
-			else
+			else*/
 				target.get_property (target_property, ref tgtval);
 
 			bool res = true;
