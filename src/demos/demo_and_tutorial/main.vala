@@ -333,12 +333,15 @@ public class test_data_bindings : Gtk.Application
 
 		Environment.set_application_name ("test_data_bindings");
 
+		// yes, nightmare implementation
+		// this is just temporary hack until i add resource building
+		// into demo executable.
+		// it is just that that is on lowest priority right now
 		var ui_builder = new Gtk.Builder ();
 		try {
 			ui_builder.add_from_file ("./interface.ui");
 		}
-		catch (Error e) { warning ("Could not load game UI: %s", e.message); }
-
+		catch (Error e) { warning ("Could not load demo UI: %s", e.message); }
 		window = (Gtk.Window) ui_builder.get_object ("firstWindow");
 		add_window (window);
 
@@ -366,7 +369,7 @@ public class test_data_bindings : Gtk.Application
 		name_chain = (Gtk.Label) ui_builder.get_object ("name_chain");
 		surname_chain = (Gtk.Label) ui_builder.get_object ("surname_chain");
 		custom_data = (Gtk.Label) ui_builder.get_object ("custom_data");
-		
+
 		_selection_contract = new BindingContract(null);
 		selection_contract.bind ("name", name, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
 			((v) => {

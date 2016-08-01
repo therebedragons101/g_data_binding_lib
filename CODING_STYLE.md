@@ -1,10 +1,26 @@
 Few coding rules for this project
 
+# Generics
+
+Generics use is limited based on library. As library cannot expose one single
+generic symbol unless this is in X_generic_lib. This limitation is imposed since
+there is no support for generics in g-object-introspection. As such it is not
+allowed in any library that will generate .gir and .typelib files
+- g_data_binding_lib => **NOT ALLOWED**
+- g_data_binding_generics_lib => **ALLOWED**
+- g_data_binding_gtk_lib => **NOT ALLOWED**
+- g_data_binding_gtk_generics_lib => **ALLOWED**
+
+
+
+
 # Conditions
 
 Conditions MUST always be full and if complex they need to be separated 
-into lines, code is longer but in long term it is far easier to read. As 
-such this is accepted
+into lines where space is used to provide correct indentation, code is longer
+but in long term it is far easier to read.
+
+As such this is needed
 ```csharp
 	if (((myvar == true) ||
 	     (myvar2 < 4)) &&

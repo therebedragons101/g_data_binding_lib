@@ -55,5 +55,16 @@ namespace G.Data
 	 * @param source Pointer to source, use get_source() to get object reference
 	 * @return Value of value object 
 	 */
-	public delegate T CustomBindingSourceDataFunc<T> (BindingPointer? source);
+	public delegate GLib.Value CustomBindingSourceValueFunc (BindingPointer? source);
+
+	/**
+	 * Delegate used to compare two values
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param val1 First value
+	 * @param val2 Second value
+	 * @return -1 if lower, 0 if equal, 1 if greater
+	 */
+	public delegate int CompareValueFunc (GLib.Value val1, GLib.Value val2);
 }

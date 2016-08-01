@@ -4,11 +4,15 @@
 # make demo and tutorial as accessible as possible
 
 # Temporary hack
-export LD_LIBRARY_PATH=../..
+export LD_LIBRARY_PATH=../bin
 
 # Temporary hack as I don't really have time to play with embedding resources
-# right now
+# right now (low priority bug)
 DIR=`pwd`
-cd ./demos/demo_and_tutorial/
-./demo_and_tutorial
+cd ../bin
+ln -s ../src/demos/demo_and_tutorial/interface.ui
+ln -s ../src/demos/demo_and_tutorial/map.png
+./demo_and_tutorial 
+rm interface.ui
+rm map.png
 cd "$DIR"

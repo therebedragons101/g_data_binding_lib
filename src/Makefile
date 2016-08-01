@@ -7,6 +7,7 @@ LIB_MINOR := 1
 LIB_VERSION := ${LIB_MAJOR}.${LIB_MINOR}
 
 all: g_data_binding_lib.so \
+	g_data_binding_gtk_lib.so \
 	g_data_binding_generics_lib.so \
 	demo-and-tutorial \
 	g_data_binding_lib-${LIB_VERSION}.typelib
@@ -67,73 +68,97 @@ GENERICS_SOURCES := g_data_binding_generics_lib.vala \
 	generics/contracts/contract_array.vala \
 	generics/contracts/contract_storage.vala \
 	generics/contracts/custom_binding_source_data_t.vala \
+	generics/contracts/delegates.vala \
 	generics/contracts/pointer_array.vala \
 	generics/contracts/pointer_storage.vala \
 	generics/property/alias_array.vala \
 	generics/property/property_alias.vala
 
+GTK_SOURCES := g_data_binding_gtk_lib.vala
+
 PACKAGES := --pkg gio-2.0
 DEMO_PACKAGES := --pkg gtk+-3.0
+GTK_PACKAGES := --pkg gtk+-3.0
+INCLUDES := ../includes/
+BIN := ../bin/
 
 # Vala
 
 csource:
 	valac \
-	-H g_data_binding_lib.h \
+	-H ${INCLUDES}g_data_binding_lib.h \
 	-C \
-	--vapi=g_data_binding_lib${LIB_MAJOR}.vapi \
-	--library=g_data_binding_lib${LIB_MAJOR} \
+	--vapi=${INCLUDES}g_data_binding_lib${LIB_MAJOR}.vapi \
+	--library=${BIN}g_data_binding_lib${LIB_MAJOR} \
 	${PACKAGES} \
 	${SOURCES}
 
 g_data_binding_lib.so:
 	valac \
-		-H g_data_binding_lib.h \
-		--vapi=g_data_binding_lib${LIB_MAJOR}.vapi \
+		-H ${INCLUDES}g_data_binding_lib.h \
+		--vapi=${INCLUDES}g_data_binding_lib${LIB_MAJOR}.vapi \
 		-X \
 		-fPIC \
 		-X \
 		-shared \
-		--library=g_data_binding_lib${LIB_MAJOR} \
-		--gir=g_data_binding_lib-${LIB_VERSION}.gir \
-		-o g_data_binding_lib${LIB_MAJOR}.so \
+		--library=${BIN}g_data_binding_lib${LIB_MAJOR} \
+		--gir=${INCLUDES}g_data_binding_lib-${LIB_VERSION}.gir \
+		-o ${BIN}g_data_binding_lib${LIB_MAJOR}.so \
 	${PACKAGES} \
 	${SOURCES}
 
 g_data_binding_generics_lib.so:
 	valac \
-		-H g_data_binding_generics_lib.h \
-		--vapi=g_data_binding_generics_lib${LIB_MAJOR}.vapi \
+		-H ${INCLUDES}g_data_binding_generics_lib.h \
+		--vapi=${INCLUDES}g_data_binding_generics_lib${LIB_MAJOR}.vapi \
 		-X \
 		-fPIC \
 		-X \
 		-shared \
-		--library=g_data_binding_generics_lib${LIB_MAJOR} \
-		--gir=g_data_binding_generics_lib-${LIB_VERSION}.gir \
-		-o g_data_binding_generics_lib${LIB_MAJOR}.so \
-		-X -I. \
-		-X g_data_binding_lib0.so \
-		g_data_binding_lib${LIB_MAJOR}.vapi \
+		--library=${BIN}g_data_binding_generics_lib${LIB_MAJOR} \
+		--gir=${INCLUDES}g_data_binding_generics_lib-${LIB_VERSION}.gir \
+		-o ${BIN}g_data_binding_generics_lib${LIB_MAJOR}.so \
+		-X -I${INCLUDES} \
+		-X ${BIN}g_data_binding_lib0.so \
+		${INCLUDES}g_data_binding_lib${LIB_MAJOR}.vapi \
 	${PACKAGES} \
 	${GENERICS_SOURCES}
 
+g_data_binding_gtk_lib.so:
+	valac \
+		-H ${INCLUDES}g_data_binding_gtk_lib.h \
+		--vapi=${INCLUDES}g_data_binding_gtk_lib${LIB_MAJOR}.vapi \
+		-X \
+		-fPIC \
+		-X \
+		-shared \
+		--library=${BIN}g_data_binding_gtk_lib${LIB_MAJOR} \
+		--gir=${INCLUDES}g_data_binding_gtk_lib-${LIB_VERSION}.gir \
+		-o ${BIN}g_data_binding_gtk_lib${LIB_MAJOR}.so \
+		-X -I${INCLUDES} \
+		-X ${BIN}g_data_binding_lib0.so \
+		${INCLUDES}g_data_binding_lib${LIB_MAJOR}.vapi \
+	${PACKAGES} \
+	${GTK_PACKAGES} \
+	${GTK_SOURCES}
+
 g_data_binding_lib-${LIB_VERSION}.typelib:
 	g-ir-compiler \
-		--shared-library=g_data_binding_lib${LIB_MAJOR}.so \
-		--output=g_data_binding_lib-${LIB_VERSION}.typelib \
-		g_data_binding_lib-${LIB_VERSION}.gir
+		--shared-library=${BIN}g_data_binding_lib${LIB_MAJOR}.so \
+		--output=${INCLUDES}g_data_binding_lib-${LIB_VERSION}.typelib \
+		${INCLUDES}g_data_binding_lib-${LIB_VERSION}.gir
 
 demo-and-tutorial:
 	valac \
 		${PACKAGES} \
 		${DEMO_PACKAGES} \
 		demos/demo_and_tutorial/main.vala \
-		g_data_binding_lib${LIB_MAJOR}.vapi \
-		g_data_binding_generics_lib${LIB_MAJOR}.vapi \
-		-X -I. \
-		-X g_data_binding_lib0.so \
-		-X g_data_binding_generics_lib0.so \
-		-o demos/demo_and_tutorial/demo_and_tutorial
+		${INCLUDES}g_data_binding_lib${LIB_MAJOR}.vapi \
+		${INCLUDES}g_data_binding_generics_lib${LIB_MAJOR}.vapi \
+		-X -I${INCLUDES} \
+		-X ${BIN}g_data_binding_lib0.so \
+		-X ${BIN}g_data_binding_generics_lib0.so \
+		-o ${BIN}demo_and_tutorial
 
 # other
 

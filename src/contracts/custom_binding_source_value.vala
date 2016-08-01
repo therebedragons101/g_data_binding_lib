@@ -60,14 +60,14 @@ namespace G.Data
 			get { return (_null_value); }
 		}
 
-		private CustomBindingSourceDataFunc<GLib.Value?>? _resolve_data = null;
+		private CustomBindingSourceValueFunc? _resolve_data = null;
 		/**
 		 * If resolve_data is set then this is primary method of value 
 		 * recalculation
 		 * 
 		 * @since 0.1
 		 */
-		public CustomBindingSourceDataFunc<GLib.Value?>? resolve_data {
+		public CustomBindingSourceValueFunc? resolve_data {
 			get { return (_resolve_data); }
 			owned set {
 				if (_resolve_data == value)
@@ -77,15 +77,18 @@ namespace G.Data
 			}
 		}
 
-		private CompareFunc<GLib.Value?>? _compare_func = null;
+		private CompareValueFunc? _compare_func = null;
 		/**
 		 * Delegate used to compare value in order to enable cache possibility.
 		 * If this is not specified this leads to more notifications as it is
 		 * not possible to discern when value didn't change
 		 * 
+		 * Note that if this is not specified then default method is used where
+		 * it tries to compare it with what is available on GLib.Value
+		 * 
 		 * @since 0.1
 		 */
-		public CompareFunc<GLib.Value?>? compare_func {
+		public CompareValueFunc? compare_func {
 			get { return (_compare_func); }
 		}
 
@@ -119,7 +122,7 @@ namespace G.Data
 		 *                             ALL_PROPERTIES or null for cases when
 		 *                             all or none are to be used.
 		 */ 
-		public CustomBindingSourceValue (string name, BindingPointer source, owned CustomBindingSourceDataFunc<GLib.Value?> get_data_method, owned CompareFunc<GLib.Value?>? compare_method, GLib.Value null_value,
+		public CustomBindingSourceValue (string name, BindingPointer source, owned CustomBindingSourceValueFunc? get_data_method, owned CompareValueFunc? compare_method, GLib.Value null_value,
 		                                 bool always_refresh = false, string[]? connected_properties = null)
 		{
 			base (name, source, connected_properties);
@@ -133,3 +136,4 @@ namespace G.Data
 		}
 	}
 }
+
