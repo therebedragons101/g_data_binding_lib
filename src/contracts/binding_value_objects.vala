@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * IMPORTANT! Best and easiest method to understand state/value objects is 

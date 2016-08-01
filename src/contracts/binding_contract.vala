@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	//TODO, finalize contract group activities
 	/**

@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * This is more of a middle link binding pointer that in most cases it can't

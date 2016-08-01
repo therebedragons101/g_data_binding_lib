@@ -1,4 +1,4 @@
-namespace G.Data.Generics
+namespace GData.Generics
 {
 	/**
 	 * KeyValuePair specifies class that contains key and value which can

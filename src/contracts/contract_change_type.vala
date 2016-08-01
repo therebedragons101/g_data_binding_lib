@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * Specifies type of change that happened in contract for binding

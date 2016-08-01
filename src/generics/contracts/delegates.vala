@@ -1,4 +1,4 @@
-namespace G.Data.Generics
+namespace GData.Generics
 {
 	/**
 	 * Delegate used to evaluate value of value object

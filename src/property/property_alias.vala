@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * Storage for property aliases for any of possible reasons.

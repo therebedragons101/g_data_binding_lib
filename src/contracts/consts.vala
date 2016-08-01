@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	internal const string __DEFAULT__ = "**DEFAULT**";
 	internal const string BINDING_SOURCE_STATE_DATA = "binding-source-state-data";

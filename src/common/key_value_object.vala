@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * KeyValueObject specifies class that contains key and value which can

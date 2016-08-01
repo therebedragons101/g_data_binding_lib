@@ -1,4 +1,4 @@
-namespace G.Data.Generics
+namespace GData.Generics
 {
 	private static void add_alias (string s, AliasArray list)
 	{

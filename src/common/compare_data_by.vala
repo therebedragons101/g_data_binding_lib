@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * CompareDataBy specifies how objects stored in ObjectArray are compared

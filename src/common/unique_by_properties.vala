@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * UniqueByProperies is helper interface for ObjectArray and its only

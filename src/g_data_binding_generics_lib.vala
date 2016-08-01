@@ -1,6 +1,6 @@
 using GLib;
 
-namespace G.Data.Generics
+namespace GData.Generics
 {
 	public const int MAJOR_VERSION = 0;
 	public const int MINOR_VERSION = 1;

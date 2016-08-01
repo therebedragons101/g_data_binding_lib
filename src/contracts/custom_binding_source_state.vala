@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * CustomBindingSourceState is state object implementation. Unlike value

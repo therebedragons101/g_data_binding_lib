@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * BindingPointer subclass that defines data change dispatch is being

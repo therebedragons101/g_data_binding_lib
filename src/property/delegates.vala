@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * Delegate used to connect to enumeration of stored aliases

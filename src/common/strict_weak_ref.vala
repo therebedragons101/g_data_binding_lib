@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * Non-generic class StrictWeakRef is different from WeakRef in two things. 

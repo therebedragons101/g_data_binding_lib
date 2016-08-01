@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * ObjectModelArray is holding list of objects and emits signals when 

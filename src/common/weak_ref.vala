@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * .Net C# Non-generic WeakRef like implementation

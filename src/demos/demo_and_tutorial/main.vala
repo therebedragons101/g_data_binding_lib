@@ -1,7 +1,7 @@
-using G.Data;
-using G.Data.Generics;
+using GData;
+using GData.Generics;
 
-namespace G.Data
+namespace GData
 {
 	public static string get_info_str (ObjectInformation? obj)
 	{

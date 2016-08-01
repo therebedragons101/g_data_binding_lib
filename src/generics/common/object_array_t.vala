@@ -1,6 +1,6 @@
-using G.Data;
+using GData;
 
-namespace G.Data.Generics
+namespace GData.Generics
 {
 	/**
 	 * ObjectArray is holding list of objects and emits signals when objects are

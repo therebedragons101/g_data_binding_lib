@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * Interface for needed functionality in BindingInformation. This is only

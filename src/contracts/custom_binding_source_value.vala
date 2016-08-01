@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * CustomBindingSourceValue is one of value objects implementations. It

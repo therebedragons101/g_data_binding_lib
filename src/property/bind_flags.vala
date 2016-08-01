@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * Flags specified upon creation of new BindingInterface to describe how

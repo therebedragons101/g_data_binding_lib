@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * Storage for contracts in order to have guaranteed reference when there is 

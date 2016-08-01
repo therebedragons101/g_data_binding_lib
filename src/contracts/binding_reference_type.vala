@@ -1,4 +1,4 @@
-namespace G.Data
+namespace GData
 {
 	/**
 	 * Specifies how BindingPointer should handle reference on data that it 
