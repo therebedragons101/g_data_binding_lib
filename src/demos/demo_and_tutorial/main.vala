@@ -331,6 +331,8 @@ public class test_data_bindings : Gtk.Application
 			.register (typeof(Gtk.SpinButton), "value")
 			.register (typeof(Gtk.Switch), "active");
 
+		Gtk.Settings.get_default().gtk_application_prefer_dark_theme = true;
+
 		Environment.set_application_name ("test_data_bindings");
 
 		// yes, nightmare implementation
