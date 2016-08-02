@@ -8,7 +8,7 @@ namespace GData
 	 */
 	public class PointerStorage : Object
 	{
-		public class Signals
+		public class Signals : Object
 		{
 			private static Signals? _instance = null;
 			internal static Signals get_instance()
@@ -19,6 +19,10 @@ namespace GData
 			}
 
 			public signal void added_storage (string storage_name);
+
+			private Signals()
+			{
+			}
 		}
 
 		/**

@@ -20,7 +20,7 @@ namespace GData
 	 * 
 	 * @since 0.1
 	 */
-	public class Binder
+	public class Binder : Object
 	{
 		private static Binder __default_binder = null;
 		private static Binder _default_binder = null;

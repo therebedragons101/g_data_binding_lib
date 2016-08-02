@@ -9,9 +9,9 @@ namespace GData
 	 * 
 	 * @since 0.1
 	 */
-	public class PropertyAlias
+	public class PropertyAlias : Object
 	{
-		public class Signals
+		public class Signals : Object
 		{
 			private static Signals? _instance = null;
 			internal static Signals get_instance()
@@ -22,6 +22,10 @@ namespace GData
 			}
 
 			public signal void added_alias (string alias_name);
+
+			private Signals()
+			{
+			}
 		}
 
 		/**

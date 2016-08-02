@@ -22,7 +22,7 @@ namespace GData
 	 * 
 	 * @since 0.1
 	 */
-	public class BindingContract : BindingPointer, BindingStateObjects, BindingValueObjects, BindingGroup
+	public class BindingContract : GData.BindingPointer, BindingStateObjects, BindingValueObjects//, BindingGroup
 	{
 		private bool finalizing_in_progress = false;
 
