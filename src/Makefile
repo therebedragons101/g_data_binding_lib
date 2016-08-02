@@ -2,25 +2,29 @@
 
 export LD_LIBRARY_PATH := $(shell pwd)
 export GI_TYPELIB_PATH := $(shell pwd)
+
+# edit library name and version here
+COMMON_NAME := g_data_binding
+NAME_SUFFIX := _lib
+LIBRARY_NAME := ${COMMON_NAME}${NAME_SUFFIX}
+
 LIB_MAJOR := 0
 LIB_MINOR := 1
 LIB_VERSION := ${LIB_MAJOR}.${LIB_MINOR}
 
-all: g_data_binding_lib.so \
-	g_data_binding_gtk_lib.so \
-	g_data_binding_generics_lib.so \
-	demo-and-tutorial \
-	g_data_binding_lib-${LIB_VERSION}.typelib
-#	csource \
+all: ${LIBRARY_NAME}.so \
+     ${COMMON_NAME}gtk${NAME_SUFFIX}.so \
+     ${COMMON_NAME}generics${NAME_SUFFIX}.so \
+     demo-and-tutorial \
+     hack-for-gir-bug \
+     ${COMMON_NAME}${NAME_SUFFIX}-${LIB_VERSION}.typelib \
+     move-binaries-to-bin
 
-run: run-g_data_binding_lib 
+run: run-${COMMON_NAME}_lib
 
-run-g_data_binding_lib: 
+run-g_${COMMON_NAME}_lib:
 
-#valac --library=test_shared -H test_shared.h test_shared.vala -X -fPIC -X -shared -o test_shared.so
-#	common/object_model_array.vala \
-
-SOURCES := g_data_binding_lib.vala \
+SOURCES := ${LIBRARY_NAME}.vala \
 	common/compare_data_by.vala \
 	common/delegates.vala \
 	common/strict_weak_reference_t.vala \
@@ -58,7 +62,7 @@ SOURCES := g_data_binding_lib.vala \
 	property/property_binding.vala \
 	row_models/row_model.vala
 
-GENERICS_SOURCES := g_data_binding_generics_lib.vala \
+GENERICS_SOURCES := ${COMMON_NAME}_generics${NAME_SUFFIX}.vala \
 	generics/common/delegates.vala \
 	generics/common/key_value_array_k_v.vala \
 	generics/common/key_value_pair_k_v.vala \
@@ -75,7 +79,7 @@ GENERICS_SOURCES := g_data_binding_generics_lib.vala \
 	generics/property/alias_array.vala \
 	generics/property/property_alias.vala
 
-GTK_SOURCES := g_data_binding_gtk_lib.vala
+GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala
 
 PACKAGES := --pkg gio-2.0
 DEMO_PACKAGES := --pkg gtk+-3.0
@@ -85,81 +89,78 @@ BIN := ../bin/
 
 # Vala
 
-csource:
+${LIBRARY_NAME}.so:
 	valac \
-	-H ${INCLUDES}g_data_binding_lib.h \
-	-C \
-	--vapi=${INCLUDES}g_data_binding_lib${LIB_MAJOR}.vapi \
-	--library=${BIN}g_data_binding_lib${LIB_MAJOR} \
-	${PACKAGES} \
-	${SOURCES}
-
-g_data_binding_lib.so:
-	valac \
-		-H ${INCLUDES}g_data_binding_lib.h \
-		--vapi=${INCLUDES}g_data_binding_lib${LIB_MAJOR}.vapi \
+		-H ${INCLUDES}${LIBRARY_NAME}.h \
+		--vapi=${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
 		-X \
 		-fPIC \
 		-X \
 		-shared \
-		--library=${BIN}g_data_binding_lib${LIB_MAJOR} \
-		--gir=${INCLUDES}g_data_binding_lib-${LIB_VERSION}.gir \
-		-o ${BIN}g_data_binding_lib${LIB_MAJOR}.so \
+		--library=${LIBRARY_NAME}${LIB_MAJOR} \
+		--gir=${INCLUDES}${LIBRARY_NAME}-${LIB_VERSION}.gir \
+		-o ${LIBRARY_NAME}${LIB_MAJOR}.so \
 	${PACKAGES} \
 	${SOURCES}
 
-g_data_binding_generics_lib.so:
+${COMMON_NAME}generics${NAME_SUFFIX}.so:
 	valac \
-		-H ${INCLUDES}g_data_binding_generics_lib.h \
-		--vapi=${INCLUDES}g_data_binding_generics_lib${LIB_MAJOR}.vapi \
+		-H ${INCLUDES}${COMMON_NAME}_generics${NAME_SUFFIX}.h \
+		--vapi=${INCLUDES}${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.vapi \
 		-X \
 		-fPIC \
 		-X \
 		-shared \
-		--library=${BIN}g_data_binding_generics_lib${LIB_MAJOR} \
-		--gir=${INCLUDES}g_data_binding_generics_lib-${LIB_VERSION}.gir \
-		-o ${BIN}g_data_binding_generics_lib${LIB_MAJOR}.so \
+		--library=${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR} \
+		--gir=${INCLUDES}${COMMON_NAME}_generics${NAME_SUFFIX}-${LIB_VERSION}.gir \
+		-o ${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.so \
 		-X -I${INCLUDES} \
-		-X ${BIN}g_data_binding_lib0.so \
-		${INCLUDES}g_data_binding_lib${LIB_MAJOR}.vapi \
+		-X ${LIBRARY_NAME}${LIB_MAJOR}.so \
+		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
 	${PACKAGES} \
 	${GENERICS_SOURCES}
 
-g_data_binding_gtk_lib.so:
+${COMMON_NAME}gtk${NAME_SUFFIX}.so:
 	valac \
-		-H ${INCLUDES}g_data_binding_gtk_lib.h \
-		--vapi=${INCLUDES}g_data_binding_gtk_lib${LIB_MAJOR}.vapi \
+		-H ${INCLUDES}${COMMON_NAME}_gtk${NAME_SUFFIX}.h \
+		--vapi=${INCLUDES}${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR}.vapi \
 		-X \
 		-fPIC \
 		-X \
 		-shared \
-		--library=${BIN}g_data_binding_gtk_lib${LIB_MAJOR} \
-		--gir=${INCLUDES}g_data_binding_gtk_lib-${LIB_VERSION}.gir \
-		-o ${BIN}g_data_binding_gtk_lib${LIB_MAJOR}.so \
+		--library=${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR} \
+		--gir=${INCLUDES}${COMMON_NAME}_gtk${NAME_SUFFIX}-${LIB_VERSION}.gir \
+		-o ${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR}.so \
 		-X -I${INCLUDES} \
-		-X ${BIN}g_data_binding_lib0.so \
-		${INCLUDES}g_data_binding_lib${LIB_MAJOR}.vapi \
+		-X ${LIBRARY_NAME}${LIB_MAJOR}.so \
+		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
 	${PACKAGES} \
 	${GTK_PACKAGES} \
 	${GTK_SOURCES}
 
-g_data_binding_lib-${LIB_VERSION}.typelib:
+hack-for-gir-bug:
+	sh gir_temporary_fix.sh
+
+${LIBRARY_NAME}-${LIB_VERSION}.typelib:
 	g-ir-compiler \
-		--shared-library=${BIN}g_data_binding_lib${LIB_MAJOR}.so \
-		--output=${INCLUDES}g_data_binding_lib-${LIB_VERSION}.typelib \
-		${INCLUDES}g_data_binding_lib-${LIB_VERSION}.gir
+		--shared-library=${LIBRARY_NAME}${LIB_MAJOR}.so \
+		--output=${INCLUDES}${LIBRARY_NAME}-${LIB_VERSION}.typelib \
+		${INCLUDES}${LIBRARY_NAME}-${LIB_VERSION}.gir
 
 demo-and-tutorial:
 	valac \
 		${PACKAGES} \
 		${DEMO_PACKAGES} \
 		demos/demo_and_tutorial/main.vala \
-		${INCLUDES}g_data_binding_lib${LIB_MAJOR}.vapi \
-		${INCLUDES}g_data_binding_generics_lib${LIB_MAJOR}.vapi \
+		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
+		${INCLUDES}${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.vapi \
 		-X -I${INCLUDES} \
-		-X ${BIN}g_data_binding_lib0.so \
-		-X ${BIN}g_data_binding_generics_lib0.so \
+		-X ${LIBRARY_NAME}${LIB_MAJOR}.so \
+		-X ${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.so \
 		-o ${BIN}demo_and_tutorial
+
+move-binaries-to-bin:
+	mv *.so ${BIN}
 
 # other
 

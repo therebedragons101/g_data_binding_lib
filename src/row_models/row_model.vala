@@ -36,6 +36,7 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 */
+		[Description (name="Visibility", blurb="Specifies if row is visible or not")]
 		public bool visible { get; set; default = true; }
 
 		/**
@@ -43,14 +44,16 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 */
-		public RowColumn()
+		public RowColumn (BindingInformationInterface binding)
 		{
-			
 		}
 	}
 
 	/**
 	 * Row model is base class to generate row representations in list widgets
+	 * 
+	 * Note that if row is created as VERTICAL this sets it as 1 column where
+	 * columns are represented as rows
 	 * 
 	 * @since 0.1
 	 */
