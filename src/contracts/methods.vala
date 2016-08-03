@@ -25,7 +25,7 @@ namespace GData
 		if ((obj1 == null) || (obj2 == null))
 			return (null);
 		if (obj1.get_type().is_a(obj2.get_type()) == true)
-			return (obj1.get_type());
+			return (obj2.get_type());
 		if (obj2.get_type().is_a(obj1.get_type()) == true)
 			return (obj1.get_type());
 		Type t = obj1.get_type().parent();
