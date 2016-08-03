@@ -890,7 +890,7 @@ stdout.printf ("example\n");
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e4_events"), _e4_events);
 
-		connect_binding_pointer_events (PointerStorage.get_default().find("example-pointer-set-data"), _e4_events);
+		connect_binding_pointer_events (PointerStorage.get_storage(_STORAGE_).find("example-pointer-set-data"), _e4_events);
 	}
 
 	public void example5 (Gtk.Builder ui_builder)
@@ -923,7 +923,7 @@ stdout.printf ("example\n");
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e5_events"), _e5_events);
 
-		connect_binding_contract_events (ContractStorage.get_default().find("example-contract-storage-set-data"), _e5_events);
+		connect_binding_contract_events (ContractStorage.get_storage(_STORAGE_).find("example-contract-storage-set-data"), _e5_events);
 	}
 
 	public void example6 (Gtk.Builder ui_builder)
@@ -959,7 +959,7 @@ stdout.printf ("example\n");
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e6_events"), _e6_events);
 
-		connect_binding_contract_events (ContractStorage.get_storage("example-contract-chaining").find("sub-contract"), _e6_events);
+		connect_binding_contract_events (ContractStorage.get_storage(_STORAGE_).find("sub-contract"), _e6_events);
 	}
 
 	public void example_v (Gtk.Builder ui_builder)

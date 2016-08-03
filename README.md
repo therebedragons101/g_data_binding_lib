@@ -23,8 +23,13 @@ consists of following**
        STEP BY STEP AND VISUALLY SHOWS INTERNALS IN ORDER TO BE REALLY EASY TO
        UNDERSTAND
 - Rest of demo and tutorial is still on TODO
+- Note that demo seems simple, but it is absolute nightmare scenario of
+  crosslinking and multi edit access that can be encountered. Whole demo only
+  deals with 3 person objects, where they also contain parent relationship
 
-**HOW TO COMPILE AND RUN DEMO**
+**HOW TO COMPILE/RUN DEMO AND TUTORIAL**
+
+[![ScreenShot](https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/demos/demo_and_tutorial/screenshot.png)](https://youtu.be/HDNQg7ShnDg)
 
 ```bash
 cd src
