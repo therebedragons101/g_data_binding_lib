@@ -1,6 +1,7 @@
 using GData;
 using GData.Generics;
 
+/* Demo relevant code starts at line 629 */
 namespace GData
 {
 	public static string get_info_str (ObjectInformation? obj)
@@ -309,6 +310,172 @@ public class test_data_bindings : Gtk.Application
 		});
 	}
 
+	private string get_current_source (Object? obj)
+	{
+		return ("\n\t\t%s".printf(_get_current_source(obj)));
+	}
+
+	private string _get_current_source (Object? obj)
+	{
+		return ("currently pointing => %s".printf (__get_current_source (obj)));
+	}
+
+	private string __get_current_source (Object? obj)
+	{
+		if (is_binding_pointer(obj) == true)
+			return ("%s".printf (get_pointer_info_str((BindingPointer?) obj)));
+		else
+			// demo only uses ObjectInformation so this is safe
+			return ("%s".printf (get_info_str((ObjectInformation?) obj)));
+	}
+
+	private void connect_binding_pointer_events (BindingPointer pointer, ObjectArray<EventDescription> events)
+	{
+		pointer.data_changed.connect ((binding, cookie) => {
+			events.add (
+				new EventDescription.as_signal (
+					"data_changed", 
+					"(binding=%s, data_change_cookie=%s)".printf ((binding == pointer) ? "THIS" : "OTHER", cookie),
+					yellow("\tSource object change notification. Note that this is event triggered from outside when BindingPointer is MANUAL\n") +
+					"\t\tbinding (BindingPointer emiting the notification)\n" +
+					"\t\tdata_change_cookie (description of data change as passed on by triggering event)" +
+					get_current_source (binding.get_source())
+				)
+			);
+		});
+		pointer.before_source_change.connect ((binding, is_same, next) => {
+			events.add (
+				new EventDescription.as_signal (
+					"before_source_change", 
+					"(binding=%s, is_same=%i, next=%s)".printf ((binding == pointer) ? "THIS" : "OTHER", (int) is_same, (next != null) ? ((Person) next).fullname() : _null()),
+					yellow("\tObject being pointed is about to change. In case if reference was not dropped it can still be accessed trough binding\n") +
+					"\t\tbinding (BindingPointer emiting the notification)\n" +
+					"\t\tis_same (specifies if type of next source being pointed to is the same)\n" +
+					"\t\tnext (reference to next object being pointed to)" +
+					get_current_source (binding.get_source())
+				)
+			);
+		});
+		pointer.source_changed.connect ((binding) => {
+			events.add (
+				new EventDescription.as_signal (
+					"source_changed", 
+					"(binding=%s)".printf((binding == pointer) ? "THIS" : "OTHER"),
+					yellow("\tObject being pointed has changed.\n") +
+					"\t\tbinding (BindingPointer emiting the notification)" +
+					get_current_source (binding.get_source())
+				)
+			);
+		});
+		pointer.connect_notifications.connect ((obj) => {
+			events.add (
+				new EventDescription.as_signal (
+					"connect_notifications", 
+					"(obj = %s)".printf (__get_current_source (obj)),
+					yellow("\tSignal to connect anything application needs connected beside basic requirements when data source changes.")
+				)
+			);
+		});
+		pointer.disconnect_notifications.connect ((obj) => {
+			events.add (
+				new EventDescription.as_signal (
+					"disconnect_notifications", 
+					"(obj = %s)".printf (__get_current_source (obj)),
+					yellow("\tSignal to disconnect anything application needs connected beside basic requirements when data source changes.")
+				)
+			);
+		});
+		pointer.notify["data"].connect ((binding) => {
+			events.add (
+				new EventDescription.as_property (
+					"data", 
+					" = %s => %s".printf (__get_current_source (pointer.data), _get_current_source (pointer.get_source()))
+				)
+			);
+		});
+	}
+
+	private void connect_binding_contract_events (BindingContract contract, ObjectArray<EventDescription> events)
+	{
+		connect_binding_pointer_events (contract, events);
+
+		contract.contract_changed.connect ((ccontract) => {
+			events.add (
+				new EventDescription.as_signal (
+					"contract_changed", 
+					"(contract=%s)".printf((ccontract == contract) ? "THIS" : "OTHER"),
+					yellow("\tEmited when contract is disolved or renewed after source change.\n") +
+					"\t\tcontract (BindingContract emiting the notification)" +
+					get_current_source (contract.get_source())
+				)
+			);
+		});
+		contract.bindings_changed.connect ((ccontract, change_type, binding) => {
+			events.add (
+				new EventDescription.as_signal (
+					"bindings_changed", 
+					"(contract=%s, change_type=%s, binding)".printf((ccontract == contract) ? "THIS" : "OTHER", (change_type == ContractChangeType.ADDED) ? "ADDED" : "REMOVED"),
+					yellow("\tEmited when bindings are changed by adding or removing.\n") +
+					"\t\tcontract (BindingContract emiting the notification)\n" +
+					"\t\tchange_type (binding ADDED or REMOVED)\n" +
+					"\t\tbinding (BindingContract emiting the notification)" +
+					get_current_source (contract.get_source())
+				)
+			);
+		});
+		contract.notify["is-valid"].connect ((c) => {
+			events.add (
+				new EventDescription.as_property (
+					"is_valid", 
+					" = %s".printf ((contract.is_valid == true) ? "TRUE" : "FALSE")
+				)
+			);
+		});
+		contract.notify["length"].connect ((c) => {
+			events.add (
+				new EventDescription.as_property (
+					"is_valid", 
+					" = %i".printf ((int) contract.length)
+				)
+			);
+		});
+		contract.notify["suspended"].connect ((c) => {
+			events.add (
+				new EventDescription.as_property (
+					"is_valid", 
+					" = %s".printf ((contract.suspended == true) ? "TRUE" : "FALSE")
+				)
+			);
+		});
+	}
+
+	private void bind_event_listbox (Gtk.ListBox listbox, ObjectArray<EventDescription> events)
+	{
+		listbox.bind_model (events, ((o) => {
+			Gtk.ListBoxRow r = new BindingListBoxRow();
+			r.visible = true;
+			Gtk.Box box = new Gtk.Box (Gtk.Orientation.VERTICAL, 4);
+			box.expand = true;
+			box.visible = true;
+			r.add (box);
+			Gtk.Label title = new Gtk.Label("");
+			title.visible = true;
+			title.hexpand = true;
+			title.xalign = 0;
+			title.use_markup = true;
+			title.set_markup(((EventDescription) o).title);
+			Gtk.Label description = new Gtk.Label("");
+			description.visible = true;
+			description.use_markup = true;
+			description.hexpand = true;
+			description.xalign = 0;
+			description.set_markup(((EventDescription) o).description);
+			box.pack_start (title, false, false, 0);
+			box.pack_start (description, false, false, 0);
+			return (r);
+		}));
+	}
+
 	private Gtk.Builder set_ui()
 	{
 		Gtk.Settings.get_default().gtk_application_prefer_dark_theme = true;
@@ -443,24 +610,40 @@ public class test_data_bindings : Gtk.Application
 		example_relay(ui_builder);
 	}
 
+	protected override void shutdown ()
+	{
+		base.shutdown ();
+	}
+
+	protected override void activate ()
+	{
+		window.present ();
+	}
+
+	public static int main (string[] args)
+	{
+		var app = new test_data_bindings ();
+		return (app.run (args));
+	}
+
 	public void main_demo (Gtk.Builder ui_builder)
 	{
 		string _STORAGE_ = "main-example";
-		BindingContract selection_contract = ContractStorage.get_storage(_STORAGE_).add ("main-contract", new BindingContract(null));
-		selection_contract.bind ("name", name, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
-			((v) => {
-				return ((string) v != "");
-			}));
-		selection_contract.bind ("surname", surname, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
-			((v) => {
-				return ((string) v != "");
-			}));
-		selection_contract.bind ("required", required, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+		BindingContract selection_contract = ContractStorage.get_storage(_STORAGE_).add ("main-contract", new BindingContract(null))
+			.bind ("name", name, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
+				((v) => {
+					return ((string) v != "");
+				}))
+			.bind ("surname", surname, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
+				((v) => {
+					return ((string) v != "");
+				}));
+			.bind ("required", required, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 		
 		// chaining contract as source
-		BindingContract chain_contract = ContractStorage.get_storage(_STORAGE_).add ("chain-contract", new BindingContract(selection_contract));
-		chain_contract.bind ("name", name_chain, "label", BindFlags.SYNC_CREATE);
-		chain_contract.bind ("surname", surname_chain, "label", BindFlags.SYNC_CREATE);
+		BindingContract chain_contract = ContractStorage.get_storage(_STORAGE_).add ("chain-contract", new BindingContract(selection_contract))
+			.bind ("name", name_chain, "label", BindFlags.SYNC_CREATE)
+			.bind ("surname", surname_chain, "label", BindFlags.SYNC_CREATE);
 
 		bind_person_model (items, persons, selection_contract);
 
@@ -494,14 +677,13 @@ public class test_data_bindings : Gtk.Application
 		BindingPointer infoptr = selection_contract.hold (new BindingPointerFromPropertyValue (selection_contract, "info"));
 		BindingPointer parentptr = selection_contract.hold (new BindingPointerFromPropertyValue (selection_contract, "parent"));
 
-		BindingContract info_contract = ContractStorage.get_storage(_STORAGE_).add ("info-contract", new BindingContract(infoptr));
-		BindingContract parent_contract = ContractStorage.get_storage(_STORAGE_).add ("parent-contract", new BindingContract(parentptr));
+		BindingContract info_contract = ContractStorage.get_storage(_STORAGE_).add ("info-contract", new BindingContract(infoptr))
+			.bind ("some_num", ui_builder.get_object ("e1_s1_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 
-		info_contract.bind ("some_num", ui_builder.get_object ("e1_s1_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-
-		parent_contract.bind ("name", ui_builder.get_object ("e1_s2_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-		parent_contract.bind ("surname", ui_builder.get_object ("e1_s2_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-		parent_contract.bind ("required", ui_builder.get_object ("e1_s2_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+		BindingContract parent_contract = ContractStorage.get_storage(_STORAGE_).add ("parent-contract", new BindingContract(parentptr))
+			.bind ("name", ui_builder.get_object ("e1_s2_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.bind ("surname", ui_builder.get_object ("e1_s2_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.bind ("required", ui_builder.get_object ("e1_s2_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 
 		PropertyBinding.bind(parent_contract, "is-valid", ui_builder.get_object ("e1_s2_g"), "visible", BindFlags.SYNC_CREATE);
 	}
@@ -698,172 +880,6 @@ public class test_data_bindings : Gtk.Application
 		);
 	}
 
-	private void bind_event_listbox (Gtk.ListBox listbox, ObjectArray<EventDescription> events)
-	{
-		listbox.bind_model (events, ((o) => {
-			Gtk.ListBoxRow r = new BindingListBoxRow();
-			r.visible = true;
-			Gtk.Box box = new Gtk.Box (Gtk.Orientation.VERTICAL, 4);
-			box.expand = true;
-			box.visible = true;
-			r.add (box);
-			Gtk.Label title = new Gtk.Label("");
-			title.visible = true;
-			title.hexpand = true;
-			title.xalign = 0;
-			title.use_markup = true;
-			title.set_markup(((EventDescription) o).title);
-			Gtk.Label description = new Gtk.Label("");
-			description.visible = true;
-			description.use_markup = true;
-			description.hexpand = true;
-			description.xalign = 0;
-			description.set_markup(((EventDescription) o).description);
-			box.pack_start (title, false, false, 0);
-			box.pack_start (description, false, false, 0);
-			return (r);
-		}));
-	}
-
-	private string get_current_source (Object? obj)
-	{
-		return ("\n\t\t%s".printf(_get_current_source(obj)));
-	}
-
-	private string _get_current_source (Object? obj)
-	{
-		return ("currently pointing => %s".printf (__get_current_source (obj)));
-	}
-
-	private string __get_current_source (Object? obj)
-	{
-		if (is_binding_pointer(obj) == true)
-			return ("%s".printf (get_pointer_info_str((BindingPointer?) obj)));
-		else
-			// demo only uses ObjectInformation so this is safe
-			return ("%s".printf (get_info_str((ObjectInformation?) obj)));
-	}
-
-	private void connect_binding_pointer_events (BindingPointer pointer, ObjectArray<EventDescription> events)
-	{
-		pointer.data_changed.connect ((binding, cookie) => {
-			events.add (
-				new EventDescription.as_signal (
-					"data_changed", 
-					"(binding=%s, data_change_cookie=%s)".printf ((binding == pointer) ? "THIS" : "OTHER", cookie),
-					yellow("\tSource object change notification. Note that this is event triggered from outside when BindingPointer is MANUAL\n") +
-					"\t\tbinding (BindingPointer emiting the notification)\n" +
-					"\t\tdata_change_cookie (description of data change as passed on by triggering event)" +
-					get_current_source (binding.get_source())
-				)
-			);
-		});
-		pointer.before_source_change.connect ((binding, is_same, next) => {
-			events.add (
-				new EventDescription.as_signal (
-					"before_source_change", 
-					"(binding=%s, is_same=%i, next=%s)".printf ((binding == pointer) ? "THIS" : "OTHER", (int) is_same, (next != null) ? ((Person) next).fullname() : _null()),
-					yellow("\tObject being pointed is about to change. In case if reference was not dropped it can still be accessed trough binding\n") +
-					"\t\tbinding (BindingPointer emiting the notification)\n" +
-					"\t\tis_same (specifies if type of next source being pointed to is the same)\n" +
-					"\t\tnext (reference to next object being pointed to)" +
-					get_current_source (binding.get_source())
-				)
-			);
-		});
-		pointer.source_changed.connect ((binding) => {
-			events.add (
-				new EventDescription.as_signal (
-					"source_changed", 
-					"(binding=%s)".printf((binding == pointer) ? "THIS" : "OTHER"),
-					yellow("\tObject being pointed has changed.\n") +
-					"\t\tbinding (BindingPointer emiting the notification)" +
-					get_current_source (binding.get_source())
-				)
-			);
-		});
-		pointer.connect_notifications.connect ((obj) => {
-			events.add (
-				new EventDescription.as_signal (
-					"connect_notifications", 
-					"(obj = %s)".printf (__get_current_source (obj)),
-					yellow("\tSignal to connect anything application needs connected beside basic requirements when data source changes.")
-				)
-			);
-		});
-		pointer.disconnect_notifications.connect ((obj) => {
-			events.add (
-				new EventDescription.as_signal (
-					"disconnect_notifications", 
-					"(obj = %s)".printf (__get_current_source (obj)),
-					yellow("\tSignal to disconnect anything application needs connected beside basic requirements when data source changes.")
-				)
-			);
-		});
-		pointer.notify["data"].connect ((binding) => {
-			events.add (
-				new EventDescription.as_property (
-					"data", 
-					" = %s => %s".printf (__get_current_source (pointer.data), _get_current_source (pointer.get_source()))
-				)
-			);
-		});
-	}
-
-	private void connect_binding_contract_events (BindingContract contract, ObjectArray<EventDescription> events)
-	{
-		connect_binding_pointer_events (contract, events);
-
-		contract.contract_changed.connect ((ccontract) => {
-			events.add (
-				new EventDescription.as_signal (
-					"contract_changed", 
-					"(contract=%s)".printf((ccontract == contract) ? "THIS" : "OTHER"),
-					yellow("\tEmited when contract is disolved or renewed after source change.\n") +
-					"\t\tcontract (BindingContract emiting the notification)" +
-					get_current_source (contract.get_source())
-				)
-			);
-		});
-		contract.bindings_changed.connect ((ccontract, change_type, binding) => {
-			events.add (
-				new EventDescription.as_signal (
-					"bindings_changed", 
-					"(contract=%s, change_type=%s, binding)".printf((ccontract == contract) ? "THIS" : "OTHER", (change_type == ContractChangeType.ADDED) ? "ADDED" : "REMOVED"),
-					yellow("\tEmited when bindings are changed by adding or removing.\n") +
-					"\t\tcontract (BindingContract emiting the notification)\n" +
-					"\t\tchange_type (binding ADDED or REMOVED)\n" +
-					"\t\tbinding (BindingContract emiting the notification)" +
-					get_current_source (contract.get_source())
-				)
-			);
-		});
-		contract.notify["is-valid"].connect ((c) => {
-			events.add (
-				new EventDescription.as_property (
-					"is_valid", 
-					" = %s".printf ((contract.is_valid == true) ? "TRUE" : "FALSE")
-				)
-			);
-		});
-		contract.notify["length"].connect ((c) => {
-			events.add (
-				new EventDescription.as_property (
-					"is_valid", 
-					" = %i".printf ((int) contract.length)
-				)
-			);
-		});
-		contract.notify["suspended"].connect ((c) => {
-			events.add (
-				new EventDescription.as_property (
-					"is_valid", 
-					" = %s".printf ((contract.suspended == true) ? "TRUE" : "FALSE")
-				)
-			);
-		});
-	}
-
 	public void example4 (Gtk.Builder ui_builder)
 	{
 		string _STORAGE_ = "example--pointer-set-data";
@@ -976,12 +992,12 @@ public class test_data_bindings : Gtk.Application
 	public void example_so (Gtk.Builder ui_builder)
 	{
 		string _STORAGE_ = "example-state-objects";
-		BindingContract my_contract = ContractStorage.get_storage(_STORAGE_).add ("my-contract", new BindingContract());
-		bind_person_model ((Gtk.ListBox) ui_builder.get_object ("eso_list"), persons, my_contract);
+		BindingContract my_contract = ContractStorage.get_storage(_STORAGE_).add ("my-contract", new BindingContract())
+			.bind ("name", ui_builder.get_object ("eso_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.bind ("surname", ui_builder.get_object ("eso_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.bind ("required", ui_builder.get_object ("eso_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 
-		my_contract.bind ("name", ui_builder.get_object ("eso_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-		my_contract.bind ("surname", ui_builder.get_object ("eso_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-		my_contract.bind ("required", ui_builder.get_object ("eso_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+		bind_person_model ((Gtk.ListBox) ui_builder.get_object ("eso_list"), persons, my_contract);
 
 		// adding custom state value to contract
 		my_contract.add_state (new CustomBindingSourceState ("validity", my_contract, ((src) => {
@@ -994,12 +1010,12 @@ public class test_data_bindings : Gtk.Application
 	public void example_vo (Gtk.Builder ui_builder)
 	{
 		string _STORAGE_ = "example-value-objects";
-		BindingContract my_contract = ContractStorage.get_storage(_STORAGE_).add ("my-contract", new BindingContract());
-		bind_person_model ((Gtk.ListBox) ui_builder.get_object ("evvo_list"), persons, my_contract);
+		BindingContract my_contract = ContractStorage.get_storage(_STORAGE_).add ("my-contract", new BindingContract())
+			.bind ("name", ui_builder.get_object ("evvo_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.bind ("surname", ui_builder.get_object ("evvo_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.bind ("required", ui_builder.get_object ("evvo_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 
-		my_contract.bind ("name", ui_builder.get_object ("evvo_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-		my_contract.bind ("surname", ui_builder.get_object ("evvo_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-		my_contract.bind ("required", ui_builder.get_object ("evvo_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+		bind_person_model ((Gtk.ListBox) ui_builder.get_object ("evvo_list"), persons, my_contract);
 
 		// adding custom value to contract
 		my_contract.add_source_value (new CustomBindingSourceData<string> ("length", my_contract, 
@@ -1044,21 +1060,5 @@ public class test_data_bindings : Gtk.Application
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e7_events"), _e7_events);
 		connect_binding_contract_events (parent_contract, _e7_events);
-	}
-
-	protected override void shutdown ()
-	{
-		base.shutdown ();
-	}
-
-	protected override void activate ()
-	{
-		window.present ();
-	}
-
-	public static int main (string[] args)
-	{
-		var app = new test_data_bindings ();
-		return (app.run (args));
 	}
 }
