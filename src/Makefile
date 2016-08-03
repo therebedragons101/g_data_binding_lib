@@ -79,7 +79,8 @@ GENERICS_SOURCES := ${COMMON_NAME}_generics${NAME_SUFFIX}.vala \
 	generics/property/alias_array.vala \
 	generics/property/property_alias.vala
 
-GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala
+GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
+	gtk/inspector/inspector_window.vala
 
 PACKAGES := --pkg gio-2.0
 DEMO_PACKAGES := --pkg gtk+-3.0
