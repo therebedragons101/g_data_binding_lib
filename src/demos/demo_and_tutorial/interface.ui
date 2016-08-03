@@ -1095,7 +1095,7 @@ THIS PAGE IN DEMO JUST SHOWS HOW MUCH SINGLE LINE OF CODE MEANS WHEN DATA IS MAP
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="pixbuf">map.png</property>
+                        <property name="resource">/org/gtk/demo_and_tutorial/map.png</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1118,7 +1118,7 @@ THIS PAGE IN DEMO JUST SHOWS HOW MUCH SINGLE LINE OF CODE MEANS WHEN DATA IS MAP
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>

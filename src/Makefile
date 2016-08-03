@@ -12,7 +12,8 @@ LIB_MAJOR := 0
 LIB_MINOR := 1
 LIB_VERSION := ${LIB_MAJOR}.${LIB_MINOR}
 
-all: ${LIBRARY_NAME}.so \
+all: resources \
+     ${LIBRARY_NAME}.so \
      ${COMMON_NAME}gtk${NAME_SUFFIX}.so \
      ${COMMON_NAME}generics${NAME_SUFFIX}.so \
      demo-and-tutorial \
@@ -80,7 +81,13 @@ GENERICS_SOURCES := ${COMMON_NAME}_generics${NAME_SUFFIX}.vala \
 	generics/property/property_alias.vala
 
 GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
+	../resources/${COMMON_NAME}_gtk${NAME_SUFFIX}.c \
+	../resources/${COMMON_NAME}_gtk${NAME_SUFFIX}.h \
 	gtk/inspector/inspector_window.vala
+
+DEMO_SOURCES := demos/demo_and_tutorial/main.vala \
+	../resources/demo_and_tutorial.c \
+	../resources/demo_and_tutorial.h
 
 PACKAGES := --pkg gio-2.0
 DEMO_PACKAGES := --pkg gtk+-3.0
@@ -89,6 +96,9 @@ INCLUDES := ../includes/
 BIN := ../bin/
 
 # Vala
+
+resources:
+	sh ../scripts/build_resources.sh
 
 ${LIBRARY_NAME}.so:
 	valac \
@@ -152,13 +162,13 @@ demo-and-tutorial:
 	valac \
 		${PACKAGES} \
 		${DEMO_PACKAGES} \
-		demos/demo_and_tutorial/main.vala \
 		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
 		${INCLUDES}${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.vapi \
 		-X -I${INCLUDES} \
 		-X ${LIBRARY_NAME}${LIB_MAJOR}.so \
 		-X ${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.so \
-		-o ${BIN}demo_and_tutorial
+		-o ${BIN}demo_and_tutorial \
+	${DEMO_SOURCES}
 
 move-binaries-to-bin:
 	mv *.so ${BIN}

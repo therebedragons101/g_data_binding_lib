@@ -523,7 +523,8 @@ public class test_data_bindings : Gtk.Application
 		// it is just that that is on lowest priority right now
 		var ui_builder = new Gtk.Builder ();
 		try {
-			ui_builder.add_from_file ("./interface.ui");
+//			ui_builder.add_from_file ("./interface.ui");
+			ui_builder.add_from_resource ("/org/gtk/demo_and_tutorial/interface.ui");
 		}
 		catch (Error e) { warning ("Could not load demo UI: %s", e.message); }
 		window = (Gtk.Window) ui_builder.get_object ("firstWindow");
