@@ -1,7 +1,7 @@
 using GData;
 using GData.Generics;
 
-/* Demo relevant code starts at line 629 */
+/* Demo relevant code starts at line 664 */
 namespace GData
 {
 	public static string get_info_str (ObjectInformation? obj)
@@ -476,6 +476,41 @@ public class test_data_bindings : Gtk.Application
 		}));
 	}
 
+	private delegate string GetKeyValueString (Object obj);
+
+	private void bind_kv_listbox<MK, K, V> (Gtk.ListBox listbox, GLib.ListModel events, GetKeyValueString method, bool sublist)
+	{
+		listbox.bind_model ((GLib.ListModel) events, ((o) => {
+			Gtk.ListBoxRow r = new BindingListBoxRow();
+			if (sublist == true)
+				r.set_data<GLib.ListModel> ("sublist", ((KeyValuePair<MK, KeyValueArray<K, V>>) o).val);
+			r.visible = true;
+			Gtk.Box box = new Gtk.Box (Gtk.Orientation.VERTICAL, 4);
+			box.expand = true;
+			box.visible = true;
+			r.add (box);
+			Gtk.Label title = new Gtk.Label("");
+			title.visible = true;
+			title.hexpand = true;
+			title.xalign = 0;
+			title.use_markup = true;
+			title.set_markup(method(o));
+			box.pack_start (title, false, false, 0);
+			return (r);
+		}));
+	}
+
+	private void on_master_selected<MK,K,V> (Gtk.ListBox list_box, Gtk.ListBox slave_list_box, GetKeyValueString method)
+	{
+		list_box.row_selected.connect ((row) => {
+			bind_kv_listbox<MK, K, V>(
+				slave_list_box,
+				(row == null) ? new ObjectArray<Object>() : row.get_data<GLib.ListModel>("sublist"),
+				method,
+				false);
+		});
+	}
+
 	private Gtk.Builder set_ui()
 	{
 		Gtk.Settings.get_default().gtk_application_prefer_dark_theme = true;
@@ -637,13 +672,15 @@ public class test_data_bindings : Gtk.Application
 			.bind ("surname", surname, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
 				((v) => {
 					return ((string) v != "");
-				}));
-			.bind ("required", required, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+				}))
+			.bind ("required", required, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.contract;
 		
 		// chaining contract as source
 		BindingContract chain_contract = ContractStorage.get_storage(_STORAGE_).add ("chain-contract", new BindingContract(selection_contract))
 			.bind ("name", name_chain, "label", BindFlags.SYNC_CREATE)
-			.bind ("surname", surname_chain, "label", BindFlags.SYNC_CREATE);
+			.bind ("surname", surname_chain, "label", BindFlags.SYNC_CREATE)
+			.contract;
 
 		bind_person_model (items, persons, selection_contract);
 
@@ -678,12 +715,14 @@ public class test_data_bindings : Gtk.Application
 		BindingPointer parentptr = selection_contract.hold (new BindingPointerFromPropertyValue (selection_contract, "parent"));
 
 		BindingContract info_contract = ContractStorage.get_storage(_STORAGE_).add ("info-contract", new BindingContract(infoptr))
-			.bind ("some_num", ui_builder.get_object ("e1_s1_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+			.bind ("some_num", ui_builder.get_object ("e1_s1_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.contract;
 
 		BindingContract parent_contract = ContractStorage.get_storage(_STORAGE_).add ("parent-contract", new BindingContract(parentptr))
 			.bind ("name", ui_builder.get_object ("e1_s2_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
 			.bind ("surname", ui_builder.get_object ("e1_s2_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.bind ("required", ui_builder.get_object ("e1_s2_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+			.bind ("required", ui_builder.get_object ("e1_s2_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.contract;
 
 		PropertyBinding.bind(parent_contract, "is-valid", ui_builder.get_object ("e1_s2_g"), "visible", BindFlags.SYNC_CREATE);
 	}
@@ -779,41 +818,6 @@ public class test_data_bindings : Gtk.Application
 		advanced_freeze1.toggled.connect (() => { toggle_freeze4 (advanced_freeze1); });
 		advanced_freeze2.toggled.connect (() => { toggle_freeze4 (advanced_freeze2); });
 		advanced_freeze3.toggled.connect (() => { toggle_freeze4 (advanced_freeze3); });
-	}
-
-	private delegate string GetKeyValueString (Object obj);
-
-	private void bind_kv_listbox<MK, K, V> (Gtk.ListBox listbox, GLib.ListModel events, GetKeyValueString method, bool sublist)
-	{
-		listbox.bind_model ((GLib.ListModel) events, ((o) => {
-			Gtk.ListBoxRow r = new BindingListBoxRow();
-			if (sublist == true)
-				r.set_data<GLib.ListModel> ("sublist", ((KeyValuePair<MK, KeyValueArray<K, V>>) o).val);
-			r.visible = true;
-			Gtk.Box box = new Gtk.Box (Gtk.Orientation.VERTICAL, 4);
-			box.expand = true;
-			box.visible = true;
-			r.add (box);
-			Gtk.Label title = new Gtk.Label("");
-			title.visible = true;
-			title.hexpand = true;
-			title.xalign = 0;
-			title.use_markup = true;
-			title.set_markup(method(o));
-			box.pack_start (title, false, false, 0);
-			return (r);
-		}));
-	}
-
-	private void on_master_selected<MK,K,V> (Gtk.ListBox list_box, Gtk.ListBox slave_list_box, GetKeyValueString method)
-	{
-		list_box.row_selected.connect ((row) => {
-			bind_kv_listbox<MK, K, V>(
-				slave_list_box,
-				(row == null) ? new ObjectArray<Object>() : row.get_data<GLib.ListModel>("sublist"),
-				method,
-				false);
-		});
 	}
 
 	private void alias_example (Gtk.Builder ui_builder)
@@ -995,7 +999,8 @@ public class test_data_bindings : Gtk.Application
 		BindingContract my_contract = ContractStorage.get_storage(_STORAGE_).add ("my-contract", new BindingContract())
 			.bind ("name", ui_builder.get_object ("eso_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
 			.bind ("surname", ui_builder.get_object ("eso_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.bind ("required", ui_builder.get_object ("eso_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+			.bind ("required", ui_builder.get_object ("eso_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.contract;
 
 		bind_person_model ((Gtk.ListBox) ui_builder.get_object ("eso_list"), persons, my_contract);
 
@@ -1013,7 +1018,8 @@ public class test_data_bindings : Gtk.Application
 		BindingContract my_contract = ContractStorage.get_storage(_STORAGE_).add ("my-contract", new BindingContract())
 			.bind ("name", ui_builder.get_object ("evvo_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
 			.bind ("surname", ui_builder.get_object ("evvo_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.bind ("required", ui_builder.get_object ("evvo_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+			.bind ("required", ui_builder.get_object ("evvo_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+			.contract;
 
 		bind_person_model ((Gtk.ListBox) ui_builder.get_object ("evvo_list"), persons, my_contract);
 
