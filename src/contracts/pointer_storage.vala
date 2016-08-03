@@ -20,6 +20,8 @@ namespace GData
 
 			public signal void added_storage (string storage_name);
 
+			internal signal void get_by_id (int id, ref BindingPointer? pointer);
+
 			private Signals()
 			{
 			}
@@ -88,6 +90,28 @@ namespace GData
 				signals.added_storage (name);
 			}
 			return (store);
+		}
+
+		/**
+		 * Searches for pointer by specified unique id which is autoassigned on
+		 * pointer creation (accessible trough its id property)
+		 * 
+		 * This search is not limited to pointers stored in storage. Any pointer
+		 * can be accessed
+		 * 
+		 * Note that since BindingContract is subclass of BindingPointer 
+		 * contracts can be accessed as well, but it is probably better for type 
+		 * safety reasons to use BindingContract.get_by_id()
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param id Id of requested pointer
+		 */
+		public static BindingPointer? get_by_id (int id)
+		{
+			BindingPointer ptr = null;
+			signals.get_by_id (id, ref ptr);
+			return (ptr);
 		}
 
 		/**

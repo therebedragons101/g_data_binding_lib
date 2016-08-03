@@ -91,6 +91,25 @@ namespace GData
 		}
 
 		/**
+		 * Searches for contract by specified unique id which is autoassigned on
+		 * pointer creation (accessible trough its id property)
+		 * 
+		 * This search is not limited to pointers stored in storage. Any pointer
+		 * can be accessed
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param id Id of requested pointer
+		 */
+		public static BindingContract? get_by_id (int id)
+		{
+			BindingPointer ptr = PointerStorage.get_by_id (id);
+			if (ptr == null)
+				return (null);
+			return ((ptr.get_type().is_a(typeof(BindingContract)) == true) ? (BindingContract) ptr : null);
+		}
+
+		/**
 		 * Resolves contract storage by specified name
 		 * 
 		 * @since 0.1

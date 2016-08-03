@@ -30,12 +30,15 @@ namespace GData
 
 		private void handle_property_change (Object obj, ParamSpec prop)
 		{
+			disconnect_notifications (_last.target);
 			_last = null;
 			renew_data();
 			if (_last.target != null)
 				before_source_change (this, false, _last.target);
-			if (_last.target != null)
+			if (_last.target != null) {
 				source_changed (this);
+				connect_notifications (_last.target);
+			}
 		}
 
 		private void handle_before_source_change (BindingPointer pointer, bool is_same, Object? next)

@@ -319,18 +319,8 @@ public class test_data_bindings : Gtk.Application
 		});
 	}
 
-	protected override void startup ()
+	private Gtk.Builder set_ui()
 	{
-		base.startup ();
-
-		// allocate "default" property as "&"
-		PropertyAlias.get_instance ("&")
-			.register (typeof(Gtk.Entry), "text")
-			.register (typeof(Gtk.Label), "label")
-			.register (typeof(Gtk.ToggleButton), "active")
-			.register (typeof(Gtk.SpinButton), "value")
-			.register (typeof(Gtk.Switch), "active");
-
 		Gtk.Settings.get_default().gtk_application_prefer_dark_theme = true;
 
 		Environment.set_application_name ("test_data_bindings");
@@ -372,6 +362,64 @@ public class test_data_bindings : Gtk.Application
 		surname_chain = (Gtk.Label) ui_builder.get_object ("surname_chain");
 		custom_data = (Gtk.Label) ui_builder.get_object ("custom_data");
 
+		assign_builder_css (ui_builder, "label_description", _dark_label_css);
+		assign_builder_css (ui_builder, "label_warning", _warning_label_css);
+		assign_builder_css (ui_builder, "custom_data", _title_css);
+		assign_builder_css (ui_builder, "evvo_4", _title_css);
+		return (ui_builder);
+	}
+
+	protected override void startup ()
+	{
+		base.startup ();
+
+		// allocate "default" property as "&"
+		PropertyAlias.get_instance ("&")
+			.register (typeof(Gtk.Entry), "text")
+			.register (typeof(Gtk.Label), "label")
+			.register (typeof(Gtk.ToggleButton), "active")
+			.register (typeof(Gtk.SpinButton), "value")
+			.register (typeof(Gtk.Switch), "active");
+		var ui_builder = set_ui();
+
+		persons.add (new Person("John", "Doe"));
+		persons.add (new Person("Somebody", "Nobody"));
+		persons.add (new Person("Intentionally_Invalid_State", "", "Nobody"));
+		persons.data[0].parent = persons.data[1];
+		persons.data[2].parent = persons.data[0];
+
+		main_demo (ui_builder);
+stdout.printf ("example\n");
+		example1(ui_builder);
+stdout.printf ("example\n");
+		example2(ui_builder);
+stdout.printf ("example\n");
+		example3(ui_builder);
+stdout.printf ("example\n");
+		alias_example(ui_builder);
+stdout.printf ("example\n");
+		pointer_storage_example(ui_builder);
+stdout.printf ("example\n");
+		contract_storage_example(ui_builder);
+stdout.printf ("example\n");
+		example4(ui_builder);
+stdout.printf ("example\n");
+		example5(ui_builder);
+stdout.printf ("example\n");
+		example6(ui_builder);
+stdout.printf ("example\n");
+		example_v(ui_builder);
+stdout.printf ("example\n");
+		example_so(ui_builder);
+stdout.printf ("example\n");
+		example_vo(ui_builder);
+stdout.printf ("example\n");
+		example_relay(ui_builder);
+stdout.printf ("example\n");
+	}
+
+	public void main_demo (Gtk.Builder ui_builder)
+	{
 		_selection_contract = new BindingContract(null);
 		selection_contract.bind ("name", name, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
 			((v) => {
@@ -389,12 +437,6 @@ public class test_data_bindings : Gtk.Application
 		chain_contract.bind ("surname", surname_chain, "label", BindFlags.SYNC_CREATE);
 
 		bind_person_model (items, persons, selection_contract);
-
-		persons.add (new Person("John", "Doe"));
-		persons.add (new Person("Somebody", "Nobody"));
-		persons.add (new Person("Intentionally_Invalid_State", "", "Nobody"));
-		persons.data[0].parent = persons.data[1];
-		persons.data[2].parent = persons.data[0];
 
 		// adding custom state value to contract
 		selection_contract.add_state (new CustomBindingSourceState ("validity", selection_contract, ((src) => {
@@ -439,25 +481,6 @@ public class test_data_bindings : Gtk.Application
 		parent_contract.bind ("required", ui_builder.get_object ("e1_s2_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 
 		PropertyBinding.bind(parent_contract, "is-valid", ui_builder.get_object ("e1_s2_g"), "visible", BindFlags.SYNC_CREATE);
-
-		assign_builder_css (ui_builder, "label_description", _dark_label_css);
-		assign_builder_css (ui_builder, "label_warning", _warning_label_css);
-		assign_builder_css (ui_builder, "custom_data", _title_css);
-		assign_builder_css (ui_builder, "evvo_4", _title_css);
-
-		example1(ui_builder);
-		example2(ui_builder);
-		example3(ui_builder);
-		alias_example(ui_builder);
-		pointer_storage_example(ui_builder);
-		contract_storage_example(ui_builder);
-		example4(ui_builder);
-		example5(ui_builder);
-		example6(ui_builder);
-		example_v(ui_builder);
-		example_so(ui_builder);
-		example_vo(ui_builder);
-		example_relay(ui_builder);
 	}
 
 	public bool flood_timer()
@@ -855,27 +878,27 @@ public class test_data_bindings : Gtk.Application
 		//
 		// this allows avoiding local variable as pointer is accessible by name
 		// and in this case this is solely for demo purpose
-		PointerStorage.get_default().add("example4-pointer", new BindingPointer(john_doe));
+		PointerStorage.get_default().add("example-pointer-set-data", new BindingPointer(john_doe));
 
 		e4_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_1");
 		e4_set_1.toggled.connect (() => {
 			if (e4_set_1.active == true)
-				PointerStorage.get_default().find("example4-pointer").data = john_doe;
+				PointerStorage.get_default().find("example-pointer-set-data").data = john_doe;
 		});
 		e4_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_2");
 		e4_set_2.toggled.connect (() => {
 			if (e4_set_2.active == true)
-				PointerStorage.get_default().find("example4-pointer").data = unnamed_person;
+				PointerStorage.get_default().find("example-pointer-set-data").data = unnamed_person;
 		});
 		e4_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_3");
 		e4_set_3.toggled.connect (() => {
 			if (e4_set_3.active == true)
-				PointerStorage.get_default().find("example4-pointer").data = null;
+				PointerStorage.get_default().find("example-pointer-set-data").data = null;
 		});
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e4_events"), _e4_events);
 
-		connect_binding_pointer_events (PointerStorage.get_default().find("example4-pointer"), _e4_events);
+		connect_binding_pointer_events (PointerStorage.get_default().find("example-pointer-set-data"), _e4_events);
 	}
 
 	public void example5 (Gtk.Builder ui_builder)
@@ -885,29 +908,29 @@ public class test_data_bindings : Gtk.Application
 		// this allows avoiding local variable as pointer is accessible by name
 		// and in this case this is solely for demo purpose
 		ContractStorage.get_default()
-			.add("example5", new BindingContract(john_doe))
+			.add("example-contract-storage-set-data", new BindingContract(john_doe))
 				.bind ("name", ui_builder.get_object ("e5_name"), "label", BindFlags.SYNC_CREATE)
 				.bind ("surname", ui_builder.get_object ("e5_surname"), "label", BindFlags.SYNC_CREATE);
 
 		e5_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_1");
 		e5_set_1.toggled.connect (() => {
 			if (e5_set_1.active == true)
-				ContractStorage.get_default().find("example5").data = john_doe;
+				ContractStorage.get_default().find("example-contract-storage-set-data").data = john_doe;
 		});
 		e5_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_2");
 		e5_set_2.toggled.connect (() => {
 			if (e5_set_2.active == true)
-				ContractStorage.get_default().find("example5").data = unnamed_person;
+				ContractStorage.get_default().find("example-contract-storage-set-data").data = unnamed_person;
 		});
 		e5_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_3");
 		e5_set_3.toggled.connect (() => {
 			if (e5_set_3.active == true)
-				ContractStorage.get_default().find("example5").data = null;
+				ContractStorage.get_default().find("example-contract-storage-set-data").data = null;
 		});
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e5_events"), _e5_events);
 
-		connect_binding_contract_events (ContractStorage.get_default().find("example5"), _e5_events);
+		connect_binding_contract_events (ContractStorage.get_default().find("example-contract-storage-set-data"), _e5_events);
 	}
 
 	public void example6 (Gtk.Builder ui_builder)
@@ -916,33 +939,33 @@ public class test_data_bindings : Gtk.Application
 		//
 		// this allows avoiding local variable as pointer is accessible by name
 		// and in this case this is solely for demo purpose
-		ContractStorage.get_storage("example-6")
+		ContractStorage.get_storage("example-contract-chaining")
 			.add("main-contract", new BindingContract(john_doe))
 				.bind ("name", ui_builder.get_object ("e6_name"), "label", BindFlags.SYNC_CREATE)
 				.bind ("surname", ui_builder.get_object ("e6_surname"), "label", BindFlags.SYNC_CREATE);
-		ContractStorage.get_storage("example-6")
-			.add("sub-contract", new BindingContract(ContractStorage.get_storage("example-6").find("main-contract")))
+		ContractStorage.get_storage("example-contract-chaining")
+			.add("sub-contract", new BindingContract(ContractStorage.get_storage("example-contract-chaining").find("main-contract")))
 				.bind ("required", ui_builder.get_object ("e6_required"), "label", BindFlags.SYNC_CREATE);
 
 		e6_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_1");
 		e6_set_1.toggled.connect (() => {
 			if (e6_set_1.active == true)
-				ContractStorage.get_storage("example-6").find("main-contract").data = john_doe;
+				ContractStorage.get_storage("example-contract-chaining").find("main-contract").data = john_doe;
 		});
 		e6_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_2");
 		e6_set_2.toggled.connect (() => {
 			if (e6_set_2.active == true)
-				ContractStorage.get_storage("example-6").find("main-contract").data = unnamed_person;
+				ContractStorage.get_storage("example-contract-chaining").find("main-contract").data = unnamed_person;
 		});
 		e6_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_3");
 		e6_set_3.toggled.connect (() => {
 			if (e6_set_3.active == true)
-				ContractStorage.get_storage("example-6").find("main-contract").data = null;
+				ContractStorage.get_storage("example-contract-chaining").find("main-contract").data = null;
 		});
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e6_events"), _e6_events);
 
-		connect_binding_contract_events (ContractStorage.get_storage("example-6").find("sub-contract"), _e6_events);
+		connect_binding_contract_events (ContractStorage.get_storage("example-contract-chaining").find("sub-contract"), _e6_events);
 	}
 
 	public void example_v (Gtk.Builder ui_builder)

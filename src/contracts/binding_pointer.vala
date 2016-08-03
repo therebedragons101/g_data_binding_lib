@@ -25,6 +25,13 @@ namespace GData
 	 */
 	public class BindingPointer : Object
 	{
+		private static int pointer_counter = 1;
+
+		private int _id = 0;
+		public int id {
+			get { return (_id); }
+		}
+
 		private static GLib.Object _SELF = new GLib.Object();
 		/**
 		 * Reference used when pointer needs to point at it self
@@ -100,9 +107,9 @@ namespace GData
 		public Object? data { 
 			get { return (_data.target); } 
 			set {
-				if (get_source() != null)
+//				if (get_source() != null)
 					disconnect_notifications (get_source());
-				if (handle_messages == true)
+//				if (handle_messages == true)
 					before_source_change (this, is_same_type(data, value), value);
 				unreference_data();
 				if (data != null)
@@ -118,10 +125,9 @@ namespace GData
 				if (data != null)
 					chain_pointer();
 				reference_data();
-				if (handle_messages == true) {
+//				if (handle_messages == true)
 					source_changed (this);
-					}
-				if (get_source() != null)
+//				if (get_source() != null)
 					connect_notifications (get_source());
 			}
 		}
@@ -427,6 +433,17 @@ namespace GData
 		 */
 		public signal void source_changed (BindingPointer source);
 
+		private void handle_get_by_id (int search_for_id, ref BindingPointer? pointer)
+		{
+			if (id == search_for_id)
+				pointer = this;
+		}
+
+		~BindingPointer()
+		{
+			PointerStorage.signals.get_by_id.disconnect (handle_get_by_id);
+		}
+
 		/**
 		 * Creates new BindingPointer
 		 * 
@@ -444,10 +461,13 @@ namespace GData
 		 */
 		public BindingPointer (Object? data = null, BindingReferenceType reference_type = BindingReferenceType.WEAK, BindingPointerUpdateType update_type = BindingPointerUpdateType.PROPERTY)
 		{
+			_id = pointer_counter;
+			pointer_counter++;
 			_data = new StrictWeakReference<Object?> (null, handle_strict_ref);
 			_reference_type = reference_type;
 			_update_type = update_type;
 			this.data = data;
+			PointerStorage.signals.get_by_id.connect (handle_get_by_id);
 		}
 	}
 }

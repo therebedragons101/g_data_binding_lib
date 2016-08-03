@@ -239,9 +239,12 @@ namespace GData
 
 		private void connect_signals()
 		{
-			if ((__is_active() == false) || (unbound == false))
+			if (__is_active() == false)// || (unbound == false))
 				return;
 			if (_flags.HAS_MANUAL_UPDATE() == true)
+				return;
+stdout.printf ("connect_signals(%s=>%s)%s\n", source_property, target_property, (unbound == true)?"CONNECT" : "AVOID");
+			if (unbound == false)
 				return;
 			unbound = false;
 			if (source != null)
@@ -258,6 +261,7 @@ namespace GData
 		{
 			if (_flags.HAS_MANUAL_UPDATE() == true)
 				return;
+stdout.printf ("disconnect_signals(%s=>%s)%s\n", source_property, target_property, (unbound == true)?"CONNECTED" : "NOT CONNECTED");
 			unbound = true;
 			if (source != null)
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||

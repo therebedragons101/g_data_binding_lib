@@ -30,13 +30,21 @@ namespace GData
 		 * method in order to generate BindingInterface
 		 * 
 		 * @since 0.1
+		 * 
+		 * @param obj Object being connected and can be used to check sanity.
+		 *            This is obtained as part of notifications during "data"
+		 *            changes
 		 */
-		public abstract void bind_connection();
+		public abstract void bind_connection (Object? obj);
 		/**
 		 * Unbinds active connection between properties
 		 * 
 		 * @since 0.1
+		 * 
+		 * @param obj Object being connected and can be used to check sanity.
+		 *            This is obtained as part of notifications during "data"
+		 *            changes
 		 */
-		public abstract void unbind_connection();
+		public abstract void unbind_connection (Object? obj);
 	}
 }

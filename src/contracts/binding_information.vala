@@ -176,12 +176,12 @@ namespace GData
 
 		private void handle_before_target_source_change (BindingPointer target, bool is_same_type, Object? next_target)
 		{
-			unbind_connection();
+//			unbind_connection();
 		}
 
 		private void handle_target_source_changed (BindingPointer target)
 		{
-			bind_connection();
+//			bind_connection();
 		}
 
 		/**
@@ -189,16 +189,22 @@ namespace GData
 		 * method in order to generate BindingInterface
 		 * 
 		 * @since 0.1
+		 * 
+		 * @param obj Object being connected and can be used to check sanity.
+		 *            This is obtained as part of notifications during "data"
+		 *            changes
 		 */
-		public void bind_connection()
+		public void bind_connection (Object? obj)
 		{
 			Object? tgt = target;
 			if (is_binding_pointer(tgt) == true)
 				tgt = ((BindingPointer) tgt).get_source();
 			if (can_bind == false)
 				return;
-			if (binding != null)
-				unbind_connection();
+			if (binding != null) {
+				GLib.critical ("Binding %s=>%s was not undone! INVESTIGATE", source_property, target_property);
+				unbind_connection(obj);
+			}
 			if (tgt == null)
 				return;
 			// Check for property existance in both source and target 
@@ -217,8 +223,12 @@ namespace GData
 		 * Unbinds active connection between properties
 		 * 
 		 * @since 0.1
+		 * 
+		 * @param obj Object being connected and can be used to check sanity.
+		 *            This is obtained as part of notifications during "data"
+		 *            changes
 		 */
-		public void unbind_connection()
+		public void unbind_connection (Object? obj)
 		{
 			if (contract.get_source() != null)
 				contract.get_source().notify[source_property].disconnect (check_source_property_validity);
@@ -287,7 +297,7 @@ namespace GData
 				((BindingPointer) target).before_source_change.connect (handle_before_target_source_change);
 				((BindingPointer) target).source_changed.connect (handle_target_source_changed);
 			}
-			bind_connection();
+			bind_connection (owner_contract.get_source());
 		}
 	}
 }

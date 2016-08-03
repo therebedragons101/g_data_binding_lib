@@ -14,13 +14,28 @@ namespace GData
 		return (obj.get_type().is_a(typeof(BindingPointer)) == true);
 	}
 
-	private static bool is_same_type (Object? obj1, Object? obj2)
+	internal static bool is_same_type (Object? obj1, Object? obj2)
 	{
 		return (type_is_same_as ((obj1 == null) ? (Type?) null : obj1.get_type(),
 		                         (obj2 == null) ? (Type?) null : obj2.get_type()));
 	}
 
-	private static bool type_is_same_as (Type? type1, Type? type2)
+	internal static Type? get_common_type (Object? obj1, Object? obj2)
+	{
+		if ((obj1 == null) || (obj2 == null))
+			return (null);
+		if (obj1.get_type().is_a(obj2.get_type()) == true)
+			return (obj1.get_type());
+		if (obj2.get_type().is_a(obj1.get_type()) == true)
+			return (obj1.get_type());
+		Type t = obj1.get_type().parent();
+		while (t != typeof(Object))
+			if (obj2.get_type().is_a(t) == true)
+				return (t);
+		return (typeof(Object));
+	}
+
+	internal static bool type_is_same_as (Type? type1, Type? type2)
 	{
 		if (type1 == type2)
 			return (true);

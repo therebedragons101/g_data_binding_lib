@@ -25,6 +25,7 @@ namespace GData
 	public class BindingContract : GData.BindingPointer, BindingStateObjects, BindingValueObjects//, BindingGroup
 	{
 		private bool finalizing_in_progress = false;
+		private bool bound = false;
 
 		private GLib.Array<BindingInformationReference> _items = new GLib.Array<BindingInformationReference>();
 		private WeakReference<Object?> last_source = new WeakReference<Object?>(null);
@@ -202,9 +203,11 @@ namespace GData
 
 		private void disolve_contract (bool emit_contract_change)
 		{
+//		stdout.printf ("disolve_contract()\n");
+			bound = false;
 			// no check here as it needs to be avoided in upper levels or before call
-			for (int i=0; i<_items.data.length; i++)
-				_items.data[i].binding.unbind_connection();
+//			for (int i=0; i<_items.data.length; i++)
+//				_items.data[i].binding.unbind_connection();
 			if (emit_contract_change == true)
 				contract_changed (this);
 		}
@@ -213,8 +216,11 @@ namespace GData
 		{
 			if (can_bind == false)
 				return;
-			for (int i=0; i<_items.length; i++)
-				_items.data[i].binding.bind_connection();
+			if (bound == true)
+				return;
+			bound = true;
+//			for (int i=0; i<_items.length; i++)
+//				_items.data[i].binding.bind_connection();
 			if (emit_contract_change == true)
 				contract_changed (this);
 			handle_is_valid (null);
@@ -289,21 +295,24 @@ namespace GData
 		 * Binds specific BindingInformationInterface and activates it
 		 * 
 		 * @since 0.1
-		 * @param info Binding information being added
+		 * @param information Binding information being added
 		 * @return Reference to BindingInformationInterface
 		 */
-		public BindingInformationInterface? bind_information (BindingInformationInterface? info)
+		public BindingInformationInterface? bind_information (BindingInformationInterface? information)
 		{
-			if (info == null)
+			if (information == null)
 				return (null);
 			for (int cnt=0; cnt<_items.length; cnt++)
-				if (_items.data[cnt].binding == info) {
+				if (_items.data[cnt].binding == information) {
 					_items.data[cnt].lock();
-					return (info);
+					return (information);
 				}
-			_items.append_val (new BindingInformationReference (info));
-			info.notify["is-valid"].connect (handle_is_valid);
-			return (info);
+			
+			_items.append_val (new BindingInformationReference (information));
+			connect_notifications.connect (information.bind_connection);
+			disconnect_notifications.connect (information.unbind_connection);
+			information.notify["is-valid"].connect (handle_is_valid);
+			return (information);
 		}
 
 		/**
@@ -398,9 +407,10 @@ namespace GData
 					}
 					else
 						_items.data[i].full_unlock();
+					connect_notifications.disconnect (information.bind_connection);
+					disconnect_notifications.disconnect (information.unbind_connection);
 					information.notify["is-valid"].disconnect (handle_is_valid);
-					information.unbind_connection();
-//					_items.data[i].reset();
+					information.unbind_connection (get_source());
 					_items.remove_index (i);
 					break;
 				}
@@ -524,7 +534,7 @@ namespace GData
 			base (null, reference_type, update_type);
 			before_source_change.connect((binding, is_same, next) => {
 				if (get_source() != null) {
-					disolve_contract (next == null);
+					disolve_contract (true);//next == null);
 					disconnect_lifetime();
 				}
 			});

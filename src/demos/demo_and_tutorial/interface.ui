@@ -1361,8 +1361,7 @@ allow to completely remove PropertyBinding &lt;b&gt;which is something i would v
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="tooltip_markup" translatable="yes">&lt;small&gt;&lt;i&gt;PropertyBinding.bind (basic_entry_left6, "text", basic_entry_right6, "text", 
-	BindFlags.DELAYED | BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);&lt;/i&gt;&lt;/small&gt;</property>
+                                <property name="tooltip_markup" translatable="yes">&lt;small&gt;&lt;i&gt;PropertyBinding.bind (basic_label_left3, "label", basic_entry_right3, "text", BindFlags.REVERSE_DIRECTION | BindFlags.SYNC_CREATE);&lt;/i&gt;&lt;/small&gt;</property>
                                 <property name="halign">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="label" translatable="yes">&lt;b&gt;Basic reverse binding (Hover over this label to see source)&lt;/b&gt;
@@ -2200,14 +2199,7 @@ until delving into contracts where binding pointers can provide group messaging 
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="tooltip_markup" translatable="yes">&lt;i&gt;registration:
-PropertyAlias.get_instance("alias:text")
-	.register (typeof(Gtk.Entry), "text")
-	.register (typeof(Gtk.Label), "label");
-
-binding:
-PropertyBinding.bind (advanced_binding_l2, "alias:text", advanced_binding_r2, "alias:text", BindFlags.SYNC_CREATE);
-&lt;/i&gt;
+                                <property name="tooltip_markup" translatable="yes">&lt;i&gt;Same as normal SYNC_CREATE binding and each button calls freeze()/unfreeze() based on his toggle state&lt;/i&gt;
 </property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">&lt;b&gt;Property binding freeze()/unfreeze() (hover on label to see source)&lt;/b&gt;
@@ -2342,11 +2334,6 @@ to register "string:text" on all objects that support it and not on those that d
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="tooltip_markup" translatable="yes">&lt;i&gt;PropertyBinding.bind (custom_binding_l1, "text", custom_binding_r1, "label", BindFlags.SYNC_CREATE, ((b, src, ref tgt) =&gt; {
-	tgt.set_string("value=" + src.get_string());
-	return (true);
-}));&lt;/i&gt;
-</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">&lt;b&gt;Property aliases (hover on label to see source)&lt;/b&gt;
 &lt;small&gt;their use is simple to understand you declare specific property name and then register which property is relevant for that purpose for specific type. note
@@ -2734,11 +2721,6 @@ other signals are simply better left to visual representation. just change sourc
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="tooltip_markup" translatable="yes">&lt;i&gt;PropertyBinding.bind (custom_binding_l1, "text", custom_binding_r1, "label", BindFlags.SYNC_CREATE, ((b, src, ref tgt) =&gt; {
-	tgt.set_string("value=" + src.get_string());
-	return (true);
-}));&lt;/i&gt;
-</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">&lt;b&gt;PointerStorage class&lt;/b&gt;
 &lt;b&gt;static&lt;/b&gt; PointerStorage? &lt;b&gt;find&lt;/b&gt; (string name) - peeks if storage exists and return reference if it does or null
@@ -3243,11 +3225,6 @@ reference handling. by simply throwing contract into storage, there is guarantee
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="tooltip_markup" translatable="yes">&lt;i&gt;PropertyBinding.bind (custom_binding_l1, "text", custom_binding_r1, "label", BindFlags.SYNC_CREATE, ((b, src, ref tgt) =&gt; {
-	tgt.set_string("value=" + src.get_string());
-	return (true);
-}));&lt;/i&gt;
-</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">&lt;b&gt;ContractStorage class&lt;/b&gt;
 &lt;b&gt;static&lt;/b&gt; ContractStorage? &lt;b&gt;find&lt;/b&gt; (string alias) - peeks if storage exists and return reference if it does or null
@@ -4563,6 +4540,30 @@ relays can be used in various ways
                                   <object class="GtkLabel">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="tooltip_markup" translatable="yes">&lt;small&gt;BindingContract my_contract = ContractStorage.get_storage("example-relay").add ("main-contract", new BindingContract());
+bind_person_model ((Gtk.ListBox) ui_builder.get_object ("e7_list"), persons, my_contract);
+
+BindingPointer infoptr = my_contract.hold (new BindingPointerFromPropertyValue (my_contract, "info"));
+BindingPointer parentptr = my_contract.hold (new BindingPointerFromPropertyValue (my_contract, "parent"));
+
+BindingContract info_contract = ContractStorage.get_storage("example-relay").add ("info-contract", new BindingContract(infoptr));
+BindingContract parent_contract = ContractStorage.get_storage("example-relay").add ("parent-contract", new BindingContract(parentptr));
+
+my_contract.bind ("name", ui_builder.get_object ("e7_1"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+	.bind ("surname", ui_builder.get_object ("e7_2"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+	.bind ("required", ui_builder.get_object ("e7_3"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+
+info_contract.bind ("some_num", ui_builder.get_object ("e7_s1_1"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+
+parent_contract.bind ("name", ui_builder.get_object ("e7_s2_1"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+	.bind ("surname", ui_builder.get_object ("e7_s2_2"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
+	.bind ("required", ui_builder.get_object ("e7_s2_3"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+
+PropertyBinding.bind(parent_contract, "is-valid", ui_builder.get_object ("e7_s2_g"), "visible", BindFlags.SYNC_CREATE);
+
+bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e7_events"), _e7_events);
+connect_binding_contract_events (parent_contract, _e7_events);
+&lt;/small&gt;</property>
                                     <property name="halign">start</property>
                                     <property name="label" translatable="yes">&lt;small&gt;easiest to understand is data redirection and for that there already exists class that handles that case BindingPointerFromPropertyValue
 which overrides &lt;b&gt;get_source()&lt;/b&gt; in a way where source it propagates is not the object set as &lt;b&gt;data&lt;/b&gt;, but rather object which is specified
