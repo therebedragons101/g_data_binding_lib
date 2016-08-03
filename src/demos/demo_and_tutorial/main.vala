@@ -352,6 +352,55 @@ public class test_data_bindings : Gtk.Application
 		surname_chain = (Gtk.Label) ui_builder.get_object ("surname_chain");
 		custom_data = (Gtk.Label) ui_builder.get_object ("custom_data");
 
+		basic_entry_left = (Gtk.Entry) ui_builder.get_object ("basic_entry_left");
+		basic_entry_right = (Gtk.Entry) ui_builder.get_object ("basic_entry_right");
+		basic_entry_left2 = (Gtk.Entry) ui_builder.get_object ("basic_entry_left2");
+		basic_entry_right2 = (Gtk.Entry) ui_builder.get_object ("basic_entry_right2");
+		basic_label_left3 = (Gtk.Label) ui_builder.get_object ("basic_label_left3");
+		basic_entry_right3 = (Gtk.Entry) ui_builder.get_object ("basic_entry_right3");
+		basic_label_right4 = (Gtk.Label) ui_builder.get_object ("basic_label_right4");
+		basic_flood_data_btn = (Gtk.ToggleButton) ui_builder.get_object ("basic_flood_data_btn");
+		basic_entry_left5 = (Gtk.Entry) ui_builder.get_object ("basic_entry_left5");
+		basic_label_right5 = (Gtk.Label) ui_builder.get_object ("basic_label_right5");
+		basic_entry_left6 = (Gtk.Entry) ui_builder.get_object ("basic_entry_left6");
+		basic_entry_right6 = (Gtk.Entry) ui_builder.get_object ("basic_entry_right6");
+
+		required_not_empty = (Gtk.Button) ui_builder.get_object ("required_not_empty");
+		is_valid_source = (Gtk.Button) ui_builder.get_object ("is_valid_source");
+
+		e4_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_1");
+		e4_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_2");
+		e4_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_3");
+
+		custom_binding_l1 = (Gtk.Entry) ui_builder.get_object ("custom_binding_l1");
+		custom_binding_r1 = (Gtk.Label) ui_builder.get_object ("custom_binding_r1");
+		custom_binding_l2 = (Gtk.Entry) ui_builder.get_object ("custom_binding_l2");
+		custom_binding_r2 = (Gtk.Entry) ui_builder.get_object ("custom_binding_r2");
+		custom_binding_l3 = (Gtk.Entry) ui_builder.get_object ("custom_binding_l3");
+		custom_binding_r3 = (Gtk.ToggleButton) ui_builder.get_object ("custom_binding_r3");
+		custom_binding_l4 = (Gtk.Entry) ui_builder.get_object ("custom_binding_l4");
+		custom_binding_r4 = (Gtk.ToggleButton) ui_builder.get_object ("custom_binding_r4");
+
+		advanced_binding_l1 = (Gtk.Entry) ui_builder.get_object ("advanced_binding_l1");
+		advanced_binding_r1 = (Gtk.Label) ui_builder.get_object ("advanced_binding_r1");
+		advanced_binding_l2 = (Gtk.Entry) ui_builder.get_object ("advanced_binding_l2");
+		advanced_binding_r2 = (Gtk.Label) ui_builder.get_object ("advanced_binding_r2");
+		advanced_binding_l3 = (Gtk.Entry) ui_builder.get_object ("advanced_binding_l3");
+		advanced_binding_r3 = (Gtk.Label) ui_builder.get_object ("advanced_binding_r3");
+		advanced_binding_l4 = (Gtk.Entry) ui_builder.get_object ("advanced_binding_l4");
+		advanced_binding_r4 = (Gtk.Label) ui_builder.get_object ("advanced_binding_r4");
+		advanced_freeze1 = (Gtk.ToggleButton) ui_builder.get_object ("advanced_freeze1");
+		advanced_freeze2 = (Gtk.ToggleButton) ui_builder.get_object ("advanced_freeze2");
+		advanced_freeze3 = (Gtk.ToggleButton) ui_builder.get_object ("advanced_freeze3");
+
+		e5_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_1");
+		e5_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_2");
+		e5_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_3");
+
+		e6_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_1");
+		e6_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_2");
+		e6_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_3");
+
 		assign_builder_css (ui_builder, "label_description", _dark_label_css);
 		assign_builder_css (ui_builder, "label_warning", _warning_label_css);
 		assign_builder_css (ui_builder, "custom_data", _title_css);
@@ -428,9 +477,6 @@ public class test_data_bindings : Gtk.Application
 			((a,b) => { return ((a == b) ? 0 : 1); }), 
 			"", false, ALL_PROPERTIES));
 
-		required_not_empty = (Gtk.Button) ui_builder.get_object ("required_not_empty");
-		is_valid_source = (Gtk.Button) ui_builder.get_object ("is_valid_source");
-
 		// bind to state. note that state is updated whenever contract source changes or specified properties in respective class get changed
 		// which makes it perfectly ok to use simple binding as this connection will be stable for whole contract life
 		PropertyBinding.bind (selection_contract.get_state_object("validity"), "state", required_not_empty, "sensitive", BindFlags.SYNC_CREATE);
@@ -480,52 +526,36 @@ public class test_data_bindings : Gtk.Application
 
 	public void example1 (Gtk.Builder ui_builder)
 	{
-		basic_entry_left = (Gtk.Entry) ui_builder.get_object ("basic_entry_left");
-		basic_entry_right = (Gtk.Entry) ui_builder.get_object ("basic_entry_right");
 		PropertyBinding.bind (basic_entry_left, "text", basic_entry_right, "text", BindFlags.SYNC_CREATE);
 
-		basic_entry_left2 = (Gtk.Entry) ui_builder.get_object ("basic_entry_left2");
-		basic_entry_right2 = (Gtk.Entry) ui_builder.get_object ("basic_entry_right2");
 		PropertyBinding.bind (basic_entry_left2, "text", basic_entry_right2, "text", BindFlags.BIDIRECTIONAL | BindFlags.SYNC_CREATE);
 
-		basic_label_left3 = (Gtk.Label) ui_builder.get_object ("basic_label_left3");
-		basic_entry_right3 = (Gtk.Entry) ui_builder.get_object ("basic_entry_right3");
 		PropertyBinding.bind (basic_label_left3, "label", basic_entry_right3, "text", BindFlags.REVERSE_DIRECTION | BindFlags.SYNC_CREATE);
 
-		basic_label_right4 = (Gtk.Label) ui_builder.get_object ("basic_label_right4");
 		PropertyBinding basic4 = PropertyBinding.bind (this, "counter", basic_label_right4, "label", BindFlags.FLOOD_DETECTION | BindFlags.SYNC_CREATE);
 		basic4.flood_detected.connect (flooded);
 		basic4.flood_stopped.connect (flood_over);
-		basic_flood_data_btn = (Gtk.ToggleButton) ui_builder.get_object ("basic_flood_data_btn");
 		basic_flood_data_btn.toggled.connect (() => {
 			if (basic_flood_data_btn.active == true)
 				GLib.Timeout.add (20, flood_timer, GLib.Priority.DEFAULT);
 		});
 
-		basic_entry_left5 = (Gtk.Entry) ui_builder.get_object ("basic_entry_left5");
-		basic_label_right5 = (Gtk.Label) ui_builder.get_object ("basic_label_right5");
 		PropertyBinding basic5 = PropertyBinding.bind (basic_entry_left5, "text", basic_label_right5, "label", BindFlags.MANUAL_UPDATE | BindFlags.SYNC_CREATE);
 		basic_transfer_data_btn = (Gtk.Button) ui_builder.get_object ("basic_transfer_data_btn");
 		basic_transfer_data_btn.clicked.connect (() => {
 			basic5.update_from_source();
 		});
 
-		basic_entry_left6 = (Gtk.Entry) ui_builder.get_object ("basic_entry_left6");
-		basic_entry_right6 = (Gtk.Entry) ui_builder.get_object ("basic_entry_right6");
 		PropertyBinding.bind (basic_entry_left6, "text", basic_entry_right6, "text", BindFlags.BIDIRECTIONAL | BindFlags.SYNC_CREATE | BindFlags.DELAYED);
 	}
 
 	public void example2 (Gtk.Builder ui_builder)
 	{
-		custom_binding_l1 = (Gtk.Entry) ui_builder.get_object ("custom_binding_l1");
-		custom_binding_r1 = (Gtk.Label) ui_builder.get_object ("custom_binding_r1");
 		PropertyBinding.bind (custom_binding_l1, "text", custom_binding_r1, "label", BindFlags.SYNC_CREATE, ((b, src, ref tgt) => {
 				tgt.set_string("value=" + src.get_string());
 				return (true);
 		}));
 
-		custom_binding_l2 = (Gtk.Entry) ui_builder.get_object ("custom_binding_l2");
-		custom_binding_r2 = (Gtk.Entry) ui_builder.get_object ("custom_binding_r2");
 		PropertyBinding.bind (custom_binding_l2, "text", custom_binding_r2, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, 
 			((binding, src, ref tgt) => {
 				((Gtk.Entry) binding.target).text = ((Gtk.Entry) binding.source).text;
@@ -540,12 +570,8 @@ public class test_data_bindings : Gtk.Application
 			tgt.set_boolean ((src.get_string() != "") && (src.get_string() != null));
 		}));
 
-		custom_binding_l3 = (Gtk.Entry) ui_builder.get_object ("custom_binding_l3");
-		custom_binding_r3 = (Gtk.ToggleButton) ui_builder.get_object ("custom_binding_r3");
 		PropertyBinding.bind (custom_binding_l3, "text", custom_binding_r3, "active", BindFlags.SYNC_CREATE);
 
-		custom_binding_l4 = (Gtk.Entry) ui_builder.get_object ("custom_binding_l4");
-		custom_binding_r4 = (Gtk.ToggleButton) ui_builder.get_object ("custom_binding_r4");
 		PropertyBinding.bind (custom_binding_l4, "text", custom_binding_r4, "active", BindFlags.SYNC_CREATE | BindFlags.INVERT_BOOLEAN);
 	}
 
@@ -559,28 +585,17 @@ public class test_data_bindings : Gtk.Application
 
 	public void example3 (Gtk.Builder ui_builder)
 	{
-		advanced_binding_l1 = (Gtk.Entry) ui_builder.get_object ("advanced_binding_l1");
-		advanced_binding_r1 = (Gtk.Label) ui_builder.get_object ("advanced_binding_r1");
 		PropertyBinding.bind (advanced_binding_l1, "&", advanced_binding_r1, "&", BindFlags.SYNC_CREATE);
 
-		advanced_binding_l2 = (Gtk.Entry) ui_builder.get_object ("advanced_binding_l2");
-		advanced_binding_r2 = (Gtk.Label) ui_builder.get_object ("advanced_binding_r2");
 		PropertyAlias.get_instance("alias:text")
 			.register (typeof(Gtk.Entry), "text")
 			.register (typeof(Gtk.Label), "label");
 		PropertyBinding.bind (advanced_binding_l2, "alias:text", advanced_binding_r2, "alias:text", BindFlags.SYNC_CREATE);
 
-		advanced_binding_l3 = (Gtk.Entry) ui_builder.get_object ("advanced_binding_l3");
-		advanced_binding_r3 = (Gtk.Label) ui_builder.get_object ("advanced_binding_r3");
 
-		advanced_binding_l4 = (Gtk.Entry) ui_builder.get_object ("advanced_binding_l4");
-		advanced_binding_r4 = (Gtk.Label) ui_builder.get_object ("advanced_binding_r4");
 		advanced4 = PropertyBinding.bind (advanced_binding_l4, "&", advanced_binding_r4, "&", BindFlags.SYNC_CREATE);
-		advanced_freeze1 = (Gtk.ToggleButton) ui_builder.get_object ("advanced_freeze1");
 		advanced_freeze1.toggled.connect (() => { toggle_freeze4 (advanced_freeze1); });
-		advanced_freeze2 = (Gtk.ToggleButton) ui_builder.get_object ("advanced_freeze2");
 		advanced_freeze2.toggled.connect (() => { toggle_freeze4 (advanced_freeze2); });
-		advanced_freeze3 = (Gtk.ToggleButton) ui_builder.get_object ("advanced_freeze3");
 		advanced_freeze3.toggled.connect (() => { toggle_freeze4 (advanced_freeze3); });
 	}
 
@@ -858,17 +873,14 @@ public class test_data_bindings : Gtk.Application
 		// and in this case this is solely for demo purpose
 		PointerStorage.get_storage(_STORAGE_).add("example-pointer-set-data", new BindingPointer(john_doe));
 
-		e4_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_1");
 		e4_set_1.toggled.connect (() => {
 			if (e4_set_1.active == true)
 				PointerStorage.get_storage(_STORAGE_).find("example-pointer-set-data").data = john_doe;
 		});
-		e4_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_2");
 		e4_set_2.toggled.connect (() => {
 			if (e4_set_2.active == true)
 				PointerStorage.get_storage(_STORAGE_).find("example-pointer-set-data").data = unnamed_person;
 		});
-		e4_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_3");
 		e4_set_3.toggled.connect (() => {
 			if (e4_set_3.active == true)
 				PointerStorage.get_storage(_STORAGE_).find("example-pointer-set-data").data = null;
@@ -891,17 +903,14 @@ public class test_data_bindings : Gtk.Application
 				.bind ("name", ui_builder.get_object ("e5_name"), "label", BindFlags.SYNC_CREATE)
 				.bind ("surname", ui_builder.get_object ("e5_surname"), "label", BindFlags.SYNC_CREATE);
 
-		e5_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_1");
 		e5_set_1.toggled.connect (() => {
 			if (e5_set_1.active == true)
 				ContractStorage.get_storage(_STORAGE_).find("example-contract-storage-set-data").data = john_doe;
 		});
-		e5_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_2");
 		e5_set_2.toggled.connect (() => {
 			if (e5_set_2.active == true)
 				ContractStorage.get_storage(_STORAGE_).find("example-contract-storage-set-data").data = unnamed_person;
 		});
-		e5_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_3");
 		e5_set_3.toggled.connect (() => {
 			if (e5_set_3.active == true)
 				ContractStorage.get_storage(_STORAGE_).find("example-contract-storage-set-data").data = null;
@@ -927,17 +936,14 @@ public class test_data_bindings : Gtk.Application
 			.add("sub-contract", new BindingContract(ContractStorage.get_storage(_STORAGE_).find("main-contract")))
 				.bind ("required", ui_builder.get_object ("e6_required"), "label", BindFlags.SYNC_CREATE);
 
-		e6_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_1");
 		e6_set_1.toggled.connect (() => {
 			if (e6_set_1.active == true)
 				ContractStorage.get_storage(_STORAGE_).find("main-contract").data = john_doe;
 		});
-		e6_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_2");
 		e6_set_2.toggled.connect (() => {
 			if (e6_set_2.active == true)
 				ContractStorage.get_storage(_STORAGE_).find("main-contract").data = unnamed_person;
 		});
-		e6_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_3");
 		e6_set_3.toggled.connect (() => {
 			if (e6_set_3.active == true)
 				ContractStorage.get_storage(_STORAGE_).find("main-contract").data = null;
