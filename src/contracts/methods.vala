@@ -29,9 +29,11 @@ namespace GData
 		if (obj2.get_type().is_a(obj1.get_type()) == true)
 			return (obj1.get_type());
 		Type t = obj1.get_type().parent();
-		while (t != typeof(Object))
+		while (t != typeof(Object)) {
 			if (obj2.get_type().is_a(t) == true)
 				return (t);
+			t = t.parent();
+		}
 		return (typeof(Object));
 	}
 
