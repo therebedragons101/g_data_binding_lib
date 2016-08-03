@@ -379,33 +379,19 @@ public class test_data_bindings : Gtk.Application
 		persons.data[2].parent = persons.data[0];
 
 		main_demo (ui_builder);
-stdout.printf ("example\n");
 		example1(ui_builder);
-stdout.printf ("example\n");
 		example2(ui_builder);
-stdout.printf ("example\n");
 		example3(ui_builder);
-stdout.printf ("example\n");
 		alias_example(ui_builder);
-stdout.printf ("example\n");
 		pointer_storage_example(ui_builder);
-stdout.printf ("example\n");
 		contract_storage_example(ui_builder);
-stdout.printf ("example\n");
 		example4(ui_builder);
-stdout.printf ("example\n");
 		example5(ui_builder);
-stdout.printf ("example\n");
 		example6(ui_builder);
-stdout.printf ("example\n");
 		example_v(ui_builder);
-stdout.printf ("example\n");
 		example_so(ui_builder);
-stdout.printf ("example\n");
 		example_vo(ui_builder);
-stdout.printf ("example\n");
 		example_relay(ui_builder);
-stdout.printf ("example\n");
 	}
 
 	public void main_demo (Gtk.Builder ui_builder)
