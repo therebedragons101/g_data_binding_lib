@@ -243,7 +243,6 @@ namespace GData
 				return;
 			if (_flags.HAS_MANUAL_UPDATE() == true)
 				return;
-stdout.printf ("connect_signals(%s=>%s)%s\n", source_property, target_property, (unbound == true)?"CONNECT" : "AVOID");
 			if (unbound == false)
 				return;
 			unbound = false;
@@ -261,7 +260,6 @@ stdout.printf ("connect_signals(%s=>%s)%s\n", source_property, target_property, 
 		{
 			if (_flags.HAS_MANUAL_UPDATE() == true)
 				return;
-stdout.printf ("disconnect_signals(%s=>%s)%s\n", source_property, target_property, (unbound == true)?"CONNECTED" : "NOT CONNECTED");
 			unbound = true;
 			if (source != null)
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
@@ -322,12 +320,7 @@ stdout.printf ("disconnect_signals(%s=>%s)%s\n", source_property, target_propert
 		{
 			Value srcval = Value(_source_property.value_type);
 			Value tgtval = Value(_target_property.value_type);
-/*			if (set_default == true) {
-				unowned Value val1 = _source_property.get_default_value();
-				val1.copy(ref srcval);
-			}
-			else*/
-				source.get_property (source_property, ref srcval);
+			source.get_property (source_property, ref srcval);
 
 			bool res = true;
 			if (_transform_to != null) {
@@ -347,12 +340,7 @@ stdout.printf ("disconnect_signals(%s=>%s)%s\n", source_property, target_propert
 		{
 			Value srcval = Value(_source_property.value_type);
 			Value tgtval = Value(_target_property.value_type);
-/*			if (set_default == true) {
-				unowned Value val1 = _target_property.get_default_value();
-				val1.copy(ref tgtval);
-			}
-			else*/
-				target.get_property (target_property, ref tgtval);
+			target.get_property (target_property, ref tgtval);
 
 			bool res = true;
 			if (_transform_from != null) {

@@ -249,16 +249,6 @@ public class test_data_bindings : Gtk.Application
 	private ObjectArray<EventDescription> _e6_events = new ObjectArray<EventDescription>();
 	private ObjectArray<EventDescription> _e7_events = new ObjectArray<EventDescription>();
 
-	private BindingContract _selection_contract;
-	public BindingContract selection_contract {
-		get { return (_selection_contract); }
-	}
-	
-	private BindingContract _chain_contract;
-	public BindingContract chain_contract {
-		get { return (_chain_contract); }
-	}
-
 	private int _counter = 0;
 	public string counter {
 		owned get { return ("counter=%i".printf(_counter)); }
@@ -420,7 +410,8 @@ stdout.printf ("example\n");
 
 	public void main_demo (Gtk.Builder ui_builder)
 	{
-		_selection_contract = new BindingContract(null);
+		string _STORAGE_ = "main-example";
+		BindingContract selection_contract = ContractStorage.get_storage(_STORAGE_).add ("main-contract", new BindingContract(null));
 		selection_contract.bind ("name", name, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
 			((v) => {
 				return ((string) v != "");
@@ -432,7 +423,7 @@ stdout.printf ("example\n");
 		selection_contract.bind ("required", required, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 		
 		// chaining contract as source
-		_chain_contract = new BindingContract(selection_contract);
+		BindingContract chain_contract = ContractStorage.get_storage(_STORAGE_).add ("chain-contract", new BindingContract(selection_contract));
 		chain_contract.bind ("name", name_chain, "label", BindFlags.SYNC_CREATE);
 		chain_contract.bind ("surname", surname_chain, "label", BindFlags.SYNC_CREATE);
 
@@ -471,8 +462,8 @@ stdout.printf ("example\n");
 		BindingPointer infoptr = selection_contract.hold (new BindingPointerFromPropertyValue (selection_contract, "info"));
 		BindingPointer parentptr = selection_contract.hold (new BindingPointerFromPropertyValue (selection_contract, "parent"));
 
-		BindingContract info_contract = ContractStorage.get_storage("main-example").add ("info-contract", new BindingContract(infoptr));
-		BindingContract parent_contract = ContractStorage.get_storage("main-example").add ("parent-contract", new BindingContract(parentptr));
+		BindingContract info_contract = ContractStorage.get_storage(_STORAGE_).add ("info-contract", new BindingContract(infoptr));
+		BindingContract parent_contract = ContractStorage.get_storage(_STORAGE_).add ("parent-contract", new BindingContract(parentptr));
 
 		info_contract.bind ("some_num", ui_builder.get_object ("e1_s1_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 
@@ -874,26 +865,27 @@ stdout.printf ("example\n");
 
 	public void example4 (Gtk.Builder ui_builder)
 	{
+		string _STORAGE_ = "example--pointer-set-data";
 		// note the use of pointer storage here
 		//
 		// this allows avoiding local variable as pointer is accessible by name
 		// and in this case this is solely for demo purpose
-		PointerStorage.get_default().add("example-pointer-set-data", new BindingPointer(john_doe));
+		PointerStorage.get_storage(_STORAGE_).add("example-pointer-set-data", new BindingPointer(john_doe));
 
 		e4_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_1");
 		e4_set_1.toggled.connect (() => {
 			if (e4_set_1.active == true)
-				PointerStorage.get_default().find("example-pointer-set-data").data = john_doe;
+				PointerStorage.get_storage(_STORAGE_).find("example-pointer-set-data").data = john_doe;
 		});
 		e4_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_2");
 		e4_set_2.toggled.connect (() => {
 			if (e4_set_2.active == true)
-				PointerStorage.get_default().find("example-pointer-set-data").data = unnamed_person;
+				PointerStorage.get_storage(_STORAGE_).find("example-pointer-set-data").data = unnamed_person;
 		});
 		e4_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_3");
 		e4_set_3.toggled.connect (() => {
 			if (e4_set_3.active == true)
-				PointerStorage.get_default().find("example-pointer-set-data").data = null;
+				PointerStorage.get_storage(_STORAGE_).find("example-pointer-set-data").data = null;
 		});
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e4_events"), _e4_events);
@@ -903,11 +895,12 @@ stdout.printf ("example\n");
 
 	public void example5 (Gtk.Builder ui_builder)
 	{
+		string _STORAGE_ = "example--contract-set-data";
 		// note the use of contract storage here
 		//
 		// this allows avoiding local variable as pointer is accessible by name
 		// and in this case this is solely for demo purpose
-		ContractStorage.get_default()
+		ContractStorage.get_storage(_STORAGE_)
 			.add("example-contract-storage-set-data", new BindingContract(john_doe))
 				.bind ("name", ui_builder.get_object ("e5_name"), "label", BindFlags.SYNC_CREATE)
 				.bind ("surname", ui_builder.get_object ("e5_surname"), "label", BindFlags.SYNC_CREATE);
@@ -915,17 +908,17 @@ stdout.printf ("example\n");
 		e5_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_1");
 		e5_set_1.toggled.connect (() => {
 			if (e5_set_1.active == true)
-				ContractStorage.get_default().find("example-contract-storage-set-data").data = john_doe;
+				ContractStorage.get_storage(_STORAGE_).find("example-contract-storage-set-data").data = john_doe;
 		});
 		e5_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_2");
 		e5_set_2.toggled.connect (() => {
 			if (e5_set_2.active == true)
-				ContractStorage.get_default().find("example-contract-storage-set-data").data = unnamed_person;
+				ContractStorage.get_storage(_STORAGE_).find("example-contract-storage-set-data").data = unnamed_person;
 		});
 		e5_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_3");
 		e5_set_3.toggled.connect (() => {
 			if (e5_set_3.active == true)
-				ContractStorage.get_default().find("example-contract-storage-set-data").data = null;
+				ContractStorage.get_storage(_STORAGE_).find("example-contract-storage-set-data").data = null;
 		});
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e5_events"), _e5_events);
@@ -935,32 +928,33 @@ stdout.printf ("example\n");
 
 	public void example6 (Gtk.Builder ui_builder)
 	{
+		string _STORAGE_ = "example-contract-chaining";
 		// note the use of contract storage here
 		//
 		// this allows avoiding local variable as pointer is accessible by name
 		// and in this case this is solely for demo purpose
-		ContractStorage.get_storage("example-contract-chaining")
+		ContractStorage.get_storage(_STORAGE_)
 			.add("main-contract", new BindingContract(john_doe))
 				.bind ("name", ui_builder.get_object ("e6_name"), "label", BindFlags.SYNC_CREATE)
 				.bind ("surname", ui_builder.get_object ("e6_surname"), "label", BindFlags.SYNC_CREATE);
-		ContractStorage.get_storage("example-contract-chaining")
-			.add("sub-contract", new BindingContract(ContractStorage.get_storage("example-contract-chaining").find("main-contract")))
+		ContractStorage.get_storage(_STORAGE_)
+			.add("sub-contract", new BindingContract(ContractStorage.get_storage(_STORAGE_).find("main-contract")))
 				.bind ("required", ui_builder.get_object ("e6_required"), "label", BindFlags.SYNC_CREATE);
 
 		e6_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_1");
 		e6_set_1.toggled.connect (() => {
 			if (e6_set_1.active == true)
-				ContractStorage.get_storage("example-contract-chaining").find("main-contract").data = john_doe;
+				ContractStorage.get_storage(_STORAGE_).find("main-contract").data = john_doe;
 		});
 		e6_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_2");
 		e6_set_2.toggled.connect (() => {
 			if (e6_set_2.active == true)
-				ContractStorage.get_storage("example-contract-chaining").find("main-contract").data = unnamed_person;
+				ContractStorage.get_storage(_STORAGE_).find("main-contract").data = unnamed_person;
 		});
 		e6_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_3");
 		e6_set_3.toggled.connect (() => {
 			if (e6_set_3.active == true)
-				ContractStorage.get_storage("example-contract-chaining").find("main-contract").data = null;
+				ContractStorage.get_storage(_STORAGE_).find("main-contract").data = null;
 		});
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e6_events"), _e6_events);
@@ -970,29 +964,27 @@ stdout.printf ("example\n");
 
 	public void example_v (Gtk.Builder ui_builder)
 	{
-		BindingContract my_contract = ContractStorage.get_storage("example-validation").add ("my-contract", new BindingContract());
-		my_contract.bind ("name", name, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
+		string _STORAGE_ = "example-validation";
+		BindingContract my_contract = ContractStorage.get_storage(_STORAGE_).add ("my-contract", new BindingContract());
+		my_contract.bind ("name", ui_builder.get_object ("evo_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
 			((v) => {
 				return ((string) v != "");
 			}));
-		my_contract.bind ("surname", surname, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
+		my_contract.bind ("surname", ui_builder.get_object ("evo_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
 			((v) => {
 				return ((string) v != "");
 			}));
-		my_contract.bind ("required", required, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+		my_contract.bind ("required", ui_builder.get_object ("evo_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 
 		bind_person_model ((Gtk.ListBox) ui_builder.get_object ("evo_list"), persons, my_contract);
-
-		my_contract.bind ("name", ui_builder.get_object ("evo_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-		my_contract.bind ("surname", ui_builder.get_object ("evo_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-		my_contract.bind ("required", ui_builder.get_object ("evo_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 
 		PropertyBinding.bind(my_contract, "is_valid", ui_builder.get_object ("evo_b1"), "sensitive", BindFlags.SYNC_CREATE);
 	}
 
 	public void example_so (Gtk.Builder ui_builder)
 	{
-		BindingContract my_contract = ContractStorage.get_storage("example-state-objects").add ("my-contract", new BindingContract());
+		string _STORAGE_ = "example-state-objects";
+		BindingContract my_contract = ContractStorage.get_storage(_STORAGE_).add ("my-contract", new BindingContract());
 		bind_person_model ((Gtk.ListBox) ui_builder.get_object ("eso_list"), persons, my_contract);
 
 		my_contract.bind ("name", ui_builder.get_object ("eso_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
@@ -1009,7 +1001,8 @@ stdout.printf ("example\n");
 
 	public void example_vo (Gtk.Builder ui_builder)
 	{
-		BindingContract my_contract = ContractStorage.get_storage("example-value-objects").add ("my-contract", new BindingContract());
+		string _STORAGE_ = "example-value-objects";
+		BindingContract my_contract = ContractStorage.get_storage(_STORAGE_).add ("my-contract", new BindingContract());
 		bind_person_model ((Gtk.ListBox) ui_builder.get_object ("evvo_list"), persons, my_contract);
 
 		my_contract.bind ("name", ui_builder.get_object ("evvo_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
@@ -1035,14 +1028,15 @@ stdout.printf ("example\n");
 
 	public void example_relay (Gtk.Builder ui_builder)
 	{
-		BindingContract my_contract = ContractStorage.get_storage("example-relay").add ("main-contract", new BindingContract());
+		string _STORAGE_ = "example-relay";
+		BindingContract my_contract = ContractStorage.get_storage(_STORAGE_).add ("main-contract", new BindingContract());
 		bind_person_model ((Gtk.ListBox) ui_builder.get_object ("e7_list"), persons, my_contract);
 
 		BindingPointer infoptr = my_contract.hold (new BindingPointerFromPropertyValue (my_contract, "info"));
 		BindingPointer parentptr = my_contract.hold (new BindingPointerFromPropertyValue (my_contract, "parent"));
 
-		BindingContract info_contract = ContractStorage.get_storage("example-relay").add ("info-contract", new BindingContract(infoptr));
-		BindingContract parent_contract = ContractStorage.get_storage("example-relay").add ("parent-contract", new BindingContract(parentptr));
+		BindingContract info_contract = ContractStorage.get_storage(_STORAGE_).add ("info-contract", new BindingContract(infoptr));
+		BindingContract parent_contract = ContractStorage.get_storage(_STORAGE_).add ("parent-contract", new BindingContract(parentptr));
 
 		my_contract.bind ("name", ui_builder.get_object ("e7_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
 			.bind ("surname", ui_builder.get_object ("e7_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
