@@ -29,6 +29,7 @@ consists of following**
 
 **HOW TO COMPILE/RUN DEMO AND TUTORIAL**
 
+click on screenshot to see video
 [![ScreenShot](https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/demos/demo_and_tutorial/screenshot.png)](https://youtu.be/HDNQg7ShnDg)
 
 ```bash
