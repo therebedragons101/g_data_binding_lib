@@ -87,6 +87,7 @@ GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	${RESOURCE}${COMMON_NAME}_gtk${NAME_SUFFIX}.* \
 	gtk/inspector/binding_inspector.vala \
 	gtk/inspector/binding_listbox_row.vala \
+	gtk/inspector/event_array.vala \
 	gtk/inspector/event_description.vala \
 	gtk/inspector/methods.vala \
 	gtk/inspector/object_information.vala

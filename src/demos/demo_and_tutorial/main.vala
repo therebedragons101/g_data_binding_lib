@@ -777,7 +777,7 @@ public class test_data_bindings : Gtk.Application
 	public void example_inspector (Gtk.Builder ui_builder)
 	{
 		((Gtk.Button) ui_builder.get_object ("show_inspector")).clicked.connect (() =>{
-			GDataGtk.BindingInspector.show();
+			GDataGtk.BindingInspector.show(ContractStorage.get_storage("main-example").find ("main-contract"));
 		});
 	}
 }

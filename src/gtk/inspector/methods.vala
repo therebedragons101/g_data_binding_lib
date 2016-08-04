@@ -74,6 +74,16 @@ namespace GDataGtk
 		return ("<b>%s</b>".printf(str));
 	}
 
+	internal static string small (string str)
+	{
+		return ("<small>%s</small>".printf(str));
+	}
+
+	internal static string big (string str)
+	{
+		return ("<big>%s</big>".printf(str));
+	}
+
 	internal string get_current_source (Object? obj)
 	{
 		return ("\n\t\t%s".printf(_get_current_source(obj)));

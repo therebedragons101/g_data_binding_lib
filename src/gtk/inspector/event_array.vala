@@ -11,7 +11,7 @@ namespace GDataGtk
 			set {
 				disconnect_events();
 				clear();
-				_resource.target = value;
+				_resource.set_new_target (value);
 				connect_events();
 			}
 		}
@@ -90,6 +90,64 @@ namespace GDataGtk
 			);
 		}
 
+		private void handle_contract_contract_changed (BindingContract ccontract)
+		{
+			add (
+				new EventDescription.as_signal (
+					"contract_changed", 
+					"(contract=%s)".printf((ccontract == resource) ? "THIS" : "OTHER"),
+					yellow("\tEmited when contract is disolved or renewed after source change.\n") +
+					"\t\tcontract (BindingContract emiting the notification)" +
+					get_current_source (resource.get_source())
+				)
+			);
+		}
+
+		private void handle_contract_bindings_changed (BindingContract ccontract, ContractChangeType change_type, BindingInformation binding)
+		{
+			add (
+				new EventDescription.as_signal (
+					"bindings_changed", 
+					"(contract=%s, change_type=%s, binding)".printf((ccontract == resource) ? "THIS" : "OTHER", (change_type == ContractChangeType.ADDED) ? "ADDED" : "REMOVED"),
+					yellow("\tEmited when bindings are changed by adding or removing.\n") +
+					"\t\tcontract (BindingContract emiting the notification)\n" +
+					"\t\tchange_type (binding ADDED or REMOVED)\n" +
+					"\t\tbinding (BindingContract emiting the notification)" +
+					get_current_source (resource.get_source())
+				)
+			);
+		}
+
+		private void handle_contract_notify_is_valid (Object obj, ParamSpec param)
+		{
+			add (
+				new EventDescription.as_property (
+					"is_valid", 
+					" = %s".printf ((as_contract(resource).is_valid == true) ? "TRUE" : "FALSE")
+				)
+			);
+		}
+
+		private void handle_contract_notify_length (Object obj, ParamSpec param)
+		{
+			add (
+				new EventDescription.as_property (
+					"length", 
+					" = %i".printf ((int) (as_contract(resource).length))
+				)
+			);
+		}
+
+		private void handle_contract_notify_suspended (Object obj, ParamSpec param)
+		{
+			add (
+				new EventDescription.as_property (
+					"is_suspended", 
+					" = %s".printf (((as_contract(resource).suspended == true) ? "TRUE" : "FALSE"))
+				)
+			);
+		}
+
 		internal void connect_binding_pointer_events()
 		{
 			resource.data_changed.connect (handle_data_changed);
@@ -102,9 +160,9 @@ namespace GDataGtk
 
 		internal void connect_binding_contract_events()
 		{
-			connect_binding_pointer_events (contract, events);
+			connect_binding_pointer_events();
 			as_contract(resource).contract_changed.connect (handle_contract_contract_changed);
-			as_contract(resource).contract_changed.connect (handle_contract_bindings_changed);
+			as_contract(resource).bindings_changed.connect (handle_contract_bindings_changed);
 			as_contract(resource).notify["is-valid"].connect (handle_contract_notify_is_valid);
 			as_contract(resource).notify["length"].connect (handle_contract_notify_length);
 			as_contract(resource).notify["suspended"].connect (handle_contract_notify_suspended);
@@ -122,9 +180,9 @@ namespace GDataGtk
 
 		internal void disconnect_binding_contract_events()
 		{
-			disconnect_binding_pointer_events (contract, events);
+			disconnect_binding_pointer_events();
 			as_contract(resource).contract_changed.disconnect (handle_contract_contract_changed);
-			as_contract(resource).contract_changed.disconnect (handle_contract_bindings_changed);
+			as_contract(resource).bindings_changed.disconnect (handle_contract_bindings_changed);
 			as_contract(resource).notify["is-valid"].disconnect (handle_contract_notify_is_valid);
 			as_contract(resource).notify["length"].disconnect (handle_contract_notify_length);
 			as_contract(resource).notify["suspended"].disconnect (handle_contract_notify_suspended);
@@ -150,73 +208,15 @@ namespace GDataGtk
 				disconnect_binding_pointer_events();
 		}
 
-		private void handle_contract_contract_changed (BindingContract ccontract)
-		{
-			add (
-				new EventDescription.as_signal (
-					"contract_changed", 
-					"(contract=%s)".printf((ccontract == resource) ? "THIS" : "OTHER"),
-					yellow("\tEmited when contract is disolved or renewed after source change.\n") +
-					"\t\tcontract (BindingContract emiting the notification)" +
-					get_current_source (contract.get_source())
-				)
-			);
-		}
-
-		private void handle_contract_bindings_changed (BindingContract ccontract, ContractChangeType change_type, BindingInformation binding)
-		{
-			add (
-				new EventDescription.as_signal (
-					"bindings_changed", 
-					"(contract=%s, change_type=%s, binding)".printf((ccontract == resource) ? "THIS" : "OTHER", (change_type == ContractChangeType.ADDED) ? "ADDED" : "REMOVED"),
-					yellow("\tEmited when bindings are changed by adding or removing.\n") +
-					"\t\tcontract (BindingContract emiting the notification)\n" +
-					"\t\tchange_type (binding ADDED or REMOVED)\n" +
-					"\t\tbinding (BindingContract emiting the notification)" +
-					get_current_source (contract.get_source())
-				)
-			);
-		}
-
-		private void handle_contract_notify_is_valid (Object obj, ParamSpec param)
-		{
-			add (
-				new EventDescription.as_property (
-					"is_valid", 
-					" = %s".printf ((as_contract(resource).is_valid == true) ? "TRUE" : "FALSE")
-				)
-			);
-		}
-
-		private void handle_contract_notify_length (Object obj, ParamSpec param)
-		{
-			add (
-				new EventDescription.as_property (
-					"is_valid", 
-					" = %i".printf ((int) contract.length)
-				)
-			);
-		}
-
-		private void handle_contract_notify_suspended (Object obj, ParamSpec param)
-		{
-			add (
-				new EventDescription.as_property (
-					"is_valid", 
-					" = %s".printf ((contract.suspended == true) ? "TRUE" : "FALSE")
-				)
-			);
-		}
-
 		~EventArray()
 		{
 			disconnect_events();
 		}
 
-		public EventArray (BindingPointer ptr)
+		public EventArray (BindingPointer? ptr)
 		{
-			ptr = new StrictWeakReference<BindingPointer>(null);
-			
+			_resource = new StrictWeakReference<BindingPointer?>(null);
+			resource = ptr;
 		}
 	}
 }

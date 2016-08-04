@@ -11,6 +11,8 @@ namespace GDataGtk
 	 */
 	public class BindingInspector
 	{
+		private EventArray _events = new EventArray(null);
+
 		private Gtk.Button source_info_btn;
 		private Gtk.MenuButton find_btn;
 		private Gtk.Label main_title;
@@ -32,10 +34,19 @@ namespace GDataGtk
 			get { return (_window); }
 		}
 
-		private BindingContract _current_data = new BindingContract (null);
-		public BindingContract current_data {
-			get { return (_current_data); }
-			set { _current_data.data = value; }
+		private BindingContract _main_contract = new BindingContract (null);
+		public BindingContract main_contract {
+			get { return (_main_contract); }
+		}
+
+		public BindingPointer? current_data {
+			get { return ((BindingPointer?) _main_contract.data); }
+			set {
+				if (main_contract.data == value)
+					return;
+				_main_contract.data = value;
+				_events.resource = value;
+			}
 		}
 
 		private AliasArray aliases;
@@ -45,8 +56,8 @@ namespace GDataGtk
 		public static void show (BindingPointer? inspect = null)
 		{
 			instance.window.present();
-			if (instance._current_data.data != inspect)
-				instance._current_data.data = inspect;
+			if (instance.current_data != inspect)
+				instance.current_data = inspect;
 		}
 
 		public static void set_target (BindingPointer? inspect = null)
@@ -54,7 +65,7 @@ namespace GDataGtk
 			if (inspector_is_visible == false)
 				show (inspect);
 			else
-				instance._current_data.data = inspect;
+				instance.current_data = inspect;
 		}
 
 		private void bind_aliases (Gtk.Builder ui_builder)
@@ -107,12 +118,19 @@ namespace GDataGtk
 
 		private void disconnect_everything()
 		{
-			current_data.unbind_all();
-			current_data = null;
+			main_contract.unbind_all();
+			main_contract.data = null;
+			_events.clear();
+			_main_contract = null;
 			_window.destroy();
 			_window = null;
 			inspector_is_visible = false;
 			_instance = null;
+		}
+
+		private string _get_type_str (Object? obj)
+		{
+			return ((obj == null) ? bold(red("null")) : "typeof(%s)".printf(obj.get_type().name()));
 		}
 
 		private BindingInspector()
@@ -134,6 +152,15 @@ namespace GDataGtk
 			find_btn = (Gtk.MenuButton) ui_builder.get_object ("find_btn");
 			main_title = (Gtk.Label) ui_builder.get_object ("main_title");
 			sub_title = (Gtk.Label) ui_builder.get_object ("sub_title");
+
+			PropertyBinding.bind (main_contract, "data", main_title, "label", BindFlags.SYNC_CREATE,
+				() => {
+					main_title.set_markup (bold("Resource type=%s".printf (_get_type_str(main_contract.data))));
+					sub_title.set_markup (small("Chain source=%s".printf (_get_type_str(main_contract.get_source()))));
+					return (false);
+				});
+
+			bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("events"), _events);
 
 			find_btn.popover = new Gtk.Popover(find_btn);
 			find_btn.popover.modal = true;
