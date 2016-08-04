@@ -162,14 +162,16 @@ namespace GDataGtk
 			sub_title = (Gtk.Label) ui_builder.get_object ("sub_title");
 			Gtk.Box events_box = (Gtk.Box) ui_builder.get_object ("events_box");
 			Gtk.Stack resource_stack = (Gtk.Stack) ui_builder.get_object ("resource_stack");
+			Gtk.ListBox bindings_listbox = (Gtk.ListBox) ui_builder.get_object ("bindings_listbox");
 
 			main_contract.binder = binder;
 
 			main_contract.before_source_change.connect ((pointer, is_same, next) => {
-				
+				bind_bindings_listbox (bindings_listbox, (BindingPointer?) null);
 			});
 			main_contract.source_changed.connect ((pointer) => {
 				_events.resource = (BindingPointer?) main_contract.data;
+				bind_bindings_listbox (bindings_listbox, (BindingPointer?) main_contract.data);
 			});
 
 			binder.bind (main_contract, "data", main_title, "label", BindFlags.SYNC_CREATE,

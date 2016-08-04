@@ -254,7 +254,7 @@ designing data flow and bindings in external resources which can be read upon ex
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="demo_box">
+          <object class="GtkBox" id="main_demo">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
@@ -1172,7 +1172,7 @@ THIS PAGE IN DEMO JUST SHOWS HOW MUCH SINGLE LINE OF CODE MEANS WHEN DATA IS MAP
                     <property name="transition_duration">500</property>
                     <property name="transition_type">slide-up-down</property>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="example1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -1631,7 +1631,7 @@ full delay time is needed to pass again. delay interval is controlled by &lt;b&g
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="example2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -1905,7 +1905,7 @@ PropertyBinding.bind (custom_binding_l3, "text", custom_binding_r3, "active", Bi
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="example3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -2297,7 +2297,7 @@ the fact that application can tap into debugging per contract makes this extreme
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="alias_example">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -2498,7 +2498,7 @@ values registered for purpose of this tutorial</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="example4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -2701,7 +2701,7 @@ other signals are simply better left to visual representation. just change sourc
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="pointer_storage_example">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -2895,7 +2895,7 @@ to situations where all gui parts need to follow current situation</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="example5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -3190,7 +3190,7 @@ WARNING! do not use "data" notification as check point. use signals&lt;/b&gt;&lt
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="contract_storage_example">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -3379,7 +3379,7 @@ values are registered for purpose of this tutorial</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="example6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -3776,7 +3776,7 @@ being held are released as well</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="example_v">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -4011,7 +4011,7 @@ PropertyBinding.bind(my_contract, "is_valid", ui_builder.get_object ("evo_b1"), 
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="example_so">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -4233,7 +4233,7 @@ PropertyBinding.bind (my_contract.get_state_object("validity"), "state", require
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="example_vo">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -4495,7 +4495,7 @@ length for all 3 strings
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="example_relay">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -5141,7 +5141,7 @@ binding was added in 3 groups, it will stay in effect until it was removed 3 tim
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="example_inspector">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -5201,7 +5201,7 @@ Example:</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="label" translatable="yes">&lt;b&gt;BindingInspector.show(null); // or show();&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;BindingInspector.show(null);&lt;/b&gt; // or show();</property>
                                     <property name="use_markup">True</property>
                                   </object>
                                 </child>

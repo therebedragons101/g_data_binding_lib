@@ -1,6 +1,38 @@
 namespace GData
 {
 	/**
+	 * Signal emitted when new type property alias is registered
+	 * 
+	 * @since 0.1
+	 * @param type Type alias was registered for
+	 * @param property_name Name of property alias was registered for
+	 */
+	public delegate void AddedTypeAliasDelegate (Type type, string property_name);
+
+	/**
+	 * Signal sent when flood was detected
+	 * 
+	 * @since 0.1
+	 * @param binding BindingInterface on which flood was detected
+	 */
+	public delegate void FloodDetectedDelegate (BindingInterface binding);
+
+	/**
+	 * Signal sent when previously detected flood stops
+	 * 
+	 * @since 0.1
+	 * @param binding BindingInterface on which flood was detected
+	 */
+	public delegate void FloodStoppedDelegate (BindingInterface binding);
+
+	/**
+	 * Signal emited upon unbind of binding interface
+	 * 
+	 * @since 0.1
+	 */
+	public delegate void BindingInterfaceDroppedDelegate (BindingInterface binding);
+
+	/**
 	 * Delegate used to connect to enumeration of stored aliases
 	 * 
 	 * @since 0.1

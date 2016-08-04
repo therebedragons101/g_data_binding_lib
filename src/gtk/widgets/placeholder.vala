@@ -5,6 +5,8 @@ namespace GDataGtk
 {
 	public const string STOP_ICON = "action-unavailable-symbolic.symbolic";
 	public const string PROCESSING_ICON = "system-run-symbolic.symbolic";
+	public const string TRUE_ICON = "checkbox-checked-symbolic.symbolic";
+	public const string FALSE_ICON = "checkbox-symbolic.symbolic";
 
 	[GtkTemplate (ui="/org/gtk/g_data_binding_gtk/data/placeholder.ui")]
 	public class Placeholder : Gtk.Box

@@ -84,14 +84,16 @@ namespace GData
 		}
 
 		/**
-		 * Signal emited when properties that are connected change
+		 * Signal emited when properties that are connected change in custom
+		 * property notification source
 		 * 
 		 * @since 0.1
 		 */ 
 		public signal void properties_changed();
 
 		/**
-		 * Signal that can be emited when there is a need for custom 
+		 * Signal that can be emited when there is a need for custom in custom
+		 * property notification source
 		 * recalculation
 		 * 
 		 * @since 0.1

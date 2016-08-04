@@ -10,6 +10,34 @@ namespace GData
 	public interface BindingInformationInterface : Object
 	{
 		/**
+		 * Returns true if binding is currently active for data transfer
+		 * 
+		 * @since 0.1
+		 */
+		public abstract bool activated { get; }
+
+		/**
+		 * Specifies source property name
+		 * 
+		 * @since 0.1
+		 */
+		public abstract string source_property { get; }
+
+		/**
+		 * Specifies target property name
+		 * 
+		 * @since 0.1
+		 */
+		public abstract string target_property { get; }
+
+		/**
+		 * Specifies binding rules for data transfer
+		 * 
+		 * @since 0.1
+		 */
+		public abstract BindFlags flags { get; }
+
+		/**
 		 * Returns if source data is valid or not.
 		 * 
 		 * Validity is checked first against valid source and then updated on

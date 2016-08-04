@@ -260,5 +260,15 @@ namespace GData
 		{
 			return ((this & BindFlags.INVERT_BOOLEAN) == BindFlags.INVERT_BOOLEAN);
 		}
+		
+		public string get_direction_arrow()
+		{
+			string dir = "→";
+			if (this.IS_BIDIRECTIONAL() == true)
+				dir = "↔";
+			else if (this.IS_REVERSE() == true)
+				dir = "←";
+			return (dir);
+		}
 	}
 }

@@ -18,6 +18,13 @@ namespace GData
 				return (_instance);
 			}
 
+			/**
+			 * Signal emited when new Storage is added
+			 * 
+			 * @since 0.1
+			 * 
+			 * @param storage_name Name of new storage
+			 */
 			public signal void added_storage (string storage_name);
 			
 			private Signals()

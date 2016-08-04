@@ -21,6 +21,13 @@ namespace GData
 				return (_instance);
 			}
 
+			/**
+			 * Signal is emited when new alias is declared
+			 * 
+			 * @since 0.1
+			 * 
+			 * @param alias_name Name of new alias
+			 */
 			public signal void added_alias (string alias_name);
 
 			private Signals()

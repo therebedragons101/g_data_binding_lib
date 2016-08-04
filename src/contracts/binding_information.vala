@@ -14,6 +14,15 @@ namespace GData
 	{
 		private BindingInterface? binding = null;
 
+		/**
+		 * Returns true if binding is currently active for data transfer
+		 * 
+		 * @since 0.1
+		 */
+		public bool activated { 
+			get { return (binding != null); } 
+		}
+
 		private WeakReference<BindingContract?> _contract;
 		/**
 		 * Contract BindingInformation belongs to

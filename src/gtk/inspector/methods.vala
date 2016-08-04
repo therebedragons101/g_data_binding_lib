@@ -3,6 +3,16 @@ using GData.Generics;
 
 namespace GDataGtk
 {
+	internal string get_self_ref_equality (Object? obj1, Object? obj2)
+	{
+		return ((obj1 == obj2) ? "THIS" : "OTHER");
+	}
+	
+	internal string bool_str (bool val)
+	{
+		return ((val == true) ? "TRUE" : "FALSE");
+	}
+	
 	/**
 	 * Checks if object is BindingPointer or its subclass
 	 * 
@@ -108,7 +118,7 @@ namespace GDataGtk
 			events.add (
 				new EventDescription.as_signal (
 					"data_changed", 
-					"(binding=%s, data_change_cookie=%s)".printf ((binding == pointer) ? "THIS" : "OTHER", cookie),
+					"(binding=%s, data_change_cookie=%s)".printf (get_self_ref_equality(binding, pointer), cookie),
 					yellow("\tSource object change notification. Note that this is event triggered from outside when BindingPointer is MANUAL\n") +
 					"\t\tbinding (BindingPointer emiting the notification)\n" +
 					"\t\tdata_change_cookie (description of data change as passed on by triggering event)" +
@@ -120,7 +130,7 @@ namespace GDataGtk
 			events.add (
 				new EventDescription.as_signal (
 					"before_source_change", 
-					"(binding=%s, is_same=%i, next=%s)".printf ((binding == pointer) ? "THIS" : "OTHER", (int) is_same, (next != null) ? get_object_str(next) : _null()),
+					"(binding=%s, is_same=%i, next=%s)".printf (get_self_ref_equality(binding, pointer), (int) is_same, (next != null) ? get_object_str(next) : _null()),
 					yellow("\tObject being pointed is about to change. In case if reference was not dropped it can still be accessed trough binding\n") +
 					"\t\tbinding (BindingPointer emiting the notification)\n" +
 					"\t\tis_same (specifies if type of next source being pointed to is the same)\n" +
@@ -133,7 +143,7 @@ namespace GDataGtk
 			events.add (
 				new EventDescription.as_signal (
 					"source_changed", 
-					"(binding=%s)".printf((binding == pointer) ? "THIS" : "OTHER"),
+					"(binding=%s)".printf(get_self_ref_equality(binding, pointer)),
 					yellow("\tObject being pointed has changed.\n") +
 					"\t\tbinding (BindingPointer emiting the notification)" +
 					get_current_source (binding.get_source())
@@ -176,7 +186,7 @@ namespace GDataGtk
 			events.add (
 				new EventDescription.as_signal (
 					"contract_changed", 
-					"(contract=%s)".printf((ccontract == contract) ? "THIS" : "OTHER"),
+					"(contract=%s)".printf(get_self_ref_equality(ccontract, contract)),
 					yellow("\tEmited when contract is disolved or renewed after source change.\n") +
 					"\t\tcontract (BindingContract emiting the notification)" +
 					get_current_source (contract.get_source())
@@ -187,7 +197,7 @@ namespace GDataGtk
 			events.add (
 				new EventDescription.as_signal (
 					"bindings_changed", 
-					"(contract=%s, change_type=%s, binding)".printf((ccontract == contract) ? "THIS" : "OTHER", (change_type == ContractChangeType.ADDED) ? "ADDED" : "REMOVED"),
+					"(contract=%s, change_type=%s, binding)".printf(get_self_ref_equality(ccontract, contract), change_type.get_state_str()),
 					yellow("\tEmited when bindings are changed by adding or removing.\n") +
 					"\t\tcontract (BindingContract emiting the notification)\n" +
 					"\t\tchange_type (binding ADDED or REMOVED)\n" +
@@ -200,7 +210,7 @@ namespace GDataGtk
 			events.add (
 				new EventDescription.as_property (
 					"is_valid", 
-					" = %s".printf ((contract.is_valid == true) ? "TRUE" : "FALSE")
+					" = %s".printf (bool_str(contract.is_valid == true))
 				)
 			);
 		});
@@ -216,10 +226,17 @@ namespace GDataGtk
 			events.add (
 				new EventDescription.as_property (
 					"is_valid", 
-					" = %s".printf ((contract.suspended == true) ? "TRUE" : "FALSE")
+					" = %s".printf (bool_str(contract.suspended == true))
 				)
 			);
 		});
+	}
+
+	internal static int __get_icon_size (Gtk.IconSize size)
+	{
+		int x,y;
+		Gtk.icon_size_lookup (size, out x, out y);
+		return (x);
 	}
 
 	internal void bind_event_listbox (Gtk.ListBox listbox, ObjectArray<EventDescription> events, BindingInspector? inspector = null, string property_name = "")
@@ -247,6 +264,52 @@ namespace GDataGtk
 				inspector.binder.bind (inspector, property_name, description, "visible", BindFlags.SYNC_CREATE);
 			box.pack_start (title, false, false, 0);
 			box.pack_start (description, false, false, 0);
+			return (r);
+		}));
+	}
+
+	internal void bind_bindings_listbox (Gtk.ListBox listbox, BindingPointer? pointer, BindingInspector? inspector = null, string property_name = "")
+	{
+		if ((pointer == null) || (is_binding_contract(pointer) == false)) {
+			listbox.bind_model (new ObjectArray<Object?>(), (o) => {
+				return (new Gtk.ListBoxRow());
+			});
+			return;
+		}
+		listbox.bind_model (as_contract(pointer), ((o) => {
+			Gtk.ListBoxRow r = new BindingListBoxRow();
+			BindingInformationInterface obj = (BindingInformationInterface) o;
+			r.set_data<WeakReference<BindingInformationInterface?>> ("binding", 
+				new WeakReference<BindingInformationInterface?>(obj));
+			r.visible = true;
+			Gtk.Box box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 4);
+			box.expand = true;
+			box.visible = true;
+			r.add (box);
+			Gtk.Image image = create_image_from_icon (((obj.activated == true) ? TRUE_ICON : FALSE_ICON), 
+				null, null, __get_icon_size(Gtk.IconSize.SMALL_TOOLBAR), false);
+			r.set_data<WeakReference<Gtk.Image?>> ("image", 
+				new WeakReference<Gtk.Image?>(image));
+			image.visible = true;
+			Gtk.Label title = new Gtk.Label("");
+			title.visible = true;
+			title.hexpand = true;
+			title.xalign = 0;
+			title.use_markup = true;
+			string dir = obj.flags.get_direction_arrow();
+			title.set_markup(
+				"%s%s%s".printf (bold((obj).source_property), dir, bold((obj).target_property)));
+/*			Gtk.Label description = new Gtk.Label("");
+			description.visible = true;
+			description.use_markup = true;
+			description.hexpand = true;
+			description.xalign = 0;
+			description.set_markup(((EventDescription) o).description);
+			if (inspector != null)
+				inspector.binder.bind (inspector, property_name, description, "visible", BindFlags.SYNC_CREATE);*/
+			box.pack_start (image, false, false, 0);
+			box.pack_start (title, true, true, 0);
+//			box.pack_start (description, false, false, 0);
 			return (r);
 		}));
 	}

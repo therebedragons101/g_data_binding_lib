@@ -51,7 +51,7 @@ namespace GData
 		public abstract void unbind();
 
 		/**
-		 * Signal emited upon unbind
+		 * Signal emited upon unbind of binding interface
 		 * 
 		 * @since 0.1
 		 */

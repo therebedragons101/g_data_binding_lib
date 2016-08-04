@@ -22,13 +22,28 @@ namespace GData
 	 * 
 	 * @since 0.1
 	 */
-	public class BindingContract : GData.BindingPointer, BindingStateObjects, BindingValueObjects//, BindingGroup
+	public class BindingContract : GData.BindingPointer, BindingStateObjects, BindingValueObjects, BindingGroup, GLib.ListModel
 	{
 		private bool finalizing_in_progress = false;
 		private bool bound = false;
 
 		private GLib.Array<BindingInformationReference> _items = new GLib.Array<BindingInformationReference>();
 		private WeakReference<Object?> last_source = new WeakReference<Object?>(null);
+
+		public Object? get_item (uint position)
+		{
+			return (_items.data[position].binding);
+		}
+
+		public Type get_item_type()
+		{
+			return (typeof(BindingInformationInterface));
+		}
+
+		public uint get_n_items ()
+		{
+			return (length);
+		}
 
 		/**
 		 * Number of bindings in contract
@@ -312,6 +327,7 @@ namespace GData
 			connect_notifications.connect (information.bind_connection);
 			disconnect_notifications.connect (information.unbind_connection);
 			information.notify["is-valid"].connect (handle_is_valid);
+			items_changed (_items.length, 0, 1);
 			return (information);
 		}
 
@@ -412,6 +428,7 @@ namespace GData
 					information.notify["is-valid"].disconnect (handle_is_valid);
 					information.unbind_connection (get_source());
 					_items.remove_index (i);
+					items_changed (i, 1, 0);
 					break;
 				}
 			}
