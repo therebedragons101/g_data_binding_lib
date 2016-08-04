@@ -7,6 +7,9 @@ export GI_TYPELIB_PATH := $(shell pwd)
 COMMON_NAME := g_data_binding
 NAME_SUFFIX := _lib
 LIBRARY_NAME := ${COMMON_NAME}${NAME_SUFFIX}
+INCLUDES := ../includes/
+BIN := ../bin/
+RESOURCE := ../resources/
 
 LIB_MAJOR := 0
 LIB_MINOR := 1
@@ -81,8 +84,7 @@ GENERICS_SOURCES := ${COMMON_NAME}_generics${NAME_SUFFIX}.vala \
 	generics/property/property_alias.vala
 
 GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
-	../resources/${COMMON_NAME}_gtk${NAME_SUFFIX}.c \
-	../resources/${COMMON_NAME}_gtk${NAME_SUFFIX}.h \
+	${RESOURCE}${COMMON_NAME}_gtk${NAME_SUFFIX}.* \
 	gtk/inspector/binding_inspector.vala \
 	gtk/inspector/binding_listbox_row.vala \
 	gtk/inspector/event_description.vala \
@@ -90,15 +92,12 @@ GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	gtk/inspector/object_information.vala
 
 DEMO_SOURCES := demos/demo_and_tutorial/main.vala \
-	../resources/demo_and_tutorial.c \
-	../resources/demo_and_tutorial.h \
+	${RESOURCE}demo_and_tutorial.* \
 	gtk/inspector/methods.vala
 
 PACKAGES := --pkg gio-2.0
 DEMO_PACKAGES := --pkg gtk+-3.0
 GTK_PACKAGES := --pkg gtk+-3.0
-INCLUDES := ../includes/
-BIN := ../bin/
 
 # Vala
 

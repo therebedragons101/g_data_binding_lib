@@ -11,8 +11,6 @@ namespace GDataGtk
 	 */
 	public class BindingInspector
 	{
-		private BindingContract? main_contract = null;
-
 		private Gtk.Button source_info_btn;
 		private Gtk.MenuButton find_btn;
 		private Gtk.Label main_title;
@@ -34,7 +32,12 @@ namespace GDataGtk
 			get { return (_window); }
 		}
 
-		private Object? _current_data = null;
+		private BindingContract _current_data = new BindingContract (null);
+		public BindingContract current_data {
+			get { return (_current_data); }
+			set { _current_data.data = value; }
+		}
+
 		private AliasArray aliases;
 		private PointerArray pointers;
 		private ContractArray storages;
@@ -42,8 +45,8 @@ namespace GDataGtk
 		public static void show (BindingPointer? inspect = null)
 		{
 			instance.window.present();
-			if (instance._current_data != inspect)
-				instance._current_data = inspect;
+			if (instance._current_data.data != inspect)
+				instance._current_data.data = inspect;
 		}
 
 		public static void set_target (BindingPointer? inspect = null)
@@ -51,7 +54,7 @@ namespace GDataGtk
 			if (inspector_is_visible == false)
 				show (inspect);
 			else
-				instance._current_data = inspect;
+				instance._current_data.data = inspect;
 		}
 
 		private void bind_aliases (Gtk.Builder ui_builder)
@@ -104,8 +107,8 @@ namespace GDataGtk
 
 		private void disconnect_everything()
 		{
-			main_contract.unbind_all();
-			main_contract = null;
+			current_data.unbind_all();
+			current_data = null;
 			_window.destroy();
 			_window = null;
 			inspector_is_visible = false;
@@ -115,7 +118,6 @@ namespace GDataGtk
 		private BindingInspector()
 		{
 			inspector_is_visible = true;
-			main_contract = new BindingContract();
 
 			var ui_builder = new Gtk.Builder ();
 			try {
