@@ -2,10 +2,6 @@
 
 License (GPL/LGPL)
 
-Databinding implementation in vala (later to be rewriten in C)???. Vala
-is chosen for simple reason, I'm far more familiar with it and that
-makes it much faster to prototype the end case scenario.
-
 **IMPORTANT!
 To get as simple and best possible overview running "demo_and_tutorial" is
 probably by far best method as tutorial not only shows how to do bindings,
