@@ -2814,7 +2814,7 @@ values are registered for purpose of this tutorial</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
-                                        <property name="label" translatable="yes">Registered contracts</property>
+                                        <property name="label" translatable="yes">Registered pointers</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -5138,6 +5138,93 @@ binding was added in 3 groups, it will stay in effect until it was removed 3 tim
                         <property name="name">group_bindings</property>
                         <property name="title" translatable="yes">Binding handling as group</property>
                         <property name="position">18</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="margin_left">8</property>
+                        <property name="margin_right">8</property>
+                        <property name="margin_top">8</property>
+                        <property name="margin_bottom">8</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel" id="custom_data_____________________">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
+                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Binding inspector&lt;/b&gt;&lt;/big&gt;
+As part of &lt;b&gt;g_data_bindings_gtk_lib&lt;/b&gt; there is ability to enable binding inspector from anywhere in application that uses data bindings</property>
+                                <property name="use_markup">True</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">&lt;b&gt;BindingInspector API&lt;/b&gt;
+All API is static to make things simpler
+
+public static Gtk.Window &lt;b&gt;window&lt;/b&gt; { get; }
+public static void &lt;b&gt;show&lt;/b&gt; (BindingPointer? inspect = null)
+public static void &lt;b&gt;set_target&lt;/b&gt; (BindingPointer? inspect = null)
+
+Example:</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="show_inspector">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;BindingInspector.show();&lt;/b&gt;</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="name">binding_inspector</property>
+                        <property name="title" translatable="yes">Binding Inspector</property>
+                        <property name="position">19</property>
                       </packing>
                     </child>
                   </object>

@@ -14,8 +14,8 @@ LIB_VERSION := ${LIB_MAJOR}.${LIB_MINOR}
 
 all: resources \
      ${LIBRARY_NAME}.so \
-     ${COMMON_NAME}gtk${NAME_SUFFIX}.so \
      ${COMMON_NAME}generics${NAME_SUFFIX}.so \
+     ${COMMON_NAME}gtk${NAME_SUFFIX}.so \
      demo-and-tutorial \
      hack-for-gir-bug \
      ${COMMON_NAME}${NAME_SUFFIX}-${LIB_VERSION}.typelib \
@@ -83,11 +83,16 @@ GENERICS_SOURCES := ${COMMON_NAME}_generics${NAME_SUFFIX}.vala \
 GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	../resources/${COMMON_NAME}_gtk${NAME_SUFFIX}.c \
 	../resources/${COMMON_NAME}_gtk${NAME_SUFFIX}.h \
-	gtk/inspector/inspector_window.vala
+	gtk/inspector/binding_inspector.vala \
+	gtk/inspector/binding_listbox_row.vala \
+	gtk/inspector/event_description.vala \
+	gtk/inspector/methods.vala \
+	gtk/inspector/object_information.vala
 
 DEMO_SOURCES := demos/demo_and_tutorial/main.vala \
 	../resources/demo_and_tutorial.c \
-	../resources/demo_and_tutorial.h
+	../resources/demo_and_tutorial.h \
+	gtk/inspector/methods.vala
 
 PACKAGES := --pkg gio-2.0
 DEMO_PACKAGES := --pkg gtk+-3.0
@@ -144,7 +149,9 @@ ${COMMON_NAME}gtk${NAME_SUFFIX}.so:
 		-o ${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR}.so \
 		-X -I${INCLUDES} \
 		-X ${LIBRARY_NAME}${LIB_MAJOR}.so \
+		-X ${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.so \
 		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
+		${INCLUDES}${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.vapi \
 	${PACKAGES} \
 	${GTK_PACKAGES} \
 	${GTK_SOURCES}
@@ -164,9 +171,11 @@ demo-and-tutorial:
 		${DEMO_PACKAGES} \
 		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
 		${INCLUDES}${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.vapi \
+		${INCLUDES}${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR}.vapi \
 		-X -I${INCLUDES} \
 		-X ${LIBRARY_NAME}${LIB_MAJOR}.so \
 		-X ${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.so \
+		-X ${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR}.so \
 		-o ${BIN}demo_and_tutorial \
 	${DEMO_SOURCES}
 
