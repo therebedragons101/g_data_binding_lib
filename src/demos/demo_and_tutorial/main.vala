@@ -2,7 +2,7 @@ using GData;
 using GData.Generics;
 using GDataGtk;
 
-/* Demo relevant code starts at line 664 */
+/* Demo relevant code starts at line 346 */
 
 public class PersonInfo : Object, ObjectInformation
 {

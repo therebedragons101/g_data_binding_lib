@@ -27,7 +27,7 @@ consists of following**
 
 The demo/tutorial is a fully working GTK+ front end showing how g_data_binding_lib can be used, with code snippets and API documentation.
 
-click on screenshot to see video
+**click on screenshot to see video**
 [![ScreenShot](https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/demos/demo_and_tutorial/screenshot.png)](https://youtu.be/HDNQg7ShnDg)
 
 ```bash
