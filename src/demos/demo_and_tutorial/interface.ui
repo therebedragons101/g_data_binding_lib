@@ -5181,7 +5181,6 @@ All API is static to make things simpler
 
 public static Gtk.Window &lt;b&gt;window&lt;/b&gt; { get; }
 public static void &lt;b&gt;show&lt;/b&gt; (BindingPointer? inspect = null)
-public static void &lt;b&gt;set_target&lt;/b&gt; (BindingPointer? inspect = null)
 
 Example:</property>
                                 <property name="use_markup">True</property>
@@ -5202,7 +5201,7 @@ Example:</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="label" translatable="yes">&lt;b&gt;BindingInspector.show();&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;BindingInspector.show(null); // or show();&lt;/b&gt;</property>
                                     <property name="use_markup">True</property>
                                   </object>
                                 </child>
@@ -5211,6 +5210,27 @@ Example:</property>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="show_inspector_with_target">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;GDataGtk.BindingInspector.show(ContractStorage.get_storage("main-example").find ("main-contract"));&lt;/b&gt;</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">3</property>
                               </packing>
                             </child>
                           </object>

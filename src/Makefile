@@ -17,8 +17,8 @@ LIB_VERSION := ${LIB_MAJOR}.${LIB_MINOR}
 
 all: resources \
      ${LIBRARY_NAME}.so \
-     ${COMMON_NAME}generics${NAME_SUFFIX}.so \
-     ${COMMON_NAME}gtk${NAME_SUFFIX}.so \
+     ${COMMON_NAME}_generics${NAME_SUFFIX}.so \
+     ${COMMON_NAME}_gtk${NAME_SUFFIX}.so \
      demo-and-tutorial \
      hack-for-gir-bug \
      ${COMMON_NAME}${NAME_SUFFIX}-${LIB_VERSION}.typelib \
@@ -83,6 +83,7 @@ GENERICS_SOURCES := ${COMMON_NAME}_generics${NAME_SUFFIX}.vala \
 	generics/property/alias_array.vala \
 	generics/property/property_alias.vala
 
+#	${RESOURCE}${COMMON_NAME}_gtk${NAME_SUFFIX}.*
 GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	${RESOURCE}${COMMON_NAME}_gtk${NAME_SUFFIX}.* \
 	gtk/inspector/binding_inspector.vala \
@@ -90,7 +91,10 @@ GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	gtk/inspector/event_array.vala \
 	gtk/inspector/event_description.vala \
 	gtk/inspector/methods.vala \
-	gtk/inspector/object_information.vala
+	gtk/inspector/object_information.vala \
+	gtk/widgets/methods.vala \
+	gtk/widgets/placeholder.vala \
+	gtk/widgets/widget_defaults.vala
 
 DEMO_SOURCES := demos/demo_and_tutorial/main.vala \
 	${RESOURCE}demo_and_tutorial.* \
@@ -119,7 +123,7 @@ ${LIBRARY_NAME}.so:
 	${PACKAGES} \
 	${SOURCES}
 
-${COMMON_NAME}generics${NAME_SUFFIX}.so:
+${COMMON_NAME}_generics${NAME_SUFFIX}.so:
 	valac \
 		-H ${INCLUDES}${COMMON_NAME}_generics${NAME_SUFFIX}.h \
 		--vapi=${INCLUDES}${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.vapi \
@@ -136,7 +140,7 @@ ${COMMON_NAME}generics${NAME_SUFFIX}.so:
 	${PACKAGES} \
 	${GENERICS_SOURCES}
 
-${COMMON_NAME}gtk${NAME_SUFFIX}.so:
+${COMMON_NAME}_gtk${NAME_SUFFIX}.so:
 	valac \
 		-H ${INCLUDES}${COMMON_NAME}_gtk${NAME_SUFFIX}.h \
 		--vapi=${INCLUDES}${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR}.vapi \
@@ -144,6 +148,8 @@ ${COMMON_NAME}gtk${NAME_SUFFIX}.so:
 		-fPIC \
 		-X \
 		-shared \
+		--target-glib=2.38 \
+		--gresources=gtk/g_data_binding_gtk_lib.resource \
 		--library=${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR} \
 		--gir=${INCLUDES}${COMMON_NAME}_gtk${NAME_SUFFIX}-${LIB_VERSION}.gir \
 		-o ${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR}.so \

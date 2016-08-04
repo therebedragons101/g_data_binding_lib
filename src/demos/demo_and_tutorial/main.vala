@@ -160,30 +160,6 @@ public class test_data_bindings : Gtk.Application
 		owned get { return ("counter=%i".printf(_counter)); }
 	}
 
-	public Gtk.CssProvider? assign_css (Gtk.Widget? widget, string css_content)
-		requires (widget != null)
-	{
-		Gtk.CssProvider provider = new Gtk.CssProvider();
-		try {
-			provider.load_from_data(css_content, css_content.length);
-			Gtk.StyleContext style = widget.get_style_context();
-			style.add_provider (provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
-		}
-		catch (Error e) { print ("Could not load CSS. %s\n", e.message); }
-		return (provider);
-	}
-
-	public void assign_builder_css (Gtk.Builder ui_builder, string widget_name, string css)
-	{
-		string wname = widget_name;
-		Gtk.Widget w = (Gtk.Widget) ui_builder.get_object (wname);
-		while (w != null) {
-			assign_css (w, css);
-			wname += "_";
-			w = (Gtk.Widget) ui_builder.get_object (wname);
-		}
-	}
-
 	public test_data_bindings ()
 	{
 		Object (flags: ApplicationFlags.FLAGS_NONE);
@@ -777,6 +753,9 @@ public class test_data_bindings : Gtk.Application
 	public void example_inspector (Gtk.Builder ui_builder)
 	{
 		((Gtk.Button) ui_builder.get_object ("show_inspector")).clicked.connect (() =>{
+			GDataGtk.BindingInspector.show(null);
+		});
+		((Gtk.Button) ui_builder.get_object ("show_inspector_with_target")).clicked.connect (() =>{
 			GDataGtk.BindingInspector.show(ContractStorage.get_storage("main-example").find ("main-contract"));
 		});
 	}

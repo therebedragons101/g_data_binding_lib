@@ -9,16 +9,22 @@ namespace GDataGtk
 	 * 
 	 * @since 0.1
 	 */
-	public class BindingInspector
+	public class BindingInspector : Object
 	{
+		public Binder binder = new Binder();
+
 		private EventArray _events = new EventArray(null);
 
 		private Gtk.Button source_info_btn;
+		private Gtk.Button clear_btn;
+		private Gtk.ToggleButton compact_events_btn;
 		private Gtk.MenuButton find_btn;
 		private Gtk.Label main_title;
 		private Gtk.Label sub_title;
 
 		private static bool inspector_is_visible { get; private set; default = false; }
+
+		public bool compact_events { get; set; default = false; }
 
 		private static BindingInspector? _instance = null;
 		public static BindingInspector instance {
@@ -149,18 +155,65 @@ namespace GDataGtk
 			_window.show();
 
 			source_info_btn = (Gtk.Button) ui_builder.get_object ("source_info_btn");
+			clear_btn = (Gtk.Button) ui_builder.get_object ("clear_btn");
+			compact_events_btn = (Gtk.ToggleButton) ui_builder.get_object ("compact_events_btn");
 			find_btn = (Gtk.MenuButton) ui_builder.get_object ("find_btn");
 			main_title = (Gtk.Label) ui_builder.get_object ("main_title");
 			sub_title = (Gtk.Label) ui_builder.get_object ("sub_title");
+			Gtk.Box events_box = (Gtk.Box) ui_builder.get_object ("events_box");
+			Gtk.Stack resource_stack = (Gtk.Stack) ui_builder.get_object ("resource_stack");
 
-			PropertyBinding.bind (main_contract, "data", main_title, "label", BindFlags.SYNC_CREATE,
+			main_contract.binder = binder;
+
+			main_contract.before_source_change.connect ((pointer, is_same, next) => {
+				
+			});
+			main_contract.source_changed.connect ((pointer) => {
+				_events.resource = (BindingPointer?) main_contract.data;
+			});
+
+			binder.bind (main_contract, "data", main_title, "label", BindFlags.SYNC_CREATE,
 				() => {
 					main_title.set_markup (bold("Resource type=%s".printf (_get_type_str(main_contract.data))));
 					sub_title.set_markup (small("Chain source=%s".printf (_get_type_str(main_contract.get_source()))));
 					return (false);
 				});
 
-			bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("events"), _events);
+			binder.bind (resource_stack, "visible-child", clear_btn, "visible", BindFlags.SYNC_CREATE,
+				() => {
+					clear_btn.visible = (resource_stack.visible_child == events_box);
+					compact_events_btn.visible = (resource_stack.visible_child == events_box);
+					return (false);
+				});
+
+			clear_btn.clicked.connect (() => {
+				_events.clear();
+			});
+
+			binder.bind (this, "compact-events", compact_events_btn, "active", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+
+			bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("events"), _events, this, "compact-events");
+
+			((Gtk.ListBox) ui_builder.get_object ("events")).set_placeholder (
+				new Placeholder.from_icon ("Waiting for events", Gtk.IconSize.DIALOG, PROCESSING_ICON));
+			((Gtk.ListBox) ui_builder.get_object ("searched_contracts")).set_placeholder (
+				new Placeholder.from_icon ("No items found", Gtk.IconSize.LARGE_TOOLBAR, STOP_ICON));
+			((Gtk.ListBox) ui_builder.get_object ("bindings_listbox")).set_placeholder (
+				new Placeholder.from_icon ("No bindings available", Gtk.IconSize.DND, STOP_ICON));
+			((Gtk.ListBox) ui_builder.get_object ("binding_information")).set_placeholder (
+				new Placeholder.from_icon ("No bindings available", Gtk.IconSize.DND, STOP_ICON));
+			((Gtk.ListBox) ui_builder.get_object ("aliases")).set_placeholder (
+				new Placeholder.from_icon ("No aliases found", Gtk.IconSize.LARGE_TOOLBAR, STOP_ICON));
+			((Gtk.ListBox) ui_builder.get_object ("alias_types")).set_placeholder (
+				new Placeholder.from_icon ("No aliases registered", Gtk.IconSize.LARGE_TOOLBAR, STOP_ICON));
+			((Gtk.ListBox) ui_builder.get_object ("contract_storages")).set_placeholder (
+				new Placeholder.from_icon ("No contract storages found", Gtk.IconSize.LARGE_TOOLBAR, STOP_ICON));
+			((Gtk.ListBox) ui_builder.get_object ("contracts")).set_placeholder (
+				new Placeholder.from_icon ("No contracts stored in storage", Gtk.IconSize.LARGE_TOOLBAR, STOP_ICON));
+			((Gtk.ListBox) ui_builder.get_object ("pointer_storages")).set_placeholder (
+				new Placeholder.from_icon ("No pointer storages found", Gtk.IconSize.LARGE_TOOLBAR, STOP_ICON));
+			((Gtk.ListBox) ui_builder.get_object ("pointers")).set_placeholder (
+				new Placeholder.from_icon ("No pointers stored in storage", Gtk.IconSize.LARGE_TOOLBAR, STOP_ICON));
 
 			find_btn.popover = new Gtk.Popover(find_btn);
 			find_btn.popover.modal = true;

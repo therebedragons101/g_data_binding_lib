@@ -4,3 +4,5 @@
 - Add demo and tutorial from poc project
 
 - Write documentation
+
+- Fix memory leak on inspector instances. Disconnect arrays from storages. Ultra low priority

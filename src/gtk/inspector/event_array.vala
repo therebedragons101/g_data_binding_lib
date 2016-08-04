@@ -9,6 +9,8 @@ namespace GDataGtk
 		public BindingPointer? resource {
 			get { return (_resource.target); }
 			set {
+				if (resource == value)
+					return;
 				disconnect_events();
 				clear();
 				_resource.set_new_target (value);

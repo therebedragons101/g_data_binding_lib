@@ -145,7 +145,7 @@ namespace GData
 					return (Binder.get_default());
 				return (_binder); 
 			}
-			set { binder = value; }
+			set { _binder = value; }
 		}
 
 		private void disconnect_lifetime()

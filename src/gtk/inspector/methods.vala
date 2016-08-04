@@ -222,7 +222,7 @@ namespace GDataGtk
 		});
 	}
 
-	internal void bind_event_listbox (Gtk.ListBox listbox, ObjectArray<EventDescription> events)
+	internal void bind_event_listbox (Gtk.ListBox listbox, ObjectArray<EventDescription> events, BindingInspector? inspector = null, string property_name = "")
 	{
 		listbox.bind_model (events, ((o) => {
 			Gtk.ListBoxRow r = new BindingListBoxRow();
@@ -243,6 +243,8 @@ namespace GDataGtk
 			description.hexpand = true;
 			description.xalign = 0;
 			description.set_markup(((EventDescription) o).description);
+			if (inspector != null)
+				inspector.binder.bind (inspector, property_name, description, "visible", BindFlags.SYNC_CREATE);
 			box.pack_start (title, false, false, 0);
 			box.pack_start (description, false, false, 0);
 			return (r);
