@@ -313,7 +313,7 @@ namespace GDataGtk
 	internal void bind_event_listbox (Gtk.ListBox listbox, ObjectArray<EventDescription> events, BindingInspector? inspector = null, string property_name = "")
 	{
 		listbox.bind_model (events, ((o) => {
-			Gtk.ListBoxRow r = new BindingListBoxRow();
+			Gtk.ListBoxRow r = new Gtk.ListBoxRow();
 			r.visible = true;
 			Gtk.Box box = new Gtk.Box (Gtk.Orientation.VERTICAL, 4);
 			box.expand = true;
@@ -342,7 +342,7 @@ namespace GDataGtk
 	internal void bind_namespace_listbox (Gtk.ListBox listbox)
 	{
 		listbox.bind_model (PointerNamespace.get_instance(), ((o) => {
-			Gtk.ListBoxRow r = new BindingListBoxRow();
+			Gtk.ListBoxRow r = new Gtk.ListBoxRow();
 			BindingPointer obj = (BindingPointer) o;
 			r.set_data<int> ("pointer", obj.id);
 			
@@ -385,7 +385,7 @@ namespace GDataGtk
 			return;
 		}
 		listbox.bind_model (as_contract(pointer), ((o) => {
-			Gtk.ListBoxRow r = new BindingListBoxRow();
+			Gtk.ListBoxRow r = new Gtk.ListBoxRow();
 			BindingInformationInterface obj = (BindingInformationInterface) o;
 			r.visible = true;
 			r.set_data<WeakReference<BindingInformationInterface?>> ("binding", 
@@ -427,7 +427,7 @@ namespace GDataGtk
 	internal void bind_kv_listbox<MK, K, V> (Gtk.ListBox listbox, GLib.ListModel events, GetKeyValueString method, bool sublist)
 	{
 		listbox.bind_model ((GLib.ListModel) events, ((o) => {
-			Gtk.ListBoxRow r = new BindingListBoxRow();
+			Gtk.ListBoxRow r = new Gtk.ListBoxRow();
 			if (sublist == true)
 				r.set_data<GLib.ListModel> ("sublist", ((KeyValuePair<MK, KeyValueArray<K, V>>) o).val);
 			r.visible = true;

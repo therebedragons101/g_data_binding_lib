@@ -1,92 +1,10 @@
 using GData;
 using GData.Generics;
 using GDataGtk;
-
-/* Demo relevant code starts at line 346 */
-
-public class PersonInfo : Object, ObjectInformation
-{
-	public int some_num { get; set; }
-
-	public string get_info()
-	{
-		return ("some_num=%i".printf(some_num));
-	}
-
-	public PersonInfo (int num)
-	{
-		some_num = num;
-	}
-}
-
-public class Person : Object, ObjectInformation
-{
-	public string name { get; set; }
-	public string surname { get; set; }
-	public string required { get; set; }
-
-	public PersonInfo info { get; set; }
-	private Person? _parent = null;
-	public Person? parent { 
-		get { return (_parent); }
-		set { _parent = value; }
-	}
-
-	public string get_info()
-	{
-		return (fullname());
-	}
-
-	public string fullname()
-	{
-		return ("%s %s".printf(name, surname));
-	}
-
-	public Person (string name, string surname, string required = "")
-	{
-		this.name = name;
-		this.surname = surname;
-		this.required = required;
-		info = new PersonInfo((int) GLib.Random.int_range(1,10));
-	}
-}
+using Demo;
 
 public class test_data_bindings : Gtk.Application
 {
-	private string _title_css = """
-		* {
-			border: solid 2px gray;
-			padding: 4px 4px 4px 4px;
-			border-radius: 5px;
-			color: rgba (255,255,255,0.7);
-			background-color: rgba(0,0,0,0.09);
-		}
-	""";
-
-	private string _dark_label_css = """
-		* {
-			border-radius: 5px;
-			padding: 4px 4px 4px 4px;
-			color: rgba (255,255,255,0.7);
-			background-color: rgba(0,0,0,0.2);
-		}
-	""";
-
-	private string _warning_label_css = """
-		* {
-			border: solid 1px rgba (0,0,0,1);
-			padding: 4px 4px 4px 4px;
-			border-radius: 5px;
-			color: rgba (255,255,255,0.7);
-			background-color: rgba(255,0,0,0.05);
-		}
-	""";
-
-	private ObjectArray<Person> _persons = new ObjectArray<Person>();
-	public ObjectArray<Person> persons {
-		get { return (_persons); }
-	}
-
 	private Gtk.Window window;
 	private Gtk.Stack demo_stack;
 	private Gtk.ListBox items;
@@ -136,9 +54,6 @@ public class test_data_bindings : Gtk.Application
 	private Gtk.ToggleButton advanced_freeze3;
 	private PropertyBinding advanced4;
 
-	private Person john_doe = new Person("John", "Doe", "ABC");
-	private Person unnamed_person = new Person("Unnamed", "Person", "DEF");
-
 	private Gtk.CheckButton e4_set_1;
 	private Gtk.CheckButton e4_set_2;
 	private Gtk.CheckButton e4_set_3;
@@ -163,32 +78,6 @@ public class test_data_bindings : Gtk.Application
 	public test_data_bindings ()
 	{
 		Object (flags: ApplicationFlags.FLAGS_NONE);
-	}
-
-	private void bind_person_model (Gtk.ListBox listbox, GLib.ListModel model, BindingPointer pointer)
-	{
-		listbox.bind_model (model, ((o) => {
-			Gtk.ListBoxRow r = new BindingListBoxRow();
-			r.set_data<WeakReference<Person?>>("person", new WeakReference<Person?>((Person) o));
-			r.visible = true;
-			Gtk.Box box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 8);
-			box.visible = true;
-			r.add (box);
-			Gtk.Label name = new Gtk.Label("");
-			name.visible = true;
-			Gtk.Label surname = new Gtk.Label("");
-			surname.visible = true;
-			box.pack_start (name);
-			box.pack_start (surname);
-
-			// This would be much more suitable in this use case
-			PropertyBinding.bind (o, "name", name, "label", BindFlags.SYNC_CREATE);
-			PropertyBinding.bind (o, "surname", surname, "label", BindFlags.SYNC_CREATE);
-			return (r);
-		}));
-		listbox.row_selected.connect ((r) => {
-			pointer.data = (r != null) ? (r.get_data<WeakReference<Person?>>("person")).target : null;
-		});
 	}
 
 	private Gtk.Builder set_ui()
@@ -304,11 +193,7 @@ public class test_data_bindings : Gtk.Application
 			.register (typeof(Gtk.Switch), "active");
 		var ui_builder = set_ui();
 
-		persons.add (new Person("John", "Doe"));
-		persons.add (new Person("Somebody", "Nobody"));
-		persons.add (new Person("Intentionally_Invalid_State", "", "Nobody"));
-		persons.data[0].parent = persons.data[1];
-		persons.data[2].parent = persons.data[0];
+		init_demo_persons();
 
 		main_demo (ui_builder);
 		example1(ui_builder);

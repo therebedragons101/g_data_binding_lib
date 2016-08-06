@@ -182,8 +182,8 @@ namespace GData
 			BindingPointer obj = find (name);
 			if (obj == null)
 				return;
-			_objects.remove (name);
 			obj.set_data<string?>("stored-as", "");
+			_objects.remove (name);
 			removed (name, obj);
 		}
 

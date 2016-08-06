@@ -8,3 +8,5 @@
 - Fix memory leak on inspector instances. Disconnect arrays from storages. Ultra low priority
 
 - Fix SELF as it is broken. Ultra low priority
+
+- Add more tests

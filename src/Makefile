@@ -32,6 +32,7 @@ run-g_${COMMON_NAME}_lib:
 SOURCES := ${LIBRARY_NAME}.vala \
 	common/compare_data_by.vala \
 	common/delegates.vala \
+	common/object_information.vala \
 	common/strict_weak_ref.vala \
 	common/strict_weak_reference_t.vala \
 	common/unique_by_properties.vala \
@@ -91,14 +92,15 @@ GENERICS_SOURCES := ${COMMON_NAME}_generics${NAME_SUFFIX}.vala \
 GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	${RESOURCE}${COMMON_NAME}_gtk${NAME_SUFFIX}.* \
 	gtk/inspector/binding_inspector.vala \
-	gtk/inspector/binding_listbox_row.vala \
 	gtk/inspector/event_array.vala \
 	gtk/inspector/event_description.vala \
 	gtk/inspector/methods.vala \
-	gtk/inspector/object_information.vala \
 	gtk/widgets/methods.vala \
 	gtk/widgets/placeholder.vala \
 	gtk/widgets/widget_defaults.vala
+
+DEMO_INCLUDES := demos/common/css.vala \
+	demos/common/persons.vala
 
 DEMO_SOURCES := demos/demo_and_tutorial/main.vala \
 	${RESOURCE}demo_and_tutorial.* \
@@ -187,6 +189,7 @@ demo-and-tutorial:
 		-X ${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.so \
 		-X ${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR}.so \
 		-o ${BIN}demo_and_tutorial \
+	${DEMO_INCLUDES} \
 	${DEMO_SOURCES}
 
 tests:
@@ -201,6 +204,7 @@ tests:
 		-X ${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.so \
 		-X ${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR}.so \
 		-o ${BIN}tests \
+	${DEMO_INCLUDES} \
 	demos/tests/main.vala
 
 move-binaries-to-bin:

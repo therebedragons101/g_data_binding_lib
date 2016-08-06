@@ -102,14 +102,14 @@ namespace GData
 	{
 		int p, d, s;
 		get_reference_count (pointer, out p, out d, out s);
-		stdout.printf ("\t\tReferences[%s]: pointer(%i), data(%i), source(%i)\n", text, p, d, s);
+		stdout.printf ("\t\tReferences(id=@%s)[\"%s\"]: pointer(%i), data(%i), source(%i)\n", (pointer == null) ? "null" : "%i".printf(as_pointer(pointer).id), text, p, d, s);
 	}
 
 	public void _debug_references (string text, StrictWeakRef pointer)
 	{
 		int p, d, s;
 		_get_reference_count (pointer, out p, out d, out s);
-		stdout.printf ("\t\tReferences[%s]: pointer(%i), data(%i), source(%i)\n", text, p, d, s);
+		stdout.printf ("\t\tReferences(id=@%s)[\"%s\"]: pointer(%i), data(%i), source(%i)\n", (pointer.target == null) ? "null" : "%i".printf(as_pointer(pointer.target).id), text, p, d, s);
 	}
 
 	internal static bool is_same_type (Object? obj1, Object? obj2)
