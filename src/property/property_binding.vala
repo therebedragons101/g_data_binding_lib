@@ -246,11 +246,11 @@ namespace GData
 			if (unbound == false)
 				return;
 			unbound = false;
-			if (source != null)
+			if (_source.is_valid_ref() == true)
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
 				    (_flags.IS_REVERSE() == false))
 					source.notify[source_property].connect (notify_transfer_from_source);
-			if (target != null)
+			if (_target.is_valid_ref() == true)
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
 				    (_flags.IS_REVERSE() == true))
 					target.notify[target_property].connect (notify_transfer_from_target);
@@ -261,11 +261,11 @@ namespace GData
 			if (_flags.HAS_MANUAL_UPDATE() == true)
 				return;
 			unbound = true;
-			if (source != null)
+			if (_source.is_valid_ref() == true)
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
 				    (_flags.IS_REVERSE() == false))
 					source.notify[source_property].disconnect (notify_transfer_from_source);
-			if (target != null)
+			if (_target.is_valid_ref() == true)
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
 				    (_flags.IS_REVERSE() == true))
 					target.notify[target_property].disconnect (notify_transfer_from_target);
@@ -358,7 +358,7 @@ namespace GData
 
 		private bool flood_timeout()
 		{
-			if (data_sync_in_process == true)
+			if ((data_sync_in_process == true) || (_source.is_valid_ref() == false) || (_target.is_valid_ref() == false))
 				return (false);
 			int64 ctime = GLib.get_monotonic_time()/1000;
 			if (ctime > (last_event+flood_interval)) {
@@ -407,6 +407,8 @@ namespace GData
 
 		private bool delay_timeout()
 		{
+			if ((_source.is_valid_ref() == false) || (_target.is_valid_ref() == false))
+				return (false);
 			int64 ctime = GLib.get_monotonic_time()/1000;
 			if (ctime > (last_event+delay_interval)) {
 				// since it is unknown if this delay resulted in manual or automatic
@@ -444,7 +446,7 @@ namespace GData
 
 		private void __update_from_source (bool set_default = false)
 		{
-			if (target == null)
+			if (_target.is_valid_ref() == false)
 				return;
 			if (((set_default == false) && (__is_active() == false)) || (is_locked > 0))
 				return;
@@ -459,11 +461,11 @@ namespace GData
 
 		private void _update_from_source (bool set_default = false)
 		{
-			if ((source == null) && (set_default == false)) {
+			if ((_source.is_valid_ref() == false) && (set_default == false)) {
 				GLib.warning ("Source object %s is not alive", _source_property.owner_type.name());
 				return;
 			}
-			if (target == null) {
+			if (_target.is_valid_ref() == false) {
 				GLib.warning ("Target object %s is not alive", _target_property.owner_type.name());
 				return;
 			}
@@ -500,7 +502,7 @@ namespace GData
 
 		private void __update_from_target (bool set_default = false)
 		{
-			if (source == null)
+			if (_source.is_valid_ref() == false)
 				return;
 			if ((__is_active() == false) || (is_locked > 0))
 				return;
@@ -515,11 +517,11 @@ namespace GData
 
 		private void _update_from_target (bool set_default = false)
 		{
-			if (source == null) {
+			if (_source.is_valid_ref() == false) {
 				GLib.warning ("Source object %s is not alive", _source_property.owner_type.name());
 				return;
 			}
-			if ((target == null) && (set_default == false)) {
+			if ((_target.is_valid_ref() == false) && (set_default == false)) {
 				GLib.warning ("Target object %s is not alive", _target_property.owner_type.name());
 				return;
 			}
@@ -556,7 +558,7 @@ namespace GData
 
 		private void initiate_connection()
 		{
-			if ((source == null) || (target == null))
+			if ((_source.is_valid_ref() == false) || (_target.is_valid_ref() == false))
 				return;
 			connect_signals();
 			initial_data_update();
@@ -705,12 +707,13 @@ namespace GData
 		 */
 		public void unbind()
 		{
+			if (ref_alive == true)
+				dropping (this);
 			_unbind();
 			if (ref_alive == true) {
 				ref_alive = false;
 				unref();
 			}
-			dropped (this);
 		}
 
 		private void handle_source_dead()

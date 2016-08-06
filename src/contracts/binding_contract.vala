@@ -328,6 +328,7 @@ namespace GData
 			disconnect_notifications.connect (information.unbind_connection);
 			information.notify["is-valid"].connect (handle_is_valid);
 			items_changed (_items.length, 0, 1);
+			bindings_changed (this, ContractChangeType.ADDED, information);
 			return (information);
 		}
 
@@ -357,15 +358,15 @@ namespace GData
 		 * @param source_validation Specifies custom method to validate this
 		 *                          particular property in source object. When
 		 *                          this is not specified, validity is true
-		 * @return Newly create BindingInformation
+		 * @return Newly create BindingInformationInterface
 		 */
-		public BindingInformation bind (string source_property, Object target, string target_property, BindFlags flags = BindFlags.DEFAULT, 
-		                                owned PropertyBindingTransformFunc? transform_to = null, owned PropertyBindingTransformFunc? transform_from = null,
-		                                owned SourceValidationFunc? source_validation = null)
+		public BindingInformationInterface bind (string source_property, Object target, string target_property, BindFlags flags = BindFlags.DEFAULT, 
+		                                         owned PropertyBindingTransformFunc? transform_to = null, owned PropertyBindingTransformFunc? transform_from = null,
+		                                         owned SourceValidationFunc? source_validation = null)
 			requires (source_property != "")
 			requires (target_property != "")
 		{
-			return ((BindingInformation) bind_information (new BindingInformation (this, source_property, target, target_property, flags, (owned) transform_to, (owned) transform_from, (owned) source_validation)));
+			return (bind_information (new BindingInformation (this, source_property, target, target_property, flags, (owned) transform_to, (owned) transform_from, (owned) source_validation)));
 		}
 
 		/**
@@ -395,15 +396,15 @@ namespace GData
 		 * @param source_validation Specifies custom method to validate this
 		 *                          particular property in source object. When
 		 *                          this is not specified, validity is true
-		 * @return Newly create BindingInformation
+		 * @return Newly create BindingInformationInterface
 		 */
-		public BindingInformation bind_default (string source_property, string target_property, BindFlags flags = BindFlags.DEFAULT, 
-		                                        owned PropertyBindingTransformFunc? transform_to = null, owned PropertyBindingTransformFunc? transform_from = null,
-		                                        owned SourceValidationFunc? source_validation = null)
+		public BindingInformationInterface bind_default (string source_property, string target_property, BindFlags flags = BindFlags.DEFAULT, 
+		                                                 owned PropertyBindingTransformFunc? transform_to = null, owned PropertyBindingTransformFunc? transform_from = null,
+		                                                 owned SourceValidationFunc? source_validation = null)
 			requires (source_property != "")
 			requires (target_property != "")
 		{
-			return ((BindingInformation) bind_information (new BindingInformation (this, source_property, _default_target, target_property, flags, (owned) transform_to, (owned) transform_from, (owned) source_validation)));
+			return (bind_information (new BindingInformation (this, source_property, _default_target, target_property, flags, (owned) transform_to, (owned) transform_from, (owned) source_validation)));
 		}
 
 		/**
@@ -461,7 +462,7 @@ namespace GData
 		 * @param change_type Specifies if binding was ADDED or REMOVED
 		 * @param binding Binding that is subject of this signal
 		 */
-		public signal void bindings_changed (BindingContract contract, ContractChangeType change_type, BindingInformation binding);
+		public signal void bindings_changed (BindingContract contract, ContractChangeType change_type, BindingInformationInterface binding);
 
 		/**
 		 * Handles contract disconnection on object reference being destroyed

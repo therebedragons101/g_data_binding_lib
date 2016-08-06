@@ -55,6 +55,6 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 */
-		public signal void dropped (BindingInterface binding);
+		public signal void dropping (BindingInterface binding);
 	}
 }

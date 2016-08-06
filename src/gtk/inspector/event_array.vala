@@ -105,7 +105,7 @@ namespace GDataGtk
 			);
 		}
 
-		private void handle_contract_bindings_changed (BindingContract ccontract, ContractChangeType change_type, BindingInformation binding)
+		private void handle_contract_bindings_changed (BindingContract ccontract, ContractChangeType change_type, BindingInformationInterface binding)
 		{
 			add (
 				new EventDescription.as_signal (

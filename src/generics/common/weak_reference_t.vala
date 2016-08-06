@@ -45,6 +45,18 @@ namespace GData.Generics
 		}
 
 		/**
+		 * Checks is target reference is valid or not
+		 * 
+		 * @since 0.1
+		 * 
+		 * @return true if target is not null, false if it is
+		 */
+		public bool is_valid_ref()
+		{
+			return (_target != null);
+		}
+
+		/**
 		 * Sets null target as currently pointed object
 		 *
 		 * @since 0.1

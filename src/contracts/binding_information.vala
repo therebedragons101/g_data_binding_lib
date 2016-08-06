@@ -12,7 +12,10 @@ namespace GData
 	 */
 	public class BindingInformation : Object, BindingInformationInterface
 	{
-		private BindingInterface? binding = null;
+		private StrictWeakReference<BindingInterface?>? _binding = null;
+		public BindingInterface? binding {
+			get { return (_binding.target); }
+		}
 
 		/**
 		 * Returns true if binding is currently active for data transfer
@@ -23,7 +26,7 @@ namespace GData
 			get { return (binding != null); } 
 		}
 
-		private WeakReference<BindingContract?> _contract;
+		private StrictWeakReference<BindingContract?> _contract;
 		/**
 		 * Contract BindingInformation belongs to
 		 * 
@@ -39,7 +42,7 @@ namespace GData
 		 * @since 0.1
 		 */
 		public bool can_bind {
-			get { return (!((contract == null) || (contract.can_bind == false) || (target == null))); }
+			get { return (!((_contract.is_valid_ref() == false) || (contract.can_bind == false) || (_target.is_valid_ref() == false))); }
 		}
 
 		private bool? last_valid_state = null;
@@ -76,7 +79,7 @@ namespace GData
 			get { return (_source_property); }
 		}
 
-		private WeakReference<Object?> _target;
+		private StrictWeakReference<Object?> _target;
 		/**
 		 * Target object
 		 * 
@@ -150,6 +153,12 @@ namespace GData
 				contract.unbind (this);
 		}
 
+		private void handle_binding_dropped()
+		{
+			contract.bindings_changed (contract, ContractChangeType.STATE_CHANGED, this);
+			notify_property("activated");
+		}
+
 		private void check_validity()
 		{
 			bool validity = true;
@@ -163,7 +172,8 @@ namespace GData
 				validity = false;
 			if (last_valid_state != validity) {
 				last_valid_state = validity;
-				notify_property ("is-valid");
+				if (contract != null)
+					notify_property ("is-valid");
 			}
 		}
 
@@ -223,9 +233,13 @@ namespace GData
 			if (((ObjectClass) contract.get_source().get_type().class_ref()).find_property(source_property) == null)
 				if (PropertyAlias.get_instance(source_property).get_for(contract.get_source().get_type()) == null)
 					return;
-			binding = contract.binder.bind (contract.get_source(), source_property, tgt, target_property, flags, (owned) _transform_to, (owned) _transform_from);
+			_binding.set_new_target (contract.binder.bind (contract.get_source(), source_property, tgt, target_property, flags, (owned) _transform_to, (owned) _transform_from));
 			check_validity();
-			contract.get_source().notify[source_property].connect (check_source_property_validity);
+			if (_contract.is_valid_ref() == true)
+				contract.get_source().notify[source_property].connect (check_source_property_validity);
+			if ((_binding.is_valid_ref() == true) && (_contract.is_valid_ref() == true))
+				contract.bindings_changed (contract, ContractChangeType.STATE_CHANGED, this);
+			notify_property("activated");
 		}
 
 		/**
@@ -239,46 +253,16 @@ namespace GData
 		 */
 		public void unbind_connection (Object? obj)
 		{
-			if (contract.get_source() != null)
-				contract.get_source().notify[source_property].disconnect (check_source_property_validity);
-			if (binding != null)
+			if (_contract.is_valid_ref() == true)
+				if (contract.get_source() != null)
+					contract.get_source().notify[source_property].disconnect (check_source_property_validity);
+			if (_binding.is_valid_ref() == true) {
 				binding.unbind();
-			binding = null;
-		}
-
-		/**
-		 * Invokes creation of BindingInformation for specified parameters.
-		 * If contract is active and everything is in order this also creates
-		 * BindingInterface and activates data transfer 
-		 * 
-		 * Main reasoning for this method is to allow chain API in objective 
-		 * languages which makes code much simpler to follow 
-		 * 
-		 * NOTE!
-		 * transform_from and transform_to can work in two ways. If value return
-		 * is true, then newly converted value is assigned to property, if
-		 * return is false, then that doesn't happen which can be used to assign
-		 * property values directly and avoiding value conversion
-		 *   
-		 * @since 0.1
-		 * @param source_property Source property name
-		 * @param target Target object
-		 * @param target_property Target property name
-		 * @param flags Flags describing property binding creation
-		 * @param transform_to Custom method to transform data from source value
-		 *                     to target value
-		 * @param transform_from Custom method to transform data from source 
-		 *                       value to target value
-		 * @param source_validation Specifies custom method to validate this
-		 *                          particular property in source object. When
-		 *                          this is not specified, validity is true
-		 * @return Newly create BindingInformation
-		 */
-		public BindingInformation bind (string source_property, Object target, string target_property, BindFlags flags = BindFlags.DEFAULT, 
-		                                owned PropertyBindingTransformFunc? transform_to = null, owned PropertyBindingTransformFunc? transform_from = null, 
-		                                owned SourceValidationFunc? source_validation = null)
-		{
-			return (contract.bind (source_property, target, target_property, flags, (owned) transform_to, (owned) transform_from, (owned) source_validation));
+				_binding.set_new_target(null);
+			}
+			if (_contract.is_valid_ref() == true)
+				contract.bindings_changed (contract, ContractChangeType.STATE_CHANGED, this);
+			notify_property("activated");
 		}
 
 		~BindingInformation()
@@ -294,9 +278,10 @@ namespace GData
 		                             BindFlags flags = BindFlags.DEFAULT, owned PropertyBindingTransformFunc? transform_to = null, 
 		                             owned PropertyBindingTransformFunc? transform_from = null, owned SourceValidationFunc? source_validation = null)
 		{
-			_contract = new WeakReference<BindingContract?>(owner_contract);
+			_binding = new StrictWeakReference<BindingInterface?>(null, handle_binding_dropped);
+			_contract = new StrictWeakReference<BindingContract?>(owner_contract);
 			_source_property = source_property;
-			_target = new WeakReference<Object?>(target);
+			_target = new StrictWeakReference<Object?>(target);
 			_target_property = target_property;
 			_flags = flags;
 			_transform_to = (owned) transform_to;

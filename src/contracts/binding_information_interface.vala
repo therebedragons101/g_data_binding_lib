@@ -10,6 +10,13 @@ namespace GData
 	public interface BindingInformationInterface : Object
 	{
 		/**
+		 * Contract BindingInformation belongs to
+		 * 
+		 * @since 0.1
+		 */
+		public abstract BindingContract? contract { get; }
+
+		/**
 		 * Returns true if binding is currently active for data transfer
 		 * 
 		 * @since 0.1
@@ -74,5 +81,77 @@ namespace GData
 		 *            changes
 		 */
 		public abstract void unbind_connection (Object? obj);
+
+		/**
+		 * Invokes creation of BindingInformation for specified parameters.
+		 * If contract is active and everything is in order this also creates
+		 * BindingInterface and activates data transfer 
+		 * 
+		 * Main reasoning for this method is to allow chain API in objective 
+		 * languages which makes code much simpler to follow 
+		 * 
+		 * NOTE!
+		 * transform_from and transform_to can work in two ways. If value return
+		 * is true, then newly converted value is assigned to property, if
+		 * return is false, then that doesn't happen which can be used to assign
+		 * property values directly and avoiding value conversion
+		 *   
+		 * @since 0.1
+		 * @param source_property Source property name
+		 * @param target Target object
+		 * @param target_property Target property name
+		 * @param flags Flags describing property binding creation
+		 * @param transform_to Custom method to transform data from source value
+		 *                     to target value
+		 * @param transform_from Custom method to transform data from source 
+		 *                       value to target value
+		 * @param source_validation Specifies custom method to validate this
+		 *                          particular property in source object. When
+		 *                          this is not specified, validity is true
+		 * @return Newly create BindingInformationInterface
+		 */
+		public BindingInformationInterface bind (
+				string source_property, Object target, string target_property, BindFlags flags = BindFlags.DEFAULT, 
+				owned PropertyBindingTransformFunc? transform_to = null, owned PropertyBindingTransformFunc? transform_from = null, 
+				owned SourceValidationFunc? source_validation = null
+		) {
+			return (contract.bind (source_property, target, target_property, flags, (owned) transform_to, (owned) transform_from, (owned) source_validation));
+		}
+
+		/**
+		 * Invokes creation of BindingInformation for specified parameters.
+		 * If contract is active and everything is in order this also creates
+		 * BindingInterface and activates data transfer 
+		 * 
+		 * Main reasoning for this method is to allow chain API in objective 
+		 * languages which makes code much simpler to follow 
+		 * 
+		 * NOTE!
+		 * transform_from and transform_to can work in two ways. If value return
+		 * is true, then newly converted value is assigned to property, if
+		 * return is false, then that doesn't happen which can be used to assign
+		 * property values directly and avoiding value conversion
+		 *   
+		 * @since 0.1
+		 * @param source_property Source property name
+		 * @param target Target object
+		 * @param target_property Target property name
+		 * @param flags Flags describing property binding creation
+		 * @param transform_to Custom method to transform data from source value
+		 *                     to target value
+		 * @param transform_from Custom method to transform data from source 
+		 *                       value to target value
+		 * @param source_validation Specifies custom method to validate this
+		 *                          particular property in source object. When
+		 *                          this is not specified, validity is true
+		 * @return Newly create BindingInformationInterface
+		 */
+		public BindingInformationInterface bind_default (
+				string source_property, string target_property, BindFlags flags = BindFlags.DEFAULT,
+				owned PropertyBindingTransformFunc? transform_to = null, owned PropertyBindingTransformFunc? transform_from = null,
+				owned SourceValidationFunc? source_validation = null
+		) {
+			return (contract.bind (source_property, contract.default_target, target_property, flags, (owned) transform_to, (owned) transform_from, (owned) source_validation));
+		}
 	}
 }
