@@ -29,10 +29,87 @@ namespace GData
 	}
 
 	public static BindingContract? as_contract (Object? obj)
-		requires (obj != null)
-		requires (is_binding_contract(obj) == true)
 	{
-		return ((BindingContract) obj);
+		if (obj != null)
+			if (is_binding_contract(obj) == true)
+				return ((BindingContract) obj);
+		return (null);
+	}
+
+	public static BindingPointer? as_pointer (Object? obj)
+	{
+		if (obj != null)
+			if (is_binding_pointer(obj) == true)
+				return ((BindingPointer) obj);
+		return (null);
+	}
+
+	/**
+	 * Returns ref_count for pointer, its data and get_source()
+	 * 
+	 * Note that this returns +1 on reference. Call _get_reference_count() if 
+	 * you need accurate
+	 * 
+	 * If not valid -1 is returned as specific reference
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param pointer Binding pointer
+	 * @param ptr_ref Binding pointer ref_count
+	 * @param ptr_ref Binding pointers data ref_count
+	 * @param ptr_ref Binding pointers get_source() ref_count
+	 */
+	public void get_reference_count (BindingPointer pointer, out int ptr_ref, out int data_ref, out int source_ref)
+	{
+		
+		weak Object? __pointer = pointer;
+		weak Object? __pointer_data = (__pointer != null) ? pointer.data : null;
+		weak Object? __pointer_source = (__pointer != null) ? pointer.get_source() : null;
+		ptr_ref = (__pointer == null) ? -1 : (int) __pointer.ref_count;
+		data_ref = (__pointer_data == null) ? -1 : (int) __pointer_data.ref_count;
+		source_ref = (__pointer_source == null) ? -1 : (int) __pointer_source.ref_count;
+	}
+
+	/**
+	 * Returns ref_count for pointer, its data and get_source()
+	 * 
+	 * Unlike get_reference_count() this call can provide exact state but it
+	 * has to stored in StrictWeakRef before call
+	 * 
+	 * If not valid -1 is returned as specific reference
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param pointer Binding pointer
+	 * @param ptr_ref Binding pointer ref_count
+	 * @param ptr_ref Binding pointers data ref_count
+	 * @param ptr_ref Binding pointers get_source() ref_count
+	 */
+	public void _get_reference_count (StrictWeakRef pointer, out int ptr_ref, out int data_ref, out int source_ref)
+	{
+		
+		weak Object? __pointer = pointer.target;
+		weak Object? __pointer_data = 
+			((__pointer != null) && (is_binding_pointer(__pointer))) ? as_pointer(__pointer).data : null;
+		weak Object? __pointer_source = 
+			((__pointer != null) && (is_binding_pointer(__pointer))) ? as_pointer(__pointer).get_source() : null;
+		ptr_ref = (__pointer == null) ? -1 : (int) __pointer.ref_count;
+		data_ref = (__pointer_data == null) ? -1 : (int) __pointer_data.ref_count;
+		source_ref = (__pointer_source == null) ? -1 : (int) __pointer_source.ref_count;
+	}
+
+	public void debug_references (string text, BindingPointer pointer)
+	{
+		int p, d, s;
+		get_reference_count (pointer, out p, out d, out s);
+		stdout.printf ("\t\tReferences[%s]: pointer(%i), data(%i), source(%i)\n", text, p, d, s);
+	}
+
+	public void _debug_references (string text, StrictWeakRef pointer)
+	{
+		int p, d, s;
+		_get_reference_count (pointer, out p, out d, out s);
+		stdout.printf ("\t\tReferences[%s]: pointer(%i), data(%i), source(%i)\n", text, p, d, s);
 	}
 
 	internal static bool is_same_type (Object? obj1, Object? obj2)

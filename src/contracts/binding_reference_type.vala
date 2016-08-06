@@ -30,6 +30,16 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 */
-		STRONG
+		STRONG;
+
+		public string get_str()
+		{
+			if (this == BindingReferenceType.DEFAULT)
+				return ("DEFAULT");
+			else if (this == BindingReferenceType.WEAK)
+				return ("WEAK");
+			else
+				return ("STRONG");
+		}
 	}
 }

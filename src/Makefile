@@ -20,6 +20,7 @@ all: resources \
      ${COMMON_NAME}_generics${NAME_SUFFIX}.so \
      ${COMMON_NAME}_gtk${NAME_SUFFIX}.so \
      demo-and-tutorial \
+     tests \
      hack-for-gir-bug \
      ${COMMON_NAME}${NAME_SUFFIX}-${LIB_VERSION}.typelib \
      move-binaries-to-bin
@@ -31,8 +32,10 @@ run-g_${COMMON_NAME}_lib:
 SOURCES := ${LIBRARY_NAME}.vala \
 	common/compare_data_by.vala \
 	common/delegates.vala \
+	common/strict_weak_ref.vala \
 	common/strict_weak_reference_t.vala \
 	common/unique_by_properties.vala \
+	common/weak_ref.vala \
 	common/weak_reference_t.vala \
 	contracts/binding_pointer.vala \
 	contracts/binding_contract.vala \
@@ -54,6 +57,7 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	contracts/custom_property_notification_binding_source.vala \
 	contracts/delegates.vala \
 	contracts/methods.vala \
+	contracts/pointer_namespace.vala \
 	contracts/pointer_storage.vala \
 	contracts/signal_controlled_binding_pointer.vala \
 	contracts/timer_controlled_binding_pointer.vala \
@@ -184,6 +188,20 @@ demo-and-tutorial:
 		-X ${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR}.so \
 		-o ${BIN}demo_and_tutorial \
 	${DEMO_SOURCES}
+
+tests:
+	valac \
+		${PACKAGES} \
+		${DEMO_PACKAGES} \
+		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
+		${INCLUDES}${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.vapi \
+		${INCLUDES}${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR}.vapi \
+		-X -I${INCLUDES} \
+		-X ${LIBRARY_NAME}${LIB_MAJOR}.so \
+		-X ${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.so \
+		-X ${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR}.so \
+		-o ${BIN}tests \
+	demos/tests/main.vala
 
 move-binaries-to-bin:
 	mv *.so ${BIN}

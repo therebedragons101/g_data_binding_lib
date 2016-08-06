@@ -27,6 +27,16 @@ namespace GData
 			}
 		}
 
+		private string _name;
+		/**
+		 * Storage name
+		 * 
+		 * @since 0.1
+		 */
+		public string name {
+			get { return (_name); }
+		}
+
 		/**
 		 * Access to global storage signals
 		 * 
@@ -85,7 +95,7 @@ namespace GData
 			_check();
 			PointerStorage? store = _storages.get (name);
 			if (store == null) {
-				store = new PointerStorage();
+				store = new PointerStorage(name);
 				_storages.insert (name, store);
 				signals.added_storage (name);
 			}
@@ -150,6 +160,12 @@ namespace GData
 			}
 			if (_objects == null)
 				_objects = new HashTable<string, BindingPointer> (str_hash, str_equal);
+			string? s = obj.get_data<string?>("stored-as");
+			if ((s != null) && (s != "")) {
+				GLib.critical ("Pointer \"%s\"is already stored as \"%s\"!".printf(name, s));
+				return (obj);
+			}
+			obj.set_data<string?>("stored-as", "%s/%s".printf(this.name, name));
 			_objects.insert (name, obj);
 			added (name, obj);
 			return (obj);
@@ -167,6 +183,7 @@ namespace GData
 			if (obj == null)
 				return;
 			_objects.remove (name);
+			obj.set_data<string?>("stored-as", "");
 			removed (name, obj);
 		}
 
@@ -193,8 +210,9 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 */
-		public PointerStorage()
+		private PointerStorage (string name)
 		{
+			_name = name;
 			_objects = new HashTable<string, BindingPointer> (str_hash, str_equal);
 		}
 	}

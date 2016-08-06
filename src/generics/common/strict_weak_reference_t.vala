@@ -60,10 +60,10 @@ namespace GData.Generics
 		 *
 		 * @param set_to_target Specifies object being pointed with target
 		 */
-		public StrictWeakReference (T? set_to_target, owned WeakReferenceInvalid? notify_method = null)
+		public StrictWeakReference (T? set_to_target, WeakReferenceInvalid? notify_method = null)
 		{
 			base (set_to_target);
-			_notify_method = (owned) notify_method;
+			_notify_method = notify_method;
 			if (_target is GLib.Object)
 				((Object) _target).weak_ref (handle_weak_ref); 
 			else

@@ -15,7 +15,7 @@ namespace GData
 	 *
 	 * @since 0.1
 	 */
-	public class WeakRef 
+	public class WeakRef
 	{
 		protected weak Object? _target;
 		/**

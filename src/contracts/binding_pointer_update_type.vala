@@ -30,6 +30,14 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 */
-		MANUAL
+		MANUAL;
+
+		public string get_str()
+		{
+			if (this == BindingPointerUpdateType.PROPERTY)
+				return ("PROPERTY");
+			else
+				return ("MANUAL");
+		}
 	}
 }

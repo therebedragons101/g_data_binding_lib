@@ -12,8 +12,20 @@ namespace GData
 	 * 
 	 * @since 0.1
 	 */ 
-	public class ObjectModelArray : Object, ListModel
+	public class ObjectModelArray : Object, GLib.ListModel
 	{
+		private CompareObjectsFunc _compare_delegate;
+
+		private static int compare___by_reference (Object object1, Object object2)
+		{
+			return ((object1 == object2) ? 0 : -1);
+		}
+
+		private static int compare___by_properties (Object object1, Object object2)
+		{
+			return (((UniqueByProperies) object1).compare_to ((UniqueByProperies) object2));
+		}
+
 		/**
 		 * This method is GLib.ListModel implementation requirement and resolves
 		 * item at specified position
@@ -112,7 +124,7 @@ namespace GData
 				return;
 			if ((index2 < 0) || (index2 >= length))
 				return;
-			T tmp = _array.data[index1];
+			Object tmp = _array.data[index1];
 			_array.data[index1] = _array.data[index2];
 			_array.data[index2] = tmp;
 		}
@@ -141,7 +153,7 @@ namespace GData
 		 * @param func Search function that is used for comparison 
 		 * @return Index of specified element or -1 if not found
 		 */
-		public int search_for (FindObjectDelegate<T> func)
+		public int search_for (ObjectFindDelegate func)
 		{
 			for (int i=0; i<length; i++)
 				if (func(data[i]) == true)
@@ -206,7 +218,7 @@ namespace GData
 		 * 
 		 * @param object Object being removed
 		 */
-		public void remove (T object)
+		public void remove (Object object)
 		{
 			int i = find(object);
 			if (i >= 0)
@@ -224,7 +236,7 @@ namespace GData
 		{
 			if ((index < 0) || (index >= length))
 				return;
-			T element = _array.data[index];
+			Object element = _array.data[index];
 			before_removing_element (element, index);
 			items_changed (index, 1, 0);
 			_array.remove_index (index);
@@ -255,7 +267,8 @@ namespace GData
 		 */
 		public void sort()
 		{
-			custom_sort (_compare_delegate);
+//			custom_sort ((a,b) => { return (_compare_delegate(a, b)); });
+//			custom_sort ((CompareFunc) _compare_delegate);
 		}
 
 		/**
@@ -265,10 +278,10 @@ namespace GData
 		 * 
 		 * @param func Compare delegate used for sorting
 		 */
-		public void custom_sort (CompareFunc func)
+		public void custom_sort (CompareObjectsFunc func)
 		{
-			_array.sort (func);
-			array_sorted();
+//			_array.sort ((a,b) => { return (func (a,b)); });
+//			array_sorted();
 		}
 
 		/**
@@ -280,7 +293,7 @@ namespace GData
 		 * @param func Method being called for each object in ObjectArray
 		 * @param backwards Specifies if iteration is from last to first or not
 		 */
-		public void foreach (Func<T> func, bool backwards = false)
+		public void foreach (ForeachFunc func, bool backwards = false)
 		{
 			if (backwards == true) {
 				for (int i=(length-1); i>=0; i++)
@@ -290,18 +303,6 @@ namespace GData
 				for (int i=0; i<length; i++)
 					func (data[i]);
 			}
-		}
-
-		private CompareFunc<T> _compare_delegate;
-
-		private static int compare___by_reference (Object object1, Object object2)
-		{
-			return ((object1 == object2) ? 0 : -1);
-		}
-
-		private static int compare___by_properties (Object object1, Object object2)
-		{
-			return (((UniqueByProperies) object1).compare_to ((UniqueByProperies) object2));
 		}
 
 		/**
@@ -357,9 +358,9 @@ namespace GData
 		 * @param compare_by Specifies how elements are compared for uniqueness
 		 * @param compare_method Method being used to compare elements
 		 */
-		public ObjectModelArray.unique (Type accepted_type, CompareDataBy compare_by = CompareDataBy.REFERENCE, owned CompareFunc<T>? compare_method = null)
+		public ObjectModelArray.unique (Type accepted_type, CompareDataBy compare_by = CompareDataBy.REFERENCE, owned CompareObjectsFunc? compare_method = null)
 		{
-			this (accepted_type, compare_by, compare_method);
+			this (accepted_type, compare_by, (owned) compare_method);
 			force_unique = true;
 		}
 
@@ -372,7 +373,7 @@ namespace GData
 		 * @param compare_by Specifies how elements are compared for uniqueness
 		 * @param compare_method Method being used to compare elements
 		 */
-		public ObjectModelArray (Type accepted_type = typeof(Object), CompareDataBy compare_by = CompareDataBy.REFERENCE, CompareFunc<T>? compare_method = null)
+		public ObjectModelArray (Type accepted_type = typeof(Object), CompareDataBy compare_by = CompareDataBy.REFERENCE, owned CompareObjectsFunc? compare_method = null)
 		{
 			_accepted_type = accepted_type;
 			if (compare_by == CompareDataBy.REFERENCE)
@@ -380,7 +381,7 @@ namespace GData
 			else if (compare_by == CompareDataBy.UNIQUE_OBJECTS)
 				_compare_delegate = ((a, b) => { return (compare___by_properties (a, b)); });
 			else if (compare_by == CompareDataBy.FUNCTION)
-				_compare_delegate = compare_method;
+				_compare_delegate = (owned) compare_method;
 		}
 	}
 }

@@ -11,6 +11,15 @@ namespace GDataGtk
 	 */
 	public class BindingInspector : Object
 	{
+		private StrictWeakRef wdata_ref = new StrictWeakRef(null);
+		private int ptr_ref = -1;
+		private int data_ref = -1;
+		private int src_ref = -1;
+
+		internal int pointer_ref { get; set; default=-1; }
+		internal int pointer_data_ref { get; set; default=-1; }
+		internal int pointer_source_ref { get; set; default=-1; }
+
 		public Binder binder = new Binder();
 
 		private EventArray _events = new EventArray(null);
@@ -21,6 +30,22 @@ namespace GDataGtk
 		private Gtk.MenuButton find_btn;
 		private Gtk.Label main_title;
 		private Gtk.Label sub_title;
+
+		private Gtk.Label ref_count_;
+		private Gtk.Label uid;
+		private Gtk.Label stored_as;
+		private Gtk.Label type;
+		private Gtk.Label data_ref_count;
+		private Gtk.Label data;
+		private Gtk.Label data_type;
+		private Gtk.Label source_ref_count;
+		private Gtk.Label source_data;
+		private Gtk.Label source_type;
+		private Gtk.Label ref_handling;
+		private Gtk.Label update_type;
+		private Gtk.Label binding_nr;
+		private Gtk.Label suspended;
+		private Gtk.Label is_valid;
 
 		private static bool inspector_is_visible { get; private set; default = false; }
 
@@ -52,6 +77,7 @@ namespace GDataGtk
 					return;
 				_main_contract.data = value;
 				_events.resource = value;
+				wdata_ref.set_new_target (value);
 			}
 		}
 
@@ -134,9 +160,51 @@ namespace GDataGtk
 			_instance = null;
 		}
 
-		private string _get_type_str (Object? obj)
+		private string _box_css = """
+			* {
+				border: solid 2px gray;
+				padding: 4px 4px 4px 4px;
+				border-radius: 15px;
+				color: rgba (255,255,255,0.8);
+				background-color: rgba(25,25,25,1);
+			}
+		""";
+
+		private string _title_css = """
+			* {
+				border: solid 2px gray;
+				padding: 4px 4px 4px 4px;
+				border-radius: 5px;
+				color: rgba (255,255,255,0.7);
+				background-color: rgba(0,0,0,0.2);
+			}
+		""";
+
+		private string _info_css = """
+			* {
+				color: rgba (255,255,255,0.5);
+			}
+		""";
+
+		public bool ref_timer()
 		{
-			return ((obj == null) ? bold(red("null")) : "typeof(%s)".printf(obj.get_type().name()));
+			if (inspector_is_visible == true) {
+/*				weak Object? __current_data = current_data;
+				weak Object? __current_data_data = (__current_data != null) ? current_data.data : null;
+				weak Object? __current_data_source = (__current_data != null) ? current_data.get_source() : null;
+				ptr_ref = (__current_data == null) ? -1 : (int) __current_data.ref_count;
+				data_ref = (__current_data_data == null) ? -1 : (int) __current_data_data.ref_count;
+				src_ref = (__current_data_source == null) ? -1 : (int) __current_data_source.ref_count;
+				ref_count_.set_markup ((ptr_ref == -1) ? bold(red("null")) : bold("%i").printf(ptr_ref));
+				data_ref_count.set_markup ((data_ref == -1) ? bold(red("null")) : bold("%i").printf(data_ref));
+				source_ref_count.set_markup ((src_ref == -1) ? bold(red("null")) : bold("%i").printf(src_ref));*/
+				string p, d, s;
+				_get_reference_markup (wdata_ref, out p, out d, out s);
+				ref_count_.set_markup (p);
+				data_ref_count.set_markup (d);
+				source_ref_count.set_markup (s);
+			}
+			return (inspector_is_visible);
 		}
 
 		private BindingInspector()
@@ -164,6 +232,22 @@ namespace GDataGtk
 			Gtk.Stack resource_stack = (Gtk.Stack) ui_builder.get_object ("resource_stack");
 			Gtk.ListBox bindings_listbox = (Gtk.ListBox) ui_builder.get_object ("bindings_listbox");
 
+			ref_count_ = (Gtk.Label) ui_builder.get_object ("ref_count");
+			uid = (Gtk.Label) ui_builder.get_object ("uid");
+			stored_as = (Gtk.Label) ui_builder.get_object ("stored_as");
+			type = (Gtk.Label) ui_builder.get_object ("type");
+			data_ref_count = (Gtk.Label) ui_builder.get_object ("data_ref_count");
+			data = (Gtk.Label) ui_builder.get_object ("data");
+			data_type = (Gtk.Label) ui_builder.get_object ("data_type");
+			source_ref_count = (Gtk.Label) ui_builder.get_object ("source_ref_count");
+			source_data = (Gtk.Label) ui_builder.get_object ("source_data");
+			source_type = (Gtk.Label) ui_builder.get_object ("source_type");
+			ref_handling = (Gtk.Label) ui_builder.get_object ("ref_handling");
+			update_type = (Gtk.Label) ui_builder.get_object ("update_type");
+			binding_nr = (Gtk.Label) ui_builder.get_object ("binding_nr");
+			suspended = (Gtk.Label) ui_builder.get_object ("suspended");
+			is_valid = (Gtk.Label) ui_builder.get_object ("is_valid");
+
 			main_contract.binder = binder;
 
 			main_contract.before_source_change.connect ((pointer, is_same, next) => {
@@ -172,17 +256,47 @@ namespace GDataGtk
 			main_contract.source_changed.connect ((pointer) => {
 				_events.resource = (BindingPointer?) main_contract.data;
 				bind_bindings_listbox (bindings_listbox, (BindingPointer?) main_contract.data);
+				wdata_ref.set_new_target (main_contract.data);
 			});
 
 			binder.bind (main_contract, "data", main_title, "label", BindFlags.SYNC_CREATE,
 				() => {
 					main_title.set_markup (bold("Resource type=%s".printf (_get_type_str(main_contract.data))));
 					sub_title.set_markup (small("Chain source=%s".printf (_get_type_str(main_contract.get_source()))));
+					uid.set_markup ((current_data == null) ? red(bold("null")) : bold("@%i").printf(current_data.id));
+					stored_as.set_markup (_get_stored_as (current_data));
+					type.set_markup (bold("%s".printf (_get_type_str(current_data))));
+					data_type.set_markup (bold((current_data == null) ? _get_type_str(null) : _get_type_str(current_data.data)));
+					data.set_markup (bold((current_data == null) ? red("null") : _get_object_str(current_data.data)));
+					source_data.set_markup (bold((current_data == null) ? red("null") : _get_object_str(current_data.get_source())));
+					source_type.set_markup (bold((current_data == null) ? _get_type_str(null) : _get_type_str(current_data.get_source())));
+					ref_handling.set_markup (bold((current_data == null) ? red("null") : current_data.reference_type.get_str()));
+					update_type.set_markup (bold((current_data == null) ? red("null") : current_data.update_type.get_str()));
+					if (is_binding_contract(current_data) == true) {
+						binding_nr.set_markup (bold("%i".printf((int) as_contract(current_data).length)));
+						// bind actively
+						suspended.set_markup (bool_strc(as_contract(current_data).suspended));
+						is_valid.set_markup (bool_strc(as_contract(current_data).is_valid));
+					}
+					else {
+						binding_nr.set_markup (bold("*** NOT AVAILABLE ***"));
+						// bind actively
+						suspended.set_markup (bold("*** NOT AVAILABLE ***"));
+						is_valid.set_markup (bold("*** NOT AVAILABLE ***"));
+					}
+					source_type.set_markup (bold((current_data == null) ? _get_type_str(null) : _get_type_str(current_data.get_source())));
 					return (false);
 				});
 
 			binder.bind (resource_stack, "visible-child", clear_btn, "visible", BindFlags.SYNC_CREATE,
 				() => {
+					clear_btn.visible = (resource_stack.visible_child == events_box);
+					compact_events_btn.visible = (resource_stack.visible_child == events_box);
+					return (false);
+				});
+
+			binder.bind (this, "pointer-ref", ui_builder.get_object ("ref_count"), "label", BindFlags.SYNC_CREATE,
+				(binding, src, ref tgt) => {
 					clear_btn.visible = (resource_stack.visible_child == events_box);
 					compact_events_btn.visible = (resource_stack.visible_child == events_box);
 					return (false);
@@ -195,6 +309,16 @@ namespace GDataGtk
 			binder.bind (this, "compact-events", compact_events_btn, "active", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
 
 			bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("events"), _events, this, "compact-events");
+
+			bind_namespace_listbox ((Gtk.ListBox) ui_builder.get_object ("searched_contracts"));
+			((Gtk.ListBox) ui_builder.get_object ("searched_contracts")).row_activated.connect ((r) => {
+				if (r == null)
+					current_data = null;
+				else {
+				stdout.printf ("@%i\n", r.get_data<int> ("pointer"));
+					current_data = PointerNamespace.get_instance().get_by_id(r.get_data<int> ("pointer"));
+				}
+			});
 
 			((Gtk.ListBox) ui_builder.get_object ("events")).set_placeholder (
 				new Placeholder.from_icon ("Waiting for events", Gtk.IconSize.DIALOG, PROCESSING_ICON));
@@ -217,6 +341,10 @@ namespace GDataGtk
 			((Gtk.ListBox) ui_builder.get_object ("pointers")).set_placeholder (
 				new Placeholder.from_icon ("No pointers stored in storage", Gtk.IconSize.LARGE_TOOLBAR, STOP_ICON));
 
+			assign_builder_css (ui_builder, "frame", _box_css);
+			assign_builder_css (ui_builder, "title_label", _title_css);
+			assign_builder_css (ui_builder, "info_label", _info_css);
+
 			find_btn.popover = new Gtk.Popover(find_btn);
 			find_btn.popover.modal = true;
 			Gtk.Box box = (Gtk.Box) ui_builder.get_object ("search_box");
@@ -231,6 +359,8 @@ namespace GDataGtk
 			_window.hide.connect (() => {
 				disconnect_everything();
 			});
+
+			GLib.Timeout.add (1000, ref_timer, GLib.Priority.DEFAULT);
 		}
 	}
 }

@@ -191,8 +191,6 @@ namespace GData
 		 */
 		public virtual Object? get_source()
 		{
-			if (data == null)
-				return (null);
 			if (data == SELF)
 				return (this);
 			bool redirect = false;
@@ -204,6 +202,8 @@ namespace GData
 					return (((BindingPointer) obj).get_source());
 				return (obj);
 			}
+			if (data == null)
+				return (null);
 			// if redirection was not there, follow the chain
 			if (is_binding_pointer(data) == true)
 				return (((BindingPointer) data).get_source());
@@ -369,6 +369,12 @@ namespace GData
 			return (true);
 		}
 
+		//TODO DElete this
+		public void _debug_references (string text)
+		{
+			debug_references ("@id=%i(%s)".printf(id, text), this);
+		}
+
 		/**
 		 * Signal that emits notification data in pointer has changed. When 
 		 * needed, this signal should be emited either from outside code or from 
@@ -461,6 +467,7 @@ namespace GData
 		 */
 		public BindingPointer (Object? data = null, BindingReferenceType reference_type = BindingReferenceType.WEAK, BindingPointerUpdateType update_type = BindingPointerUpdateType.PROPERTY)
 		{
+			
 			_id = pointer_counter;
 			pointer_counter++;
 			_data = new StrictWeakReference<Object?> (null, handle_strict_ref);
@@ -468,6 +475,7 @@ namespace GData
 			_update_type = update_type;
 			this.data = data;
 			PointerStorage.signals.get_by_id.connect (handle_get_by_id);
+			PointerNamespace.get_instance().add (this);
 		}
 	}
 }
