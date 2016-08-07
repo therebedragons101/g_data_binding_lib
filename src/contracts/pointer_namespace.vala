@@ -1,43 +1,5 @@
 namespace GData
 {
-	/**
-	 * StrictWeakReference wrapped in GObject
-	 * 
-	 * @since 0.1
-	 */
-	public class WeakRefWrapper : Object
-	{
-		private StrictWeakReference<Object?>? wref = null;
-
-		/**
-		 * Target object
-		 * 
-		 * @since 0.1
-		 */
-		public Object target {
-			owned get { return (wref.target); }
-		}
-
-		~WeakRefWrapper()
-		{
-			wref.set_new_target (null);
-			wref = null;
-		}
-
-		/**
-		 * Creates new WeakRefWrapper
-		 * 
-		 * @since 0.1
-		 * 
-		 * @param obj Object being wrapped
-		 * @param notify_method Notification method when reference becomes 
-		 *                      invalid
-		 */
-		public WeakRefWrapper (Object obj, owned WeakReferenceInvalid? notify_method)
-		{
-			wref = new StrictWeakReference<Object?> (obj, (owned) notify_method);
-		}
-	}
 
 	/**
 	 * Class serves to store weak references for all pointers and it creates
@@ -61,10 +23,10 @@ namespace GData
 		// Safer to just clean everything as it is small amount of data
 		private void clean_null()
 		{
-			for (uint i=_pointers.length-1; i<=0; i--) {
-				if (((WeakRefWrapper) _pointers.data[i]).target == null) {
-					_pointers.remove_index (i);
-					items_changed (i, 1, 0);
+			for (int i=(int)_pointers.length-1; i>=0; i--) {
+				if (((WeakRefWrapper) _pointers.data[(uint)i]).target == null) {
+					_pointers.remove_index ((uint)i);
+					items_changed ((uint)i, 1, 0);
 				}
 			}
 		}
@@ -77,14 +39,10 @@ namespace GData
 
 		public BindingPointer? get_by_id (int id)
 		{
-			stdout.printf ("searching %i/%i\n", id, (int)_pointers.length);
-			for (uint i=1; i<_pointers.length; i++) {
-			stdout.printf("%i\n", as_pointer(get_item(i)).id);
-				if (get_item(i) != null) {
-					if (as_pointer(get_item(i)) != null)
-						if (as_pointer(get_item(i)).id == id)
-							return (as_pointer(get_item(i)));
-				}
+			for (uint i=0; i<_pointers.length; i++) {
+				if (as_pointer(get_item(i)) != null)
+					if (as_pointer(get_item(i)).id == id)
+						return (as_pointer(get_item(i)));
 			}
 			stdout.printf("not found\n");
 			return (null);

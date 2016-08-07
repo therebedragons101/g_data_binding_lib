@@ -429,6 +429,7 @@ namespace GData
 					information.notify["is-valid"].disconnect (handle_is_valid);
 					information.unbind_connection (get_source());
 					_items.remove_index (i);
+					bindings_changed (this, ContractChangeType.REMOVED, information);
 					items_changed (i, 1, 0);
 					break;
 				}

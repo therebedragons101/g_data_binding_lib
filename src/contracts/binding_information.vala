@@ -12,6 +12,8 @@ namespace GData
 	 */
 	public class BindingInformation : Object, BindingInformationInterface
 	{
+		private bool is_enabled = false;
+	
 		private StrictWeakReference<BindingInterface?>? _binding = null;
 		public BindingInterface? binding {
 			get { return (_binding.target); }
@@ -155,6 +157,9 @@ namespace GData
 
 		private void handle_binding_dropped()
 		{
+			if (is_enabled == false)
+				return;
+			is_enabled = false;
 			contract.bindings_changed (contract, ContractChangeType.STATE_CHANGED, this);
 			notify_property("activated");
 		}
@@ -237,6 +242,9 @@ namespace GData
 			check_validity();
 			if (_contract.is_valid_ref() == true)
 				contract.get_source().notify[source_property].connect (check_source_property_validity);
+			if (is_enabled == true)
+				return;
+			is_enabled = true;
 			if ((_binding.is_valid_ref() == true) && (_contract.is_valid_ref() == true))
 				contract.bindings_changed (contract, ContractChangeType.STATE_CHANGED, this);
 			notify_property("activated");
@@ -260,6 +268,9 @@ namespace GData
 				binding.unbind();
 				_binding.set_new_target(null);
 			}
+			if (is_enabled == false)
+				return;
+			is_enabled = false;
 			if (_contract.is_valid_ref() == true)
 				contract.bindings_changed (contract, ContractChangeType.STATE_CHANGED, this);
 			notify_property("activated");

@@ -57,18 +57,18 @@ public class test_data_bindings : Gtk.Application
 	private Gtk.CheckButton e4_set_1;
 	private Gtk.CheckButton e4_set_2;
 	private Gtk.CheckButton e4_set_3;
-	private ObjectArray<EventDescription> _e4_events = new ObjectArray<EventDescription>();
+	private EventArray _e4_events = new EventArray();
 
 	private Gtk.CheckButton e5_set_1;
 	private Gtk.CheckButton e5_set_2;
 	private Gtk.CheckButton e5_set_3;
-	private ObjectArray<EventDescription> _e5_events = new ObjectArray<EventDescription>();
+	private EventArray _e5_events = new EventArray();
 
 	private Gtk.CheckButton e6_set_1;
 	private Gtk.CheckButton e6_set_2;
 	private Gtk.CheckButton e6_set_3;
-	private ObjectArray<EventDescription> _e6_events = new ObjectArray<EventDescription>();
-	private ObjectArray<EventDescription> _e7_events = new ObjectArray<EventDescription>();
+	private EventArray _e6_events = new EventArray();
+	private EventArray _e7_events = new EventArray();
 
 	private int _counter = 0;
 	public string counter {
@@ -475,7 +475,7 @@ public class test_data_bindings : Gtk.Application
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e4_events"), _e4_events);
 
-		connect_binding_pointer_events (PointerStorage.get_storage(_STORAGE_).find("example-pointer-set-data"), _e4_events);
+		_e4_events.resource = PointerStorage.get_storage(_STORAGE_).find("example-pointer-set-data");
 	}
 
 	public void example5 (Gtk.Builder ui_builder)
@@ -505,7 +505,7 @@ public class test_data_bindings : Gtk.Application
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e5_events"), _e5_events);
 
-		connect_binding_contract_events (ContractStorage.get_storage(_STORAGE_).find("example-contract-storage-set-data"), _e5_events);
+		_e5_events.resource = ContractStorage.get_storage(_STORAGE_).find("example-contract-storage-set-data");
 	}
 
 	public void example6 (Gtk.Builder ui_builder)
@@ -538,7 +538,7 @@ public class test_data_bindings : Gtk.Application
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e6_events"), _e6_events);
 
-		connect_binding_contract_events (ContractStorage.get_storage(_STORAGE_).find("sub-contract"), _e6_events);
+		_e6_events.resource = ContractStorage.get_storage(_STORAGE_).find("sub-contract");
 	}
 
 	public void example_v (Gtk.Builder ui_builder)
@@ -632,7 +632,7 @@ public class test_data_bindings : Gtk.Application
 		PropertyBinding.bind(parent_contract, "is-valid", ui_builder.get_object ("e7_s2_g"), "visible", BindFlags.SYNC_CREATE);
 
 		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e7_events"), _e7_events);
-		connect_binding_contract_events (parent_contract, _e7_events);
+		_e7_events.resource = parent_contract;
 	}
 
 	public void example_inspector (Gtk.Builder ui_builder)
@@ -648,10 +648,6 @@ public class test_data_bindings : Gtk.Application
 		StrictWeakRef my_contract = new StrictWeakRef (ContractStorage.get_storage("main-example").find ("main-contract"));
 		_debug_references ("main contract", my_contract);
 		debug_references ("_main contract", as_contract(my_contract.target));
-		stdout.printf ("%i\n", (int)my_contract.target.ref_count);
-		stdout.printf ("%i\n", (int)persons.data[0].ref_count);
-		stdout.printf ("%i\n", (int)persons.data[1].ref_count);
-		stdout.printf ("%i\n", (int)persons.data[2].ref_count);
 			GDataGtk.BindingInspector.show(ContractStorage.get_storage("main-example").find ("main-contract"));
 		});
 	}

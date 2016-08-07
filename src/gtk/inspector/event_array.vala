@@ -23,7 +23,7 @@ namespace GDataGtk
 			add (
 				new EventDescription.as_signal (
 					"data_changed", 
-					"(binding=%s, data_change_cookie=%s)".printf ((binding == resource) ? "THIS" : "OTHER", cookie),
+					"(binding=%s, data_change_cookie=%s)".printf (get_self_ref_equality(binding, resource), cookie),
 					yellow("\tSource object change notification. Note that this is event triggered from outside when BindingPointer is MANUAL\n") +
 					"\t\tbinding (BindingPointer emiting the notification)\n" +
 					"\t\tdata_change_cookie (description of data change as passed on by triggering event)" +
@@ -37,7 +37,7 @@ namespace GDataGtk
 			add (
 				new EventDescription.as_signal (
 					"before_source_change", 
-					"(binding=%s, is_same=%i, next=%s)".printf ((binding == resource) ? "THIS" : "OTHER", (int) is_same, (next != null) ? get_object_str(next) : _null()),
+					"(binding=%s, is_same=%i, next=%s)".printf (get_self_ref_equality(binding, resource), (int) is_same, (next != null) ? get_object_str(next) : _null()),
 					yellow("\tObject being pointed is about to change. In case if reference was not dropped it can still be accessed trough binding\n") +
 					"\t\tbinding (BindingPointer emiting the notification)\n" +
 					"\t\tis_same (specifies if type of next source being pointed to is the same)\n" +
@@ -52,7 +52,7 @@ namespace GDataGtk
 			add (
 				new EventDescription.as_signal (
 					"source_changed", 
-					"(binding=%s)".printf((binding == resource) ? "THIS" : "OTHER"),
+					"(binding=%s)".printf(get_self_ref_equality(binding, resource)),
 					yellow("\tObject being pointed has changed.\n") +
 					"\t\tbinding (BindingPointer emiting the notification)" +
 					get_current_source (binding.get_source())
@@ -97,7 +97,7 @@ namespace GDataGtk
 			add (
 				new EventDescription.as_signal (
 					"contract_changed", 
-					"(contract=%s)".printf((ccontract == resource) ? "THIS" : "OTHER"),
+					"(contract=%s)".printf(get_self_ref_equality(ccontract, resource)),
 					yellow("\tEmited when contract is disolved or renewed after source change.\n") +
 					"\t\tcontract (BindingContract emiting the notification)" +
 					get_current_source (resource.get_source())
@@ -110,7 +110,7 @@ namespace GDataGtk
 			add (
 				new EventDescription.as_signal (
 					"bindings_changed", 
-					"(contract=%s, change_type=%s, binding)".printf((ccontract == resource) ? "THIS" : "OTHER", (change_type == ContractChangeType.ADDED) ? "ADDED" : "REMOVED"),
+					"(contract=%s, change_type=%s, binding=[%s])".printf(get_self_ref_equality(ccontract, resource), change_type.get_state_str(), binding.as_str(true)),
 					yellow("\tEmited when bindings are changed by adding or removing.\n") +
 					"\t\tcontract (BindingContract emiting the notification)\n" +
 					"\t\tchange_type (binding ADDED or REMOVED)\n" +
@@ -125,7 +125,7 @@ namespace GDataGtk
 			add (
 				new EventDescription.as_property (
 					"is_valid", 
-					" = %s".printf ((as_contract(resource).is_valid == true) ? "TRUE" : "FALSE")
+					" = %s".printf (bool_str(as_contract(resource).is_valid == true))
 				)
 			);
 		}
@@ -145,7 +145,7 @@ namespace GDataGtk
 			add (
 				new EventDescription.as_property (
 					"is_suspended", 
-					" = %s".printf (((as_contract(resource).suspended == true) ? "TRUE" : "FALSE"))
+					" = %s".printf (bool_str((as_contract(resource).suspended == true)))
 				)
 			);
 		}
@@ -215,7 +215,7 @@ namespace GDataGtk
 			disconnect_events();
 		}
 
-		public EventArray (BindingPointer? ptr)
+		public EventArray (BindingPointer? ptr = null)
 		{
 			_resource = new StrictWeakReference<BindingPointer?>(null);
 			resource = ptr;

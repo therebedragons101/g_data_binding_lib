@@ -21,11 +21,6 @@ namespace GDataGtk
 		source_ref = ((s == -1) ? bold(red("null")) : bold("%i").printf(s));
 	}
 
-	internal string fix_markup (string str)
-	{
-		return (str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"));
-	}
-
 	internal string _get_type_str (Object? obj)
 	{
 		return ((obj == null) ? bold(red("null")) : "typeof(%s)".printf(obj.get_type().name()));
@@ -115,56 +110,6 @@ namespace GDataGtk
 		return ((obj == null) ? _null() : "[%s]->\"%s\"".printf(green(obj.get_type().name()), (obj.data != null) ? obj.data.get_type().name() : _null()));
 	}
 
-	internal static string _null()
-	{
-		return ("[%s]".printf(bold(red("null"))));
-	}
-
-	internal static string color (string color, string str)
-	{
-		return ("<span color='%s'>%s</span>".printf(color, str));
-	}
-
-	internal static string green (string str)
-	{
-		return (color ("green", str));
-	}
-
-	internal static string red (string str)
-	{
-		return (color ("red", str));
-	}
-
-	internal static string yellow (string str)
-	{
-		return (color ("yellow", str));
-	}
-
-	internal static string blue (string str)
-	{
-		return (color ("blue", str));
-	}
-
-	internal static string italic (string str)
-	{
-		return ("<i>%s</i>".printf(str));
-	}
-
-	internal static string bold (string str)
-	{
-		return ("<b>%s</b>".printf(str));
-	}
-
-	internal static string small (string str)
-	{
-		return ("<small>%s</small>".printf(str));
-	}
-
-	internal static string big (string str)
-	{
-		return ("<big>%s</big>".printf(str));
-	}
-
 	internal string get_current_source (Object? obj)
 	{
 		return ("\n\t\t%s".printf(_get_current_source(obj)));
@@ -181,126 +126,6 @@ namespace GDataGtk
 			return ("%s".printf (get_pointer_info_str((BindingPointer?) obj)));
 		else
 			return ("%s".printf (get_object_str(obj)));
-	}
-
-	internal void connect_binding_pointer_events (BindingPointer pointer, ObjectArray<EventDescription> events)
-	{
-		pointer.data_changed.connect ((binding, cookie) => {
-			events.add (
-				new EventDescription.as_signal (
-					"data_changed", 
-					"(binding=%s, data_change_cookie=%s)".printf (get_self_ref_equality(binding, pointer), cookie),
-					yellow("\tSource object change notification. Note that this is event triggered from outside when BindingPointer is MANUAL\n") +
-					"\t\tbinding (BindingPointer emiting the notification)\n" +
-					"\t\tdata_change_cookie (description of data change as passed on by triggering event)" +
-					get_current_source (binding.get_source())
-				)
-			);
-		});
-		pointer.before_source_change.connect ((binding, is_same, next) => {
-			events.add (
-				new EventDescription.as_signal (
-					"before_source_change", 
-					"(binding=%s, is_same=%i, next=%s)".printf (get_self_ref_equality(binding, pointer), (int) is_same, (next != null) ? get_object_str(next) : _null()),
-					yellow("\tObject being pointed is about to change. In case if reference was not dropped it can still be accessed trough binding\n") +
-					"\t\tbinding (BindingPointer emiting the notification)\n" +
-					"\t\tis_same (specifies if type of next source being pointed to is the same)\n" +
-					"\t\tnext (reference to next object being pointed to)" +
-					get_current_source (binding.get_source())
-				)
-			);
-		});
-		pointer.source_changed.connect ((binding) => {
-			events.add (
-				new EventDescription.as_signal (
-					"source_changed", 
-					"(binding=%s)".printf(get_self_ref_equality(binding, pointer)),
-					yellow("\tObject being pointed has changed.\n") +
-					"\t\tbinding (BindingPointer emiting the notification)" +
-					get_current_source (binding.get_source())
-				)
-			);
-		});
-		pointer.connect_notifications.connect ((obj) => {
-			events.add (
-				new EventDescription.as_signal (
-					"connect_notifications", 
-					"(obj = %s)".printf (__get_current_source (obj)),
-					yellow("\tSignal to connect anything application needs connected beside basic requirements when data source changes.")
-				)
-			);
-		});
-		pointer.disconnect_notifications.connect ((obj) => {
-			events.add (
-				new EventDescription.as_signal (
-					"disconnect_notifications", 
-					"(obj = %s)".printf (__get_current_source (obj)),
-					yellow("\tSignal to disconnect anything application needs connected beside basic requirements when data source changes.")
-				)
-			);
-		});
-		pointer.notify["data"].connect ((binding) => {
-			events.add (
-				new EventDescription.as_property (
-					"data", 
-					" = %s => %s".printf (__get_current_source (pointer.data), _get_current_source (pointer.get_source()))
-				)
-			);
-		});
-	}
-
-	internal void connect_binding_contract_events (BindingContract contract, ObjectArray<EventDescription> events)
-	{
-		connect_binding_pointer_events (contract, events);
-
-		contract.contract_changed.connect ((ccontract) => {
-			events.add (
-				new EventDescription.as_signal (
-					"contract_changed", 
-					"(contract=%s)".printf(get_self_ref_equality(ccontract, contract)),
-					yellow("\tEmited when contract is disolved or renewed after source change.\n") +
-					"\t\tcontract (BindingContract emiting the notification)" +
-					get_current_source (contract.get_source())
-				)
-			);
-		});
-		contract.bindings_changed.connect ((ccontract, change_type, binding) => {
-			events.add (
-				new EventDescription.as_signal (
-					"bindings_changed", 
-					"(contract=%s, change_type=%s, binding)".printf(get_self_ref_equality(ccontract, contract), change_type.get_state_str()),
-					yellow("\tEmited when bindings are changed by adding or removing.\n") +
-					"\t\tcontract (BindingContract emiting the notification)\n" +
-					"\t\tchange_type (binding ADDED or REMOVED)\n" +
-					"\t\tbinding (BindingContract emiting the notification)" +
-					get_current_source (contract.get_source())
-				)
-			);
-		});
-		contract.notify["is-valid"].connect ((c) => {
-			events.add (
-				new EventDescription.as_property (
-					"is_valid", 
-					" = %s".printf (bool_str(contract.is_valid == true))
-				)
-			);
-		});
-		contract.notify["length"].connect ((c) => {
-			events.add (
-				new EventDescription.as_property (
-					"is_valid", 
-					" = %i".printf ((int) contract.length)
-				)
-			);
-		});
-		contract.notify["suspended"].connect ((c) => {
-			events.add (
-				new EventDescription.as_property (
-					"is_valid", 
-					" = %s".printf (bool_str(contract.suspended == true))
-				)
-			);
-		});
 	}
 
 	internal static int __get_icon_size (Gtk.IconSize size)
@@ -405,8 +230,7 @@ namespace GDataGtk
 			title.xalign = 0;
 			title.use_markup = true;
 			string dir = obj.flags.get_direction_arrow();
-			title.set_markup(
-				"%s%s%s".printf (bold(fix_markup((obj).source_property)), dir, bold(fix_markup((obj).target_property))));
+			title.set_markup(obj.as_short_str(true));
 /*			Gtk.Label description = new Gtk.Label("");
 			description.visible = true;
 			description.use_markup = true;

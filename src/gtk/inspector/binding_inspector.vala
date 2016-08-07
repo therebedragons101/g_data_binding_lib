@@ -275,7 +275,7 @@ namespace GDataGtk
 					if (is_binding_contract(current_data) == true) {
 						binding_nr.set_markup (bold("%i".printf((int) as_contract(current_data).length)));
 						// bind actively
-						suspended.set_markup (bool_strc(as_contract(current_data).suspended));
+						suspended.set_markup (bool_activity(!as_contract(current_data).suspended));
 						is_valid.set_markup (bool_strc(as_contract(current_data).is_valid));
 					}
 					else {
@@ -314,10 +314,8 @@ namespace GDataGtk
 			((Gtk.ListBox) ui_builder.get_object ("searched_contracts")).row_activated.connect ((r) => {
 				if (r == null)
 					current_data = null;
-				else {
-				stdout.printf ("@%i\n", r.get_data<int> ("pointer"));
+				else
 					current_data = PointerNamespace.get_instance().get_by_id(r.get_data<int> ("pointer"));
-				}
 			});
 
 			((Gtk.ListBox) ui_builder.get_object ("events")).set_placeholder (
@@ -344,6 +342,7 @@ namespace GDataGtk
 			assign_builder_css (ui_builder, "frame", _box_css);
 			assign_builder_css (ui_builder, "title_label", _title_css);
 			assign_builder_css (ui_builder, "info_label", _info_css);
+			assign_builder_css (ui_builder, "chain_listbox", _title_css);
 
 			find_btn.popover = new Gtk.Popover(find_btn);
 			find_btn.popover.modal = true;

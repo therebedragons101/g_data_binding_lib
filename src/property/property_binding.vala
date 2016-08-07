@@ -690,6 +690,37 @@ namespace GData
 			return (new PropertyBinding (source, _source_property, target, _target_property, flags, (owned) transform_to, (owned) transform_from));
 		}
 
+		/**
+		 * Adds property to binding as notification its data has changed
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param side Specifies side which property will be connected to
+		 * @param property_names Specifies array of properties that need to be
+		 *                       connected
+		 * @return BindingInterface reference to it self to allow chain API in
+		 *         objective oriented languages
+		 */
+		public BindingInterface add_property_notification (BindingSide side, string property_name)
+		{
+			return (this);
+		}
+
+		/**
+		 * Adds signal to binding as notification its data has changed
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param side Specifies side which signal will be connected to
+		 * @param signal_name Specifies signal that need to be connected
+		 * @return BindingInterface reference to it self to allow chain API in
+		 *         objective oriented languages
+		 */
+		public BindingInterface add_signal (BindingSide side, string signal_name)
+		{
+			return (this);
+		}
+
 		private void _unbind()
 		{
 			if (unbound == false) {

@@ -1,3 +1,5 @@
+using GData;
+
 namespace GDataGtk
 {
 	public class EventDescription : Object

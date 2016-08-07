@@ -32,11 +32,14 @@ run-g_${COMMON_NAME}_lib:
 SOURCES := ${LIBRARY_NAME}.vala \
 	common/compare_data_by.vala \
 	common/delegates.vala \
+	common/markup.vala \
+	common/methods.vala \
 	common/object_information.vala \
 	common/strict_weak_ref.vala \
 	common/strict_weak_reference_t.vala \
 	common/unique_by_properties.vala \
 	common/weak_ref.vala \
+	common/weak_ref_wrapper.vala \
 	common/weak_reference_t.vala \
 	contracts/binding_pointer.vala \
 	contracts/binding_contract.vala \
@@ -91,6 +94,7 @@ GENERICS_SOURCES := ${COMMON_NAME}_generics${NAME_SUFFIX}.vala \
 #	${RESOURCE}${COMMON_NAME}_gtk${NAME_SUFFIX}.*
 GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	${RESOURCE}${COMMON_NAME}_gtk${NAME_SUFFIX}.* \
+	common/markup.vala \
 	gtk/inspector/binding_inspector.vala \
 	gtk/inspector/event_array.vala \
 	gtk/inspector/event_description.vala \
@@ -104,6 +108,8 @@ DEMO_INCLUDES := demos/common/css.vala \
 
 DEMO_SOURCES := demos/demo_and_tutorial/main.vala \
 	${RESOURCE}demo_and_tutorial.* \
+	common/markup.vala \
+	gtk/inspector/event_array.vala \
 	gtk/inspector/methods.vala
 
 PACKAGES := --pkg gio-2.0

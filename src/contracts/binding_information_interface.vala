@@ -153,5 +153,35 @@ namespace GData
 		) {
 			return (contract.bind (source_property, contract.default_target, target_property, flags, (owned) transform_to, (owned) transform_from, (owned) source_validation));
 		}
+
+		/**
+		 * Returns string representation for binding description
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param markup Enable markup
+		 * @return String representation for binding description
+		 */
+		public string as_short_str (bool markup = false)
+		{
+			string dir = flags.get_direction_arrow();
+			if (markup == true)
+				return ("%s%s%s".printf (bold(fix_markup(source_property)), dir, bold(fix_markup(target_property))));
+			else
+				return ("%s%s%s".printf (source_property, dir, target_property));
+		}
+
+		/**
+		 * Returns string representation for binding description
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param markup Enable markup
+		 * @return String representation for binding description
+		 */
+		public string as_str (bool markup = false)
+		{
+			return ("%s/%s".printf (as_short_str(markup), bool_activity(activated, markup)));
+		}
 	}
 }
