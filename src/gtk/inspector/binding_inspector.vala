@@ -130,14 +130,24 @@ namespace GDataGtk
 					return ("Pointer: [%s]".printf(bold(sel.key)).replace("&", "&amp;"));
 				})
 			);
+			((Gtk.ListBox) ui_builder.get_object ("pointers")).row_activated.connect ((r) => {
+				if (r == null)
+					return;
+				int? i = r.get_data<int>("pointer");
+				if (i != null)
+					current_data = PointerNamespace.get_instance().get_by_id(i);
+				find_btn.popover.hide();
+			});
 		}
 
 		private void bind_storages (Gtk.Builder ui_builder)
 		{
 			storages = track_contract_storage();
-			bind_kv_listbox<string, string, WeakReference<BindingContract>>((Gtk.ListBox) ui_builder.get_object ("contract_storages"), storages, ((kv) => {
-				return (((KeyValuePair<string, KeyValueArray<string, WeakReference<BindingContract>>>) kv).key.replace("&", "&amp;"));
-			}), true);
+			bind_kv_listbox<string, string, WeakReference<BindingContract>>((Gtk.ListBox) ui_builder.get_object ("contract_storages"), storages, 
+				((kv) => {
+					return (((KeyValuePair<string, KeyValueArray<string, WeakReference<BindingContract>>>) kv)
+						.key.replace("&", "&amp;"));
+				}), true);
 			on_master_selected<string, string, WeakReference<BindingContract>> (
 				(Gtk.ListBox) ui_builder.get_object ("contract_storages"), 
 				(Gtk.ListBox) ui_builder.get_object ("contracts"), 
@@ -146,6 +156,14 @@ namespace GDataGtk
 					return ("Contract: [%s]".printf(bold(sel.key)).replace("&", "&amp;"));
 				})
 			);
+			((Gtk.ListBox) ui_builder.get_object ("contracts")).row_activated.connect ((r) => {
+				if (r == null)
+					return;
+				int? i = r.get_data<int>("pointer");
+				if (i != null)
+					current_data = PointerNamespace.get_instance().get_by_id(i);
+				find_btn.popover.hide();
+			});
 		}
 
 		private void disconnect_everything()
@@ -180,6 +198,15 @@ namespace GDataGtk
 			}
 		""";
 
+		private string _chain_css = """
+			* {
+				padding: 4px 4px 4px 4px;
+				border-radius: 5px;
+				color: rgba (255,255,255,0.7);
+				background-color: rgba(0,0,0,0.0);
+			}
+		""";
+
 		private string _info_css = """
 			* {
 				color: rgba (255,255,255,0.5);
@@ -206,6 +233,39 @@ namespace GDataGtk
 			}
 			return (inspector_is_visible);
 		}
+
+		private bool update_source_data()
+		{
+			main_title.set_markup (bold("Resource type=%s".printf (_get_type_str(main_contract.data))));
+			sub_title.set_markup (small("Chain source=%s".printf (_get_type_str(main_contract.get_source()))));
+			uid.set_markup ((current_data == null) ? red(bold("null")) : bold("@%i").printf(current_data.id));
+			stored_as.set_markup (_get_stored_as (current_data));
+			type.set_markup (bold("%s".printf (_get_type_str(current_data))));
+			data_type.set_markup (bold((current_data == null) ? _get_type_str(null) : _get_type_str(current_data.data)));
+			data.set_markup (bold((current_data == null) ? red("null") : _get_object_str(current_data.data)));
+			source_data.set_markup (bold((current_data == null) ? red("null") : _get_object_str(current_data.get_source())));
+			source_type.set_markup (bold((current_data == null) ? _get_type_str(null) : _get_type_str(current_data.get_source())));
+			ref_handling.set_markup (bold((current_data == null) ? red("null") : current_data.reference_type.get_str()));
+			update_type.set_markup (bold((current_data == null) ? red("null") : current_data.update_type.get_str()));
+			if (is_binding_contract(current_data) == true) {
+				binding_nr.set_markup (bold("%i".printf((int) as_contract(current_data).length)));
+				// bind actively
+				suspended.set_markup (bool_activity(!as_contract(current_data).suspended));
+				is_valid.set_markup (bool_strc(as_contract(current_data).is_valid));
+			}
+			else {
+				binding_nr.set_markup (bold("*** NOT AVAILABLE ***"));
+				// bind actively
+				suspended.set_markup (bold("*** NOT AVAILABLE ***"));
+				is_valid.set_markup (bold("*** NOT AVAILABLE ***"));
+			}
+			source_type.set_markup (bold((current_data == null) ? _get_type_str(null) : _get_type_str(current_data.get_source())));
+			return (false);
+		}
+
+		private BindingInterface? i1 = null;
+		private BindingInterface? i2 = null;
+		private BindingInterface? i3 = null;
 
 		private BindingInspector()
 		{
@@ -251,42 +311,36 @@ namespace GDataGtk
 			main_contract.binder = binder;
 
 			main_contract.before_source_change.connect ((pointer, is_same, next) => {
-				bind_bindings_listbox (bindings_listbox, (BindingPointer?) null);
 			});
 			main_contract.source_changed.connect ((pointer) => {
 				_events.resource = (BindingPointer?) main_contract.data;
-				bind_bindings_listbox (bindings_listbox, (BindingPointer?) main_contract.data);
 				wdata_ref.set_new_target (main_contract.data);
+				bind_linear_source_chain ((Gtk.ListBox) ui_builder.get_object ("chain_listbox"), this);
 			});
 
-			binder.bind (main_contract, "data", main_title, "label", BindFlags.SYNC_CREATE,
-				() => {
-					main_title.set_markup (bold("Resource type=%s".printf (_get_type_str(main_contract.data))));
-					sub_title.set_markup (small("Chain source=%s".printf (_get_type_str(main_contract.get_source()))));
-					uid.set_markup ((current_data == null) ? red(bold("null")) : bold("@%i").printf(current_data.id));
-					stored_as.set_markup (_get_stored_as (current_data));
-					type.set_markup (bold("%s".printf (_get_type_str(current_data))));
-					data_type.set_markup (bold((current_data == null) ? _get_type_str(null) : _get_type_str(current_data.data)));
-					data.set_markup (bold((current_data == null) ? red("null") : _get_object_str(current_data.data)));
-					source_data.set_markup (bold((current_data == null) ? red("null") : _get_object_str(current_data.get_source())));
-					source_type.set_markup (bold((current_data == null) ? _get_type_str(null) : _get_type_str(current_data.get_source())));
-					ref_handling.set_markup (bold((current_data == null) ? red("null") : current_data.reference_type.get_str()));
-					update_type.set_markup (bold((current_data == null) ? red("null") : current_data.update_type.get_str()));
-					if (is_binding_contract(current_data) == true) {
-						binding_nr.set_markup (bold("%i".printf((int) as_contract(current_data).length)));
-						// bind actively
-						suspended.set_markup (bool_activity(!as_contract(current_data).suspended));
-						is_valid.set_markup (bool_strc(as_contract(current_data).is_valid));
-					}
-					else {
-						binding_nr.set_markup (bold("*** NOT AVAILABLE ***"));
-						// bind actively
-						suspended.set_markup (bold("*** NOT AVAILABLE ***"));
-						is_valid.set_markup (bold("*** NOT AVAILABLE ***"));
-					}
-					source_type.set_markup (bold((current_data == null) ? _get_type_str(null) : _get_type_str(current_data.get_source())));
-					return (false);
-				});
+			binder.bind (main_contract, "data", main_title, "label", BindFlags.SYNC_CREATE, update_source_data);
+
+			main_contract.connect_notifications.connect (() => {
+				if (current_data == null)
+					return;
+				bind_bindings_listbox (bindings_listbox, (BindingPointer?) main_contract.data, this);
+				i1 =binder.bind (current_data, "data", main_title, "label", BindFlags.SYNC_CREATE, update_source_data);
+				if (is_binding_contract(current_data) == true) {
+					i2 = binder.bind (current_data, "is_valid", main_title, "label", BindFlags.SYNC_CREATE, update_source_data);
+					i3 = binder.bind (current_data, "suspended", main_title, "label", BindFlags.SYNC_CREATE, update_source_data);
+				}
+			});
+
+			main_contract.disconnect_notifications.connect (() => {
+				bind_bindings_listbox (bindings_listbox, (BindingPointer?) null, this);
+				if (i1 != null) i1.unbind(); i1 = null;
+				if (i2 != null) i2.unbind(); i2 = null;
+				if (i3 != null) i3.unbind(); i3 = null;
+			});
+
+			notify["current-data"].connect (() => {
+				bind_linear_source_chain ((Gtk.ListBox) ui_builder.get_object ("chain_listbox"), this);
+			});
 
 			binder.bind (resource_stack, "visible-child", clear_btn, "visible", BindFlags.SYNC_CREATE,
 				() => {
@@ -310,12 +364,26 @@ namespace GDataGtk
 
 			bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("events"), _events, this, "compact-events");
 
-			bind_namespace_listbox ((Gtk.ListBox) ui_builder.get_object ("searched_contracts"));
-			((Gtk.ListBox) ui_builder.get_object ("searched_contracts")).row_activated.connect ((r) => {
+			Gtk.ListBox searched_contracts = ((Gtk.ListBox) ui_builder.get_object ("searched_contracts"));
+			Gtk.SearchEntry search_entry = ((Gtk.SearchEntry) ui_builder.get_object ("search_entry"));
+			search_entry.search_changed.connect (() => {
+				searched_contracts.invalidate_filter();
+			});
+			bind_namespace_listbox (searched_contracts);
+			searched_contracts.set_filter_func ((r) => {
+				if (search_entry.text == "")
+					return (true);
+				string? s = r.get_data<string> ("name");
+				if (s == null)
+					return (false);
+				return (s.contains (search_entry.text));
+			});
+			searched_contracts.row_activated.connect ((r) => {
 				if (r == null)
 					current_data = null;
 				else
 					current_data = PointerNamespace.get_instance().get_by_id(r.get_data<int> ("pointer"));
+				find_btn.popover.hide();
 			});
 
 			((Gtk.ListBox) ui_builder.get_object ("events")).set_placeholder (
@@ -342,7 +410,7 @@ namespace GDataGtk
 			assign_builder_css (ui_builder, "frame", _box_css);
 			assign_builder_css (ui_builder, "title_label", _title_css);
 			assign_builder_css (ui_builder, "info_label", _info_css);
-			assign_builder_css (ui_builder, "chain_listbox", _title_css);
+			assign_builder_css (ui_builder, "chain_listbox", _chain_css);
 
 			find_btn.popover = new Gtk.Popover(find_btn);
 			find_btn.popover.modal = true;

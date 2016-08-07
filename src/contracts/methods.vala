@@ -28,6 +28,28 @@ namespace GData
 		return (obj.get_type().is_a(typeof(BindingContract)) == true);
 	}
 
+	/**
+	 * Checks if object is BindingPointer or its subclass
+	 * 
+	 * @since 0.1
+	 * @param obj Object being checked
+	 * @return true if object is BindingPointer or subclass, false if not
+	 */
+	public static bool is_object_information (Object? obj)
+	{
+		if (obj == null)
+			return (false);
+		return (obj.get_type().is_a(typeof(ObjectInformation)) == true);
+	}
+
+	/**
+	 * Casts object as BindingContract
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param obj Object
+	 * @return Contract if casting is possible
+	 */
 	public static BindingContract? as_contract (Object? obj)
 	{
 		if (obj != null)
@@ -36,6 +58,14 @@ namespace GData
 		return (null);
 	}
 
+	/**
+	 * Casts object as BindingPointer
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param obj Object
+	 * @return Pointer if casting is possible
+	 */
 	public static BindingPointer? as_pointer (Object? obj)
 	{
 		if (obj != null)

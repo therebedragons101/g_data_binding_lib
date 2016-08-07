@@ -91,6 +91,23 @@ namespace GData
 			}
 		}
 
+		private bool? _is_relay = null;
+		/**
+		 * Specifies if pointer is doing source relaying or not
+		 * 
+		 * @since 0.1
+		 */
+		public bool is_relay {
+			get {
+				if (_is_relay == null) {
+					bool b = false;
+					redirect_to (ref b);
+					_is_relay = b;
+				}
+				return (_is_relay);
+			}
+		}
+
 		private StrictWeakReference<Object?> _data = null;
 		/**
 		 * Data being pointed with this pointer
@@ -168,12 +185,16 @@ namespace GData
 		 * BindingPointerFromPropertyValue which is also featured in tutorial
 		 * in order to be easy to understand
 		 * 
+		 * If pointer is doing redirecting redirect_in_play must be returned 
+		 * true even when data is invalid as it provides information if pointer
+		 * is relaying or not
+		 * 
 		 * @since 0.1
 		 * @param redirect_in_play If this is set to true, value of get_source()
 		 *                         will be result of this method
 		 * @return Object or null where pointer should be redirected 
 		 */
-		protected virtual Object? redirect_to (ref bool redirect_in_play)
+		public virtual Object? redirect_to (ref bool redirect_in_play)
 		{
 			redirect_in_play = false;
 			return (null);

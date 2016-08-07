@@ -46,6 +46,16 @@ namespace GDataGtk
 		return ("%s @%i".printf(stor, pointer.id));
 	}
 
+	internal string? _get_pointer_namespace (BindingPointer? pointer)
+	{
+		if (pointer == null)
+			return (null);
+		string? stor = pointer.get_data<string?>("stored-as");
+		if ((stor == null) || (stor == ""))
+			return (null);
+		return ("%s".printf(stor));
+	}
+
 	//TODO bad provisional implementation. only first or last should be replaced
 	internal string get_pointer_namespace_markup (BindingPointer? pointer)
 	{
@@ -72,20 +82,6 @@ namespace GDataGtk
 		return ((val == true) ? green(bold("TRUE")) : red(bold("FALSE")));
 	}
 	
-	/**
-	 * Checks if object is BindingPointer or its subclass
-	 * 
-	 * @since 0.1
-	 * @param obj Object being checked
-	 * @return true if object is BindingPointer or subclass, false if not
-	 */
-	internal static bool is_object_information (Object? obj)
-	{
-		if (obj == null)
-			return (false);
-		return (obj.get_type().is_a(typeof(ObjectInformation)) == true);
-	}
-
 	internal static string get_info_str (ObjectInformation? obj)
 	{
 		return ((obj == null) ? _null() : "[%s]->\"%s\"".printf(green(obj.get_type().name()), obj.get_info()));
@@ -98,11 +94,11 @@ namespace GDataGtk
 		return ((obj == null) ? _null() : "[%s]".printf(green(obj.get_type().name())));
 	}
 
-	internal static string _get_object_str (Object? obj)
+	internal static string _get_object_str (Object? obj, bool markup = true)
 	{
 		if (is_object_information(obj) == true)
 			return (get_info_str((ObjectInformation) obj));
-		return ((obj == null) ? "null" : "%s".printf(green(obj.get_type().name())));
+		return ((obj == null) ? bold(red("null", markup), markup) : "%s".printf(green(obj.get_type().name(), markup)));
 	}
 
 	internal static string get_pointer_info_str (BindingPointer? obj)
@@ -133,6 +129,37 @@ namespace GDataGtk
 		int x,y;
 		Gtk.icon_size_lookup (size, out x, out y);
 		return (x);
+	}
+
+	internal void bind_linear_source_chain (Gtk.ListBox listbox, BindingInspector? inspector = null, string property_name = "")
+	{
+		//TODO, model
+		int cid = (inspector.current_data != null) ? inspector.current_data.id : -1;
+		GLib.Array<Gtk.Widget> arr = new GLib.Array<Gtk.Widget>();
+		bool found = false;
+		listbox.@foreach ((w) => {
+			arr.append_val (w);
+			int? ri = w.get_data<int> ("pointer");
+			if (ri == cid)
+				found = true;
+		});
+		if (found == true)
+			return;
+		for (int i=0; i<arr.length; i++)
+			listbox.remove (arr.data[i]);
+		PointerInfo[] ptrs = PointerInfo.get_linear_chain (inspector.main_contract, inspector.current_data);
+		for (int i=0; i<ptrs.length; i++) {
+			Gtk.ListBoxRow r = new Gtk.ListBoxRow();
+			r.set_data<int> ("pointer", ptrs[i].pointer.id);
+			r.visible = true;
+			Gtk.Box box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+			box.expand = true;
+			box.visible = true;
+			r.add (box);
+			box.pack_start (ptrs[i], true, true, 0);
+			ptrs[i].visible = true;
+			listbox.add (r);
+		}
 	}
 
 	internal void bind_event_listbox (Gtk.ListBox listbox, ObjectArray<EventDescription> events, BindingInspector? inspector = null, string property_name = "")
@@ -170,7 +197,8 @@ namespace GDataGtk
 			Gtk.ListBoxRow r = new Gtk.ListBoxRow();
 			BindingPointer obj = (BindingPointer) o;
 			r.set_data<int> ("pointer", obj.id);
-			
+			r.set_data<string> ("name", get_pointer_namespace(obj));
+
 			r.visible = true;
 			Gtk.Box box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 4);
 			box.expand = true;
@@ -221,6 +249,12 @@ namespace GDataGtk
 			r.add (box);
 			Gtk.Image image = create_image_from_icon (((obj.activated == true) ? TRUE_ICON : FALSE_ICON), 
 				null, null, __get_icon_size(Gtk.IconSize.SMALL_TOOLBAR), false);
+			inspector.binder.bind (obj, "activated", image, "pixbuf", BindFlags.SYNC_CREATE, 
+				(binding, src, ref dest) => {
+					assign_image_from_icon (image, (src.get_boolean() ? TRUE_ICON : FALSE_ICON), 
+					                        null, null, __get_icon_size(Gtk.IconSize.SMALL_TOOLBAR), false);
+					return (false);
+				});
 			r.set_data<WeakReference<Gtk.Image?>> ("image", 
 				new WeakReference<Gtk.Image?>(image));
 			image.visible = true;
@@ -229,7 +263,6 @@ namespace GDataGtk
 			title.hexpand = true;
 			title.xalign = 0;
 			title.use_markup = true;
-			string dir = obj.flags.get_direction_arrow();
 			title.set_markup(obj.as_short_str(true));
 /*			Gtk.Label description = new Gtk.Label("");
 			description.visible = true;
@@ -254,6 +287,13 @@ namespace GDataGtk
 			Gtk.ListBoxRow r = new Gtk.ListBoxRow();
 			if (sublist == true)
 				r.set_data<GLib.ListModel> ("sublist", ((KeyValuePair<MK, KeyValueArray<K, V>>) o).val);
+			else {
+				if (typeof(V).is_a(typeof(WeakReference<BindingPointer>)) == true) {
+					WeakReference<BindingPointer> refs = (WeakReference<BindingPointer>) ((KeyValuePair<K,V>) o).val;
+					if (is_binding_pointer(refs.target) == true)
+						r.set_data<int>("pointer", refs.target.id);
+				}
+			}
 			r.visible = true;
 			Gtk.Box box = new Gtk.Box (Gtk.Orientation.VERTICAL, 4);
 			box.expand = true;

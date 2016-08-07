@@ -44,7 +44,7 @@ namespace GData
 					if (as_pointer(get_item(i)).id == id)
 						return (as_pointer(get_item(i)));
 			}
-			stdout.printf("not found\n");
+			stdout.printf("id(%i) not found\n", id);
 			return (null);
 		}
 

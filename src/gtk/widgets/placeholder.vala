@@ -7,8 +7,6 @@ namespace GDataGtk
 	public const string PROCESSING_ICON = "system-run-symbolic.symbolic";
 	public const string TRUE_ICON = "checkbox-checked-symbolic.symbolic";
 	public const string FALSE_ICON = "checkbox-symbolic.symbolic";
-	public const string POINTER_ICON = "document-revert-symbolic-rtl.symbolic";
-	public const string CONTRACT_ICON = "open-menu-symbolic.symbolic";
 
 	[GtkTemplate (ui="/org/gtk/g_data_binding_gtk/data/placeholder.ui")]
 	public class Placeholder : Gtk.Box
@@ -28,10 +26,8 @@ namespace GDataGtk
 			}
 		}
 
-		[GtkChild]
-		private Gtk.Label wlabel;
-		[GtkChild]
-		private Gtk.Box image_box;
+		[GtkChild] private Gtk.Label wlabel;
+		[GtkChild] private Gtk.Box image_box;
 
 		public bool use_markup { get; set; }
 

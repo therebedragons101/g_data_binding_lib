@@ -38,6 +38,16 @@ namespace GDataGtk
 		return (image);
 	}
 
+	public Gtk.Image assign_image_from_icon (Gtk.Image image, string resource_icon, Gtk.StyleContext? context = null, bool? use_symbolic = null, int icon_size = 24, bool can_focus = false)
+	{
+		if (context != null)
+			image.pixbuf = load_pixbuf (resource_icon, context, use_symbolic, icon_size);
+		else {
+			image.pixbuf = load_pixbuf (resource_icon, image.get_style_context(), use_symbolic, icon_size);
+		}
+		return (image);
+	}
+
 	public Gtk.CssProvider? assign_css (Gtk.Widget? widget, string css_content)
 		requires (widget != null)
 	{

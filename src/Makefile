@@ -101,6 +101,7 @@ GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	gtk/inspector/methods.vala \
 	gtk/widgets/methods.vala \
 	gtk/widgets/placeholder.vala \
+	gtk/widgets/pointer_info.vala \
 	gtk/widgets/widget_defaults.vala
 
 DEMO_INCLUDES := demos/common/css.vala \

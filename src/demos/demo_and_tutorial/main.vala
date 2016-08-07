@@ -637,18 +637,11 @@ public class test_data_bindings : Gtk.Application
 
 	public void example_inspector (Gtk.Builder ui_builder)
 	{
-		//test references
-/*		BindingContract my_contract = new BindingContract();
-		stdout.printf ("\t\tDirect ref_count:%i\n", (int)my_contract.ref_count);
-		debug_references ("after create", my_contract);*/
 		((Gtk.Button) ui_builder.get_object ("show_inspector")).clicked.connect (() =>{
 			GDataGtk.BindingInspector.show(null);
 		});
 		((Gtk.Button) ui_builder.get_object ("show_inspector_with_target")).clicked.connect (() =>{
-		StrictWeakRef my_contract = new StrictWeakRef (ContractStorage.get_storage("main-example").find ("main-contract"));
-		_debug_references ("main contract", my_contract);
-		debug_references ("_main contract", as_contract(my_contract.target));
-			GDataGtk.BindingInspector.show(ContractStorage.get_storage("main-example").find ("main-contract"));
+			GDataGtk.BindingInspector.show(ContractStorage.get_storage("main-example").find ("chain-contract"));
 		});
 	}
 }

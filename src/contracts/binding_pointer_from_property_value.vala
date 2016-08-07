@@ -117,7 +117,7 @@ namespace GData
 		 *                         will be result of this method
 		 * @return Object or null where pointer should be redirected 
 		 */
-		protected override Object? redirect_to (ref bool redirect_in_play)
+		public override Object? redirect_to (ref bool redirect_in_play)
 		{
 			redirect_in_play = true;
 			if (_last == null)

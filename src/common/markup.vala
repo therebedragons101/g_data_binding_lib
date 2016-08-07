@@ -5,6 +5,11 @@ namespace GData
 		return ("[%s]".printf(bold(red("null", markup), markup)));
 	}
 
+	internal static string __null(bool markup = true)
+	{
+		return ("%s".printf(bold(red("null", markup), markup)));
+	}
+
 	internal static string color (string color, string str, bool markup = true)
 	{
 		if (markup == false)

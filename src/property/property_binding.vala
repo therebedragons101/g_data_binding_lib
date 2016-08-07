@@ -118,7 +118,7 @@ namespace GData
 			}
 
 			if ((Value.type_transformable(value_a.type(), value_b.type()) == true) &&
-				 (value_a.transform(ref value_b) == true))
+			    (value_a.transform(ref value_b) == true))
 				return (true);
 
 			GLib.warning ("%s: Unable to convert a value of type %s to a value of type %s",
