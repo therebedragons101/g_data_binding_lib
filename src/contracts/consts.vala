@@ -16,7 +16,7 @@ namespace GData
 	 * 
 	 * @since 0.1
 	 */
-//	public const string[]? NO_PROPERTY = null;
+	public const string[]? NO_PROPERTY = { "" };
 
 	internal static bool report_possible_binding_errors = false;
 }

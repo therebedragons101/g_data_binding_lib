@@ -19,7 +19,7 @@ public class DemoAndTutorial : Gtk.Application
 		"simple_binding/example_simple_property_binding",
 		"simple_binding/example_state_objects",
 		"simple_binding/example_validation",
-		"simple_binding/example_validation"
+		"simple_binding/example_value_objects"
 	};
 
 	public class StorageInspectRow : Gtk.ListBoxRow

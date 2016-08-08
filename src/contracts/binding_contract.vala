@@ -218,11 +218,7 @@ namespace GData
 
 		private void disolve_contract (bool emit_contract_change)
 		{
-//		stdout.printf ("disolve_contract()\n");
 			bound = false;
-			// no check here as it needs to be avoided in upper levels or before call
-//			for (int i=0; i<_items.data.length; i++)
-//				_items.data[i].binding.unbind_connection();
 			if (emit_contract_change == true)
 				contract_changed (this);
 		}
@@ -234,8 +230,6 @@ namespace GData
 			if (bound == true)
 				return;
 			bound = true;
-//			for (int i=0; i<_items.length; i++)
-//				_items.data[i].binding.bind_connection();
 			if (emit_contract_change == true)
 				contract_changed (this);
 			handle_is_valid (null);
@@ -304,6 +298,19 @@ namespace GData
 		{
 			for (int cnt = 0; cnt<group.length; cnt++)
 				unbind (group.get_item_at_index (cnt));
+		}
+
+		/**
+		 * This method does nothing else but just injecting redirection for
+		 * API chaining in objective oriented languages
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param mapper Mapper object
+		 */
+		public ContractMapperInterface set_binding_mapper (ContractMapperInterface mapper)
+		{
+			return (mapper);
 		}
 
 		/**

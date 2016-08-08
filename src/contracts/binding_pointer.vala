@@ -131,11 +131,15 @@ namespace GData
 				unreference_data();
 				if (data != null)
 					unchain_pointer();
+				bool sub = false;
 				if (value == this)
 					_data = new StrictWeakReference<Object?>(SELF, handle_strict_ref);
 				else {
-					if ((value != null) && (validate_data_type(value) == false))
-						_data = new StrictWeakReference<Object?>(null, handle_strict_ref);
+					if ((value != null) && (validate_data_type(value, out sub) == false))
+						if (sub == true)
+							_data = new StrictWeakReference<Object?>(substitution_on_invalid_data, handle_strict_ref);
+						else
+							_data = new StrictWeakReference<Object?>(null, handle_strict_ref);
 					else
 						_data = new StrictWeakReference<Object?>(value, handle_strict_ref);
 				}
@@ -169,17 +173,42 @@ namespace GData
 			}
 		}
 
+		private Type? _only_accept_type = null;
 		/**
-		 * Enables type restriction validation for subclassing needs
+		 * Specifies type restriction for pointer value of "data"
 		 * 
-		 * Note that null value is handled internally. Default return in binding
-		 * pointer is true
+		 * By default null is valid value and if this needs to be mitigated,
+		 * then subclass must override validate_object_type() method.
 		 * 
 		 * @since 0.1
 		 */
-		protected bool validate_data_type (Object obj)
+		public Type? only_accept_type {
+			get { return (_only_accept_type); }
+			set { _only_accept_type = value; }
+		}
+
+		private Object? substitution_on_invalid_data { get; set; default = null; }
+
+		/**
+		 * Enables type restriction validation for subclassing needs
+		 * 
+		 * Note that null is always acceptable unless this method is overriden
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param obj Object that needs to be validated if it is suitable for
+		 *            pointer
+		 * @param use_substitution If for some reason validation failed and 
+		 *                         there is default falback, then this needs to
+		 *                         be set to true and substitution value set in
+		 *                         substitution property
+		 */
+		protected virtual bool validate_data_type (Object? obj, out bool use_substitution)
 		{
-			return (true);
+			use_substitution = false;
+			if ((_only_accept_type == null) || (obj == null))
+				return (true);
+			return (obj.get_type().is_a(_only_accept_type));
 		}
 
 		/**

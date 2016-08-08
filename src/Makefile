@@ -55,6 +55,7 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	contracts/binding_value_objects.vala \
 	contracts/consts.vala \
 	contracts/contract_change_type.vala \
+	contracts/contract_mapper_interface.vala \
 	contracts/contract_storage.vala \
 	contracts/custom_binding_source_state.vala \
 	contracts/custom_binding_source_value.vala \

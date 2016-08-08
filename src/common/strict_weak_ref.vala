@@ -59,10 +59,10 @@ namespace GData
 		 *
 		 * @param set_to_target Specifies object being pointed with target
 		 */
-		public StrictWeakRef (Object? set_to_target, owned WeakReferenceInvalid? notify_method = null)
+		public StrictWeakRef (Object? set_to_target, WeakReferenceInvalid? notify_method = null)
 		{
 			base (set_to_target);
-			_notify_method = (owned) notify_method;
+			_notify_method = notify_method;
 			if (_target != null)
 				((Object) _target).weak_ref (handle_weak_ref); 
 		}
