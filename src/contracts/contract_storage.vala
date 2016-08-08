@@ -108,6 +108,20 @@ namespace GData
 		}
 
 		/**
+		 * Resolves contract storage by specified name. Unlike get_storage() 
+		 * this method does not guarantee resulting storage. If storage is not 
+		 * found null is returned 
+		 * 
+		 * @since 0.1
+		 * @return Contract storage reference or null if not found
+		 */
+		public static ContractStorage? find_storage (string name)
+		{
+			_check();
+			return (_storages.get (name));
+		}
+
+		/**
 		 * Searches for contract by specified unique id which is autoassigned on
 		 * pointer creation (accessible trough its id property)
 		 * 
@@ -162,12 +176,12 @@ namespace GData
 			}
 			if (_objects == null)
 				_objects = new HashTable<string, BindingContract> (str_hash, str_equal);
-			string? s = obj.get_data<string?>("stored-as");
+			string? s = obj.stored_as;
 			if ((s != null) && (s != "")) {
 				GLib.critical ("Contract \"%s\"is already stored as \"%s\"!".printf(name, s));
 				return (obj);
 			}
-			obj.set_data<string?>("stored-as", "%s/%s".printf(this.name, name));
+			obj.stored_as = "%s/%s".printf(this.name, name);
 			_objects.insert (name, obj);
 			added (name, obj);
 			return (obj);

@@ -3,79 +3,108 @@ using GData.Generics;
 using GDataGtk;
 using Demo;
 
-public class test_data_bindings : Gtk.Application
+public class DemoAndTutorial : Gtk.Application
 {
-	private Gtk.Window window;
+	public const string resource_path = "/org/gtk/demo_and_tutorial/";
+
+	public const string[] code_pages = {
+		"main_demo",
+		"simple_binding/example_alias_and_freeze",
+		"simple_binding/example_contract_chaining",
+		"simple_binding/example_contract_set_data",
+		"simple_binding/example_custom_property_binding",
+		"simple_binding/example_inspector",
+		"simple_binding/example_pointer_relay",
+		"simple_binding/example_pointer_set_data",
+		"simple_binding/example_simple_property_binding",
+		"simple_binding/example_state_objects",
+		"simple_binding/example_validation",
+		"simple_binding/example_validation"
+	};
+
+	public class StorageInspectRow : Gtk.ListBoxRow
+	{
+		private Gtk.Label title;
+
+		public int id { get; set; }
+		public string pname { get; set; }
+
+		public StorageInspectRow (int id, string pname)
+		{
+			this.id = id;
+			this.pname = pname;
+			visible = true;
+			title = new Gtk.Label("");
+			title.visible = true;
+			title.hexpand = true;
+			title.xalign = 0;
+			title.use_markup = true;
+			title.set_markup(get_pointer_namespace_markup(PointerNamespace.get_instance().get_by_id(id)));
+			add (title);
+		}
+	}
+
+	private ObjectArray<StorageInspectRow> inspect_list = new ObjectArray<StorageInspectRow>();
+
+	public Gtk.Window window;
+	public Gtk.HeaderBar demo_headerbar;
+
+	private Gtk.Stack code_demo_stack;
 	private Gtk.Stack demo_stack;
-	private Gtk.ListBox items;
-	private Gtk.Entry name;
-	private Gtk.Entry surname;
-	private Gtk.Entry required;
-	private Gtk.Button required_not_empty;
-	private Gtk.Button is_valid_source;
-	private Gtk.Label name_chain;
-	private Gtk.Label surname_chain;
-	private Gtk.Label custom_data;
-	private Gtk.HeaderBar demo_headerbar;
+	private Gtk.Stack basic_tutorial_stack;
+	private Gtk.Box binding_tutorial_box;
+	private Gtk.TextBuffer code_buffer;
 
-	private Gtk.Entry basic_entry_left;
-	private Gtk.Entry basic_entry_right;
-	private Gtk.Entry basic_entry_left2;
-	private Gtk.Entry basic_entry_right2;
-	private Gtk.Label basic_label_left3;
-	private Gtk.Entry basic_entry_right3;
-	private Gtk.Label basic_label_right4;
-	private Gtk.ToggleButton basic_flood_data_btn;
-	private Gtk.Entry basic_entry_left5;
-	private Gtk.Label basic_label_right5;
-	private Gtk.Button basic_transfer_data_btn;
-	private Gtk.Entry basic_entry_left6;
-	private Gtk.Entry basic_entry_right6;
-
-	private Gtk.Entry custom_binding_l1;
-	private Gtk.Label custom_binding_r1;
-	private Gtk.Entry custom_binding_l2;
-	private Gtk.Entry custom_binding_r2;
-	private Gtk.Entry custom_binding_l3;
-	private Gtk.ToggleButton custom_binding_r3;
-	private Gtk.Entry custom_binding_l4;
-	private Gtk.ToggleButton custom_binding_r4;
-
-	private Gtk.Entry advanced_binding_l1;
-	private Gtk.Label advanced_binding_r1;
-	private Gtk.Entry advanced_binding_l2;
-	private Gtk.Label advanced_binding_r2;
-	private Gtk.Entry advanced_binding_l3;
-	private Gtk.Label advanced_binding_r3;
-	private Gtk.Entry advanced_binding_l4;
-	private Gtk.Label advanced_binding_r4;
-	private Gtk.ToggleButton advanced_freeze1;
-	private Gtk.ToggleButton advanced_freeze2;
-	private Gtk.ToggleButton advanced_freeze3;
-	private PropertyBinding advanced4;
-
-	private Gtk.CheckButton e4_set_1;
-	private Gtk.CheckButton e4_set_2;
-	private Gtk.CheckButton e4_set_3;
 	private EventArray _e4_events = new EventArray();
-
-	private Gtk.CheckButton e5_set_1;
-	private Gtk.CheckButton e5_set_2;
-	private Gtk.CheckButton e5_set_3;
 	private EventArray _e5_events = new EventArray();
-
-	private Gtk.CheckButton e6_set_1;
-	private Gtk.CheckButton e6_set_2;
-	private Gtk.CheckButton e6_set_3;
 	private EventArray _e6_events = new EventArray();
 	private EventArray _e7_events = new EventArray();
 
-	private int _counter = 0;
+	public int _counter = 0;
 	public string counter {
 		owned get { return ("counter=%i".printf(_counter)); }
 	}
 
-	public test_data_bindings ()
+	private string _active_page = "";
+	public string active_page { 
+		get { return (_active_page); }
+		set { 
+			_active_page = value;
+			string text = "";
+			inspect_list.clear();
+			if (value != "") {
+				string res = "resource://%s%s.vala".printf (resource_path, value);
+				File file = File.new_for_uri (res);
+				if (!file.query_exists ())
+					stderr.printf ("File '%s' => '%s' doesn't exist.\n", file.get_path (), res);
+				else try {
+					DataInputStream dis = new DataInputStream (file.read ());
+					string line = "";
+					while ((line = dis.read_line (null)) != null)
+						text = "%s%s%s".printf (text, (text != "") ? "\n" : "", line);
+				} catch (Error e) { error ("%s", e.message); }
+
+				string nm = value;
+				if (nm.last_index_of("/") > -1)
+					nm = nm.splice (0, nm.last_index_of("/")+1);
+				PointerStorage? ptrs = PointerStorage.find_storage(nm);
+				if (ptrs != null) {
+					ptrs.foreach ((k,v) => {
+						inspect_list.add (new StorageInspectRow (v.id, v.stored_as));
+					});
+				}
+				ContractStorage? ctrs = ContractStorage.find_storage(nm);
+				if (ctrs != null) {
+					ctrs.foreach ((k,v) => {
+						inspect_list.add (new StorageInspectRow (v.id, v.stored_as));
+					});
+				}
+			}
+			code_buffer.set_text(text);
+		}
+	}
+
+	public DemoAndTutorial ()
 	{
 		Object (flags: ApplicationFlags.FLAGS_NONE);
 	}
@@ -86,18 +115,15 @@ public class test_data_bindings : Gtk.Application
 
 		Environment.set_application_name ("test_data_bindings");
 
-		// yes, nightmare implementation
-		// this is just temporary hack until i add resource building
-		// into demo executable.
-		// it is just that that is on lowest priority right now
 		var ui_builder = new Gtk.Builder ();
 		try {
-//			ui_builder.add_from_file ("./interface.ui");
 			ui_builder.add_from_resource ("/org/gtk/demo_and_tutorial/interface.ui");
 		}
 		catch (Error e) { warning ("Could not load demo UI: %s", e.message); }
 		window = (Gtk.Window) ui_builder.get_object ("firstWindow");
 		add_window (window);
+
+		binding_tutorial_box = (Gtk.Box) ui_builder.get_object ("binding_tutorial_box");
 
 		demo_stack = (Gtk.Stack) ui_builder.get_object ("demo_stack");
 		((Gtk.Button) ui_builder.get_object ("demo_btn")).clicked.connect(() => {
@@ -107,7 +133,7 @@ public class test_data_bindings : Gtk.Application
 			demo_stack.visible_child = (Gtk.Box) ui_builder.get_object ("map_box");
 		});
 		((Gtk.Button) ui_builder.get_object ("binding_tutorial_btn")).clicked.connect(() => {
-			demo_stack.visible_child = (Gtk.Box) ui_builder.get_object ("binding_tutorial_box");
+			demo_stack.visible_child = binding_tutorial_box;
 		});
 		((Gtk.Button) ui_builder.get_object ("mapping_tutorial_btn")).clicked.connect(() => {
 			demo_stack.visible_child = (Gtk.Box) ui_builder.get_object ("mapping_tutorial_box");
@@ -116,68 +142,99 @@ public class test_data_bindings : Gtk.Application
 		demo_headerbar = (Gtk.HeaderBar) ui_builder.get_object ("demo_headerbar");
 		window.set_titlebar (demo_headerbar);
 
-		items = (Gtk.ListBox) ui_builder.get_object ("items");
-		name = (Gtk.Entry) ui_builder.get_object ("name");
-		surname = (Gtk.Entry) ui_builder.get_object ("surname");
-		required = (Gtk.Entry) ui_builder.get_object ("required");
-		name_chain = (Gtk.Label) ui_builder.get_object ("name_chain");
-		surname_chain = (Gtk.Label) ui_builder.get_object ("surname_chain");
-		custom_data = (Gtk.Label) ui_builder.get_object ("custom_data");
+		code_demo_stack = (Gtk.Stack) ui_builder.get_object ("code_demo_stack");
+		demo_stack = (Gtk.Stack) ui_builder.get_object ("demo_stack");
+		basic_tutorial_stack = (Gtk.Stack) ui_builder.get_object ("basic_tutorial_stack");
+		code_buffer = (Gtk.TextBuffer) ui_builder.get_object ("code_buffer");
 
-		basic_entry_left = (Gtk.Entry) ui_builder.get_object ("basic_entry_left");
-		basic_entry_right = (Gtk.Entry) ui_builder.get_object ("basic_entry_right");
-		basic_entry_left2 = (Gtk.Entry) ui_builder.get_object ("basic_entry_left2");
-		basic_entry_right2 = (Gtk.Entry) ui_builder.get_object ("basic_entry_right2");
-		basic_label_left3 = (Gtk.Label) ui_builder.get_object ("basic_label_left3");
-		basic_entry_right3 = (Gtk.Entry) ui_builder.get_object ("basic_entry_right3");
-		basic_label_right4 = (Gtk.Label) ui_builder.get_object ("basic_label_right4");
-		basic_flood_data_btn = (Gtk.ToggleButton) ui_builder.get_object ("basic_flood_data_btn");
-		basic_entry_left5 = (Gtk.Entry) ui_builder.get_object ("basic_entry_left5");
-		basic_label_right5 = (Gtk.Label) ui_builder.get_object ("basic_label_right5");
-		basic_entry_left6 = (Gtk.Entry) ui_builder.get_object ("basic_entry_left6");
-		basic_entry_right6 = (Gtk.Entry) ui_builder.get_object ("basic_entry_right6");
+		demo_stack.notify["visible-child"].connect (() => {
+			set_active_demo_page(demo_stack);
+		});
 
-		required_not_empty = (Gtk.Button) ui_builder.get_object ("required_not_empty");
-		is_valid_source = (Gtk.Button) ui_builder.get_object ("is_valid_source");
+		basic_tutorial_stack.notify["visible-child"].connect (() => {
+			set_active_basic_tutorial_page(basic_tutorial_stack);
+		});
 
-		e4_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_1");
-		e4_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_2");
-		e4_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_3");
+		for (int i=0; i<code_pages.length; i++) {
+			string nm = code_pages[i];
+			if (nm.last_index_of("/") > -1)
+				nm = nm.splice (0, nm.last_index_of("/")+1);
+			Object b = ui_builder.get_object (nm);
+			b.set_data<string> ("code", code_pages[i]);
+		}
 
-		custom_binding_l1 = (Gtk.Entry) ui_builder.get_object ("custom_binding_l1");
-		custom_binding_r1 = (Gtk.Label) ui_builder.get_object ("custom_binding_r1");
-		custom_binding_l2 = (Gtk.Entry) ui_builder.get_object ("custom_binding_l2");
-		custom_binding_r2 = (Gtk.Entry) ui_builder.get_object ("custom_binding_r2");
-		custom_binding_l3 = (Gtk.Entry) ui_builder.get_object ("custom_binding_l3");
-		custom_binding_r3 = (Gtk.ToggleButton) ui_builder.get_object ("custom_binding_r3");
-		custom_binding_l4 = (Gtk.Entry) ui_builder.get_object ("custom_binding_l4");
-		custom_binding_r4 = (Gtk.ToggleButton) ui_builder.get_object ("custom_binding_r4");
+		Gtk.ToggleButton show_code = (Gtk.ToggleButton) ui_builder.get_object ("show_code");
+		show_code.toggled.connect (() => {
+			code_demo_stack.visible_child = (show_code.active == true) ? 
+				((Gtk.Box) ui_builder.get_object ("code_box")) :
+				((Gtk.Box) ui_builder.get_object ("demo"));
+		});
 
-		advanced_binding_l1 = (Gtk.Entry) ui_builder.get_object ("advanced_binding_l1");
-		advanced_binding_r1 = (Gtk.Label) ui_builder.get_object ("advanced_binding_r1");
-		advanced_binding_l2 = (Gtk.Entry) ui_builder.get_object ("advanced_binding_l2");
-		advanced_binding_r2 = (Gtk.Label) ui_builder.get_object ("advanced_binding_r2");
-		advanced_binding_l3 = (Gtk.Entry) ui_builder.get_object ("advanced_binding_l3");
-		advanced_binding_r3 = (Gtk.Label) ui_builder.get_object ("advanced_binding_r3");
-		advanced_binding_l4 = (Gtk.Entry) ui_builder.get_object ("advanced_binding_l4");
-		advanced_binding_r4 = (Gtk.Label) ui_builder.get_object ("advanced_binding_r4");
-		advanced_freeze1 = (Gtk.ToggleButton) ui_builder.get_object ("advanced_freeze1");
-		advanced_freeze2 = (Gtk.ToggleButton) ui_builder.get_object ("advanced_freeze2");
-		advanced_freeze3 = (Gtk.ToggleButton) ui_builder.get_object ("advanced_freeze3");
+		Binder.get_default().bind (code_demo_stack, "visible-child", ui_builder.get_object ("main_stack_switcher"), "visible",
+		                      BindFlags.SYNC_CREATE, 
+			((b, src, ref tgt) => {
+				tgt.set_boolean (code_demo_stack.visible_child == ui_builder.get_object ("demo"));
+				return (true);
+			}));
 
-		e5_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_1");
-		e5_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_2");
-		e5_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_3");
+		Binder.get_default().bind (this, "active-page", ui_builder.get_object ("code_and_storage"), "reveal-child",
+		                      BindFlags.SYNC_CREATE, 
+			((b, src, ref tgt) => {
+				tgt.set_boolean ((src.get_string() != "") && (src.get_string() != null));
+				return (true);
+			}));
 
-		e6_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_1");
-		e6_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_2");
-		e6_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e6_set_3");
+		Binder.get_default().bind (inspect_list, "length", ui_builder.get_object ("show_storages"), "sensitive",
+		                      BindFlags.SYNC_CREATE, 
+			((b, src, ref tgt) => {
+				tgt.set_boolean (inspect_list.length > 0);
+				return (true);
+			}));
+
+		Gtk.MenuButton show_storages = ((Gtk.MenuButton) ui_builder.get_object ("show_storages"));
+		show_storages.popover = new Gtk.Popover(show_storages);
+		show_storages.popover.add ((Gtk.Box) ui_builder.get_object ("inspect_list"));
+
+		Gtk.ListBox used_resources = (Gtk.ListBox) ui_builder.get_object ("used_resources");
+		used_resources.bind_model (inspect_list, (o) => {
+			return ((StorageInspectRow) o);
+		});
+		used_resources.row_activated.connect ((r) => {
+			if (r == null)
+				BindingInspector.show (null);
+			else
+				BindingInspector.show (PointerNamespace.get_instance().get_by_id(((StorageInspectRow) r).id));
+		});
 
 		assign_builder_css (ui_builder, "label_description", _dark_label_css);
 		assign_builder_css (ui_builder, "label_warning", _warning_label_css);
 		assign_builder_css (ui_builder, "custom_data", _title_css);
 		assign_builder_css (ui_builder, "evvo_4", _title_css);
 		return (ui_builder);
+	}
+
+	private void set_page_name (Object? obj)
+	{
+		if (obj == null)
+			return;
+		string? str = obj.get_data<string>("code");
+		if (str == null)
+			active_page = "";
+		else
+			active_page = str;
+	}
+
+	private void set_active_basic_tutorial_page (Gtk.Stack stack)
+	{
+		set_page_name (stack.visible_child);
+	}
+
+	private void set_active_demo_page (Gtk.Stack stack)
+	{
+		if (stack.visible_child == binding_tutorial_box)
+			set_active_basic_tutorial_page (basic_tutorial_stack);
+		else
+			set_page_name (stack.visible_child);
 	}
 
 	protected override void startup ()
@@ -195,20 +252,20 @@ public class test_data_bindings : Gtk.Application
 
 		init_demo_persons();
 
-		main_demo (ui_builder);
-		example1(ui_builder);
-		example2(ui_builder);
-		example3(ui_builder);
-		alias_example(ui_builder);
-		pointer_storage_example(ui_builder);
-		contract_storage_example(ui_builder);
-		example4(ui_builder);
-		example5(ui_builder);
-		example6(ui_builder);
-		example_v(ui_builder);
-		example_so(ui_builder);
-		example_vo(ui_builder);
-		example_relay(ui_builder);
+		main_demo (this, ui_builder);
+		example_simple_property_binding(this, ui_builder);
+		example_custom_property_binding(this, ui_builder);
+		example_alias_and_freeze(this, ui_builder);
+		alias_storage(this, ui_builder);
+		pointer_storage_example(this, ui_builder);
+		contract_storage_example(this, ui_builder);
+		example_pointer_set_data(this, ui_builder, _e4_events);
+		example_contract_set_data(this, ui_builder, _e5_events);
+		example_contract_chaining(this, ui_builder, _e6_events);
+		example_validation(this, ui_builder);
+		example_state_objects(this, ui_builder);
+		example_value_objects(this, ui_builder);
+		example_pointer_relay(this, ui_builder, _e7_events);
 		example_inspector(ui_builder);
 	}
 
@@ -224,170 +281,11 @@ public class test_data_bindings : Gtk.Application
 
 	public static int main (string[] args)
 	{
-		var app = new test_data_bindings ();
+		var app = new DemoAndTutorial ();
 		return (app.run (args));
 	}
 
-	public void main_demo (Gtk.Builder ui_builder)
-	{
-		string _STORAGE_ = "main-example";
-		BindingContract selection_contract = ContractStorage.get_storage(_STORAGE_).add ("main-contract", new BindingContract(null))
-			.bind ("name", name, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
-				((v) => {
-					return ((string) v != "");
-				}))
-			.bind ("surname", surname, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
-				((v) => {
-					return ((string) v != "");
-				}))
-			.bind ("required", required, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.contract;
-		
-		// chaining contract as source
-		BindingContract chain_contract = ContractStorage.get_storage(_STORAGE_).add ("chain-contract", new BindingContract(selection_contract))
-			.bind ("name", name_chain, "label", BindFlags.SYNC_CREATE)
-			.bind ("surname", surname_chain, "label", BindFlags.SYNC_CREATE)
-			.contract;
-
-		bind_person_model (items, persons, selection_contract);
-
-		// adding custom state value to contract
-		selection_contract.add_state (new CustomBindingSourceState ("validity", selection_contract, ((src) => {
-			return ((src.data != null) && (((Person) src.data).required != ""));
-		}), new string[1] { "required" }));
-
-		// adding custom value to contract
-		selection_contract.add_source_value (new CustomBindingSourceData<string> ("length", selection_contract, 
-			((src) => {
-				return ("(cumulative of string lengths)=>%i".printf((src.data != null) ? ((Person) src.data).name.length + ((Person) src.data).surname.length + ((Person) src.data).required.length : 0));
-			}), 
-			((a,b) => { return ((a == b) ? 0 : 1); }), 
-			"", false, ALL_PROPERTIES));
-
-		// bind to state. note that state is updated whenever contract source changes or specified properties in respective class get changed
-		// which makes it perfectly ok to use simple binding as this connection will be stable for whole contract life
-		PropertyBinding.bind (selection_contract.get_state_object("validity"), "state", required_not_empty, "sensitive", BindFlags.SYNC_CREATE);
-
-		// bind to binding value. note that value is updated whenever contract source changes or specified properties in respective class get changed
-		// which makes it perfectly ok to use simple binding as this connection will be stable for whole contract life
-		PropertyBinding.bind (selection_contract.get_source_value ("length"), "data", custom_data, "label", BindFlags.SYNC_CREATE, 
-			(binding, srcval, ref targetval) => {
-				targetval.set_string (((CustomBindingSourceData<string>) binding.source).data);
-				return true;
-			});
-
-		PropertyBinding.bind (selection_contract, "is-valid", is_valid_source, "sensitive", BindFlags.SYNC_CREATE);
-
-		BindingPointer infoptr = selection_contract.hold (new BindingPointerFromPropertyValue (selection_contract, "info"));
-		BindingPointer parentptr = selection_contract.hold (new BindingPointerFromPropertyValue (selection_contract, "parent"));
-
-		BindingContract info_contract = ContractStorage.get_storage(_STORAGE_).add ("info-contract", new BindingContract(infoptr))
-			.bind ("some_num", ui_builder.get_object ("e1_s1_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.contract;
-
-		BindingContract parent_contract = ContractStorage.get_storage(_STORAGE_).add ("parent-contract", new BindingContract(parentptr))
-			.bind ("name", ui_builder.get_object ("e1_s2_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.bind ("surname", ui_builder.get_object ("e1_s2_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.bind ("required", ui_builder.get_object ("e1_s2_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.contract;
-
-		PropertyBinding.bind(parent_contract, "is-valid", ui_builder.get_object ("e1_s2_g"), "visible", BindFlags.SYNC_CREATE);
-	}
-
-	public bool flood_timer()
-	{
-		_counter++;
-		this.notify_property("counter");
-		return (basic_flood_data_btn.active);
-	}
-
-	public void flooded (BindingInterface binding)
-	{
-		basic_label_right4.sensitive = false;
-		basic_label_right4.label = "*** FLOODING *** last before freeze=>%i".printf(_counter);
-	}
-
-	public void flood_over (BindingInterface binding)
-	{
-		basic_label_right4.sensitive = true;
-	}
-
-	public void example1 (Gtk.Builder ui_builder)
-	{
-		PropertyBinding.bind (basic_entry_left, "text", basic_entry_right, "text", BindFlags.SYNC_CREATE);
-
-		PropertyBinding.bind (basic_entry_left2, "text", basic_entry_right2, "text", BindFlags.BIDIRECTIONAL | BindFlags.SYNC_CREATE);
-
-		PropertyBinding.bind (basic_label_left3, "label", basic_entry_right3, "text", BindFlags.REVERSE_DIRECTION | BindFlags.SYNC_CREATE);
-
-		PropertyBinding basic4 = PropertyBinding.bind (this, "counter", basic_label_right4, "label", BindFlags.FLOOD_DETECTION | BindFlags.SYNC_CREATE);
-		basic4.flood_detected.connect (flooded);
-		basic4.flood_stopped.connect (flood_over);
-		basic_flood_data_btn.toggled.connect (() => {
-			if (basic_flood_data_btn.active == true)
-				GLib.Timeout.add (20, flood_timer, GLib.Priority.DEFAULT);
-		});
-
-		PropertyBinding basic5 = PropertyBinding.bind (basic_entry_left5, "text", basic_label_right5, "label", BindFlags.MANUAL_UPDATE | BindFlags.SYNC_CREATE);
-		basic_transfer_data_btn = (Gtk.Button) ui_builder.get_object ("basic_transfer_data_btn");
-		basic_transfer_data_btn.clicked.connect (() => {
-			basic5.update_from_source();
-		});
-
-		PropertyBinding.bind (basic_entry_left6, "text", basic_entry_right6, "text", BindFlags.BIDIRECTIONAL | BindFlags.SYNC_CREATE | BindFlags.DELAYED);
-	}
-
-	public void example2 (Gtk.Builder ui_builder)
-	{
-		PropertyBinding.bind (custom_binding_l1, "text", custom_binding_r1, "label", BindFlags.SYNC_CREATE, ((b, src, ref tgt) => {
-				tgt.set_string("value=" + src.get_string());
-				return (true);
-		}));
-
-		PropertyBinding.bind (custom_binding_l2, "text", custom_binding_r2, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, 
-			((binding, src, ref tgt) => {
-				((Gtk.Entry) binding.target).text = ((Gtk.Entry) binding.source).text;
-				return (false);
-			}),
-			((binding, src, ref tgt) => {
-				((Gtk.Entry) binding.source).text = ((Gtk.Entry) binding.target).text;
-				return (false);
-			}));
-
-		GLib.Value.register_transform_func (typeof(string), typeof(bool), ((src, ref tgt) => {
-			tgt.set_boolean ((src.get_string() != "") && (src.get_string() != null));
-		}));
-
-		PropertyBinding.bind (custom_binding_l3, "text", custom_binding_r3, "active", BindFlags.SYNC_CREATE);
-
-		PropertyBinding.bind (custom_binding_l4, "text", custom_binding_r4, "active", BindFlags.SYNC_CREATE | BindFlags.INVERT_BOOLEAN);
-	}
-
-	private void toggle_freeze4 (Gtk.ToggleButton btn)
-	{
-		if (btn.active == true)
-			advanced4.freeze();
-		else
-			advanced4.unfreeze();
-	}
-
-	public void example3 (Gtk.Builder ui_builder)
-	{
-		PropertyBinding.bind (advanced_binding_l1, "&", advanced_binding_r1, "&", BindFlags.SYNC_CREATE);
-
-		PropertyAlias.get_instance("alias:text")
-			.register (typeof(Gtk.Entry), "text")
-			.register (typeof(Gtk.Label), "label");
-		PropertyBinding.bind (advanced_binding_l2, "alias:text", advanced_binding_r2, "alias:text", BindFlags.SYNC_CREATE);
-
-
-		advanced4 = PropertyBinding.bind (advanced_binding_l4, "&", advanced_binding_r4, "&", BindFlags.SYNC_CREATE);
-		advanced_freeze1.toggled.connect (() => { toggle_freeze4 (advanced_freeze1); });
-		advanced_freeze2.toggled.connect (() => { toggle_freeze4 (advanced_freeze2); });
-		advanced_freeze3.toggled.connect (() => { toggle_freeze4 (advanced_freeze3); });
-	}
-
-	private void alias_example (Gtk.Builder ui_builder)
+	private void alias_storage (DemoAndTutorial demo, Gtk.Builder ui_builder)
 	{
 		AliasArray aliases = track_property_aliases();
 		bind_kv_listbox<string, Type, string>((Gtk.ListBox) ui_builder.get_object ("aliases"), aliases, ((kv) => {
@@ -403,7 +301,7 @@ public class test_data_bindings : Gtk.Application
 		);
 	}
 
-	private void pointer_storage_example (Gtk.Builder ui_builder)
+	private void pointer_storage_example (DemoAndTutorial demo, Gtk.Builder ui_builder)
 	{
 		PointerStorage.get_storage("test_group1").add ("pointer 1", new BindingContract());
 		PointerStorage.get_storage("test_group1").add ("pointer 2", new BindingContract());
@@ -427,7 +325,7 @@ public class test_data_bindings : Gtk.Application
 		);
 	}
 
-	private void contract_storage_example (Gtk.Builder ui_builder)
+	private void contract_storage_example (DemoAndTutorial demo, Gtk.Builder ui_builder)
 	{
 		ContractStorage.get_storage("test_group1").add ("contract 1", new BindingContract());
 		ContractStorage.get_storage("test_group1").add ("contract 2", new BindingContract());
@@ -451,197 +349,9 @@ public class test_data_bindings : Gtk.Application
 		);
 	}
 
-	public void example4 (Gtk.Builder ui_builder)
-	{
-		string _STORAGE_ = "example--pointer-set-data";
-		// note the use of pointer storage here
-		//
-		// this allows avoiding local variable as pointer is accessible by name
-		// and in this case this is solely for demo purpose
-		PointerStorage.get_storage(_STORAGE_).add("example-pointer-set-data", new BindingPointer(john_doe));
 
-		e4_set_1.toggled.connect (() => {
-			if (e4_set_1.active == true)
-				PointerStorage.get_storage(_STORAGE_).find("example-pointer-set-data").data = john_doe;
-		});
-		e4_set_2.toggled.connect (() => {
-			if (e4_set_2.active == true)
-				PointerStorage.get_storage(_STORAGE_).find("example-pointer-set-data").data = unnamed_person;
-		});
-		e4_set_3.toggled.connect (() => {
-			if (e4_set_3.active == true)
-				PointerStorage.get_storage(_STORAGE_).find("example-pointer-set-data").data = null;
-		});
 
-		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e4_events"), _e4_events);
 
-		_e4_events.resource = PointerStorage.get_storage(_STORAGE_).find("example-pointer-set-data");
-	}
 
-	public void example5 (Gtk.Builder ui_builder)
-	{
-		string _STORAGE_ = "example--contract-set-data";
-		// note the use of contract storage here
-		//
-		// this allows avoiding local variable as pointer is accessible by name
-		// and in this case this is solely for demo purpose
-		ContractStorage.get_storage(_STORAGE_)
-			.add("example-contract-storage-set-data", new BindingContract(john_doe))
-				.bind ("name", ui_builder.get_object ("e5_name"), "label", BindFlags.SYNC_CREATE)
-				.bind ("surname", ui_builder.get_object ("e5_surname"), "label", BindFlags.SYNC_CREATE);
 
-		e5_set_1.toggled.connect (() => {
-			if (e5_set_1.active == true)
-				ContractStorage.get_storage(_STORAGE_).find("example-contract-storage-set-data").data = john_doe;
-		});
-		e5_set_2.toggled.connect (() => {
-			if (e5_set_2.active == true)
-				ContractStorage.get_storage(_STORAGE_).find("example-contract-storage-set-data").data = unnamed_person;
-		});
-		e5_set_3.toggled.connect (() => {
-			if (e5_set_3.active == true)
-				ContractStorage.get_storage(_STORAGE_).find("example-contract-storage-set-data").data = null;
-		});
-
-		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e5_events"), _e5_events);
-
-		_e5_events.resource = ContractStorage.get_storage(_STORAGE_).find("example-contract-storage-set-data");
-	}
-
-	public void example6 (Gtk.Builder ui_builder)
-	{
-		string _STORAGE_ = "example-contract-chaining";
-		// note the use of contract storage here
-		//
-		// this allows avoiding local variable as pointer is accessible by name
-		// and in this case this is solely for demo purpose
-		ContractStorage.get_storage(_STORAGE_)
-			.add("main-contract", new BindingContract(john_doe))
-				.bind ("name", ui_builder.get_object ("e6_name"), "label", BindFlags.SYNC_CREATE)
-				.bind ("surname", ui_builder.get_object ("e6_surname"), "label", BindFlags.SYNC_CREATE);
-		ContractStorage.get_storage(_STORAGE_)
-			.add("sub-contract", new BindingContract(ContractStorage.get_storage(_STORAGE_).find("main-contract")))
-				.bind ("required", ui_builder.get_object ("e6_required"), "label", BindFlags.SYNC_CREATE);
-
-		e6_set_1.toggled.connect (() => {
-			if (e6_set_1.active == true)
-				ContractStorage.get_storage(_STORAGE_).find("main-contract").data = john_doe;
-		});
-		e6_set_2.toggled.connect (() => {
-			if (e6_set_2.active == true)
-				ContractStorage.get_storage(_STORAGE_).find("main-contract").data = unnamed_person;
-		});
-		e6_set_3.toggled.connect (() => {
-			if (e6_set_3.active == true)
-				ContractStorage.get_storage(_STORAGE_).find("main-contract").data = null;
-		});
-
-		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e6_events"), _e6_events);
-
-		_e6_events.resource = ContractStorage.get_storage(_STORAGE_).find("sub-contract");
-	}
-
-	public void example_v (Gtk.Builder ui_builder)
-	{
-		string _STORAGE_ = "example-validation";
-		BindingContract my_contract = ContractStorage.get_storage(_STORAGE_).add ("my-contract", new BindingContract());
-		my_contract.bind ("name", ui_builder.get_object ("evo_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
-			((v) => {
-				return ((string) v != "");
-			}));
-		my_contract.bind ("surname", ui_builder.get_object ("evo_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
-			((v) => {
-				return ((string) v != "");
-			}));
-		my_contract.bind ("required", ui_builder.get_object ("evo_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-
-		bind_person_model ((Gtk.ListBox) ui_builder.get_object ("evo_list"), persons, my_contract);
-
-		PropertyBinding.bind(my_contract, "is_valid", ui_builder.get_object ("evo_b1"), "sensitive", BindFlags.SYNC_CREATE);
-	}
-
-	public void example_so (Gtk.Builder ui_builder)
-	{
-		string _STORAGE_ = "example-state-objects";
-		BindingContract my_contract = ContractStorage.get_storage(_STORAGE_).add ("my-contract", new BindingContract())
-			.bind ("name", ui_builder.get_object ("eso_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.bind ("surname", ui_builder.get_object ("eso_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.bind ("required", ui_builder.get_object ("eso_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.contract;
-
-		bind_person_model ((Gtk.ListBox) ui_builder.get_object ("eso_list"), persons, my_contract);
-
-		// adding custom state value to contract
-		my_contract.add_state (new CustomBindingSourceState ("validity", my_contract, ((src) => {
-			return ((src.data != null) && (((Person) src.data).required != ""));
-		}), new string[1] { "required" }));
-
-		PropertyBinding.bind(my_contract.get_state_object("validity"), "state", ui_builder.get_object ("eso_b1"), "sensitive", BindFlags.SYNC_CREATE);
-	}
-
-	public void example_vo (Gtk.Builder ui_builder)
-	{
-		string _STORAGE_ = "example-value-objects";
-		BindingContract my_contract = ContractStorage.get_storage(_STORAGE_).add ("my-contract", new BindingContract())
-			.bind ("name", ui_builder.get_object ("evvo_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.bind ("surname", ui_builder.get_object ("evvo_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.bind ("required", ui_builder.get_object ("evvo_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.contract;
-
-		bind_person_model ((Gtk.ListBox) ui_builder.get_object ("evvo_list"), persons, my_contract);
-
-		// adding custom value to contract
-		my_contract.add_source_value (new CustomBindingSourceData<string> ("length", my_contract, 
-			((src) => {
-				return ("(cumulative of string lengths)=>%i".printf((src.data != null) ? ((Person) src.data).name.length + ((Person) src.data).surname.length + ((Person) src.data).required.length : 0));
-			}), 
-			((a,b) => { return ((a == b) ? 0 : 1); }), 
-			"", false, ALL_PROPERTIES));
-
-		// bind to binding value. note that value is updated whenever contract source changes or specified properties in respective class get changed
-		// which makes it perfectly ok to use simple binding as this connection will be stable for whole contract life
-		PropertyBinding.bind (my_contract.get_source_value ("length"), "data", ui_builder.get_object ("evvo_4"), "&", BindFlags.SYNC_CREATE, 
-			(binding, srcval, ref targetval) => {
-				targetval.set_string (((CustomBindingSourceData<string>) binding.source).data);
-				return true;
-			});
-	}
-
-	public void example_relay (Gtk.Builder ui_builder)
-	{
-		string _STORAGE_ = "example-relay";
-		BindingContract my_contract = ContractStorage.get_storage(_STORAGE_).add ("main-contract", new BindingContract());
-		bind_person_model ((Gtk.ListBox) ui_builder.get_object ("e7_list"), persons, my_contract);
-
-		BindingPointer infoptr = my_contract.hold (new BindingPointerFromPropertyValue (my_contract, "info"));
-		BindingPointer parentptr = my_contract.hold (new BindingPointerFromPropertyValue (my_contract, "parent"));
-
-		BindingContract info_contract = ContractStorage.get_storage(_STORAGE_).add ("info-contract", new BindingContract(infoptr));
-		BindingContract parent_contract = ContractStorage.get_storage(_STORAGE_).add ("parent-contract", new BindingContract(parentptr));
-
-		my_contract.bind ("name", ui_builder.get_object ("e7_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.bind ("surname", ui_builder.get_object ("e7_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.bind ("required", ui_builder.get_object ("e7_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-
-		info_contract.bind ("some_num", ui_builder.get_object ("e7_s1_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-
-		parent_contract.bind ("name", ui_builder.get_object ("e7_s2_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.bind ("surname", ui_builder.get_object ("e7_s2_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-			.bind ("required", ui_builder.get_object ("e7_s2_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-
-		PropertyBinding.bind(parent_contract, "is-valid", ui_builder.get_object ("e7_s2_g"), "visible", BindFlags.SYNC_CREATE);
-
-		bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e7_events"), _e7_events);
-		_e7_events.resource = parent_contract;
-	}
-
-	public void example_inspector (Gtk.Builder ui_builder)
-	{
-		((Gtk.Button) ui_builder.get_object ("show_inspector")).clicked.connect (() =>{
-			GDataGtk.BindingInspector.show(null);
-		});
-		((Gtk.Button) ui_builder.get_object ("show_inspector_with_target")).clicked.connect (() =>{
-			GDataGtk.BindingInspector.show(ContractStorage.get_storage("main-example").find ("chain-contract"));
-		});
-	}
 }

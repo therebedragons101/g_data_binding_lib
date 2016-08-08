@@ -104,12 +104,14 @@ GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	gtk/widgets/pointer_info.vala \
 	gtk/widgets/widget_defaults.vala
 
-DEMO_INCLUDES := demos/common/css.vala \
+DEMO_INCLUDES := common/markup.vala \
+	demos/common/css.vala \
 	demos/common/persons.vala
 
 DEMO_SOURCES := demos/demo_and_tutorial/main.vala \
+	demos/demo_and_tutorial/simple_binding/*.vala \
+	demos/demo_and_tutorial/main_demo.vala \
 	${RESOURCE}demo_and_tutorial.* \
-	common/markup.vala \
 	gtk/inspector/event_array.vala \
 	gtk/inspector/methods.vala
 

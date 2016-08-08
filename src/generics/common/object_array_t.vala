@@ -158,12 +158,14 @@ namespace GData.Generics
 		{
 			if (force_unique == true) {
 				add_unique (object);
-				element_added (object);
+				if (_dont_dispatch_signals == false)
+					element_added (object);
 			}
 			else {
 				_array.append_val (object);
 				items_changed (length-1, 0, 1);
-				element_added (object);
+				if (_dont_dispatch_signals == false)
+					element_added (object);
 			}
 		}
 
@@ -191,7 +193,8 @@ namespace GData.Generics
 			}
 			_array.append_val (object);
 			items_changed (length-1, 0, 1);
-			element_added (object);
+			if (_dont_dispatch_signals == false)
+				element_added (object);
 			return (object);
 		}
 
@@ -221,10 +224,12 @@ namespace GData.Generics
 			if ((index < 0) || (index >= length))
 				return;
 			T element = _array.data[index];
-			before_removing_element (element, index);
+			if (_dont_dispatch_signals == false)
+				before_removing_element (element, index);
 			items_changed (index, 1, 0);
 			_array.remove_index (index);
-			element_removed (element);
+			if (_dont_dispatch_signals == false)
+				element_removed (element);
 			if (length == 0)
 				array_cleared();
 		}
@@ -410,6 +415,9 @@ namespace GData.Generics
 				_compare_delegate = ((a, b) => { return (compare___by_properties (a, b)); });
 			else if (compare_by == CompareDataBy.FUNCTION)
 				_compare_delegate = compare_method;
+			this.element_added.connect (() => { notify_property("length"); });
+			this.element_removed.connect (() => { notify_property("length"); });
+			this.array_cleared.connect (() => { notify_property("length"); });
 		}
 	}
 }

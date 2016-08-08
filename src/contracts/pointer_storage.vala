@@ -83,9 +83,23 @@ namespace GData
 		}
 
 		/**
-		 * Resolves pointer storage by specified name. Unlike find() this
-		 * method guarantees resulting storage. If storage is not found new one
-		 * with that name is created
+		 * Resolves pointer storage by specified name. Unlike get_storage() 
+		 * this method does not guarantee resulting storage. If storage is not 
+		 * found null is returned 
+		 * 
+		 * @since 0.1
+		 * @return Pointer storage reference or null if not found
+		 */
+		public static PointerStorage? find_storage (string name)
+		{
+			_check();
+			return (_storages.get (name));
+		}
+
+		/**
+		 * Resolves pointer storage by specified name. Unlike find_storage() 
+		 * this method guarantees resulting storage. If storage is not found new 
+		 * one with that name is created
 		 * 
 		 * @since 0.1
 		 * @return Pointer storage reference
@@ -160,12 +174,12 @@ namespace GData
 			}
 			if (_objects == null)
 				_objects = new HashTable<string, BindingPointer> (str_hash, str_equal);
-			string? s = obj.get_data<string?>("stored-as");
+			string? s = obj.stored_as;
 			if ((s != null) && (s != "")) {
 				GLib.critical ("Pointer \"%s\"is already stored as \"%s\"!".printf(name, s));
 				return (obj);
 			}
-			obj.set_data<string?>("stored-as", "%s/%s".printf(this.name, name));
+			obj.stored_as = "%s/%s".printf(this.name, name);
 			_objects.insert (name, obj);
 			added (name, obj);
 			return (obj);

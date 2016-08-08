@@ -150,6 +150,26 @@ namespace GData
 		}
 
 		/**
+		 * Returns store namespace address where it is stored
+		 * 
+		 * @since 0.1
+		 */
+		public string? stored_as {
+			owned get { 
+				string? s = get_data<string?>("stored-as");
+				if ((s == null) || (s == ""))
+					return (null);
+				return (s); 
+			}
+			internal set {
+				if (stored_as != null)
+					GLib.error ("Pointer (@%i) is already stored as: '%s'", id, stored_as);
+				else
+					set_data<string?>("stored-as", value);
+			}
+		}
+
+		/**
 		 * Enables type restriction validation for subclassing needs
 		 * 
 		 * Note that null value is handled internally. Default return in binding
