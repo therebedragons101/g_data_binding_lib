@@ -1,5 +1,7 @@
 # Data binding library in Vala (GLib)
 
+**Scroll down for videos and screenshots**
+
 License (GPL/LGPL)
 
 **IMPORTANT!
