@@ -33,12 +33,16 @@ The demo/tutorial is a fully working GTK+ front end showing how g_data_binding_l
 
 Binding inspector in action (inspecting demo, no code is necessary for this)
 **click on screenshot to see video**
-[![ScreenShot](https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/demos/demo_and_tutorial/inspector-screenshot.png)](https://youtu.be/-9Sv2Tkj6Gk)
-- still missing things (state/value object inspection, full source map draw, property binding namespace, better event selector
+[![ScreenShot](https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/demos/demo_and_tutorial/inspector-screenshot.png)](https://youtu.be/ua8IgmbfRqA)
+- still missing things (full source map draw)
+
+Object inspector in action (inspecting demo, no code is necessary for this and if wanted can be usable for any purpose since it can be extended in any way)
+**click on screenshot to see video**
+[![ScreenShot](https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/demos/demo_and_tutorial/object-inspector-screenshot.png)](https://youtu.be/d9vSbwbvdBI)
 
 Demo in action
 **click on screenshot to see video**
-[![ScreenShot](https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/demos/demo_and_tutorial/screenshot.png)](https://youtu.be/HDNQg7ShnDg)
+[![ScreenShot](https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/demos/demo_and_tutorial/screenshot.png)](https://youtu.be/wh50UUniBk0)
 
 ```bash
 cd src
