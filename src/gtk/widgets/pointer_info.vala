@@ -48,6 +48,28 @@ namespace GDataGtk
 				background-color: rgba(40,40,40,1.0);
 			}
 		""";
+
+		private string _state_css = """
+			* {
+				border: solid 2px gray;
+				border-top-style: none;
+				padding: 2px 2px 2px 2px;
+				border-radius: 0px 0px 5px 5px;
+				color: rgba (255,255,255,0.7);
+				background-color: rgba(60,60,60,1.0);
+			}
+		""";
+
+		private string _value_css = """
+			* {
+				border: solid 2px gray;
+				border-top-style: none;
+				padding: 2px 2px 2px 2px;
+				border-radius: 0px 0px 5px 5px;
+				color: rgba (255,255,255,0.7);
+				background-color: rgba(80,80,80,1.0);
+			}
+		""";
 //				background-color: rgba(0,0,0,1.0);
 
 		private StrictWeakReference<BindingPointer?> _pointer;
@@ -115,10 +137,14 @@ namespace GDataGtk
 		[GtkChild] private Gtk.Box title_padding_box;
 		[GtkChild] private Gtk.Box description_padding_box;
 		[GtkChild] private Gtk.Box item_padding_box;
+		[GtkChild] private Gtk.Box value_padding_box;
+		[GtkChild] private Gtk.Box state_padding_box;
 		[GtkChild] private Gtk.Image icon;
 		[GtkChild] private Gtk.Label title;
 		[GtkChild] private Gtk.Label description;
 		[GtkChild] private Gtk.Label items;
+		[GtkChild] private Gtk.Label values;
+		[GtkChild] private Gtk.Label states;
 		[GtkChild] private Gtk.Image chain_link_type;
 
 		private void reset_link_icon()
@@ -139,6 +165,11 @@ namespace GDataGtk
 			opacity = (is_selected == true) ? 1.0f : 0.5f;
 		}
 
+		private string section_title (string str)
+		{
+			return (bold(color("chocolate", underline("%s\n".printf(str)))));
+		}
+
 		private void reset_display()
 		{
 			if (pointer == null) {
@@ -151,7 +182,7 @@ namespace GDataGtk
 			bool b = false;
 			if (pointer.is_relay == true)
 				dest = pointer.redirect_to (ref b);
-			title.set_markup("typeof(%s)".printf (bold(pointer.get_type().name())));
+			title.set_markup(fix_markup2(bold(_get_object_str_desc(pointer))));
 			string desc = small("UID: @<b>%i</b>".printf(pointer.id));
 			string? ns = _get_pointer_namespace(pointer);
 			chain_link_type.visible = (is_binding_pointer(dest) == true);
@@ -167,14 +198,36 @@ namespace GDataGtk
 				desc = "%s\n%s".printf (desc, dsc);
 			}
 			description.set_markup (small(desc));
-			item_padding_box.visible = is_binding_contract (pointer);
+			// safe cast
+			BindingContract? c = as_contract(pointer);
+			string _items_ = "";
 			if (is_binding_contract(pointer) == true) {
-				BindingContract c = as_contract(pointer);
-				string props = "";
+				// properties
 				for (int i=0; i<c.length; i++)
-					props = "%s%s%s".printf(props, (props == "") ? "" : "\n", c.get_item_at_index(i).as_str(true));
-				items.set_markup (small(props));
+					_items_ = "%s%s%s".printf(_items_, (_items_ == "") ? "" : "\n", c.get_item_at_index(i).as_str(true));
+				items.set_markup (small("%s%s".printf(section_title("PROPERTIES"), _items_)));
 			}
+			item_padding_box.visible = !((is_binding_contract(pointer) == false) || (_items_ == ""));
+			// value objects
+			_items_ = "";
+			if (is_binding_contract(pointer) == true) {
+				GObjectArray? sarr = c.get_data<GObjectArray> (BINDING_SOURCE_STATE_DATA);
+				if (sarr != null)
+					for (int i=0; i<sarr.length; i++)
+						_items_ = "%s%s%s".printf(_items_, (_items_ == "") ? "" : "\n", bold("\"%s\"").printf(as_state_object(sarr.data[i]).name));
+				states.set_markup (small("%s%s".printf(section_title("STATE OBJECTS"), _items_)));
+			}
+			value_padding_box.visible = !((is_binding_contract(pointer) == false) || (_items_ == ""));
+			// state objects
+			_items_ = "";
+			if (is_binding_contract(pointer) == true) {
+				GObjectArray? varr = c.get_data<GObjectArray> (BINDING_SOURCE_VALUE_DATA);
+				if (varr != null)
+					for (int i=0; i<varr.length; i++)
+						_items_ = "%s%s%s".printf(_items_, (_items_ == "") ? "" : "\n", bold("\"%s\"").printf(as_binding_object(varr.data[i]).name));
+				values.set_markup (small("%s%s".printf(section_title("VALUE OBJECTS"), _items_)));
+			}
+			state_padding_box.visible = !((is_binding_contract(pointer) == false) || (_items_ == ""));
 		}
 
 		private void handle_pointer_invalid()
@@ -187,6 +240,16 @@ namespace GDataGtk
 			reset_opacity();
 		}
 
+		/**
+		 * Returns array of linear chain elements based on new pointer and 
+		 * checks if currently displayed chain already contains new element in
+		 * order to avoid refresh
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param selection_check Pointer being checked
+		 * @param pointer Pointer whose chain needs to be built
+		 */
 		public static PointerInfo[]? get_linear_chain (BindingPointer selection_check, BindingPointer? pointer)
 		{
 			if (pointer == null)
@@ -194,15 +257,21 @@ namespace GDataGtk
 			GLib.Array<WeakReference<BindingPointer>> arr = new GLib.Array<WeakReference<BindingPointer>>();
 			arr.append_val (new WeakReference<BindingPointer>(pointer));
 			Object? obj;
-			if (pointer.is_relay == true)
+			if (pointer.is_relay == true) {
+				if (is_binding_pointer(pointer.data) == true)
+					arr.append_val (new WeakReference<BindingPointer>(as_pointer(pointer.data)));
 				obj = pointer.get_source();
+			}
 			else
 				obj = pointer.data;
 			bool b = false;
 			while (is_binding_pointer(obj) == true) {
 				arr.append_val (new WeakReference<BindingPointer>(as_pointer(obj)));
-				if (as_pointer(obj).is_relay == true)
+				if (as_pointer(obj).is_relay == true) {
+					if (is_binding_pointer(pointer.data) == true)
+						arr.append_val (new WeakReference<BindingPointer>(as_pointer(pointer.data)));
 					obj = as_pointer(obj).redirect_to(ref b);
+				}
 				else
 					obj = as_pointer(obj).data;
 			}
@@ -222,6 +291,14 @@ namespace GDataGtk
 		 */
 		public signal void selected (BindingPointer? pointer);
 
+		/**
+		 * Pointer chain display widget
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param selection_check Existance check to avoid rebuilding of chain
+		 * @param pointer Pointer being displayed
+		 */
 		public PointerInfo(BindingPointer selection_check, BindingPointer pointer)
 		{
 			_pointer = new StrictWeakReference<BindingPointer?> (null, handle_pointer_invalid);
@@ -231,6 +308,8 @@ namespace GDataGtk
 			assign_css (title_padding_box, _title_css);
 			assign_css (description_padding_box, _description_css);
 			assign_css (item_padding_box, _item_css);
+			assign_css (value_padding_box, _value_css);
+			assign_css (state_padding_box, _state_css);
 			assign_image_from_icon (icon, ((is_binding_contract(pointer) == true) ? CONTRACT_ICON : POINTER_ICON), 
 				null, null, __get_icon_size(Gtk.IconSize.SMALL_TOOLBAR), false);
 			event_box.button_press_event.connect ((e) => {

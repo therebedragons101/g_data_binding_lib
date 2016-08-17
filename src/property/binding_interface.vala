@@ -17,6 +17,15 @@ namespace GData
 	public interface BindingInterface : Object
 	{
 		/**
+		 * Returns true if binding is currently active, false if not
+		 * 
+		 * @since 0.1
+		 */
+		public bool activated {
+			get { return (flags.IS_ACTIVE() == true); }
+		}
+
+		/**
 		 * Source object
 		 * 
 		 * @since 0.1
@@ -126,6 +135,63 @@ namespace GData
 			return (this);
 		}
 
+		/**
+		 * Returns string representation for binding description
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param markup Enable markup
+		 * @return String representation for binding description
+		 */
+		public string as_short_str (bool markup = false)
+		{
+			string dir = flags.get_direction_arrow();
+			if (markup == true)
+				return ("%s%s%s".printf (bold(fix_markup(source_property)), dir, bold(fix_markup(target_property))));
+			else
+				return ("%s%s%s".printf (source_property, dir, target_property));
+		}
+
+		/**
+		 * Returns string representation for binding description
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param markup Enable markup
+		 * @return String representation for binding description
+		 */
+		public string as_str (bool markup = false)
+		{
+			return ("%s/%s".printf (as_short_str(markup), bool_activity(activated, markup)));
+		}
+
+		public string sources_as_str(bool markup = false, GetObjectDescriptionStringDelegate? method = null)
+		{
+			ParamSpec? psource = TypeInformation.get_instance().find_property_from_type (get_type(), "source");
+			ParamSpec? ptarget = TypeInformation.get_instance().find_property_from_type (get_type(), "target");
+			if ((psource == null) && (ptarget == null))
+				return ("");
+			string src;
+			string tgt;
+			GLib.Value sval = GLib.Value(typeof(Object));
+			GLib.Value tval = GLib.Value(typeof(Object));
+			if (psource != null)
+				get_property (psource.name, ref sval);
+			if (ptarget != null)
+				get_property (ptarget.name, ref tval);
+			Object? osrc = sval.get_object();
+			Object? otgt = tval.get_object();
+			if (method != null) {
+				src = (psource == null) ? "" : "%s %s".printf (small(italic("Source:", markup), markup), method(osrc, markup).replace("\n", " "));
+				tgt = (ptarget == null) ? "" : "%s %s".printf (small(italic("Target:", markup), markup), method(otgt, markup).replace("\n", " "));
+			}
+			else {
+				src = (psource == null) ? "" : "%s %s".printf (small(italic("Source:", markup), markup), TYPE_COLOR(bold(psource.value_type.name())));
+				tgt = (ptarget == null) ? "" : "%s %s".printf (small(italic("Target:", markup), markup), TYPE_COLOR(bold(ptarget.value_type.name())));
+			}
+			string delim = ((src != "") && (tgt != "")) ? "\n" : "";
+			return ("%s%s%s".printf (src, delim, tgt));
+		}
 		/**
 		 * Signal emited upon unbind of binding interface
 		 * 

@@ -40,11 +40,11 @@ namespace GData
 		 */
 		public void clean_state_objects()
 		{
-			GLib.Array<CustomBindingSourceState>? arr = get_data<GLib.Array<CustomBindingSourceState>> (BINDING_SOURCE_STATE_DATA);
+			GObjectArray? arr = get_data<GObjectArray> (BINDING_SOURCE_STATE_DATA);
 			if (arr == null)
 				return;
 			while (arr.length > 0)	
-				remove_state (arr.data[arr.length-1].name);
+				remove_state (as_state_object(arr.data[arr.length-1]).name);
 		}
 
 		/**
@@ -57,15 +57,16 @@ namespace GData
 		 */
 		public CustomBindingSourceState add_state (CustomBindingSourceState state_object)
 		{
-			GLib.Array<CustomBindingSourceState>? arr = get_data<GLib.Array<CustomBindingSourceState>> (BINDING_SOURCE_STATE_DATA);
+			GObjectArray? arr = get_data<GObjectArray> (BINDING_SOURCE_STATE_DATA);
 			if (arr == null) {
-				arr = new GLib.Array<CustomBindingSourceState>();
-				set_data<GLib.Array<CustomBindingSourceState>> (BINDING_SOURCE_STATE_DATA, arr);
+				arr = new GObjectArray();
+				set_data<GObjectArray> (BINDING_SOURCE_STATE_DATA, arr);
 			}
 			for (int i=0; i<arr.length; i++)
-				if (arr.data[i].name == state_object.name)
-					return (arr.data[i]);
-			arr.append_val (state_object);
+				if (as_state_object(arr.data[i]).name == state_object.name)
+					return (as_state_object(arr.data[i]));
+			arr.add (state_object);
+			state_objects_changed (state_object, ContractChangeType.ADDED);
 			return (state_object);
 		}
 
@@ -78,12 +79,12 @@ namespace GData
 		 */
 		public CustomBindingSourceState? get_state_object (string name)
 		{
-			GLib.Array<CustomBindingSourceState>? arr = get_data<GLib.Array<CustomBindingSourceState>> (BINDING_SOURCE_STATE_DATA);
+			GObjectArray? arr = get_data<GObjectArray> (BINDING_SOURCE_STATE_DATA);
 			if (arr == null)
 				return (null);
 			for (int i=0; i<arr.length; i++)
-				if (arr.data[i].name == name)
-					return ((CustomBindingSourceState?) arr.data[i]);
+				if (as_state_object(arr.data[i]).name == name)
+					return (as_state_object(arr.data[i]));
 			return (null);
 		}
 
@@ -95,16 +96,31 @@ namespace GData
 		 */
 		public void remove_state (string name)
 		{
-			GLib.Array<CustomBindingSourceState>? arr = get_data<GLib.Array<CustomBindingSourceState>> (BINDING_SOURCE_STATE_DATA);
+			GObjectArray? arr = get_data<GObjectArray> (BINDING_SOURCE_STATE_DATA);
 			if (arr == null)
 				return;
 			for (int i=0; i<arr.length; i++) {
-				if (arr.data[i].name == name) {
-					arr.data[i].disconnect_object();
-					arr.remove_index (i);
+				if (as_state_object(arr.data[i]).name == name) {
+					CustomBindingSourceState obj = as_state_object(arr.data[i]);
+					arr.remove_at_index (i);
+					state_objects_changed (obj, ContractChangeType.REMOVED);
+					obj.disconnect_object();
 					return;
 				}
 			}
 		}
+
+		/**
+		 * Signal is sent whenever state object is added or removed. State 
+		 * change is never signaled here. For value change it is better to rely
+		 * on property value and binding to the object
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param object Object being added or removed
+		 * @param change_type Type of change
+		 */
+		public signal void state_objects_changed (CustomBindingSourceState object, ContractChangeType change_type);
 	}
 }
+

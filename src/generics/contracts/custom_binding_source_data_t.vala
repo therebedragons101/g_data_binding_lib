@@ -118,10 +118,10 @@ namespace GData.Generics
 		 *                             ALL_PROPERTIES or null for cases when
 		 *                             all or none are to be used.
 		 */ 
-		public CustomBindingSourceData (string name, BindingPointer source, owned CustomBindingSourceDataFunc<T> get_data_method, owned CompareFunc<T>? compare_method, T null_value,
+		public CustomBindingSourceData (string name, BindingPointer source, string description = "", owned CustomBindingSourceDataFunc<T> get_data_method, owned CompareFunc<T>? compare_method, T null_value,
 		                                bool always_refresh = false, string[]? connected_properties = null)
 		{
-			base (name, source, connected_properties);
+			base (name, source, description, connected_properties);
 			_null_value = null_value;
 			_always_refresh = always_refresh;
 			_resolve_data = (owned) get_data_method;

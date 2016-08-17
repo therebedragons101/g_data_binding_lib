@@ -64,9 +64,9 @@ namespace GData
 		 *                             ALL_PROPERTIES or null for cases when
 		 *                             all or none are to be used.
 		 */ 
-		public CustomBindingSourceState (string name, BindingPointer source, owned CustomBindingSourceStateFunc state_check_method, string[]? connected_properties = null)
+		public CustomBindingSourceState (string name, BindingPointer source, string description = "", owned CustomBindingSourceStateFunc state_check_method, string[]? connected_properties = null)
 		{
-			base (name, source, connected_properties);
+			base (name, source, description, connected_properties);
 			_check_state = (owned) state_check_method;
 			properties_changed.connect (check_source_state);
 			manual_recalculation.connect (check_source_state);

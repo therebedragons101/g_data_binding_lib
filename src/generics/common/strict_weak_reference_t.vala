@@ -60,7 +60,7 @@ namespace GData.Generics
 		 *
 		 * @param set_to_target Specifies object being pointed with target
 		 */
-		public StrictWeakReference (T? set_to_target, WeakReferenceInvalid? notify_method = null)
+		public StrictWeakReference (T? set_to_target = null, WeakReferenceInvalid? notify_method = null)
 		{
 			base (set_to_target);
 			_notify_method = notify_method;

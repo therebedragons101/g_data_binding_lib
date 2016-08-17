@@ -20,7 +20,7 @@ namespace GData
 	 * 
 	 * @since 0.1
 	 */
-	public class Binder : Object
+	public class Binder : Object, HasDescription
 	{
 		private static Binder __default_binder = null;
 		private static Binder _default_binder = null;
@@ -47,7 +47,7 @@ namespace GData
 		{
 			if (_default_binder == null) {
 				if (__default_binder == null)
-					__default_binder = new Binder();
+					__default_binder = new Binder().set_description(__DEFAULT__);
 				_default_binder = __default_binder;
 			}
 			return (_default_binder);
@@ -121,6 +121,44 @@ namespace GData
 			return (binding);
 		}
 
+		private string _description = "";
+		/**
+		 * Specifies binder description
+		 * 
+		 * @since 0.1
+		 */
+		[Description (name="Object description")]
+		public string description {
+			owned get { return (_description); }
+		}
+
+		/**
+		 * Sets description string for Binder and returns Binder reference
+		 * for convenience of method chaingin in objective oriented languages
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param new_description Description text
+		 * @return Reference to binder object
+		 */
+		public Binder set_description (string new_description)
+		{
+			if (new_description == _description)
+				return (this);
+			new_description = _description;
+			notify_property ("description");
+			return (this);
+		}
+
+		/**
+		 * Specifies if bindings created by binder object should be published
+		 * to binding namespace or not
+		 * 
+		 * @since 0.1
+		 */
+		[Description (name="Is silent")]
+		public bool is_silent { get; private set; default = false; }
+
 		/**
 		 * Signal emited upon successful call to Binder.bind(...)
 		 * 
@@ -133,7 +171,44 @@ namespace GData
 		 * @since 0.1
 		 * @param binding Newly created BindingInterface
 		 */
-		public signal void binding_created (BindingInterface binding);
+		public signal void binding_created (BindingInterface? binding);
+
+		/**
+		 * Creates new instance of Binder class
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param binding_create Method supplied by CreatePropertyBinding is 
+		 *                       expected to do all safety checks. Binder does 
+		 *                       absolutely nothing to guarantee safety.
+		 *                       If supplied method is null, then 
+		 *                       BindingInterface creation will be relayed to 
+		 *                       PropertyBinding.bind
+		 */
+		private Binder.full (owned CreatePropertyBinding? binding_create = null, bool silent_binding)
+		{
+			is_silent = silent_binding;
+			_binding_create = (owned) binding_create;
+			if (is_silent == false)
+				BindingNamespace.get_instance().register_binder (this);
+		}
+
+		/**
+		 * Creates new instance of Binder class
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param binding_create Method supplied by CreatePropertyBinding is 
+		 *                       expected to do all safety checks. Binder does 
+		 *                       absolutely nothing to guarantee safety.
+		 *                       If supplied method is null, then 
+		 *                       BindingInterface creation will be relayed to 
+		 *                       PropertyBinding.bind
+		 */
+		public Binder.silent (owned CreatePropertyBinding? binding_create = null)
+		{
+			this.full ((owned) binding_create, true);
+		}
 
 		/**
 		 * Creates new instance of Binder class
@@ -149,7 +224,7 @@ namespace GData
 		 */
 		public Binder (owned CreatePropertyBinding? binding_create = null)
 		{
-			_binding_create = (owned) binding_create;
+			this.full ((owned) binding_create, false);
 		}
 	}
 }

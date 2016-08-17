@@ -8,6 +8,7 @@ namespace Demo
 		string _STORAGE_ = "main_demo";
 		BindingContract selection_contract = ContractStorage.get_storage(_STORAGE_)
 			.add ("main-contract", new BindingContract(null))
+				.set_contract_description ("Main demo base contract")
 				.bind ("name", ui_builder.get_object ("name"), "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, null, null,
 					((v) => {
 						return ((string) v != "");
@@ -22,6 +23,7 @@ namespace Demo
 		// chaining contract as source
 		BindingContract chain_contract = ContractStorage.get_storage(_STORAGE_)
 			.add ("chain-contract", new BindingContract(selection_contract))
+				.set_contract_description ("Main demo chain contract")
 				.bind ("name", ui_builder.get_object ("name_chain"), "label", BindFlags.SYNC_CREATE)
 				.bind ("surname", ui_builder.get_object ("surname_chain"), "label", BindFlags.SYNC_CREATE)
 				.contract;
@@ -29,12 +31,12 @@ namespace Demo
 		bind_person_model ((Gtk.ListBox)ui_builder.get_object ("items"), persons, selection_contract);
 
 		// adding custom state value to contract
-		selection_contract.add_state (new CustomBindingSourceState ("validity", selection_contract, ((src) => {
+		selection_contract.add_state (new CustomBindingSourceState ("validity", selection_contract, "Field \"required\" validity", ((src) => {
 			return ((src.data != null) && (((Person) src.data).required != ""));
 		}), new string[1] { "required" }));
 
 		// adding custom value to contract
-		selection_contract.add_source_value (new CustomBindingSourceData<string> ("length", selection_contract, 
+		selection_contract.add_source_value (new CustomBindingSourceData<string> ("length", selection_contract, "Cumulative string length",
 			((src) => {
 				return ("(cumulative of string lengths)=>%i".printf((src.data != null) ? ((Person) src.data).name.length + ((Person) src.data).surname.length + ((Person) src.data).required.length : 0));
 			}), 
@@ -63,11 +65,13 @@ namespace Demo
 
 		BindingContract info_contract = ContractStorage.get_storage(_STORAGE_)
 			.add ("info-contract", new BindingContract(infoptr))
+				.set_contract_description ("Main demo info contract")
 				.bind ("some_num", ui_builder.get_object ("e1_s1_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
 				.contract;
 
 		BindingContract parent_contract = ContractStorage.get_storage(_STORAGE_)
 			.add ("parent-contract", new BindingContract(parentptr))
+				.set_contract_description ("Main demo parent contract")
 				.bind ("name", ui_builder.get_object ("e1_s2_1"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
 				.bind ("surname", ui_builder.get_object ("e1_s2_2"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
 				.bind ("required", ui_builder.get_object ("e1_s2_3"), "&", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)

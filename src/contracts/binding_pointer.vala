@@ -23,7 +23,7 @@ namespace GData
 	 * 
 	 * @since 0.1
 	 */
-	public class BindingPointer : Object
+	public class BindingPointer : Object, HasDescription
 	{
 		private static int pointer_counter = 1;
 
@@ -44,6 +44,39 @@ namespace GData
 		}
 
 		private bool data_disposed = false;
+
+		private string _description = "";
+		/**
+		 * Description of object
+		 * 
+		 * @since 0.1
+		 */
+		[Description (name="Object description", blurb="Object description")]
+		public string description { 
+			owned get { 
+				if (_description == "")
+					return ("id(@%i) %s".printf(id, stored_as));
+				return (_description); 
+			}
+		}
+
+		/**
+		 * Sets description text and returns its own reference for objective
+		 * oriented languages code chaining
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param new_description Description text
+		 * @return Object reference to allow continuation of code chaining
+		 */
+		public BindingPointer set_description (string new_description)
+		{
+			if (new_description == description)
+				return (this);
+			_description = new_description;
+			notify_property ("description");
+			return (this);
+		}
 
 		private BindingReferenceType _reference_type = BindingReferenceType.DEFAULT;
 		/**
@@ -122,7 +155,7 @@ namespace GData
 		 */
 		[Description (nick="Data", blurb="Data object pointed by binding pointer")]
 		public Object? data { 
-			get { return (_data.target); } 
+			get { return (_data.target); }
 			set {
 //				if (get_source() != null)
 					disconnect_notifications (get_source());
@@ -160,7 +193,7 @@ namespace GData
 		 */
 		public string? stored_as {
 			owned get { 
-				string? s = get_data<string?>("stored-as");
+				string? s = get_data<string?>(_STORED_AS_);
 				if ((s == null) || (s == ""))
 					return (null);
 				return (s); 
@@ -169,7 +202,7 @@ namespace GData
 				if (stored_as != null)
 					GLib.error ("Pointer (@%i) is already stored as: '%s'", id, stored_as);
 				else
-					set_data<string?>("stored-as", value);
+					set_data<string?>(_STORED_AS_, value);
 			}
 		}
 

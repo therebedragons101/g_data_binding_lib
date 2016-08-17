@@ -156,11 +156,8 @@ namespace GData.Generics
 		 */
 		public void add (T object)
 		{
-			if (force_unique == true) {
+			if (force_unique == true)
 				add_unique (object);
-				if (_dont_dispatch_signals == false)
-					element_added (object);
-			}
 			else {
 				_array.append_val (object);
 				items_changed (length-1, 0, 1);
@@ -183,6 +180,8 @@ namespace GData.Generics
 		 * @param object Object being added into ObjectArray
 		 * @return If object exists, existing is returned, if not then it
 		 *         returns the newly added object
+		 * @param nosearch Override for search need for identical object when
+		 *                 unique is being guaranteed to speed up insertion
 		 */
 		public T add_unique (T object, bool nosearch = false)
 		{
@@ -196,6 +195,100 @@ namespace GData.Generics
 			if (_dont_dispatch_signals == false)
 				element_added (object);
 			return (object);
+		}
+
+		/**
+		 * Inserts new element in ObjectArray and emits element_added signal. If
+		 * ObjectArray was created with force_unique then element is only added
+		 * if it doesn't exists yet.
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param pos Position index where object needs to be inserted
+		 * @param object Object being added into ObjectArray
+		 */
+		public void insert_at (int pos, T object)
+			requires ((pos >= 0) && (pos < length))
+		{
+			if (force_unique == true)
+				insert_unique_at (pos, object);
+			else {
+				_array.insert_val ((uint) pos, object);
+				items_changed (pos, 0, 1);
+				if (_dont_dispatch_signals == false)
+					element_added (object);
+			}
+		}
+
+		/**
+		 * Inserts new element in ObjectArray and emits element_added signal. If
+		 * ObjectArray was created with force_unique then element is only added
+		 * if it doesn't exists yet.
+		 * 
+		 * This is same as add() with one exception that unique is guaranteed.
+		 * Note that this can be called even if ObjectArray does not specify
+		 * force_unique 
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param pos Position index where object needs to be inserted
+		 * @param object Object being added into ObjectArray
+		 * @param nosearch Override for search need for identical object when
+		 *                 unique is being guaranteed to speed up insertion
+		 * @return If object exists, existing is returned, if not then it
+		 *         returns the newly added object
+		 */
+		public T insert_unique_at (int pos, T object, bool nosearch = false)
+			requires ((pos >= 0) && (pos < length))
+		{
+			if (nosearch == false) {
+				int i = find (object);
+				if (i >= 0)
+					return (data[i]);
+			}
+			_array.insert_val ((uint) pos, object);
+			items_changed (pos, 0, 1);
+			if (_dont_dispatch_signals == false)
+				element_added (object);
+			return (object);
+		}
+
+		/**
+		 * Prepends new element in ObjectArray and emits element_added signal. 
+		 * If ObjectArray was created with force_unique then element is only 
+		 * added if it doesn't exists yet.
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param object Object being prepended into ObjectArray
+		 */
+		public void prepend (T object)
+		{
+			insert_at (0, object);
+		}
+
+		/**
+		 * Prepends new element in ObjectArray and emits element_added signal. 
+		 * If ObjectArray was created with force_unique then element is only 
+		 * added if it doesn't exists yet.
+		 * 
+		 * This is same as prepend() with one exception that unique is 
+		 * guaranteed.
+		 * 
+		 * Note that this can be called even if ObjectArray does not specify
+		 * force_unique 
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param object Object being prepended into ObjectArray
+		 * @param nosearch Override for search need for identical object when
+		 *                 unique is being guaranteed to speed up insertion
+		 * @return If object exists, existing is returned, if not then it
+		 *         returns the newly added object
+		 */
+		public T prepend_unique (T object, bool nosearch = false)
+		{
+			return (insert_unique_at(0, object, nosearch));
 		}
 
 		/**

@@ -14,6 +14,7 @@ public class DemoAndTutorial : Gtk.Application
 		"simple_binding/example_contract_set_data",
 		"simple_binding/example_custom_property_binding",
 		"simple_binding/example_inspector",
+		"simple_binding/example_object_inspector",
 		"simple_binding/example_pointer_relay",
 		"simple_binding/example_pointer_set_data",
 		"simple_binding/example_simple_property_binding",
@@ -267,6 +268,7 @@ public class DemoAndTutorial : Gtk.Application
 		example_value_objects(this, ui_builder);
 		example_pointer_relay(this, ui_builder, _e7_events);
 		example_inspector(ui_builder);
+		example_object_inspector(ui_builder, this);
 	}
 
 	protected override void shutdown ()

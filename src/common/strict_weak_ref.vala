@@ -44,6 +44,18 @@ namespace GData
 			return (true);
 		}
 
+		/**
+		 * Checks if pointed reference is not null
+		 * 
+		 * @since 0.1
+		 * 
+		 * @return true if valid, false if not
+		 */
+		public bool is_valid_ref()
+		{
+			return (_target != null);
+		}
+
 		~StrictWeakRef()
 		{
 			if (_target != null) {

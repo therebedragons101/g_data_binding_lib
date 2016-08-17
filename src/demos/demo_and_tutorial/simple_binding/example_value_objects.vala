@@ -16,7 +16,7 @@ namespace Demo
 				.contract;
 
 		// adding custom value to contract
-		my_contract.add_source_value (new CustomBindingSourceData<string> ("length", my_contract, 
+		my_contract.add_source_value (new CustomBindingSourceData<string> ("length", my_contract, "Cumulative string length",
 			((src) => {
 				return ("(cumulative of string lengths)=>%i".printf((src.data != null) ? ((Person) src.data).name.length + ((Person) src.data).surname.length + ((Person) src.data).required.length : 0));
 			}), 

@@ -246,14 +246,22 @@ namespace GData
 			if (unbound == false)
 				return;
 			unbound = false;
-			if (_source.is_valid_ref() == true)
+			if (_source.is_valid_ref() == true) {
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
-				    (_flags.IS_REVERSE() == false))
-					source.notify[source_property].connect (notify_transfer_from_source);
-			if (_target.is_valid_ref() == true)
+				    (_flags.IS_REVERSE() == false)) {
+					if (_flags.IS_CUSTOM_EVENTS_ONLY() == false)
+						source.notify[source_property].connect (notify_transfer_from_source);
+					// Connect additional events
+				}
+			}
+			if (_target.is_valid_ref() == true) {
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
-				    (_flags.IS_REVERSE() == true))
-					target.notify[target_property].connect (notify_transfer_from_target);
+				    (_flags.IS_REVERSE() == true)) {
+					if (_flags.IS_CUSTOM_EVENTS_ONLY() == false)
+						target.notify[target_property].connect (notify_transfer_from_target);
+					// Connect additional events
+				}
+			}
 		}
 
 		private void disconnect_signals()
@@ -261,14 +269,22 @@ namespace GData
 			if (_flags.HAS_MANUAL_UPDATE() == true)
 				return;
 			unbound = true;
-			if (_source.is_valid_ref() == true)
+			if (_source.is_valid_ref() == true) {
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
-				    (_flags.IS_REVERSE() == false))
-					source.notify[source_property].disconnect (notify_transfer_from_source);
-			if (_target.is_valid_ref() == true)
+				    (_flags.IS_REVERSE() == false)) {
+					if (_flags.IS_CUSTOM_EVENTS_ONLY() == false)
+						source.notify[source_property].disconnect (notify_transfer_from_source);
+					// Disconect additional events
+				}
+			}
+			if (_target.is_valid_ref() == true) {
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
-				    (_flags.IS_REVERSE() == true))
-					target.notify[target_property].disconnect (notify_transfer_from_target);
+				    (_flags.IS_REVERSE() == true)) {
+					if (_flags.IS_CUSTOM_EVENTS_ONLY() == false)
+						target.notify[target_property].disconnect (notify_transfer_from_target);
+					// Disconect additional events
+				}
+			}
 		}
 
 		/**

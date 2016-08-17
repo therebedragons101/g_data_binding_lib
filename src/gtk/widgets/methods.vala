@@ -1,5 +1,21 @@
 namespace GDataGtk
 {
+	public static void set_height_margins (Gtk.Widget? widget, int margin)
+	{
+		if (widget == null)
+			return;
+		widget.margin_bottom = margin;
+		widget.margin_top = margin;
+	}
+
+	public static void set_side_margins (Gtk.Widget? widget, int margin)
+	{
+		if (widget == null)
+			return;
+		widget.margin_left = margin;
+		widget.margin_right = margin;
+	}
+
 	public static Gdk.Pixbuf? load_pixbuf (string name, Gtk.StyleContext? context = null, bool? load_symbolic = null, int size = 16, Gtk.IconLookupFlags flags = Gtk.IconLookupFlags.FORCE_SIZE | Gtk.IconLookupFlags.GENERIC_FALLBACK)
 	{
 		Gdk.Pixbuf? pix = null;

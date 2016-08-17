@@ -3,36 +3,45 @@ using GData.Generics;
 
 namespace GDataGtk
 {
+	private static Binder? inspector_binder = null;
+
+	internal Binder? _binder()
+	{
+		if (inspector_binder == null)
+			inspector_binder = new Binder.silent();
+		return (inspector_binder);
+	}
+
 	internal void get_reference_markup (BindingPointer pointer, out string ptr_ref, out string data_ref, out string source_ref)
 	{
 		int p, d, s;
 		get_reference_count (pointer, out p, out d, out s);
-		ptr_ref = ((p == -1) ? bold(red("null")) : bold("%i").printf(p));
-		data_ref = ((d == -1) ? bold(red("null")) : bold("%i").printf(d));
-		source_ref = ((s == -1) ? bold(red("null")) : bold("%i").printf(s));
+		ptr_ref = ((p == -1) ? _null() : bold("%i").printf(p));
+		data_ref = ((d == -1) ? _null() : bold("%i").printf(d));
+		source_ref = ((s == -1) ? _null() : bold("%i").printf(s));
 	}
 
 	internal void _get_reference_markup (StrictWeakRef pointer, out string ptr_ref, out string data_ref, out string source_ref)
 	{
 		int p, d, s;
 		_get_reference_count (pointer, out p, out d, out s);
-		ptr_ref = ((p == -1) ? bold(red("null")) : bold("%i").printf(p));
-		data_ref = ((d == -1) ? bold(red("null")) : bold("%i").printf(d));
-		source_ref = ((s == -1) ? bold(red("null")) : bold("%i").printf(s));
+		ptr_ref = ((p == -1) ? _null() : bold("%i").printf(p));
+		data_ref = ((d == -1) ? _null() : bold("%i").printf(d));
+		source_ref = ((s == -1) ? _null() : bold("%i").printf(s));
 	}
 
 	internal string _get_type_str (Object? obj)
 	{
-		return ((obj == null) ? bold(red("null")) : "typeof(%s)".printf(obj.get_type().name()));
+		return ((obj == null) ? _null() : "%s(%s)".printf(RESERVED_WORD("typeof"), obj.get_type().name()));
 	}
 
 	internal string _get_stored_as (BindingPointer? pointer)
 	{
 		if (pointer == null)
-			return (red(bold("null")));
+			return (_null());
 		string? stor = pointer.get_data<string?>("stored-as");
 		if ((stor == null) || (stor == ""))
-			return (green(bold("** NOT STORED **")));
+			return (INSENSITIVE("** NOT STORED **"));
 		return (bold(stor));
 	}
 
@@ -71,39 +80,96 @@ namespace GDataGtk
 	{
 		return ((obj1 == obj2) ? "THIS" : "OTHER");
 	}
-	
+
 	internal string bool_str (bool val)
 	{
 		return ((val == true) ? "TRUE" : "FALSE");
 	}
-	
+
 	internal string bool_strc (bool val)
 	{
-		return ((val == true) ? green(bold("TRUE")) : red(bold("FALSE")));
-	}
-	
-	internal static string get_info_str (ObjectInformation? obj)
-	{
-		return ((obj == null) ? _null() : "[%s]->\"%s\"".printf(green(obj.get_type().name()), obj.get_info()));
+		return ((val == true) ? ACTIVE_COLOR(bold("TRUE")) : INACTIVE_COLOR(bold("FALSE")));
 	}
 
-	internal static string get_object_str (Object? obj)
+	internal static string get_info_str (Object? obj, bool markup = true)
 	{
+		return (((obj == null) || (obj.get_type().is_a(typeof(ObjectInformation)) == false)) ? "" : "\"%s\"".printf(((ObjectInformation) obj).get_info()));
+	}
+
+	internal static string get_description_str (Object? obj, bool markup = true)
+	{
+		if ((obj != null) && 
+		    (obj.get_type().is_a(typeof(HasDescription)) == false) && 
+		    (obj.get_type().is_a(typeof(Gtk.Buildable)) == true))
+			return (((Gtk.Buildable) obj).get_name());
+		return (((obj == null) || (obj.get_type().is_a(typeof(HasDescription)) == false)) ? "" : bold("%s", markup).printf(((HasDescription) obj).description));
+	}
+
+	internal static string get_object_type (Object? obj, bool markup = true)
+	{
+		return ((obj == null) ? __null(markup) : get_type_str(obj.get_type()));
+	}
+
+	internal static string get_type_str (Type? type, bool markup = true)
+	{
+		return ((type == null) ? __null(markup) : "%s".printf(bold(TYPE_COLOR(type.name(), markup), markup)));
+	}
+
+	internal static string get_object_str (Object? obj, bool markup = true)
+	{
+		if (obj == null)
+			return (__null(markup));
+		string s = get_description_str(obj, markup);
+		if (s != "")
+			return (s);
 		if (is_object_information(obj) == true)
 			return (get_info_str((ObjectInformation) obj));
-		return ((obj == null) ? _null() : "[%s]".printf(green(obj.get_type().name())));
+		return ((obj == null) ? _null() : "[%s]".printf(TYPE_COLOR(obj.get_type().name(), markup)));
 	}
 
 	internal static string _get_object_str (Object? obj, bool markup = true)
 	{
+		string s = get_description_str(obj, markup);
+		if (s != "")
+			return (s);
 		if (is_object_information(obj) == true)
 			return (get_info_str((ObjectInformation) obj));
-		return ((obj == null) ? bold(red("null", markup), markup) : "%s".printf(green(obj.get_type().name(), markup)));
+		return (get_object_type(obj, markup));
+	}
+
+	internal static string _get_object_str_desc (Object? obj, bool markup = true)
+	{
+		string d = "";
+		string i = "";
+		d = get_description_str(obj, false);
+		if (is_object_information(obj) == true) {
+			i = get_info_str((ObjectInformation) obj);
+			return ("%s%s".printf((d != "") ? (bold(d, markup) + "\n") : "", i));
+		}
+		if (d != "")
+			return (bold(d, markup));
+		return ((obj == null) ? _null(markup) : "%s".printf(TYPE_COLOR(obj.get_type().name(), markup)));
+	}
+
+	internal static string _get_full_object_str_desc (Object? obj, bool markup = true)
+	{
+		string d = "";
+		string i = "";
+		d = get_description_str(obj, false);
+		if (is_object_information(obj) == true)
+			i = get_info_str((ObjectInformation) obj);
+		string t = ((obj == null) ? _null(markup) : "%s".printf(TYPE_COLOR(obj.get_type().name(), markup)));
+		string res = "%s%s%s".printf (
+			(d != "") ? ((bold(d, markup)) + "\n") : "",
+			(i != "") ? (bold(i) + "\n") : "",
+			t
+		);
+		return (res);
 	}
 
 	internal static string get_pointer_info_str (BindingPointer? obj)
 	{
-		return ((obj == null) ? _null() : "[%s]->\"%s\"".printf(green(obj.get_type().name()), (obj.data != null) ? obj.data.get_type().name() : _null()));
+		return ((obj == null) ? _null() : "%s→\"%s\"".printf(TYPE_COLOR(obj.get_type().name()), (obj.data != null) ? obj.data.get_type().name() : _null()));
 	}
 
 	internal string get_current_source (Object? obj)
@@ -113,7 +179,7 @@ namespace GDataGtk
 
 	internal string _get_current_source (Object? obj)
 	{
-		return ("currently pointing => %s".printf (__get_current_source (obj)));
+		return ("currently pointing → %s".printf (__get_current_source (obj)));
 	}
 
 	internal string __get_current_source (Object? obj)
@@ -184,7 +250,7 @@ namespace GDataGtk
 			description.xalign = 0;
 			description.set_markup(((EventDescription) o).description);
 			if (inspector != null)
-				inspector.binder.bind (inspector, property_name, description, "visible", BindFlags.SYNC_CREATE);
+				_binder().bind (inspector, property_name, description, "visible", BindFlags.SYNC_CREATE);
 			box.pack_start (title, false, false, 0);
 			box.pack_start (description, false, false, 0);
 			return (r);
@@ -249,7 +315,7 @@ namespace GDataGtk
 			r.add (box);
 			Gtk.Image image = create_image_from_icon (((obj.activated == true) ? TRUE_ICON : FALSE_ICON), 
 				null, null, __get_icon_size(Gtk.IconSize.SMALL_TOOLBAR), false);
-			inspector.binder.bind (obj, "activated", image, "pixbuf", BindFlags.SYNC_CREATE, 
+			_binder().bind (obj, "activated", image, "pixbuf", BindFlags.SYNC_CREATE, 
 				(binding, src, ref dest) => {
 					assign_image_from_icon (image, (src.get_boolean() ? TRUE_ICON : FALSE_ICON), 
 					                        null, null, __get_icon_size(Gtk.IconSize.SMALL_TOOLBAR), false);
@@ -279,6 +345,78 @@ namespace GDataGtk
 		}));
 	}
 
+	internal void bind_bindings_namespace_listbox (Gtk.ListBox listbox, BindingInspector? inspector = null, string property_name = "")
+	{
+		BindingNamespace.get_instance().clean_null();
+		listbox.bind_model (BindingNamespace.get_instance(), ((o) => {
+			Gtk.ListBoxRow r = new Gtk.ListBoxRow();
+			WeakRefWrapper? wr = ((WeakRefWrapper?) o);
+			r.visible = ((wr != null) && (wr.target != null));
+			if (wr.target != null) {
+				BindingInterface? obj = ((BindingInterface?) wr.target);
+				r.visible = true;
+				r.set_data<WeakReference<BindingInterface?>> ("binding", new WeakReference<BindingInterface?>(obj));
+				Gtk.Box box = new Gtk.Box (Gtk.Orientation.VERTICAL, 4);
+				box.expand = true;
+				box.visible = true;
+				r.add (box);
+				Gtk.Label title = new Gtk.Label("");
+				title.visible = true;
+				title.hexpand = true;
+				title.xalign = 0;
+				title.use_markup = true;
+				title.set_markup(obj.as_str(true));
+				box.pack_start (title, true, true, 0);
+			}
+			return (r);
+		}));
+		BindingNamespace.get_instance().clean_null();
+	}
+
+	internal void bind_binding_object_listbox (Gtk.ListBox listbox, BindingPointer? pointer, bool is_value, BindingInspector? inspector = null, string property_name = "")
+	{
+		if ((pointer == null) || (is_binding_contract(pointer) == false)) {
+			listbox.bind_model (new GObjectArray(), (o) => {
+				return (new Gtk.ListBoxRow());
+			});
+			return;
+		}
+		GObjectArray? arr = null;
+		if (is_value == true)
+			arr = pointer.get_data<GObjectArray> (BINDING_SOURCE_VALUE_DATA);
+		else
+			arr = pointer.get_data<GObjectArray> (BINDING_SOURCE_STATE_DATA);
+		if (arr == null)
+			arr = new GObjectArray();
+		listbox.bind_model (arr, ((o) => {
+			Gtk.ListBoxRow r = new Gtk.ListBoxRow();
+			r.visible = true;
+			CustomPropertyNotificationBindingSource obj = (CustomPropertyNotificationBindingSource) o;
+			r.set_data<WeakReference<Object?>> ("binding-object", new WeakReference<Object?>(obj));
+			Gtk.Box box = new Gtk.Box (Gtk.Orientation.VERTICAL, 4);
+			box.expand = true;
+			box.visible = true;
+			r.add (box);
+			Gtk.Label title = new Gtk.Label("");
+			title.visible = true;
+			title.hexpand = true;
+			title.xalign = 0;
+			title.use_markup = true;
+			title.set_markup(fix_markup2(small(italic("Name: ")) + bold("\"%s\"".printf(obj.name))));
+			Gtk.Label description = new Gtk.Label("");
+			description.visible = ((obj.description != null) && (obj.description != ""));
+			description.use_markup = true;
+			description.hexpand = true;
+			description.xalign = 0;
+			if (description.visible == true)
+				description.set_markup(fix_markup2(small(italic("Description: ")) + italic(small(obj.description))));
+			description.opacity = 0.6f;
+			box.pack_start (title, true, true, 0);
+			box.pack_start (description, true, true, 0);
+			return (r);
+		}));
+	}
+
 	private delegate string GetKeyValueString (Object obj);
 
 	internal void bind_kv_listbox<MK, K, V> (Gtk.ListBox listbox, GLib.ListModel events, GetKeyValueString method, bool sublist)
@@ -288,7 +426,7 @@ namespace GDataGtk
 			if (sublist == true)
 				r.set_data<GLib.ListModel> ("sublist", ((KeyValuePair<MK, KeyValueArray<K, V>>) o).val);
 			else {
-				if (typeof(V).is_a(typeof(WeakReference<BindingPointer>)) == true) {
+				if (typeof(V).is_a(typeof(WeakReference)) == true) {
 					WeakReference<BindingPointer> refs = (WeakReference<BindingPointer>) ((KeyValuePair<K,V>) o).val;
 					if (is_binding_pointer(refs.target) == true)
 						r.set_data<int>("pointer", refs.target.id);

@@ -179,7 +179,21 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 */
-		DELAYED;
+		DELAYED,
+		/**
+		 * Specifies binding data transfer only relies on additionally specified
+		 * events and original property should not be connected
+		 * 
+		 * @since 0.1
+		 */
+		CUSTOM_EVENTS_ONLY,
+		/**
+		 * Specifies all error reporting should be disabled as there is no
+		 * guarantee that binding is possible
+		 * 
+		 * @since 0.1
+		 */
+		BIND_IF_POSSIBLE;
 
 		/**
 		 * Checks if FLOOD_DETECTION flag is enabled or not
@@ -242,6 +256,16 @@ namespace GData
 		}
 
 		/**
+		 * Checks if CUSTOM_EVENTS_ONLY flag is set
+		 * 
+		 * @since 0.1
+		 */
+		public bool IS_CUSTOM_EVENTS_ONLY()
+		{
+			return ((this & BindFlags.CUSTOM_EVENTS_ONLY) == BindFlags.CUSTOM_EVENTS_ONLY);
+		}
+
+		/**
 		 * Checks if MANUAL_UPDATE flag is set
 		 * 
 		 * @since 0.1
@@ -260,7 +284,17 @@ namespace GData
 		{
 			return ((this & BindFlags.INVERT_BOOLEAN) == BindFlags.INVERT_BOOLEAN);
 		}
-		
+
+		/**
+		 * Checks if BIND_IF_POSSIBLE flag is set
+		 * 
+		 * @since 0.1
+		 */
+		public bool IS_CONDITIONAL()
+		{
+			return ((this & BindFlags.BIND_IF_POSSIBLE) == BindFlags.BIND_IF_POSSIBLE);
+		}
+
 		public string get_direction_arrow()
 		{
 			string dir = "→";
@@ -272,3 +306,4 @@ namespace GData
 		}
 	}
 }
+

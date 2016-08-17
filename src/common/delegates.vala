@@ -8,6 +8,62 @@ namespace GData
 	public delegate void SimpleDelegate();
 
 	/**
+	 * Specifies delegate passing boolean value
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param val Value
+	 */
+	public delegate void BoolValueDelegate (bool val);
+
+	/**
+	 * Specifies delegate passing int value
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param val Value
+	 */
+	public delegate void IntValueDelegate (int val);
+
+	/**
+	 * Specifies delegate passing string value
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param val Value
+	 */
+	public delegate void StringValueDelegate (string val);
+
+	/**
+	 * Specifies delegate passing GLib.Value type of value
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param val Value
+	 */
+	public delegate void ValueDelegate (GLib.Value val);
+
+	/**
+	 * Specifies delegate passing object value
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param val Value
+	 */
+	public delegate void ObjectValueDelegate (Object? val);
+
+	/**
+	 * Specifies method to get object description
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param obj Object needing description
+	 * @param use_markup If string needs to be represented as markup or not
+	 * @return Object description
+	 */
+	public delegate string GetObjectDescriptionStringDelegate (Object? obj, bool use_markup);
+
+	/**
 	 * Specifies simple delegate that passes search string
 	 * 
 	 * @since 0.1
@@ -23,6 +79,8 @@ namespace GData
 	 * @since 0.1
 	 */
 	public delegate void WeakReferenceInvalid();
+
+	public delegate void ObjectIterationFunc (Object obj);
 
 	/**
 	 * Specifies simple delegate that passes searched object

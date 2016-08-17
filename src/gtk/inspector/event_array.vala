@@ -21,10 +21,11 @@ namespace GDataGtk
 		private void handle_data_changed (BindingPointer binding, string cookie)
 		{
 			add (
-				new EventDescription.as_signal (
+				new ContractEventDescription.as_signal (
+					EventFilterMode.POINTER_SOURCE,
 					"data_changed", 
 					"(binding=%s, data_change_cookie=%s)".printf (get_self_ref_equality(binding, resource), cookie),
-					yellow("\tSource object change notification. Note that this is event triggered from outside when BindingPointer is MANUAL\n") +
+					INFORMATION_COLOR("\tSource object change notification. Note that this is event triggered from outside when BindingPointer is MANUAL\n") +
 					"\t\tbinding (BindingPointer emiting the notification)\n" +
 					"\t\tdata_change_cookie (description of data change as passed on by triggering event)" +
 					get_current_source (binding.get_source())
@@ -35,10 +36,11 @@ namespace GDataGtk
 		private void handle_pointer_before_source_change (BindingPointer binding, bool is_same, Object? next)
 		{
 			add (
-				new EventDescription.as_signal (
+				new ContractEventDescription.as_signal (
+					EventFilterMode.POINTER_SOURCE,
 					"before_source_change", 
 					"(binding=%s, is_same=%i, next=%s)".printf (get_self_ref_equality(binding, resource), (int) is_same, (next != null) ? get_object_str(next) : _null()),
-					yellow("\tObject being pointed is about to change. In case if reference was not dropped it can still be accessed trough binding\n") +
+					INFORMATION_COLOR("\tObject being pointed is about to change. In case if reference was not dropped it can still be accessed trough binding\n") +
 					"\t\tbinding (BindingPointer emiting the notification)\n" +
 					"\t\tis_same (specifies if type of next source being pointed to is the same)\n" +
 					"\t\tnext (reference to next object being pointed to)" +
@@ -50,10 +52,11 @@ namespace GDataGtk
 		private void handle_pointer_source_changed (BindingPointer binding)
 		{
 			add (
-				new EventDescription.as_signal (
+				new ContractEventDescription.as_signal (
+					EventFilterMode.POINTER_SOURCE,
 					"source_changed", 
 					"(binding=%s)".printf(get_self_ref_equality(binding, resource)),
-					yellow("\tObject being pointed has changed.\n") +
+					INFORMATION_COLOR("\tObject being pointed has changed.\n") +
 					"\t\tbinding (BindingPointer emiting the notification)" +
 					get_current_source (binding.get_source())
 				)
@@ -63,10 +66,11 @@ namespace GDataGtk
 		private void handle_pointer_connect_notifications (Object? obj)
 		{
 			add (
-				new EventDescription.as_signal (
+				new ContractEventDescription.as_signal (
+					EventFilterMode.POINTER_CONNECTION,
 					"connect_notifications", 
 					"(obj = %s)".printf (__get_current_source (obj)),
-					yellow("\tSignal to connect anything application needs connected beside basic requirements when data source changes.")
+					INFORMATION_COLOR("\tSignal to connect anything application needs connected beside basic requirements when data source changes.")
 				)
 			);
 		}
@@ -74,10 +78,11 @@ namespace GDataGtk
 		private void handle_pointer_disconnect_notifications (Object? obj)
 		{
 			add (
-				new EventDescription.as_signal (
+				new ContractEventDescription.as_signal (
+					EventFilterMode.POINTER_CONNECTION,
 					"disconnect_notifications", 
 					"(obj = %s)".printf (__get_current_source (obj)),
-					yellow("\tSignal to disconnect anything application needs connected beside basic requirements when data source changes.")
+					INFORMATION_COLOR("\tSignal to disconnect anything application needs connected beside basic requirements when data source changes.")
 				)
 			);
 		}
@@ -85,7 +90,8 @@ namespace GDataGtk
 		private void handle_pointer_notify_data (Object obj, ParamSpec param)
 		{
 			add (
-				new EventDescription.as_property (
+				new ContractEventDescription.as_property (
+					EventFilterMode.PROPERTY_NOTIFICATIONS,
 					"data", 
 					" = %s => %s".printf (__get_current_source (resource.data), _get_current_source (resource.get_source()))
 				)
@@ -95,10 +101,11 @@ namespace GDataGtk
 		private void handle_contract_contract_changed (BindingContract ccontract)
 		{
 			add (
-				new EventDescription.as_signal (
+				new ContractEventDescription.as_signal (
+					EventFilterMode.CONTRACT_CHANGE,
 					"contract_changed", 
 					"(contract=%s)".printf(get_self_ref_equality(ccontract, resource)),
-					yellow("\tEmited when contract is disolved or renewed after source change.\n") +
+					INFORMATION_COLOR("\tEmited when contract is disolved or renewed after source change.\n") +
 					"\t\tcontract (BindingContract emiting the notification)" +
 					get_current_source (resource.get_source())
 				)
@@ -108,10 +115,11 @@ namespace GDataGtk
 		private void handle_contract_bindings_changed (BindingContract ccontract, ContractChangeType change_type, BindingInformationInterface binding)
 		{
 			add (
-				new EventDescription.as_signal (
+				new ContractEventDescription.as_signal (
+					EventFilterMode.CONTRACT_BINDINGS,
 					"bindings_changed", 
 					"(contract=%s, change_type=%s, binding=[%s])".printf(get_self_ref_equality(ccontract, resource), change_type.get_state_str(), binding.as_str(true)),
-					yellow("\tEmited when bindings are changed by adding or removing.\n") +
+					INFORMATION_COLOR("\tEmited when bindings are changed by adding or removing.\n") +
 					"\t\tcontract (BindingContract emiting the notification)\n" +
 					"\t\tchange_type (binding ADDED or REMOVED)\n" +
 					"\t\tbinding (BindingContract emiting the notification)" +
@@ -123,7 +131,8 @@ namespace GDataGtk
 		private void handle_contract_notify_is_valid (Object obj, ParamSpec param)
 		{
 			add (
-				new EventDescription.as_property (
+				new ContractEventDescription.as_property (
+					EventFilterMode.PROPERTY_NOTIFICATIONS,
 					"is_valid", 
 					" = %s".printf (bool_str(as_contract(resource).is_valid == true))
 				)
@@ -133,7 +142,8 @@ namespace GDataGtk
 		private void handle_contract_notify_length (Object obj, ParamSpec param)
 		{
 			add (
-				new EventDescription.as_property (
+				new ContractEventDescription.as_property (
+					EventFilterMode.PROPERTY_NOTIFICATIONS,
 					"length", 
 					" = %i".printf ((int) (as_contract(resource).length))
 				)
@@ -143,7 +153,8 @@ namespace GDataGtk
 		private void handle_contract_notify_suspended (Object obj, ParamSpec param)
 		{
 			add (
-				new EventDescription.as_property (
+				new ContractEventDescription.as_property (
+					EventFilterMode.PROPERTY_NOTIFICATIONS,
 					"is_suspended", 
 					" = %s".printf (bool_str((as_contract(resource).suspended == true)))
 				)

@@ -43,11 +43,11 @@ namespace GData
 		 */
 		public void clean_source_values()
 		{
-			GLib.Array<CustomPropertyNotificationBindingSource>? arr = get_data<GLib.Array> (BINDING_SOURCE_VALUE_DATA);
+			GObjectArray? arr = get_data<GObjectArray> (BINDING_SOURCE_VALUE_DATA);
 			if (arr == null)
 				return;
 			while (arr.length > 0)
-				remove_source_value (arr.data[arr.length-1].name);
+				remove_source_value (as_binding_object(arr.data[arr.length-1]).name);
 		}
 
 		/**
@@ -60,15 +60,16 @@ namespace GData
 		 */
 		public CustomPropertyNotificationBindingSource add_source_value (CustomPropertyNotificationBindingSource data_object)
 		{
-			GLib.Array<CustomPropertyNotificationBindingSource>? arr = get_data<GLib.Array<CustomPropertyNotificationBindingSource>> (BINDING_SOURCE_VALUE_DATA);
+			GObjectArray? arr = get_data<GObjectArray> (BINDING_SOURCE_VALUE_DATA);
 			if (arr == null) {
-				arr = new GLib.Array<CustomPropertyNotificationBindingSource>();
-				set_data<GLib.Array<CustomPropertyNotificationBindingSource>> (BINDING_SOURCE_VALUE_DATA, arr);
+				arr = new GObjectArray();
+				set_data<GObjectArray> (BINDING_SOURCE_VALUE_DATA, arr);
 			}
 			for (int i=0; i<arr.length; i++)
-				if (arr.data[i].name == data_object.name)
-					return (arr.data[i]);
-			arr.append_val (data_object);
+				if (as_binding_object(arr.data[i]).name == data_object.name)
+					return (as_binding_object(arr.data[i]));
+			arr.add (data_object);
+			value_objects_changed (data_object, ContractChangeType.ADDED);
 			return (data_object);
 		}
 
@@ -81,12 +82,12 @@ namespace GData
 		 */
 		public CustomPropertyNotificationBindingSource? get_source_value (string name)
 		{
-			GLib.Array<CustomPropertyNotificationBindingSource>? arr = get_data<GLib.Array<CustomPropertyNotificationBindingSource>> (BINDING_SOURCE_VALUE_DATA);
+			GObjectArray? arr = get_data<GObjectArray> (BINDING_SOURCE_VALUE_DATA);
 			if (arr == null)
 				return (null);
 			for (int i=0; i<arr.length; i++)
-				if (arr.data[i].name == name)
-					return (arr.data[i]);
+				if (as_binding_object(arr.data[i]).name == name)
+					return (as_binding_object(arr.data[i]));
 			return (null);
 		}
 
@@ -98,16 +99,31 @@ namespace GData
 		 */
 		public void remove_source_value (string name)
 		{
-			GLib.Array<CustomPropertyNotificationBindingSource>? arr = get_data<GLib.Array<CustomPropertyNotificationBindingSource>> (BINDING_SOURCE_VALUE_DATA);
+			GObjectArray? arr = get_data<GObjectArray> (BINDING_SOURCE_VALUE_DATA);
 			if (arr == null)
 				return;
 			for (int i=0; i<arr.length; i++) {
-				if (arr.data[i].name == name) {
-					arr.data[i].disconnect_object();
-					arr.remove_index (i);
+				if (as_binding_object(arr.data[i]).name == name) {
+					CustomPropertyNotificationBindingSource obj = as_binding_object(arr.data[i]);
+					arr.remove_at_index (i);
+					value_objects_changed (obj, ContractChangeType.REMOVED);
+					obj.disconnect_object();
+					obj = null;
 					return;
 				}
 			}
 		}
+
+		/**
+		 * Signal is sent whenever value object is added or removed. Value 
+		 * change is never signaled here. For state change it is better to rely
+		 * on "state" property value and binding to the object
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param object Object being added or removed
+		 * @param change_type Type of change
+		 */
+		public signal void value_objects_changed (CustomPropertyNotificationBindingSource object, ContractChangeType change_type);
 	}
 }

@@ -122,10 +122,10 @@ namespace GData
 		 *                             ALL_PROPERTIES or null for cases when
 		 *                             all or none are to be used.
 		 */ 
-		public CustomBindingSourceValue (string name, BindingPointer source, owned CustomBindingSourceValueFunc? get_data_method, owned CompareValueFunc? compare_method, GLib.Value null_value,
+		public CustomBindingSourceValue (string name, BindingPointer source, string description = "", owned CustomBindingSourceValueFunc? get_data_method, owned CompareValueFunc? compare_method, GLib.Value null_value,
 		                                 bool always_refresh = false, string[]? connected_properties = null)
 		{
-			base (name, source, connected_properties);
+			base (name, source, description, connected_properties);
 			_null_value = null_value;
 			_always_refresh = always_refresh;
 			_resolve_data = (owned) get_data_method;

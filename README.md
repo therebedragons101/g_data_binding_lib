@@ -3,6 +3,10 @@
 License (GPL/LGPL)
 
 **IMPORTANT!
+Currently there is a bug in Vala that needs patch in order to compile
+https://bugzilla.gnome.org/show_bug.cgi?id=769903 or anything related to flags
+just crashes application
+
 To get as simple and best possible overview running "demo_and_tutorial" is
 probably by far best method as tutorial not only shows how to do bindings,
 it also taps into innards to visually represent whole design. Difference in
@@ -21,7 +25,7 @@ consists of following**
 - Rest of demo and tutorial is still on TODO
 - Note that demo seems simple, but it is absolute nightmare scenario of
   crosslinking and multi edit access that can be encountered. Whole demo only
-  deals with 3 person objects, where they also contain parent relationship
+  deals with 3 person objects, where they also contain parent relationships
 
 **HOW TO COMPILE/RUN DEMO AND TUTORIAL**
 
@@ -58,71 +62,23 @@ make
 #             - demo_and_tutorial
 ```
 
-IMPLEMENTATION STAGES ON TODO LIST
-
-- Stage 1
-          (
-          - getting basic databinding in order (temporarily removed
-            signal/custom BindingPointer and its demo is still needed)
-            95% DONE
-          - other thing that needs to be done for getting basic databinding
-            in order is finishing move on StrictWeakReference where this is
-            suited 20% DONE
-          - once basic databinding is done after certain time bump major
-            version from 0 to 1. until version is 0 api is not guaranteed
-            once bumped to 1 api will be rock stable and any change that
-            would require breaking it is impossible unless bumped to 
-            major version 2. at that point only incremental api changes
-            can occur
-          )
-- Stage 2
-          (
-          - split files/move to library DONE 
-          - get feedback on public api if possible NOT_UP_TO_ME
-          - better, simpler and more complete build system IN_PROGRESS
-          - add demo and tutorial from data_binding_poc_vala_project DONE
-          - simplify demo and tutorial as much code is still not clean
-          )
-- Stage 3
-          (
-          - add advanced feature demos)
-          - add prebuilt mapping system
-          )
-- Stage 4
-          (
-          rewrite final product in C if I don't decide to stay in Vala, but
-          chances of rewrite are really slim and getting slimmer with moments.
-          my original plan was to try and get inclusion in GLib, but somewhere
-          along the line i stopped seeing point of this getting in upstream
-          as it would only introduce drawbacks and gain absolutely nothing.
-
-          if it stays its own library it can
-          - target older GLib than the one where included and support a lot
-            more applications
-          - doesn't go into painful slow development as features would most
-            probably need aproval discussions. community development is all
-            well and good, but the larger the project... the more bikesheding
-            and waiting
-          - it can stay in Vala and as such develop a lot faster
-          - it is much easier to guarantee stable api
-
-          bonus of rewrite?
-          - honestly trying to get it into GLib was the only one and even for
-            that one i don't see the point, but if there is some reason I fail
-            to see I am more than willing to help with effort
-          )
+- Property binding is now more or less near 100% complete and this is time for
+  0.2 release which will focus mainly on row bindings (active and inactive)
 
 NOTE! at this stage i would strongly advise running demo and look trough its
 tutorial as this aproach takes very different and unique way.
 i will most pobably will just ignore people if i detect that they talk about
-something different and they lack understanding the basic direction of this 
+something different and they lack understanding the basic direction of this
 project
 
 TODO
 
-- Advanced binding demos
+- Row models
 
-- Splitting sources (done) and moving to library
+- Binding loader and designer like Glade (not gui, just mappings. Glade is
+  pretty much everything needed)
+
+- Advanced binding demos
 
 - Fix comments in demo
 
@@ -143,19 +99,19 @@ NOTE! You shoud run demo before coming to conclusions
 - Binding flood detection (optional and disabled by default). When enabled it
   can detect flood of data change per property so it doesn't spam GUI redraw
   (Look at demo>Tutorial(Binding)>Basic binding for example of implementation
-  as well as code example). (Flood relay to contract example is still on 
+  as well as code example). (Flood relay to contract example is still on
   TODO)
 
 - MANUAL binding update (optional and disabled by default). Does nothing but
   disables default property notify binding and waits for update_from_source()
   and update_from_parent() to be triggered. This enables custom refresh, but
   more importantly it makes BindingPointer MANUAL_UPDATE really viable
-  (BindingPointer still needs to include this, TODO) (Look at 
-  demo>Tutorial(Binding)>Basic binding for example of implementation as well 
+  (BindingPointer still needs to include this, TODO) (Look at
+  demo>Tutorial(Binding)>Basic binding for example of implementation as well
   as code example)
 
 - REVERSE direction support. While useless by it self in PropertyBinding,
-  this comes in play when taken from group view where you sometimes need 
+  this comes in play when taken from group view where you sometimes need
   different direction of data flow for certain binding and this just removes
   need for extra contract that would be needed otherwise. It also controls
   direction of SYNC_CREATE
@@ -170,7 +126,7 @@ NOTE! You shoud run demo before coming to conclusions
 
 - DELAYED property binding allows binding where updates are throtled.
   example case for that is search functionality where it is better to 
-  apply delay after each update in order to remove as many events as 
+  apply delay after each update in order to remove as many events as
   possible
 
 -- end of PropertyBinding --

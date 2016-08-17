@@ -1,9 +1,5 @@
 namespace GData
 {
-	internal const string __DEFAULT__ = "**DEFAULT**";
-	internal const string BINDING_SOURCE_STATE_DATA = "binding-source-state-data";
-	internal const string BINDING_SOURCE_VALUE_DATA = "binding-source-value-data";
-
 	/**
 	 * Constant used to define CustomPropertyNotificationBindingSource to track
 	 * all properties without the need to name them
@@ -18,5 +14,27 @@ namespace GData
 	 */
 	public const string[]? NO_PROPERTY = { "" };
 
-	internal static bool report_possible_binding_errors = false;
+	/**
+	 * Default mapping alias which specifies mapping should look up alias
+	 * for property in class that is specified as default
+	 * 
+	 * @since 0.1
+	 */
+	public const string MAP_ALIAS_DEFAULT = "map::alias::default";
+
+	/**
+	 * Default mapping alias which specifies mapping should look up alias
+	 * for property in class that is specified to control visibility
+	 * 
+	 * @since 0.1
+	 */
+	public const string MAP_ALIAS_VISIBILITY = "map::alias::visibility";
+
+	/**
+	 * Default mapping alias which specifies mapping should look up alias
+	 * for property in class that is specified to control sensitivity
+	 * 
+	 * @since 0.1
+	 */
+	public const string MAP_ALIAS_SENSITIVITY = "map::alias::sensitivity";
 }

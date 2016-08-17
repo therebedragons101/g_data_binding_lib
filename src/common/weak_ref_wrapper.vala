@@ -18,6 +18,23 @@ namespace GData
 			owned get { return (wref.target); }
 		}
 
+		/**
+		 * Sets new target object to be wrapped
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param obj Object that will become new target
+		 */
+		public void set_new_target (Object? obj)
+		{
+			wref.set_new_target (obj);
+		}
+
+		public bool is_valid_ref()
+		{
+			return (wref.is_valid_ref());
+		}
+
 		~WeakRefWrapper()
 		{
 			wref.set_new_target (null);
@@ -33,9 +50,9 @@ namespace GData
 		 * @param notify_method Notification method when reference becomes 
 		 *                      invalid
 		 */
-		public WeakRefWrapper (Object obj, owned WeakReferenceInvalid? notify_method)
+		public WeakRefWrapper (Object? obj, WeakReferenceInvalid? notify_method = null)
 		{
-			wref = new StrictWeakReference<Object?> (obj, (owned) notify_method);
+			wref = new StrictWeakReference<Object?> (obj, notify_method);
 		}
 	}
 }

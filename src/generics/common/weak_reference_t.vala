@@ -73,7 +73,7 @@ namespace GData.Generics
 		 *
 		 * @param set_to_target Specifies object being pointed with target
 		 */
-		public WeakReference (T? set_to_target)
+		public WeakReference (T? set_to_target = null)
 		{
 			_target = set_to_target;
 		}

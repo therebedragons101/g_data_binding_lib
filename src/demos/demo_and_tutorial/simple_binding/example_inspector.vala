@@ -1,4 +1,6 @@
-namespace GData
+using GData;
+
+namespace Demo
 {
 	public static void example_inspector (Gtk.Builder ui_builder)
 	{

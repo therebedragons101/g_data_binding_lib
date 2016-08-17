@@ -131,11 +131,17 @@ namespace GData
 		 * @since 0.1
 		 */
 		public Object? default_target {
-			get { return (_default_target.data); }
-			set {
+			get { 
 				if (_default_target == null)
-					_default_target = new BindingPointer (null, reference_type);
-				if (default_target == value)
+					return (null);
+				return (_default_target.data); 
+			}
+			set {
+				if (_default_target == null) {
+					_default_target = new BindingPointer (value, reference_type);
+					return;
+				}
+				else if (_default_target.data == value)
 					return;
 				_default_target.data = value;
 			}
@@ -175,6 +181,22 @@ namespace GData
 				((BindingPointer) data).before_source_change.connect (before_sub_source_change);
 			}
 			handle_is_valid (null);
+		}
+
+		/**
+		 * Convenience chainging method that calls BindingPointer.set_description()
+		 * and instead returns BindingContract as return type
+		 *
+		 * @since 0.1
+		 * 
+		 * @param new_description New description text
+		 * @return Reference to BindingContract to allow API chainging in 
+		 *         objective oriented languages
+		 */
+		public BindingContract set_contract_description (string new_description)
+		{
+			set_description (new_description);
+			return (this);
 		}
 
 		private void sub_source_changed (BindingPointer src)

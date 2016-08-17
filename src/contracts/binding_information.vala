@@ -226,7 +226,7 @@ namespace GData
 			if (can_bind == false)
 				return;
 			if (binding != null) {
-				GLib.critical ("Binding %s=>%s was not undone! INVESTIGATE", source_property, target_property);
+				GLib.critical ("Binding %s→%s was not undone! INVESTIGATE", source_property, target_property);
 				unbind_connection(obj);
 			}
 			if (tgt == null)

@@ -11,7 +11,7 @@ namespace GData
 	 * 
 	 * @since 0.1
 	 */
-	public class CustomPropertyNotificationBindingSource : Object
+	public class CustomPropertyNotificationBindingSource : Object, HasDescription
 	{
 		private bool _disconnected = false;
 		/**
@@ -32,7 +32,36 @@ namespace GData
 		 */
 		[Description (name="Object name", blurb="Object name")]
 		public string name { get; set; }
-		
+
+		private string _description = "";
+		/**
+		 * Description of object
+		 * 
+		 * @since 0.1
+		 */
+		[Description (name="Object description", blurb="Object description")]
+		public string description { 
+			owned get { return (_description); }
+		}
+
+		/**
+		 * Sets description text and returns its own reference for objective
+		 * oriented languages code chaining
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param new_description Description text
+		 * @return Object reference to allow continuation of code chaining
+		 */
+		public CustomPropertyNotificationBindingSource set_description (string new_description)
+		{
+			if (new_description == description)
+				return (this);
+			_description = new_description;
+			notify_property ("description");
+			return (this);
+		}
+
 		/**
 		 * Method called upon disconnection
 		 * 
@@ -117,9 +146,10 @@ namespace GData
 		 * @param connected_properties Names of properties object should connect
 		 *                             to
 		 */
-		public CustomPropertyNotificationBindingSource (string name, BindingPointer source, string[]? connected_properties = null)
+		public CustomPropertyNotificationBindingSource (string name, BindingPointer source, string description = "", string[]? connected_properties = null)
 		{
 			this.name = name;
+			_description = description;
 			this.connected_properties = connected_properties;
 			_source = new WeakReference<BindingPointer?>(source);
 			source.before_source_change.connect ((src) => {

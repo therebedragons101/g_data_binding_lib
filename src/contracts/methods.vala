@@ -15,11 +15,11 @@ namespace GData
 	}
 
 	/**
-	 * Checks if object is BindingPointer or its subclass
+	 * Checks if object is BindingContract or its subclass
 	 * 
 	 * @since 0.1
 	 * @param obj Object being checked
-	 * @return true if object is BindingPointer or subclass, false if not
+	 * @return true if object is BindingContract or subclass, false if not
 	 */
 	public static bool is_binding_contract (Object? obj)
 	{
@@ -29,17 +29,61 @@ namespace GData
 	}
 
 	/**
-	 * Checks if object is BindingPointer or its subclass
+	 * Checks if object is ObjectInformation or its subclass
 	 * 
 	 * @since 0.1
 	 * @param obj Object being checked
-	 * @return true if object is BindingPointer or subclass, false if not
+	 * @return true if object is ObjectInformation or subclass, false if not
 	 */
 	public static bool is_object_information (Object? obj)
 	{
 		if (obj == null)
 			return (false);
 		return (obj.get_type().is_a(typeof(ObjectInformation)) == true);
+	}
+
+	/**
+	 * Checks if object is CustomBindingSourceState or its subclass
+	 * 
+	 * @since 0.1
+	 * @param obj Object being checked
+	 * @return true if object is CustomBindingSourceState or subclass, false if not
+	 */
+	public static bool is_state_object (Object? obj)
+	{
+		if (obj == null)
+			return (false);
+		return (obj.get_type().is_a(typeof(CustomBindingSourceState)) == true);
+	}
+
+	/**
+	 * Checks if object is CustomPropertyNotificationBindingSource or its 
+	 * subclass
+	 * 
+	 * @since 0.1
+	 * @param obj Object being checked
+	 * @return true if object is CustomPropertyNotificationBindingSource or 
+	 *         subclass, false if not
+	 */
+	public static bool is_binding_object (Object? obj)
+	{
+		if (obj == null)
+			return (false);
+		return (obj.get_type().is_a(typeof(CustomPropertyNotificationBindingSource)) == true);
+	}
+
+	/**
+	 * Checks if object is implementing HasDescription interface
+	 * 
+	 * @since 0.1
+	 * @param obj Object being checked
+	 * @return true if object is implementing HasDescription, false if not
+	 */
+	public static bool has_description (Object? obj)
+	{
+		if (obj == null)
+			return (false);
+		return (obj.get_type().is_a(typeof(HasDescription)) == true);
 	}
 
 	/**
@@ -71,6 +115,38 @@ namespace GData
 		if (obj != null)
 			if (is_binding_pointer(obj) == true)
 				return ((BindingPointer) obj);
+		return (null);
+	}
+
+	/**
+	 * Casts object as CustomBindingSourceState
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param obj Object
+	 * @return Pointer if casting is possible
+	 */
+	public static CustomBindingSourceState? as_state_object (Object? obj)
+	{
+		if (obj != null)
+			if (is_state_object(obj) == true)
+				return ((CustomBindingSourceState) obj);
+		return (null);
+	}
+
+	/**
+	 * Casts object as CustomPropertyNotificationBindingSource
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param obj Object
+	 * @return Pointer if casting is possible
+	 */
+	public static CustomPropertyNotificationBindingSource? as_binding_object (Object? obj)
+	{
+		if (obj != null)
+			if (is_binding_object(obj) == true)
+				return ((CustomPropertyNotificationBindingSource) obj);
 		return (null);
 	}
 

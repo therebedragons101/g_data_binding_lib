@@ -16,7 +16,7 @@ namespace Demo
 				.contract;
 
 		// adding custom state value to contract
-		my_contract.add_state (new CustomBindingSourceState ("validity", my_contract, ((src) => {
+		my_contract.add_state (new CustomBindingSourceState ("validity", my_contract, "Field \"required\" validity", ((src) => {
 			return ((src.data != null) && (((Person) src.data).required != ""));
 		}), new string[1] { "required" }));
 

@@ -29,12 +29,22 @@ run: run-${COMMON_NAME}_lib
 
 run-g_${COMMON_NAME}_lib:
 
+COMMON_INTERNAL := common/consts.vala \
+	common/markup.vala \
+	common/methods.vala
+
 SOURCES := ${LIBRARY_NAME}.vala \
+	${COMMON_INTERNAL} \
+	common/boolean_flag.vala \
+	common/boolean_group.vala \
 	common/compare_data_by.vala \
 	common/delegates.vala \
-	common/markup.vala \
-	common/methods.vala \
+	common/gobject_array.vala \
+	common/has_description.vala \
 	common/object_information.vala \
+	common/ref_timeout.vala \
+	common/reference_monitor.vala \
+	common/reference_monitor_group.vala \
 	common/strict_weak_ref.vala \
 	common/strict_weak_reference_t.vala \
 	common/unique_by_properties.vala \
@@ -69,13 +79,19 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	property/bind_flags.vala \
 	property/binder.vala \
 	property/binding_interface.vala \
+	property/binding_namespace.vala \
 	property/data_flood_detection.vala \
 	property/delegates.vala \
 	property/property_alias.vala \
 	property/property_binding.vala \
+	property/type_information.vala \
+	row_models/enum_flags_model.vala \
+	row_models/enum_flags_value_object.vala \
+	row_models/inverted_list_model.vala \
 	row_models/row_model.vala
 
 GENERICS_SOURCES := ${COMMON_NAME}_generics${NAME_SUFFIX}.vala \
+	${COMMON_INTERNAL} \
 	generics/common/delegates.vala \
 	generics/common/key_value_array_k_v.vala \
 	generics/common/key_value_pair_k_v.vala \
@@ -95,17 +111,41 @@ GENERICS_SOURCES := ${COMMON_NAME}_generics${NAME_SUFFIX}.vala \
 #	${RESOURCE}${COMMON_NAME}_gtk${NAME_SUFFIX}.*
 GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	${RESOURCE}${COMMON_NAME}_gtk${NAME_SUFFIX}.* \
-	common/markup.vala \
+	${COMMON_INTERNAL} \
 	gtk/inspector/binding_inspector.vala \
+	gtk/inspector/binding_namespace_view_mode.vala \
+	gtk/inspector/contract_event_description.vala \
+	gtk/inspector/default_widgets.vala \
 	gtk/inspector/event_array.vala \
 	gtk/inspector/event_description.vala \
+	gtk/inspector/event_filter_mode.vala \
 	gtk/inspector/methods.vala \
+	gtk/inspector/object_inspector_window.vala \
+	gtk/widgets/edit_mode.vala \
+	gtk/widgets/enum_flags_menu_button.vala \
+	gtk/widgets/enum_flags_popover.vala \
+	gtk/widgets/enum_flags_values.vala \
+	gtk/widgets/enum_flags_value_interface.vala \
 	gtk/widgets/methods.vala \
+	gtk/widgets/object_events_row.vala \
+	gtk/widgets/object_inspector.vala \
+	gtk/widgets/object_inspector_listbox_row.vala \
+	gtk/widgets/object_inspector_row.vala \
+	gtk/widgets/object_inspector_view.vala \
 	gtk/widgets/placeholder.vala \
+	gtk/widgets/preflight_event_box.vala \
 	gtk/widgets/pointer_info.vala \
+	gtk/widgets/reference_monitor_row.vala \
+	gtk/widgets/reference_monitor_show_view.vala \
+	gtk/widgets/simple_entry_box.vala \
+	gtk/widgets/smooth_list_box_row.vala \
+	gtk/widgets/state_image.vala \
+	gtk/widgets/title_description_row.vala \
+	gtk/widgets/track_element.vala \
+	gtk/widgets/track_log_element.vala \
 	gtk/widgets/widget_defaults.vala
 
-DEMO_INCLUDES := common/markup.vala \
+DEMO_INCLUDES := ${COMMON_INTERNAL} \
 	demos/common/css.vala \
 	demos/common/persons.vala
 
