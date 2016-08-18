@@ -63,12 +63,12 @@ namespace GDataGtk
 		private ObjectInspector binding_namespace_inspector;
 
 		private static bool inspector_is_visible { get; private set; default = false; }
-		public string binding_search_text { get; set; default=""; }
+		protected string binding_search_text { get; set; default=""; }
 
-		public BindingNamespaceViewMode binding_namespace_view { get; set; default=BindingNamespaceViewMode.ALL; }
+		protected BindingNamespaceViewMode binding_namespace_view { get; set; default=BindingNamespaceViewMode.ALL; }
 		private BooleanGroup binding_namespace_view_flags;
 
-		public EventFilterMode event_filter { get; set; default=EventFilterMode.ALL; }
+		protected EventFilterMode event_filter { get; set; default=EventFilterMode.ALL; }
 		private BooleanGroup event_filter_flags;
 
 //		public bool compact_events { get; set; default = false; }
@@ -83,7 +83,7 @@ namespace GDataGtk
 		}
 
 		private Gtk.Window? _window = null;
-		public Gtk.Window window {
+		private Gtk.Window window {
 			get { return (_window); }
 		}
 
@@ -277,7 +277,7 @@ namespace GDataGtk
 			}
 		""";
 
-		public bool ref_timer()
+		private bool ref_timer()
 		{
 			if (inspector_is_visible == true) {
 /*				weak Object? __current_data = current_data;

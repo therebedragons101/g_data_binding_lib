@@ -1,11 +1,5 @@
 namespace GData
 {
-	public enum BindingSide
-	{
-		SOURCE,
-		TARGET
-	}
-
 	/**
 	 * Most basic property binding requirement
 	 * 

@@ -5,8 +5,6 @@ namespace GDataGtk
 {
 	public delegate void AddLogEventDelegate (string event_type, string event_name);
 
-	public delegate void SSSSSS();
-
 	/**
 	 * Specifies tracking element that supports connection and logging where
 	 * events are automatically dispatched to log specified at creation

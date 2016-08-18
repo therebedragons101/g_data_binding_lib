@@ -9,6 +9,39 @@ namespace GData
 	 */
 	public class PropertyBinding : Object, BindingInterface, DataFloodDetection
 	{
+		internal class SignalInfo
+		{
+			public ulong signal_handler_id;
+			public string signal_name;
+			public StrictWeakRef object;
+			public Callback callback;
+
+			public void connect_signal (Object caller)
+			{
+				if ((signal_handler_id != 0) || (object.is_valid_ref() == false))
+					return;
+				signal_handler_id = Signal.connect_swapped (object.target, signal_name, callback, caller);
+			}
+
+			public void disconnect_signal()
+			{
+				if (object.is_valid_ref() == true)
+					if (SignalHandler.is_connected(object.target, signal_handler_id) == true)
+						SignalHandler.disconnect (object.target, signal_handler_id);
+				signal_handler_id = 0;
+			}
+
+			public SignalInfo (ulong signal_handler_id, string signal_name, Object object, Callback callback)
+			{
+				this.signal_handler_id = signal_handler_id;
+				this.signal_name = signal_name;
+				this.object = new StrictWeakRef(object);
+				this.callback = callback;
+			}
+		}
+
+		GLib.Array<SignalInfo> _signals = new GLib.Array<SignalInfo>();
+
 		// used to avoid delay on sync, no relation with thread safety
 		private bool data_sync_in_process = false;
 
@@ -237,6 +270,33 @@ namespace GData
 			__update_from_target (false);
 		}
 
+		private void ___update_from_source()
+		{
+			__update_from_source (false);
+		}
+
+		private void ___update_from_target()
+		{
+			__update_from_target (false);
+		}
+
+		// notify signals should already be as notify::property_name
+		private void connect_signal (Object? obj, string detailed_signal, bool emit_update_from_source)
+		{
+			Callback callback = (emit_update_from_source == true) ? 
+				(Callback) ___update_from_source : (Callback) ___update_from_target;
+			for (int i=0; i<_signals.length; i++)
+				if ((_signals.data[i].object.target == obj) &&
+				    (_signals.data[i].callback == callback) &&
+				    (_signals.data[i].signal_name == detailed_signal)) {
+					_signals.data[i].connect_signal(this);
+					return;
+				}
+			ulong signal_handler_id = Signal.connect_swapped (obj, detailed_signal, callback, this);
+			if (signal_handler_id != 0)
+				_signals.append_val (new SignalInfo (signal_handler_id, detailed_signal, obj, callback));
+		}
+
 		private void connect_signals()
 		{
 			if (__is_active() == false)// || (unbound == false))
@@ -250,7 +310,8 @@ namespace GData
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
 				    (_flags.IS_REVERSE() == false)) {
 					if (_flags.IS_CUSTOM_EVENTS_ONLY() == false)
-						source.notify[source_property].connect (notify_transfer_from_source);
+						connect_signal (source, "notify::" + source_property, true);
+//						source.notify[source_property].connect (notify_transfer_from_source);
 					// Connect additional events
 				}
 			}
@@ -258,7 +319,8 @@ namespace GData
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
 				    (_flags.IS_REVERSE() == true)) {
 					if (_flags.IS_CUSTOM_EVENTS_ONLY() == false)
-						target.notify[target_property].connect (notify_transfer_from_target);
+						connect_signal (target, "notify::" + target_property, false);
+//						target.notify[target_property].connect (notify_transfer_from_target);
 					// Connect additional events
 				}
 			}
@@ -269,7 +331,9 @@ namespace GData
 			if (_flags.HAS_MANUAL_UPDATE() == true)
 				return;
 			unbound = true;
-			if (_source.is_valid_ref() == true) {
+			for (int i=0; i<_signals.length; i++)
+				_signals.data[i].disconnect_signal();
+/*			if (_source.is_valid_ref() == true) {
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
 				    (_flags.IS_REVERSE() == false)) {
 					if (_flags.IS_CUSTOM_EVENTS_ONLY() == false)
@@ -284,7 +348,7 @@ namespace GData
 						target.notify[target_property].disconnect (notify_transfer_from_target);
 					// Disconect additional events
 				}
-			}
+			}*/
 		}
 
 		/**
@@ -298,7 +362,7 @@ namespace GData
 		 *                    is aiming for cases when there is need for best 
 		 *                    performance possible
 		 */
-		public void freeze (bool hard_freeze = false)
+		public void freeze(bool hard_freeze = false)
 		{
 			freeze_counter++;
 			if (freeze_counter == 1) {
@@ -719,7 +783,7 @@ namespace GData
 		 */
 		public BindingInterface add_property_notification (BindingSide side, string property_name)
 		{
-			return (this);
+			return (add_signal (side, "notify::" + property_name));
 		}
 
 		/**
@@ -734,6 +798,7 @@ namespace GData
 		 */
 		public BindingInterface add_signal (BindingSide side, string signal_name)
 		{
+			connect_signal ((side == BindingSide.SOURCE) ? source : target, signal_name, (side == BindingSide.SOURCE));
 			return (this);
 		}
 

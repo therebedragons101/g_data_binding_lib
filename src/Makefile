@@ -7,6 +7,7 @@ export GI_TYPELIB_PATH := $(shell pwd)
 COMMON_NAME := g_data_binding
 NAME_SUFFIX := _lib
 LIBRARY_NAME := ${COMMON_NAME}${NAME_SUFFIX}
+GTK_LIBRARY_NAME := ${COMMON_NAME}_gtk${NAME_SUFFIX}
 INCLUDES := ../includes/
 BIN := ../bin/
 RESOURCE := ../resources/
@@ -22,8 +23,10 @@ all: resources \
      demo-and-tutorial \
      tests \
      hack-for-gir-bug \
-     ${COMMON_NAME}${NAME_SUFFIX}-${LIB_VERSION}.typelib \
+     ${LIBRARY_NAME}-${LIB_VERSION}.typelib \
      move-binaries-to-bin
+
+#     ${GTK_LIBRARY_NAME}-${LIB_VERSION}.typelib \
 
 run: run-${COMMON_NAME}_lib
 
@@ -78,6 +81,7 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	contracts/timer_controlled_binding_pointer.vala \
 	property/bind_flags.vala \
 	property/binder.vala \
+	property/binding_side.vala \
 	property/binding_interface.vala \
 	property/binding_namespace.vala \
 	property/data_flood_detection.vala \
@@ -226,6 +230,12 @@ ${LIBRARY_NAME}-${LIB_VERSION}.typelib:
 		--shared-library=${LIBRARY_NAME}${LIB_MAJOR}.so \
 		--output=${INCLUDES}${LIBRARY_NAME}-${LIB_VERSION}.typelib \
 		${INCLUDES}${LIBRARY_NAME}-${LIB_VERSION}.gir
+
+${GTK_LIBRARY_NAME}-${LIB_VERSION}.typelib:
+	g-ir-compiler \
+		--shared-library=${GTK_LIBRARY_NAME}${LIB_MAJOR}.so \
+		--output=${INCLUDES}${GTK_LIBRARY_NAME}-${LIB_VERSION}.typelib \
+		${INCLUDES}${GTK_LIBRARY_NAME}-${LIB_VERSION}.gir
 
 demo-and-tutorial:
 	valac \

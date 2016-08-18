@@ -467,7 +467,7 @@ namespace GDataGtk
 			refresh_data();
 		}
 
-		public void handle_search_changed()
+		private	 void handle_search_changed()
 		{
 			do_filter_items();
 			notify_property("current-filter");
@@ -521,7 +521,7 @@ namespace GDataGtk
 			__clean_object_inspector();
 		}
 
-		public bool ref_timer()
+		private	bool ref_timer()
 		{
 			if (description_row != null)
 				description_row.manual_value = get_description_str(inspected_object);
