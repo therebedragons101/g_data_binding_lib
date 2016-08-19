@@ -87,22 +87,6 @@ namespace GData
 	}
 
 	/**
-	 * Casts object as BindingContract
-	 * 
-	 * @since 0.1
-	 * 
-	 * @param obj Object
-	 * @return Contract if casting is possible
-	 */
-	public static BindingContract? as_contract (Object? obj)
-	{
-		if (obj != null)
-			if (is_binding_contract(obj) == true)
-				return ((BindingContract) obj);
-		return (null);
-	}
-
-	/**
 	 * Casts object as BindingPointer
 	 * 
 	 * @since 0.1
@@ -112,9 +96,54 @@ namespace GData
 	 */
 	public static BindingPointer? as_pointer (Object? obj)
 	{
-		if (obj != null)
-			if (is_binding_pointer(obj) == true)
-				return ((BindingPointer) obj);
+		if (is_binding_pointer(obj) == true)
+			return ((BindingPointer) obj);
+		return (null);
+	}
+
+	/**
+	 * Casts object as BindingContract
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param obj Object
+	 * @return Contract if casting is possible
+	 */
+	public static BindingContract? as_contract (Object? obj)
+	{
+		if (is_binding_contract(obj) == true)
+			return ((BindingContract) obj);
+		return (null);
+	}
+
+	/**
+	 * Safe casts object as BindingPointer and returns get_source() if possible
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param obj Object
+	 * @return Value of pointers get_source() if casting is possible, null if 
+	 *         not
+	 */
+	public static Object? as_pointer_source (Object? obj)
+	{
+		if (is_binding_contract(obj) == true)
+			return (((BindingPointer) obj).get_source());
+		return (null);
+	}
+
+	/**
+	 * Safe casts object as BindingContract and returns "data" if possible
+	 * 
+	 * @since 0.1
+	 * 
+	 * @param obj Object
+	 * @return Value of contracts "data" property or null if not contract
+	 */
+	public static Object? as_pointer_data (Object? obj)
+	{
+		if (is_binding_pointer(obj) == true)
+			return (((BindingPointer) obj).get_source());
 		return (null);
 	}
 

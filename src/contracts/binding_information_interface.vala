@@ -119,9 +119,9 @@ namespace GData
 		}
 
 		/**
-		 * Invokes creation of BindingInformation for specified parameters.
-		 * If contract is active and everything is in order this also creates
-		 * BindingInterface and activates data transfer 
+		 * Invokes creation of another BindingInformation for specified 
+		 * parameters. If contract is active and everything is in order this 
+		 * also creates BindingInterface and activates data transfer 
 		 * 
 		 * Main reasoning for this method is to allow chain API in objective 
 		 * languages which makes code much simpler to follow 

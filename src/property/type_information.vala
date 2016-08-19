@@ -2,6 +2,28 @@ namespace GData
 {
 	public delegate void ParamSpecDelegate (ParamSpec pspec);
 
+	public static bool can_translate_value_type (Type val1, Type val2)
+	{
+		return ((GLib.Value.type_compatible(val1, val2) == true) ||
+		        (GLib.Value.type_transformable(val1, val2) == true));
+	}
+
+	public static bool can_translate_value (GLib.Value val1, GLib.Value val2)
+	{
+		return (can_translate_value_type (val2.type(), val2.type()));
+	}
+
+	public static bool copy_or_transform_value (GLib.Value val1, ref GLib.Value val2)
+	{
+		if (GLib.Value.type_compatible(val1.type(), val2.type()) == true)
+			val1.copy (ref val2);
+		else if (GLib.Value.type_transformable(val1.type(), val2.type()) == true)
+			val1.transform (ref val2);
+		else
+			return (false);
+		return (true);
+	}
+
 	public class TypeInformation
 	{
 		private static TypeInformation? _instance = null;
@@ -34,14 +56,12 @@ namespace GData
 		 */
 		public ParamSpec? find_property_from_type (Type type, string property_name)
 		{
-stdout.printf("find_property_from_type(%s,%s)\n", type.name(), property_name);
 			string prop = property_name;
 			ParamSpec? _property = ((ObjectClass) type.class_ref()).find_property (prop);
 			if ((_property == null) && (PropertyAlias.contains(prop) == true)) {
 				prop = PropertyAlias.get_instance(property_name).safe_get_for (type, property_name);
 				_property = ((ObjectClass) type.class_ref()).find_property (prop);
 			}
-stdout.printf("find_property_from_type(%i)\n", (int) (_property != null));
 			return (_property);
 		}
 
@@ -57,11 +77,58 @@ stdout.printf("find_property_from_type(%i)\n", (int) (_property != null));
 		 */
 		public ParamSpec? find_property_from_ref (Object? obj, string property_name)
 		{
-stdout.printf("find_property_from_type(%s,%s)\n", (obj==null)?null:obj.get_type().name(), property_name);
 			if ((obj == null) || (property_name == ""))
 				return (null);
-stdout.printf("find_property_from_type(%s,%s)\n", (obj==null)?null:obj.get_type().name(), property_name);
 			return (find_property_from_type (obj.get_type(), property_name));
+		}
+
+
+		/**
+		 * Finds property trough type and if unsucessful, tries finding one
+		 * trough property aliases
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param type Object type property is searhed for
+		 * @param property_name Property name
+		 * @param restrict_to Restricts result to specified type, if it is not
+		 *                    transformable, null is returned
+		 * @return ParamSpec of found property or null if not found
+		 */
+		public ParamSpec? find_typesafe_property_from_type (Type type, string property_name, Type restrict_to=GLib.Type.INVALID)
+		{
+			string prop = property_name;
+			ParamSpec? _property = ((ObjectClass) type.class_ref()).find_property (prop);
+			if ((_property == null) && (PropertyAlias.contains(prop) == true)) {
+				prop = PropertyAlias.get_instance(property_name).safe_get_for (type, property_name);
+				_property = ((ObjectClass) type.class_ref()).find_property (prop);
+			}
+			if ((restrict_to != Type.INVALID) && (_property != null))
+				if ((GLib.Value.type_compatible(_property.value_type, restrict_to) == true) ||
+					(GLib.Value.type_transformable(_property.value_type, restrict_to) == true))
+					return (_property);
+				else
+					return (null);
+			return (_property);
+		}
+
+		/**
+		 * Finds property trough objects type and if unsucessful, tries finding
+		 * one trough property aliases
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param type Object type property is searhed for
+		 * @param property_name Property name
+		 * @param restrict_to Restricts result to specified type, if it is not
+		 *                    transformable, null is returned
+		 * @return ParamSpec of found property or null if not found
+		 */
+		public ParamSpec? find_typesafe_property_from_ref (Object? obj, string property_name, Type restrict_to=GLib.Type.INVALID)
+		{
+			if ((obj == null) || (property_name == ""))
+				return (null);
+			return (find_typesafe_property_from_type (obj.get_type(), property_name));
 		}
 
 		/**

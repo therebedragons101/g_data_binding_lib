@@ -38,8 +38,6 @@ COMMON_INTERNAL := common/consts.vala \
 
 SOURCES := ${LIBRARY_NAME}.vala \
 	${COMMON_INTERNAL} \
-	common/boolean_flag.vala \
-	common/boolean_group.vala \
 	common/compare_data_by.vala \
 	common/delegates.vala \
 	common/gobject_array.vala \
@@ -74,9 +72,14 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	contracts/custom_binding_source_value.vala \
 	contracts/custom_property_notification_binding_source.vala \
 	contracts/delegates.vala \
+	contracts/enum_state.vala \
+	contracts/enum_state_group.vala \
+	contracts/flag_state.vala \
+	contracts/flag_state_group.vala \
 	contracts/methods.vala \
 	contracts/pointer_namespace.vala \
 	contracts/pointer_storage.vala \
+	contracts/proxy_property.vala \
 	contracts/signal_controlled_binding_pointer.vala \
 	contracts/timer_controlled_binding_pointer.vala \
 	property/bind_flags.vala \

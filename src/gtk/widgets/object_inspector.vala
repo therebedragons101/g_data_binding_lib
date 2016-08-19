@@ -124,8 +124,9 @@ namespace GDataGtk
 		 * @since 0.1
 		 */
 		public ObjectInspectorView display_options { get; set; default=ObjectInspectorView.ALL; }
-		private BooleanFlag display_properties;
-		private BooleanFlag display_signals;
+		private FlagStateGroup display_flags;
+		private FlagState display_properties;
+		private FlagState display_signals;
 
 		/**
 		 * Reference monitor flags
@@ -133,9 +134,7 @@ namespace GDataGtk
 		 * @since 0.1
 		 */
 		public ReferenceMonitorShowView reference_monitor_options { get; set; default=ReferenceMonitorShowView.NAME | ReferenceMonitorShowView.REFERENCE; }
-		private BooleanFlag reference_show_name;
-		private BooleanFlag reference_show_description;
-		private BooleanFlag reference_show_reference;
+		private FlagStateGroup reference_display_flags;
 
 		[GtkChild] private Gtk.ListBox object_inspector_list_box;
 		[GtkChild] private Gtk.ListBox static_info_object_inspector_list_box;
@@ -308,11 +307,9 @@ namespace GDataGtk
 			_static_items.add (type_row);
 
 			description_row = new ObjectInspectorRow(this, "Description", true);
-//			description_row.get_action_container().visible = true;
 			_static_items.add (description_row);
 
 			ref_row = new ObjectInspectorRow(this, "Ref count", true);
-//			ref_row.get_action_container().visible = false;
 			PreflightEventBox ev3 = create_event_label ("ref()", false);
 			ref_row.pack_action_widget (ev3);
 			ev3.clicked.connect (() => {
@@ -348,7 +345,8 @@ namespace GDataGtk
 			expander.hexpand = true;
 			expander.use_markup = true;
 			expander.visible = true;
-			_binder().bind (display_properties, "state", expander, "expanded", BindFlags.SYNC_CREATE|BindFlags.BIDIRECTIONAL);
+			_binder().bind (display_flags.get_state(ObjectInspectorView.PROPERTIES), "state", expander, "expanded", 
+				BindFlags.SYNC_CREATE|BindFlags.BIDIRECTIONAL);
 			props_title.pack_custom_widget (expander);
 			props_title.pack_action_widget (create_event_label ("track all", false, "", ((s) => {
 				for (int i=0; i<_tracked.length; i++)
@@ -618,11 +616,11 @@ namespace GDataGtk
 			_synced_to = new StrictWeakReference<ObjectInspector?>(null, handle_invalid_sync);
 			_current_log_array = _log_array;
 			ReferenceMonitor.__get_object_description = _get_full_object_str_desc;
-			display_properties = new BooleanFlag (this, "display-options", ObjectInspectorView.PROPERTIES, true);
-			display_signals = new BooleanFlag (this, "display-options", ObjectInspectorView.SIGNALS, true);
-			reference_show_name = new BooleanFlag (this, "reference-monitor-options", ReferenceMonitorShowView.NAME, true);
-			reference_show_description = new BooleanFlag (this, "reference-monitor-options", ReferenceMonitorShowView.NOTIFICATION, true);
-			reference_show_reference = new BooleanFlag (this, "reference-monitor-options", ReferenceMonitorShowView.REFERENCE, true);
+			display_flags = new FlagStateGroup (this, "display-options");
+			reference_display_flags = new FlagStateGroup (this, "reference-monitor-options");
+
+			display_properties = display_flags.get_state(ObjectInspectorView.PROPERTIES);
+			display_signals = display_flags.get_state(ObjectInspectorView.SIGNALS);
 			notify["display-options"].connect (() => { handle_search_changed(); });
 
 			create_inspector_widget_registry();
@@ -656,9 +654,9 @@ namespace GDataGtk
 			reference_monitor_listbox.bind_model (ReferenceMonitorGroup.get_default(), (o) => {
 				SmoothListBoxRow row = new SmoothListBoxRow.with_delete (o, 4);
 				ReferenceMonitorRow rrow = new ReferenceMonitorRow ((ReferenceMonitor) o);
-				_binder().bind (reference_show_name, "state", rrow, "show-name", BindFlags.SYNC_CREATE);
-				_binder().bind (reference_show_description, "state", rrow, "show-notification", BindFlags.SYNC_CREATE);
-				_binder().bind (reference_show_reference, "state", rrow, "show-reference", BindFlags.SYNC_CREATE);
+				_binder().bind (reference_display_flags.get_state(ReferenceMonitorShowView.NAME), "state", rrow, "show-name", BindFlags.SYNC_CREATE);
+				_binder().bind (reference_display_flags.get_state(ReferenceMonitorShowView.NOTIFICATION), "state", rrow, "show-notification", BindFlags.SYNC_CREATE);
+				_binder().bind (reference_display_flags.get_state(ReferenceMonitorShowView.REFERENCE), "state", rrow, "show-reference", BindFlags.SYNC_CREATE);
 				row.get_container().pack_start (rrow, true, true);
 				row.action_taken.connect ((action, obj) => {
 					if (action == ACTION_DELETE)

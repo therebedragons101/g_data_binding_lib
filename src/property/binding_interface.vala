@@ -70,7 +70,10 @@ namespace GData
 		 * @return BindingInterface reference to it self to allow chain API in
 		 *         objective oriented languages
 		 */
-		public abstract BindingInterface add_property_notification (BindingSide side, string property_name);
+		public BindingInterface add_property_notification (BindingSide side, string property_name)
+		{
+			return (add_custom_property_notification ((side == BindingSide.SOURCE) ? source : target, property_name, side));
+		}
 
 		/**
 		 * Adds signal to binding as notification its data has changed
@@ -78,11 +81,47 @@ namespace GData
 		 * @since 0.1
 		 * 
 		 * @param side Specifies side which signal will be connected to
-		 * @param signal_name Specifies signal that need to be connected
+		 * @param detailed_signal_name Specifies signal that need to be 
+		 *                             connected. Signal supports signal::quark
+		 *                             structure where quark is not necessary
 		 * @return BindingInterface reference to it self to allow chain API in
 		 *         objective oriented languages
 		 */
-		public abstract BindingInterface add_signal (BindingSide side, string signal_name);
+		public BindingInterface add_signal (BindingSide side, string detailed_signal_name)
+		{
+			return (add_custom_signal ((side == BindingSide.SOURCE) ? source : target, detailed_signal_name, side));
+		}
+
+		/**
+		 * Adds property to binding as notification its data has changed
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param obj Object containing the property
+		 * @param property_name Specifies array of properties that need to be
+		 *                       connected
+		 * @param trigger_update_from Specifies side which property will be 
+		 *                            connected to
+		 * @return BindingInterface reference to it self to allow chain API in
+		 *         objective oriented languages
+		 */
+		public abstract BindingInterface add_custom_property_notification (Object? obj, string property_name, BindingSide trigger_update_from);
+
+		/**
+		 * Adds signal to binding as notification its data has changed
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param obj Object containing the property
+		 * @param detailed_signal_name Specifies signal that need to be 
+		 *                             connected. Signal supports signal::quark
+		 *                             structure where quark is not necessary
+		 * @param trigger_update_from Specifies side which property will be 
+		 *                            connected to
+		 * @return BindingInterface reference to it self to allow chain API in
+		 *         objective oriented languages
+		 */
+		public abstract BindingInterface add_custom_signal (Object? obj, string detailed_signal_name, BindingSide trigger_update_from);
 
 		/**
 		 * Adds properties to binding as notification its data has changed

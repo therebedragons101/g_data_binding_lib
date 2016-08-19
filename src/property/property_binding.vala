@@ -775,15 +775,17 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 * 
-		 * @param side Specifies side which property will be connected to
-		 * @param property_names Specifies array of properties that need to be
+		 * @param obj Object containing the property
+		 * @param property_name Specifies array of properties that need to be
 		 *                       connected
+		 * @param trigger_update_from Specifies side which property will be 
+		 *                            connected to
 		 * @return BindingInterface reference to it self to allow chain API in
 		 *         objective oriented languages
 		 */
-		public BindingInterface add_property_notification (BindingSide side, string property_name)
+		public BindingInterface add_custom_property_notification (Object? obj, string property_name, BindingSide trigger_update_from)
 		{
-			return (add_signal (side, "notify::" + property_name));
+			return (add_custom_signal (obj, "notify::" + property_name, trigger_update_from));
 		}
 
 		/**
@@ -791,14 +793,16 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 * 
-		 * @param side Specifies side which signal will be connected to
+		 * @param obj Object containing the property
 		 * @param signal_name Specifies signal that need to be connected
+		 * @param trigger_update_from Specifies side which property will be 
+		 *                            connected to
 		 * @return BindingInterface reference to it self to allow chain API in
 		 *         objective oriented languages
 		 */
-		public BindingInterface add_signal (BindingSide side, string signal_name)
+		public BindingInterface add_custom_signal (Object? obj, string signal_name, BindingSide trigger_update_from)
 		{
-			connect_signal ((side == BindingSide.SOURCE) ? source : target, signal_name, (side == BindingSide.SOURCE));
+			connect_signal (obj, signal_name, (trigger_update_from == BindingSide.SOURCE));
 			return (this);
 		}
 

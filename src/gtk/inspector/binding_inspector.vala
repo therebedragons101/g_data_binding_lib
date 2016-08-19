@@ -25,7 +25,6 @@ namespace GDataGtk
 
 		private Gtk.Button source_info_btn;
 		private Gtk.Button clear_btn;
-//		private Gtk.ToggleButton compact_events_btn;
 		private Gtk.MenuButton find_btn;
 		private Gtk.Label main_title;
 		private Gtk.Label sub_title;
@@ -66,10 +65,11 @@ namespace GDataGtk
 		protected string binding_search_text { get; set; default=""; }
 
 		protected BindingNamespaceViewMode binding_namespace_view { get; set; default=BindingNamespaceViewMode.ALL; }
-		private BooleanGroup binding_namespace_view_flags;
+		private FlagStateGroup binding_namespace_view_flags;
+		private ProxyProperty _test_proxy;
 
 		protected EventFilterMode event_filter { get; set; default=EventFilterMode.ALL; }
-		private BooleanGroup event_filter_flags;
+		private FlagStateGroup event_filter_flags;
 
 //		public bool compact_events { get; set; default = false; }
 
@@ -352,8 +352,10 @@ namespace GDataGtk
 
 		private BindingInspector()
 		{
-			event_filter_flags = new BooleanGroup (this, "event-filter", false);
-			binding_namespace_view_flags = new BooleanGroup (this, "binding-namespace-view", false);
+			event_filter_flags = new FlagStateGroup (this, "event-filter", false);
+			binding_namespace_view_flags = new FlagStateGroup (this, "binding-namespace-view", false);
+			_test_proxy = new ProxyProperty (this, "event-filter", GLib.Value(typeof(EventFilterMode)));
+			_test_proxy.value_changed.connect (() => { stdout.printf("value changed\n"); });
 
 			if (self_ref == null)
 				self_ref = new StrictWeakRef(null);
