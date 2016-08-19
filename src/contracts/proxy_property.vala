@@ -211,21 +211,21 @@ namespace GData
 			if (is_binding_pointer(_wref.target) == true) {
 				parm = TypeInformation.get_instance().find_typesafe_property_from_ref (as_pointer_source(_wref.target), _original_property_name, restrict_to);
 				if ((parm != null) && (as_pointer_source(_wref.target) != null))
-					Signal.connect_swapped(as_pointer_source(_wref.target), "notify::" + parm.name, (Callback) property_changed, this);
+					signal_handler_id = Signal.connect_swapped(as_pointer_source(_wref.target), "notify::" + parm.name, (Callback) property_changed, this);
 				as_pointer(obj).before_source_change.connect ((b, i, n) => {
 					unbind();
 				});
 				as_pointer(obj).source_changed.connect ((b) => {
 					parm = TypeInformation.get_instance().find_typesafe_property_from_ref (as_pointer_source(_wref.target), _original_property_name, restrict_to);
 					if (parm != null)
-						Signal.connect_swapped(as_pointer_source(_wref.target), "notify::" + parm.name, (Callback) property_changed, this);
+						signal_handler_id = Signal.connect_swapped(as_pointer_source(_wref.target), "notify::" + parm.name, (Callback) property_changed, this);
 					value_changed();
 				});
 			}
 			else {
 				parm = TypeInformation.get_instance().find_typesafe_property_from_ref (_wref.target, _original_property_name, restrict_to);
 				if (parm != null)
-					Signal.connect_swapped(_wref.target, "notify::" + parm.name, (Callback) property_changed, this);
+					signal_handler_id = Signal.connect_swapped(_wref.target, "notify::" + parm.name, (Callback) property_changed, this);
 			}
 			value_changed();
 		}

@@ -102,11 +102,10 @@ namespace GData
 		{
 			_group = new StrictWeakReference<FlagStateGroup> (group);
 			_watched_flag = flag;
-			if (_group.is_valid_ref() == true)
-				_group.target.notify["flags"].connect (() => {
-					notify_property ("flags");
-					check_state();
-				});
+			_group.target.notify["flags"].connect (() => {
+				notify_property ("flags");
+				check_state();
+			});
 			check_state();
 			notify_property ("flags");
 		}
@@ -131,6 +130,9 @@ namespace GData
 			_proxy = new ProxyProperty (obj, property_name, invalid, bidirectional, typeof(uint));
 			_watched_flag = flag;
 			_proxy.value_changed.connect (() => {
+				GLib.Value val = GLib.Value(typeof(uint));
+				_proxy.get_property_value (ref val);
+				_flags = val.get_uint();
 				notify_property ("flags");
 				check_state();
 			});

@@ -71,8 +71,6 @@ namespace GDataGtk
 		protected EventFilterMode event_filter { get; set; default=EventFilterMode.ALL; }
 		private FlagStateGroup event_filter_flags;
 
-//		public bool compact_events { get; set; default = false; }
-
 		private static BindingInspector? _instance = null;
 		public static BindingInspector instance {
 			get {
@@ -280,15 +278,6 @@ namespace GDataGtk
 		private bool ref_timer()
 		{
 			if (inspector_is_visible == true) {
-/*				weak Object? __current_data = current_data;
-				weak Object? __current_data_data = (__current_data != null) ? current_data.data : null;
-				weak Object? __current_data_source = (__current_data != null) ? current_data.get_source() : null;
-				ptr_ref = (__current_data == null) ? -1 : (int) __current_data.ref_count;
-				data_ref = (__current_data_data == null) ? -1 : (int) __current_data_data.ref_count;
-				src_ref = (__current_data_source == null) ? -1 : (int) __current_data_source.ref_count;
-				ref_count_.set_markup ((ptr_ref == -1) ? bold(red("null")) : bold("%i").printf(ptr_ref));
-				data_ref_count.set_markup ((data_ref == -1) ? bold(red("null")) : bold("%i").printf(data_ref));
-				source_ref_count.set_markup ((src_ref == -1) ? bold(red("null")) : bold("%i").printf(src_ref));*/
 				string p, d, s;
 				_get_reference_markup (wdata_ref, out p, out d, out s);
 				ref_count_.set_markup (p);
@@ -352,6 +341,7 @@ namespace GDataGtk
 
 		private BindingInspector()
 		{
+			stdout.printf ("EventFilterMode.SHOW_FULL_DESCRIPTION=%lu\n", (uint) EventFilterMode.SHOW_FULL_DESCRIPTION);
 			event_filter_flags = new FlagStateGroup (this, "event-filter", false);
 			binding_namespace_view_flags = new FlagStateGroup (this, "binding-namespace-view", false);
 			_test_proxy = new ProxyProperty (this, "event-filter", GLib.Value(typeof(EventFilterMode)));
@@ -376,7 +366,6 @@ namespace GDataGtk
 
 			source_info_btn = (Gtk.Button) ui_builder.get_object ("source_info_btn");
 			clear_btn = (Gtk.Button) ui_builder.get_object ("clear_btn");
-//			compact_events_btn = (Gtk.ToggleButton) ui_builder.get_object ("compact_events_btn");
 			find_btn = (Gtk.MenuButton) ui_builder.get_object ("find_btn");
 			main_title = (Gtk.Label) ui_builder.get_object ("main_title");
 			sub_title = (Gtk.Label) ui_builder.get_object ("sub_title");
@@ -407,8 +396,6 @@ namespace GDataGtk
 			binding_nr = (Gtk.Label) ui_builder.get_object ("binding_nr");
 			suspended = (Gtk.Label) ui_builder.get_object ("suspended");
 			is_valid = (Gtk.Label) ui_builder.get_object ("is_valid");
-
-//			main_contract.binder = binder;
 
 			main_contract.before_source_change.connect ((pointer, is_same, next) => {
 			});

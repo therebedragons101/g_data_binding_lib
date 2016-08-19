@@ -41,7 +41,7 @@ namespace GData
 		 */
 		public uint flags {
 			get {
-				if (is_valid() == false)
+				if (is_valid() == true)
 					return (_flags);
 				return (__invalid_value);
 			}
@@ -77,7 +77,8 @@ namespace GData
 			__invalid_value = invalid_value;
 			value_changed.connect (() => {
 				GLib.Value val = GLib.Value (typeof(uint));
-				get_property_value (ref val);
+				if (get_property_value (ref val) == false)
+					GLib.message ("FlagStateGroup.Retrieving property value for '%s' failed", property_name);
 				_flags = val.get_uint();
 				notify_property("flags");
 			});

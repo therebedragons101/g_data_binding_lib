@@ -80,6 +80,7 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	contracts/pointer_namespace.vala \
 	contracts/pointer_storage.vala \
 	contracts/proxy_property.vala \
+	contracts/proxy_property_group.vala \
 	contracts/signal_controlled_binding_pointer.vala \
 	contracts/timer_controlled_binding_pointer.vala \
 	property/bind_flags.vala \

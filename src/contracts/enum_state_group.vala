@@ -41,7 +41,7 @@ namespace GData
 		 */
 		public uint enum_value {
 			get {
-				if (is_valid() == false)
+				if (is_valid() == true)
 					return (_enum_value);
 				return (__invalid_value);
 			}

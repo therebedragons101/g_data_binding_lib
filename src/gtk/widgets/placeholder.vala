@@ -8,6 +8,11 @@ namespace GDataGtk
 	public const string TRUE_ICON = "checkbox-checked-symbolic.symbolic";
 	public const string FALSE_ICON = "checkbox-symbolic.symbolic";
 
+	/**
+	 * Simple placeholder widget that contains icon and description
+	 * 
+	 * @since 0.1
+	 */
 	[GtkTemplate (ui="/org/gtk/g_data_binding_gtk/data/placeholder.ui")]
 	public class Placeholder : Gtk.Box
 	{
@@ -29,6 +34,11 @@ namespace GDataGtk
 		[GtkChild] private Gtk.Label wlabel;
 		[GtkChild] private Gtk.Box image_box;
 
+		/**
+		 * Specifies if label uses markup or not
+		 * 
+		 * @since 0.1
+		 */
 		public bool use_markup { get; set; }
 
 		private Gtk.IconSize _size = Gtk.IconSize.DIALOG;
@@ -40,6 +50,11 @@ namespace GDataGtk
 			}
 		}
 
+		/**
+		 * Label text
+		 * 
+		 * @since 0.1
+		 */
 		private string label {
 			get { return (wlabel.label); }
 			set {
@@ -51,6 +66,12 @@ namespace GDataGtk
 		}
 
 		private Gtk.Image? _image = null;
+		/**
+		 * Image widget which can either be manipulated or swapped for another
+		 * one.
+		 * 
+		 * @since 0.1
+		 */
 		public Gtk.Image? image {
 			get { return (_image); }
 			set {
@@ -66,6 +87,16 @@ namespace GDataGtk
 			}
 		}
 
+		/**
+		 * Creates most common set placeholder that has label "No items found",
+		 * and dialog sized STOP icon
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param label Label text
+		 * @param size Icon and text size
+		 * @param icon_name Icon name
+		 */
 		public Placeholder.from_icon (string label = "No items found", 
 		                              Gtk.IconSize size = Gtk.IconSize.DIALOG,
 		                              string icon_name = STOP_ICON) 
@@ -74,6 +105,15 @@ namespace GDataGtk
 				create_image_from_icon (icon_name, null, null, WidgetDefaults.get_default().get_icon_size(size), false));
 		}
 
+		/**
+		 * Creates new placeholder widget
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param label Label text
+		 * @param size Icon and text size
+		 * @param icon_name Icon name
+		 */
 		public Placeholder (string label, Gtk.IconSize size, Gtk.Image image)
 		{
 			this.label = label;
