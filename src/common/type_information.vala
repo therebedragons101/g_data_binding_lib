@@ -24,6 +24,21 @@ namespace GData
 		return (true);
 	}
 
+	public static int get_hierarchy_gap (Type from, Type to)
+	{
+		if ((from.is_classed() == false) || (to.is_classed() == false))
+			return (int.MAX);
+		int count = 0;
+		Type c = from;
+		while (c != to) {
+			count++;
+			if (c.parent() == Type.INVALID)
+				return (int.MAX);
+			c = c.parent();
+		}
+		return (count);
+	}
+
 	public class TypeInformation
 	{
 		private static TypeInformation? _instance = null;

@@ -30,7 +30,7 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 */
-		public abstract string source_property { get; }
+		public abstract string source_property { owned get; }
 		/**
 		 * Target object
 		 * 
@@ -42,7 +42,7 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 */
-		public abstract string target_property { get; }
+		public abstract string target_property { owned get; }
 		/**
 		 * Flags that describe property binding creation and status
 		 * 

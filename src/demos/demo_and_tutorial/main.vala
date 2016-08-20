@@ -241,7 +241,6 @@ public class DemoAndTutorial : Gtk.Application
 	protected override void startup ()
 	{
 		base.startup ();
-
 		// allocate "default" property as "&"
 		PropertyAlias.get_instance ("&")
 			.register (typeof(Gtk.Entry), "text")

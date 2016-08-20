@@ -188,12 +188,33 @@ namespace GData
 		 */
 		CUSTOM_EVENTS_ONLY,
 		/**
-		 * Specifies all error reporting should be disabled as there is no
+		 * Specifies all error reporting should be supressed as there is no
 		 * guarantee that binding is possible
 		 * 
 		 * @since 0.1
 		 */
-		BIND_IF_POSSIBLE;
+		SUPRESS_WARNINGS,
+		/**
+		 * Specifies binding should not use registered handler and instead use
+		 * handler specified in its original_type property
+		 * 
+		 * @since 0.1
+		 */
+		USE_ORIGINAL_SOURCE_TYPE,
+		/**
+		 * Specifies binding should not use registered handler and instead use
+		 * handler specified in its original_type property
+		 * 
+		 * @since 0.1
+		 */
+		USE_ORIGINAL_TARGET_TYPE,
+		/**
+		 * Specifies binding should not use registered handler and instead use
+		 * handler specified in its original_type property
+		 * 
+		 * @since 0.1
+		 */
+		USE_ORIGINAL_TYPES = USE_ORIGINAL_SOURCE_TYPE | USE_ORIGINAL_TARGET_TYPE;
 
 		/**
 		 * Checks if FLOOD_DETECTION flag is enabled or not
@@ -292,7 +313,27 @@ namespace GData
 		 */
 		public bool IS_CONDITIONAL()
 		{
-			return ((this & BindFlags.BIND_IF_POSSIBLE) == BindFlags.BIND_IF_POSSIBLE);
+			return ((this & BindFlags.SUPRESS_WARNINGS) == BindFlags.SUPRESS_WARNINGS);
+		}
+
+		/**
+		 * Checks if USE_ORIGINAL_SOURCE_TYPE flag is set
+		 * 
+		 * @since 0.1
+		 */
+		public bool IS_ORIGINAL_SOURCE()
+		{
+			return ((this & BindFlags.USE_ORIGINAL_SOURCE_TYPE) == BindFlags.USE_ORIGINAL_SOURCE_TYPE);
+		}
+
+		/**
+		 * Checks if USE_ORIGINAL_SOURCE_TYPE flag is set
+		 * 
+		 * @since 0.1
+		 */
+		public bool IS_ORIGINAL_TARGET()
+		{
+			return ((this & BindFlags.USE_ORIGINAL_TARGET_TYPE) == BindFlags.USE_ORIGINAL_TARGET_TYPE);
 		}
 
 		public string get_direction_arrow()

@@ -36,6 +36,8 @@ COMMON_INTERNAL := common/consts.vala \
 	common/markup.vala \
 	common/methods.vala
 
+#	vapi/open_object.c \
+
 SOURCES := ${LIBRARY_NAME}.vala \
 	${COMMON_INTERNAL} \
 	common/compare_data_by.vala \
@@ -49,6 +51,7 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	common/strict_weak_ref.vala \
 	common/strict_weak_reference_t.vala \
 	common/unique_by_properties.vala \
+	common/type_information.vala \
 	common/weak_ref.vala \
 	common/weak_ref_wrapper.vala \
 	common/weak_reference_t.vala \
@@ -85,14 +88,16 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	contracts/timer_controlled_binding_pointer.vala \
 	property/bind_flags.vala \
 	property/binder.vala \
-	property/binding_side.vala \
+	property/binding_data_transfer.vala \
+	property/binding_defaults.vala \
 	property/binding_interface.vala \
 	property/binding_namespace.vala \
+	property/binding_side.vala \
 	property/data_flood_detection.vala \
 	property/delegates.vala \
+	property/gobject_binding_data_transfer.vala \
 	property/property_alias.vala \
 	property/property_binding.vala \
-	property/type_information.vala \
 	row_models/enum_flags_model.vala \
 	row_models/enum_flags_value_object.vala \
 	row_models/inverted_list_model.vala \
@@ -173,6 +178,8 @@ GTK_PACKAGES := --pkg gtk+-3.0
 resources:
 	sh ../scripts/build_resources.sh
 
+#		--enable-experimental-non-null \
+
 ${LIBRARY_NAME}.so:
 	valac \
 		-H ${INCLUDES}${LIBRARY_NAME}.h \
@@ -186,6 +193,7 @@ ${LIBRARY_NAME}.so:
 		-o ${LIBRARY_NAME}${LIB_MAJOR}.so \
 	${PACKAGES} \
 	${SOURCES}
+
 
 ${COMMON_NAME}_generics${NAME_SUFFIX}.so:
 	valac \

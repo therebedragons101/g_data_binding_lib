@@ -169,52 +169,43 @@ namespace GData
 			return (true);
 		}
 
-		private StrictWeakReference<Object?>? _source = null;
+		private BindingDataTransfer? _source_transfer = null;
+		private BindingDataTransfer? _target_transfer = null;
+
 		/**
 		 * Source object data is being transfered from
 		 * 
 		 * @delay 0.1
 		 */
 		public Object? source {
-			get { return (_source.target); }
+			get { return (_source_transfer.get_object()); }
 		}
 
-		private ParamSpec? _source_property = null;
 		/**
 		 * Source property name
 		 * 
 		 * @since 0.1
 		 */
 		public string source_property { 
-			get { 
-				if (_source_property == null)
-					return ("");
-				return (_source_property.name); 
-			}
+			owned get {	return (_source_transfer.get_name()); }
 		}
 
-		private StrictWeakReference<Object?>? _target = null;
 		/**
 		 * Target object data is being transfered to
 		 * 
 		 * @delay 0.1
 		 */
-		public Object? target { 
-			get { return (_target.target); }
+		public Object? target {
+			get { return (_target_transfer.get_object()); }
 		}
 
-		private ParamSpec? _target_property = null;
 		/**
 		 * Target property name
 		 * 
 		 * @since 0.1
 		 */
 		public string target_property { 
-			get { 
-				if (_target_property == null)
-					return ("");
-				return (_target_property.name); 
-			}
+			owned get {	return (_target_transfer.get_name()); }
 		}
 
 		private BindFlags _flags = BindFlags.DEFAULT;
@@ -306,21 +297,19 @@ namespace GData
 			if (unbound == false)
 				return;
 			unbound = false;
-			if (_source.is_valid_ref() == true) {
+			if (_source_transfer.is_valid_ref() == true) {
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
 				    (_flags.IS_REVERSE() == false)) {
 					if (_flags.IS_CUSTOM_EVENTS_ONLY() == false)
-						connect_signal (source, "notify::" + source_property, true);
-//						source.notify[source_property].connect (notify_transfer_from_source);
+						_source_transfer.connect_signal();
 					// Connect additional events
 				}
 			}
-			if (_target.is_valid_ref() == true) {
+			if (_target_transfer.is_valid_ref() == true) {
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
 				    (_flags.IS_REVERSE() == true)) {
 					if (_flags.IS_CUSTOM_EVENTS_ONLY() == false)
-						connect_signal (target, "notify::" + target_property, false);
-//						target.notify[target_property].connect (notify_transfer_from_target);
+						_target_transfer.connect_signal();
 					// Connect additional events
 				}
 			}
@@ -331,24 +320,10 @@ namespace GData
 			if (_flags.HAS_MANUAL_UPDATE() == true)
 				return;
 			unbound = true;
+			_source_transfer.disconnect_signal();
+			_target_transfer.disconnect_signal();
 			for (int i=0; i<_signals.length; i++)
 				_signals.data[i].disconnect_signal();
-/*			if (_source.is_valid_ref() == true) {
-				if ((_flags.IS_BIDIRECTIONAL() == true) ||
-				    (_flags.IS_REVERSE() == false)) {
-					if (_flags.IS_CUSTOM_EVENTS_ONLY() == false)
-						source.notify[source_property].disconnect (notify_transfer_from_source);
-					// Disconect additional events
-				}
-			}
-			if (_target.is_valid_ref() == true) {
-				if ((_flags.IS_BIDIRECTIONAL() == true) ||
-				    (_flags.IS_REVERSE() == true)) {
-					if (_flags.IS_CUSTOM_EVENTS_ONLY() == false)
-						target.notify[target_property].disconnect (notify_transfer_from_target);
-					// Disconect additional events
-				}
-			}*/
 		}
 
 		/**
@@ -398,9 +373,9 @@ namespace GData
 
 		private void target_set_value (bool set_default)
 		{
-			Value srcval = Value(_source_property.value_type);
-			Value tgtval = Value(_target_property.value_type);
-			source.get_property (source_property, ref srcval);
+			Value srcval = Value(_source_transfer.get_value_type());
+			Value tgtval = Value(_target_transfer.get_value_type());
+			_source_transfer.get_value (ref srcval);
 
 			bool res = true;
 			if (_transform_to != null) {
@@ -413,14 +388,14 @@ namespace GData
 					do_invert_boolean (ref tgtval);
 			}
 			if (res == true)
-				target.set_property (target_property, tgtval);
+				_target_transfer.set_value (tgtval);
 		}
 
 		private void source_set_value (bool set_default)
 		{
-			Value srcval = Value(_source_property.value_type);
-			Value tgtval = Value(_target_property.value_type);
-			target.get_property (target_property, ref tgtval);
+			Value srcval = Value(_source_transfer.get_value_type());
+			Value tgtval = Value(_target_transfer.get_value_type());
+			_target_transfer.get_value (ref tgtval);
 
 			bool res = true;
 			if (_transform_from != null) {
@@ -433,12 +408,12 @@ namespace GData
 					do_invert_boolean (ref srcval);
 			}
 			if (res == true)
-				source.set_property (source_property, srcval);
+				_source_transfer.set_value (srcval);
 		}
 
 		private bool flood_timeout()
 		{
-			if ((data_sync_in_process == true) || (_source.is_valid_ref() == false) || (_target.is_valid_ref() == false))
+			if ((data_sync_in_process == true) || (_source_transfer.is_valid_ref() == false) || (_target_transfer.is_valid_ref() == false))
 				return (false);
 			int64 ctime = GLib.get_monotonic_time()/1000;
 			if (ctime > (last_event+flood_interval)) {
@@ -487,7 +462,7 @@ namespace GData
 
 		private bool delay_timeout()
 		{
-			if ((_source.is_valid_ref() == false) || (_target.is_valid_ref() == false))
+			if ((_source_transfer.is_valid_ref() == false) || (_target_transfer.is_valid_ref() == false))
 				return (false);
 			int64 ctime = GLib.get_monotonic_time()/1000;
 			if (ctime > (last_event+delay_interval)) {
@@ -526,7 +501,7 @@ namespace GData
 
 		private void __update_from_source (bool set_default = false)
 		{
-			if (_target.is_valid_ref() == false)
+			if (_target_transfer.is_valid_ref() == false)
 				return;
 			if (((set_default == false) && (__is_active() == false)) || (is_locked > 0))
 				return;
@@ -541,20 +516,24 @@ namespace GData
 
 		private void _update_from_source (bool set_default = false)
 		{
-			if ((_source.is_valid_ref() == false) && (set_default == false)) {
-				GLib.warning ("Source object %s is not alive", _source_property.owner_type.name());
+			if ((_target_transfer.is_valid_ref() == false) && (set_default == false)) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Source object %s is not alive", _source_transfer.get_object_type());
 				return;
 			}
-			if (_target.is_valid_ref() == false) {
-				GLib.warning ("Target object %s is not alive", _target_property.owner_type.name());
+			if (_target_transfer.is_valid_ref() == false) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Target object %s is not alive", _target_transfer.get_object_type());
 				return;
 			}
-			if ((_target_property.flags & ParamFlags.WRITABLE) != ParamFlags.WRITABLE) {
-				GLib.warning ("Property (target) %s.\"%s\" is not writable", _target_property.owner_type.name(), target_property);
+			if ((_target_transfer.get_property_flags() & ParamFlags.WRITABLE) != ParamFlags.WRITABLE) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Property (target) %s.\"%s\" is not writable", _target_transfer.get_object_type(), target_property);
 				return;
 			}
-			if ((set_default == false) && ((_source_property.flags & ParamFlags.READABLE) != ParamFlags.READABLE)) {
-				GLib.warning ("Property (source) %s.\"%s\" is not readable", _source_property.owner_type.name(), source_property);
+			if ((set_default == false) && ((_source_transfer.get_property_flags() & ParamFlags.READABLE) != ParamFlags.READABLE)) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Property (source) %s.\"%s\" is not readable", _source_transfer.get_object_type(), source_property);
 				return;
 			}
 			__update_from_source (set_default);
@@ -582,7 +561,7 @@ namespace GData
 
 		private void __update_from_target (bool set_default = false)
 		{
-			if (_source.is_valid_ref() == false)
+			if (_source_transfer.is_valid_ref() == false)
 				return;
 			if ((__is_active() == false) || (is_locked > 0))
 				return;
@@ -597,20 +576,24 @@ namespace GData
 
 		private void _update_from_target (bool set_default = false)
 		{
-			if (_source.is_valid_ref() == false) {
-				GLib.warning ("Source object %s is not alive", _source_property.owner_type.name());
+			if (_source_transfer.is_valid_ref() == false) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Source object %s is not alive", _source_transfer.get_object_type());
 				return;
 			}
-			if ((_target.is_valid_ref() == false) && (set_default == false)) {
-				GLib.warning ("Target object %s is not alive", _target_property.owner_type.name());
+			if ((_target_transfer.is_valid_ref() == false) && (set_default == false)) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Target object %s is not alive", _target_transfer.get_object_type());
 				return;
 			}
-			if ((_source_property.flags & ParamFlags.WRITABLE) != ParamFlags.WRITABLE) {
-				GLib.warning ("Property (source) %s.\"%s\" is not writable", _source_property.owner_type.name(), source_property);
+			if ((_source_transfer.get_property_flags() & ParamFlags.WRITABLE) != ParamFlags.WRITABLE) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Property (source) %s.\"%s\" is not writable", _source_transfer.get_object_type(), source_property);
 				return;
 			}
-			if ((set_default == false) && ((_target_property.flags & ParamFlags.READABLE) != ParamFlags.READABLE)) {
-				GLib.warning ("Property (target) %s.\"%s\" is not readable", _target_property.owner_type.name(), target_property);
+			if ((set_default == false) && ((_target_transfer.get_property_flags() & ParamFlags.READABLE) != ParamFlags.READABLE)) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Property (target) %s.\"%s\" is not readable", _target_transfer.get_object_type(), target_property);
 				return;
 			}
 			__update_from_target (set_default);
@@ -638,7 +621,7 @@ namespace GData
 
 		private void initiate_connection()
 		{
-			if ((_source.is_valid_ref() == false) || (_target.is_valid_ref() == false))
+			if ((_source_transfer.is_valid_ref() == false) || (_target_transfer.is_valid_ref() == false))
 				return;
 			connect_signals();
 			initial_data_update();
@@ -682,37 +665,43 @@ namespace GData
 			bool tgtread = false;
 			bool tgtwrite = false;
 			if (source == null) {
-				GLib.warning ("Specified source is NULL");
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Specified source is NULL");
 				return (null);
 			}
 			if (target == null) {
-				GLib.warning ("Specified target is NULL");
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Specified target is NULL");
 				return (null);
 			}
 			if (source == target) {
-				GLib.warning ("(source == target), there is probably better way to bind the properties");
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("(source == target), there is probably better way to bind the properties");
 				return (null);
 			}
 
-			ParamSpec? _source_property = ((ObjectClass) source.get_type().class_ref()).find_property (srcprop);
-			ParamSpec? _target_property = ((ObjectClass) target.get_type().class_ref()).find_property (tgtprop);
-			if ((_source_property == null) && (PropertyAlias.contains(srcprop) == true)) {
-				srcprop = PropertyAlias.get_instance(source_property).safe_get_for (source.get_type(), source_property);
-				_source_property = ((ObjectClass) source.get_type().class_ref()).find_property (srcprop);
-			}
-			if ((_target_property == null) && (PropertyAlias.contains(tgtprop) == true)) {
-				tgtprop = PropertyAlias.get_instance(target_property).safe_get_for (target.get_type(), target_property);
-				_target_property = ((ObjectClass) target.get_type().class_ref()).find_property (tgtprop);
-			}
-
-			if ((_source_property == null) ||
-			    ((_source_property.flags & ParamFlags.CONSTRUCT_ONLY) == ParamFlags.CONSTRUCT_ONLY)) {
-				GLib.warning ("Type %s (source) does not contain property with name \"%s\"", source.get_type().name(), srcprop);
+			BindingDataTransfer? _source_transfer = BindingDefaults.get_instance().get_transfer_object_for (source, srcprop, flags.IS_ORIGINAL_SOURCE());
+			if (_source_transfer == null) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Could not allocate BindingDataTransfer for source(%s)", source.get_type().name());
 				return (null);
 			}
-			if ((_target_property == null) ||
-			    ((_target_property.flags & ParamFlags.CONSTRUCT_ONLY) == ParamFlags.CONSTRUCT_ONLY)) {
-				GLib.warning ("Type %s (target) does not contain property with name \"%s\"", target.get_type().name(), tgtprop);
+			BindingDataTransfer? _target_transfer = BindingDefaults.get_instance().get_transfer_object_for (target, tgtprop, flags.IS_ORIGINAL_TARGET());
+			if (_target_transfer == null) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Could not allocate BindingDataTransfer for target(%s)", target.get_type().name());
+				return (null);
+			}
+			if ((_source_transfer.get_name() == "") ||
+			    ((_source_transfer.get_property_flags() & ParamFlags.CONSTRUCT_ONLY) == ParamFlags.CONSTRUCT_ONLY)) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Type %s (source) does not contain property with name \"%s\"", source.get_type().name(), srcprop);
+				return (null);
+			}
+			if ((_target_transfer.get_name() == "") ||
+			    ((_target_transfer.get_property_flags() & ParamFlags.CONSTRUCT_ONLY) == ParamFlags.CONSTRUCT_ONLY)) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Type %s (target) does not contain property with name \"%s\"", target.get_type().name(), tgtprop);
 				return (null);
 			}
 			if (flags.IS_BIDIRECTIONAL() == true) {
@@ -730,44 +719,51 @@ namespace GData
 				tgtwrite = true;
 			}
 			if ((srcread == true) &&
-			    ((_source_property.flags & ParamFlags.READABLE) != ParamFlags.READABLE)) {
-				GLib.warning ("Type %s (source) does not contain READABLE property with name \"%s\"", source.get_type().name(), srcprop);
+			    ((_source_transfer.get_property_flags() & ParamFlags.READABLE) != ParamFlags.READABLE)) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Type %s (source) does not contain READABLE property with name \"%s\"", source.get_type().name(), srcprop);
 				return (null);
 			}
 			if ((srcwrite == true) &&
-			    ((_source_property.flags & ParamFlags.WRITABLE) != ParamFlags.WRITABLE)) {
-				GLib.warning ("Type %s (source) does not contain WRITABLE property with name \"%s\"", source.get_type().name(), srcprop);
+			    ((_source_transfer.get_property_flags() & ParamFlags.WRITABLE) != ParamFlags.WRITABLE)) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Type %s (source) does not contain WRITABLE property with name \"%s\"", source.get_type().name(), srcprop);
 				return (null);
 			}
 			if ((tgtread == true) &&
-			    ((_target_property.flags & ParamFlags.READABLE) != ParamFlags.READABLE)) {
-				GLib.warning ("Type %s (target) does not contain READABLE property with name \"%s\"", target.get_type().name(), tgtprop);
+			    ((_target_transfer.get_property_flags() & ParamFlags.READABLE) != ParamFlags.READABLE)) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Type %s (target) does not contain READABLE property with name \"%s\"", target.get_type().name(), tgtprop);
 				return (null);
 			}
 			if ((tgtwrite == true) &&
-			    ((_target_property.flags & ParamFlags.WRITABLE) != ParamFlags.WRITABLE)) {
-				GLib.warning ("Type %s (target) does not contain WRITABLE property with name \"%s\"", target.get_type().name(), tgtprop);
+			    ((_target_transfer.get_property_flags() & ParamFlags.WRITABLE) != ParamFlags.WRITABLE)) {
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("Type %s (target) does not contain WRITABLE property with name \"%s\"", target.get_type().name(), tgtprop);
 				return (null);
 			}
 			if ((flags.IS_DELAYED() == true) &&
 			    (flags.HAS_FLOOD_DETECTION() == true)) {
-				GLib.warning ("FLOOD_DETECTION and DELAYED are incompatible. Ignoring FLOOD_DETECTION");
+				if (flags.IS_CONDITIONAL() == false)
+					GLib.warning ("FLOOD_DETECTION and DELAYED are incompatible. Ignoring FLOOD_DETECTION");
 				flags = flags & ~(BindFlags.FLOOD_DETECTION);
 			}
 			// only do checks on writable parts as boolean might be result of translation
 			if (flags.HAS_INVERT_BOOLEAN() == true) {
 				if ((srcwrite == true) &&
-				    (_source_property.value_type != typeof(bool))) {
-					GLib.warning ("Type %s (source) does not contain WRITABLE boolean property with name \"%s\"", source.get_type().name(), srcprop);
+				    (_source_transfer.get_value_type() != typeof(bool))) {
+					if (flags.IS_CONDITIONAL() == false)
+						GLib.warning ("Type %s (source) does not contain WRITABLE boolean property with name \"%s\"", source.get_type().name(), srcprop);
 					return (null);
 				}
 				if ((tgtwrite == true) &&
-				    (_target_property.value_type != typeof(bool))) {
-					GLib.warning ("Type %s (target) does not contain WRITABLE boolean property with name \"%s\"", target.get_type().name(), tgtprop);
+				    (_target_transfer.get_value_type() != typeof(bool))) {
+					if (flags.IS_CONDITIONAL() == false)
+						GLib.warning ("Type %s (target) does not contain WRITABLE boolean property with name \"%s\"", target.get_type().name(), tgtprop);
 					return (null);
 				}
 			}
-			return (new PropertyBinding (source, _source_property, target, _target_property, flags, (owned) transform_to, (owned) transform_from));
+			return (new PropertyBinding (_source_transfer, _target_transfer, flags, (owned) transform_to, (owned) transform_from));
 		}
 
 		/**
@@ -811,6 +807,16 @@ namespace GData
 			if (unbound == false) {
 				unbound = true;
 				disconnect_signals();
+				if (_source_transfer != null) {
+					_source_transfer.changed.disconnect (___update_from_source);
+					_source_transfer.reference_dropped.disconnect (handle_source_dead);
+					_source_transfer = null;
+				}
+				if (_target_transfer != null) {
+					_target_transfer.changed.disconnect (___update_from_target);
+					_target_transfer.reference_dropped.disconnect (handle_target_dead);
+					_target_transfer = null;
+				}
 			}
 		}
 
@@ -851,18 +857,19 @@ namespace GData
 			_unbind();
 		}
 
-		private PropertyBinding (Object? source, ParamSpec? source_property, Object? target, ParamSpec? target_property, 
+		private PropertyBinding (BindingDataTransfer? source, BindingDataTransfer? target, 
 		                         BindFlags flags = BindFlags.DEFAULT, owned PropertyBindingTransformFunc? transform_to = null, 
 		                         owned PropertyBindingTransformFunc? transform_from = null)
 		{
 			// no need for error checking as it had been done in create() which is only public accessible
 			// way of creation
 
-			_source = new StrictWeakReference<Object?> (source, handle_source_dead);
-			_target = new StrictWeakReference<Object?> (target, handle_target_dead);
-
-			_source_property = source_property;
-			_target_property = target_property;
+			_source_transfer = source;
+			_target_transfer = target;
+			_source_transfer.changed.connect (___update_from_source);
+			_target_transfer.changed.connect (___update_from_target);
+			_source_transfer.reference_dropped.connect (handle_source_dead);
+			_target_transfer.reference_dropped.connect (handle_target_dead);
 
 			_transform_to = (owned) transform_to;
 			_transform_from = (owned) transform_from;
