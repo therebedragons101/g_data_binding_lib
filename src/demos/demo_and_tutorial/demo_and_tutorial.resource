@@ -3,6 +3,7 @@
   <gresource prefix="/org/gtk/demo_and_tutorial">
     <file>map.png</file>
     <file compressed="true">interface.ui</file>
+    <file compressed="true">person_composite_widget.ui</file>
     <file compressed="true">main_demo.vala</file>
     <file compressed="true">simple_binding/example_alias_and_freeze.vala</file>
     <file compressed="true">simple_binding/example_contract_chaining.vala</file>
@@ -16,5 +17,9 @@
     <file compressed="true">simple_binding/example_state_objects.vala</file>
     <file compressed="true">simple_binding/example_validation.vala</file>
     <file compressed="true">simple_binding/example_value_objects.vala</file>
+    <file compressed="true">advanced_binding/example_enum_flags_state.vala</file>
+    <file compressed="true">mapping/example_auto_widgets.vala</file>
+    <file compressed="true">mapping/example_auto_value_mode_widgets.vala</file>
+    <file compressed="true">mapping/example_composite_widgets.vala</file>
   </gresource>
 </gresources>

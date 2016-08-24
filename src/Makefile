@@ -40,6 +40,7 @@ COMMON_INTERNAL := common/consts.vala \
 
 SOURCES := ${LIBRARY_NAME}.vala \
 	${COMMON_INTERNAL} \
+	common/attribute.vala \
 	common/compare_data_by.vala \
 	common/delegates.vala \
 	common/gobject_array.vala \
@@ -88,7 +89,9 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	contracts/timer_controlled_binding_pointer.vala \
 	property/bind_flags.vala \
 	property/binder.vala \
+	property/binder_mapper.vala \
 	property/binding_data_transfer.vala \
+	property/binding_data_transfer_interface.vala \
 	property/binding_defaults.vala \
 	property/binding_interface.vala \
 	property/binding_namespace.vala \
@@ -96,6 +99,8 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	property/data_flood_detection.vala \
 	property/delegates.vala \
 	property/gobject_binding_data_transfer.vala \
+	property/gsettings_binding_data_transfer.vala \
+	property/information_availability.vala \
 	property/property_alias.vala \
 	property/property_binding.vala \
 	row_models/enum_flags_model.vala \
@@ -134,7 +139,15 @@ GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	gtk/inspector/event_filter_mode.vala \
 	gtk/inspector/methods.vala \
 	gtk/inspector/object_inspector_window.vala \
+	gtk/widgets/auto_container_control.vala \
+	gtk/widgets/auto_container_row.vala \
+	gtk/widgets/auto_value_widget.vala \
+	gtk/widgets/auto_value_mode_widget.vala \
+	gtk/widgets/auto_widget.vala \
+	gtk/widgets/bindable_composite_widget.vala \
+	gtk/widgets/creation_edit_mode.vala \
 	gtk/widgets/edit_mode.vala \
+	gtk/widgets/edit_mode_control.vala \
 	gtk/widgets/enum_flags_menu_button.vala \
 	gtk/widgets/enum_flags_popover.vala \
 	gtk/widgets/enum_flags_values.vala \
@@ -160,10 +173,13 @@ GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 
 DEMO_INCLUDES := ${COMMON_INTERNAL} \
 	demos/common/css.vala \
+	demos/common/person_composite_widget.vala \
 	demos/common/persons.vala
 
 DEMO_SOURCES := demos/demo_and_tutorial/main.vala \
 	demos/demo_and_tutorial/simple_binding/*.vala \
+	demos/demo_and_tutorial/advanced_binding/*.vala \
+	demos/demo_and_tutorial/mapping/*.vala \
 	demos/demo_and_tutorial/main_demo.vala \
 	${RESOURCE}demo_and_tutorial.* \
 	gtk/inspector/event_array.vala \
@@ -251,6 +267,8 @@ ${GTK_LIBRARY_NAME}-${LIB_VERSION}.typelib:
 
 demo-and-tutorial:
 	valac \
+		--target-glib=2.38 \
+		--gresources=demos/demo_and_tutorial/demo_and_tutorial.resource \
 		${PACKAGES} \
 		${DEMO_PACKAGES} \
 		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
@@ -266,6 +284,8 @@ demo-and-tutorial:
 
 tests:
 	valac \
+		--target-glib=2.38 \
+		--gresources=demos/demo_and_tutorial/demo_and_tutorial.resource \
 		${PACKAGES} \
 		${DEMO_PACKAGES} \
 		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \

@@ -71,6 +71,16 @@ namespace GData
 			}
 		}
 
+		/**
+		 * Convenience access to inverted state value
+		 * 
+		 * @since 0.1
+		 */
+		public bool inverted_state {
+			get { return (!state); }
+			set { state = !value; }
+		}
+
 		private uint _enum_value = 0;
 		/**
 		 * Returns complete value of enum in bound property
@@ -94,8 +104,10 @@ namespace GData
 			}
 			bool prev = _state;
 			_state = (_enum_value == _watched_value);
-			if (prev != _state)
+			if (prev != _state) {
 				notify_property ("state");
+				notify_property("inverted-state");
+			}
 		}
 
 		internal EnumState.as_group_element (EnumStateGroup group, int val)

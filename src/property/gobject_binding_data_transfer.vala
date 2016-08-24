@@ -146,6 +146,8 @@ namespace GData
 		 */
 		public override void disconnect_signal()
 		{
+			if (get_object() == null)
+				return;
 			if (signal_handler_id == 0)
 				return;
 			if (SignalHandler.is_connected(get_object(), signal_handler_id) == true) {
@@ -175,7 +177,24 @@ namespace GData
 		 */
 		protected override void resolve (string property_name)
 		{
-			parm = TypeInformation.get_instance().find_property_from_ref (get_object(), property_name);
+			parm = TypeInformation.get_instance().find_property_from_type (get_introspection_type(), property_name);
+		}
+
+		/**
+		 * Creates BindingSide and calls resolve() which needs to be overriden
+		 * in subclasses
+		 * 
+		 * If reference to object drops reference_dropped() signal is invoked
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param obj Object containing property
+		 * @param property_name Property name
+		 */
+		public GObjectBindingDataTransfer.introspection_only (Type class_type, string property_name)
+		{
+			base.introspection_only (class_type, property_name);
+			ulong res = this.reference_dropped.connect (() => { signal_handler_id = 0; });
 		}
 
 		/**

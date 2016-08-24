@@ -18,11 +18,21 @@ namespace Demo
 		}
 	}
 
+	[Flags]
+	public enum StatusFlags
+	{
+		MALE,
+		EMPLOYED,
+		ALIVE
+	}
+
 	public class Person : Object, ObjectInformation
 	{
 		public string name { get; set; }
 		public string surname { get; set; }
 		public string required { get; set; }
+
+		public StatusFlags status { get; set; }
 
 		public PersonInfo info { get; set; }
 

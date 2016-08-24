@@ -84,19 +84,6 @@ namespace GDataGtk
 			}
 		}
 
-		private string convert_to_type_name (string str)
-		{
-			string res = "";
-			for (int i=0; i<str.length; i++) {
-				string p = str.substring(i, 1);
-				if ((res != "") && (p == p.up()) && ((res.length > 1) &&(res.substring(res.length-2,1) != "_")))
-					res += "_" + p;
-				else
-					res += p.up();
-			}
-			return (res + "_");
-		}
-
 		/**
 		 * Binds specific type to internal listbox and assigns correct state of
 		 * internal items

@@ -9,6 +9,8 @@ namespace GData
 	 */
 	public class PropertyBinding : Object, BindingInterface, DataFloodDetection
 	{
+		private const string DEBUG_STR = "		binding: ";
+
 		internal class SignalInfo
 		{
 			public ulong signal_handler_id;
@@ -173,6 +175,30 @@ namespace GData
 		private BindingDataTransfer? _target_transfer = null;
 
 		/**
+		 * Returns full binding information about source
+		 * 
+		 * @since 0.1
+		 * 
+		 * @return Full binding information about source.
+		 */
+		public BindingDataTransferInterface get_source_binding_data_transfer_information()
+		{
+			return (_source_transfer);
+		}
+
+		/**
+		 * Returns full binding information about target
+		 * 
+		 * @since 0.1
+		 * 
+		 * @return Full binding information about target
+		 */
+		public BindingDataTransferInterface get_target_binding_data_transfer_information()
+		{
+			return (_target_transfer);
+		}
+
+		/**
 		 * Source object data is being transfered from
 		 * 
 		 * @delay 0.1
@@ -280,6 +306,8 @@ namespace GData
 				if ((_signals.data[i].object.target == obj) &&
 				    (_signals.data[i].callback == callback) &&
 				    (_signals.data[i].signal_name == detailed_signal)) {
+					if (has_set_flag(flags, BindFlags.DEBUG) == true)
+						GLib.message (DEBUG_STR + "connecting signal: " + detailed_signal + " from " + ((emit_update_from_source == true) ? "source" : "target"));
 					_signals.data[i].connect_signal(this);
 					return;
 				}
@@ -296,6 +324,8 @@ namespace GData
 				return;
 			if (unbound == false)
 				return;
+			if (has_set_flag(flags, BindFlags.DEBUG) == true)
+				GLib.message (DEBUG_STR + "connect_signals()");
 			unbound = false;
 			if (_source_transfer.is_valid_ref() == true) {
 				if ((_flags.IS_BIDIRECTIONAL() == true) ||
@@ -319,6 +349,8 @@ namespace GData
 		{
 			if (_flags.HAS_MANUAL_UPDATE() == true)
 				return;
+			if (has_set_flag(flags, BindFlags.DEBUG) == true)
+				GLib.message (DEBUG_STR + "disconnect_signals()");
 			unbound = true;
 			_source_transfer.disconnect_signal();
 			_target_transfer.disconnect_signal();
@@ -348,6 +380,8 @@ namespace GData
 			}
 			if (hard_freeze == true)
 				disconnect_signals();
+			if (has_set_flag(flags, BindFlags.DEBUG) == true)
+				GLib.message (DEBUG_STR + "freeze(%i)".printf(freeze_counter));
 		}
 
 		/**
@@ -368,11 +402,15 @@ namespace GData
 				connect_signals();
 				initial_data_update();
 			}
+			if (has_set_flag(flags, BindFlags.DEBUG) == true)
+				GLib.message (DEBUG_STR + "unfreeze(%i)".printf(freeze_counter));
 			return (__is_active());
 		}
 
 		private void target_set_value (bool set_default)
 		{
+			if (has_set_flag(flags, BindFlags.DEBUG) == true)
+				GLib.message (DEBUG_STR + "target_set_value()");
 			Value srcval = Value(_source_transfer.get_value_type());
 			Value tgtval = Value(_target_transfer.get_value_type());
 			_source_transfer.get_value (ref srcval);
@@ -393,6 +431,8 @@ namespace GData
 
 		private void source_set_value (bool set_default)
 		{
+			if (has_set_flag(flags, BindFlags.DEBUG) == true)
+				GLib.message (DEBUG_STR + "source_set_value()");
 			Value srcval = Value(_source_transfer.get_value_type());
 			Value tgtval = Value(_target_transfer.get_value_type());
 			_target_transfer.get_value (ref tgtval);
@@ -429,6 +469,8 @@ namespace GData
 					update_from_source();
 				else
 					update_from_target();
+				if (has_set_flag(flags, BindFlags.DEBUG) == true)
+					GLib.message (DEBUG_STR + "flood stopped");
 				return (false);
 			}
 			return (true);
@@ -451,6 +493,8 @@ namespace GData
 						events_flooding = true;
 						flood_detected (this);
 						GLib.Timeout.add ((flood_interval), flood_timeout, GLib.Priority.DEFAULT);
+						if (has_set_flag(flags, BindFlags.DEBUG) == true)
+							GLib.message (DEBUG_STR + "flood detected");
 						return (false);
 					}
 				}
@@ -501,6 +545,8 @@ namespace GData
 
 		private void __update_from_source (bool set_default = false)
 		{
+			if (has_set_flag(flags, BindFlags.DEBUG) == true)
+				GLib.message (DEBUG_STR + "__update_from_source()");
 			if (_target_transfer.is_valid_ref() == false)
 				return;
 			if (((set_default == false) && (__is_active() == false)) || (is_locked > 0))
@@ -510,6 +556,8 @@ namespace GData
 			if (process_delay(true) == false)
 				return;
 			is_locked++;
+			if (has_set_flag(flags, BindFlags.DEBUG) == true)
+				GLib.message (DEBUG_STR + "__update_from_source().passed_checks");
 			target_set_value (set_default);
 			is_locked--;
 		}
@@ -561,6 +609,8 @@ namespace GData
 
 		private void __update_from_target (bool set_default = false)
 		{
+			if (has_set_flag(flags, BindFlags.DEBUG) == true)
+				GLib.message (DEBUG_STR + "__update_from_target()");
 			if (_source_transfer.is_valid_ref() == false)
 				return;
 			if ((__is_active() == false) || (is_locked > 0))
@@ -570,6 +620,8 @@ namespace GData
 			if (process_delay(false) == false)
 				return;
 			is_locked++;
+			if (has_set_flag(flags, BindFlags.DEBUG) == true)
+				GLib.message (DEBUG_STR + "__update_from_target().passed_checks");
 			source_set_value (set_default);
 			is_locked--;
 		}
@@ -763,6 +815,8 @@ namespace GData
 					return (null);
 				}
 			}
+			if (has_set_flag(flags, BindFlags.DEBUG) == true)
+				GLib.message (DEBUG_STR + "Binding initiated()");
 			return (new PropertyBinding (_source_transfer, _target_transfer, flags, (owned) transform_to, (owned) transform_from));
 		}
 

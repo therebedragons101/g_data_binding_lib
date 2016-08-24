@@ -20,7 +20,11 @@ public class DemoAndTutorial : Gtk.Application
 		"simple_binding/example_simple_property_binding",
 		"simple_binding/example_state_objects",
 		"simple_binding/example_validation",
-		"simple_binding/example_value_objects"
+		"simple_binding/example_value_objects",
+		"advanced_binding/example_enum_flags_state",
+		"mapping/example_auto_widgets",
+		"mapping/example_auto_value_mode_widgets",
+		"mapping/example_composite_widgets"
 	};
 
 	public class StorageInspectRow : Gtk.ListBoxRow
@@ -53,7 +57,11 @@ public class DemoAndTutorial : Gtk.Application
 	private Gtk.Stack code_demo_stack;
 	private Gtk.Stack demo_stack;
 	private Gtk.Stack basic_tutorial_stack;
+	private Gtk.Stack mapping_stack;
 	private Gtk.Box binding_tutorial_box;
+	private Gtk.Stack advanced_tutorial_stack;
+	private Gtk.Box advanced_tutorial_box;
+	private Gtk.Box mapping_tutorial_box;
 	private Gtk.TextBuffer code_buffer;
 
 	private EventArray _e4_events = new EventArray();
@@ -125,6 +133,8 @@ public class DemoAndTutorial : Gtk.Application
 		add_window (window);
 
 		binding_tutorial_box = (Gtk.Box) ui_builder.get_object ("binding_tutorial_box");
+		advanced_tutorial_box = (Gtk.Box) ui_builder.get_object ("binding_tutorial_box");
+		mapping_tutorial_box = (Gtk.Box) ui_builder.get_object ("mapping_tutorial_box");
 
 		demo_stack = (Gtk.Stack) ui_builder.get_object ("demo_stack");
 		((Gtk.Button) ui_builder.get_object ("demo_btn")).clicked.connect(() => {
@@ -146,6 +156,9 @@ public class DemoAndTutorial : Gtk.Application
 		code_demo_stack = (Gtk.Stack) ui_builder.get_object ("code_demo_stack");
 		demo_stack = (Gtk.Stack) ui_builder.get_object ("demo_stack");
 		basic_tutorial_stack = (Gtk.Stack) ui_builder.get_object ("basic_tutorial_stack");
+		advanced_tutorial_stack = (Gtk.Stack) ui_builder.get_object ("advanced_tutorial_stack");
+		mapping_stack = (Gtk.Stack) ui_builder.get_object ("mapping_stack");
+
 		code_buffer = (Gtk.TextBuffer) ui_builder.get_object ("code_buffer");
 
 		demo_stack.notify["visible-child"].connect (() => {
@@ -154,6 +167,14 @@ public class DemoAndTutorial : Gtk.Application
 
 		basic_tutorial_stack.notify["visible-child"].connect (() => {
 			set_active_basic_tutorial_page(basic_tutorial_stack);
+		});
+
+		advanced_tutorial_stack.notify["visible-child"].connect (() => {
+			set_active_advanced_tutorial_page(advanced_tutorial_stack);
+		});
+
+		mapping_stack.notify["visible-child"].connect (() => {
+			set_active_mapping_tutorial_page(mapping_stack);
 		});
 
 		for (int i=0; i<code_pages.length; i++) {
@@ -210,6 +231,7 @@ public class DemoAndTutorial : Gtk.Application
 		assign_builder_css (ui_builder, "label_description", _dark_label_css);
 		assign_builder_css (ui_builder, "label_warning", _warning_label_css);
 		assign_builder_css (ui_builder, "custom_data", _title_css);
+		assign_builder_css (ui_builder, "custom_data2", _title_css);
 		assign_builder_css (ui_builder, "evvo_4", _title_css);
 		return (ui_builder);
 	}
@@ -230,10 +252,24 @@ public class DemoAndTutorial : Gtk.Application
 		set_page_name (stack.visible_child);
 	}
 
+	private void set_active_advanced_tutorial_page (Gtk.Stack stack)
+	{
+		set_page_name (stack.visible_child);
+	}
+
+	private void set_active_mapping_tutorial_page (Gtk.Stack stack)
+	{
+		set_page_name (stack.visible_child);
+	}
+
 	private void set_active_demo_page (Gtk.Stack stack)
 	{
 		if (stack.visible_child == binding_tutorial_box)
 			set_active_basic_tutorial_page (basic_tutorial_stack);
+		if (stack.visible_child == advanced_tutorial_box)
+			set_active_advanced_tutorial_page (advanced_tutorial_stack);
+		if (stack.visible_child == mapping_tutorial_box)
+			set_active_mapping_tutorial_page (mapping_stack);
 		else
 			set_page_name (stack.visible_child);
 	}
@@ -268,6 +304,10 @@ public class DemoAndTutorial : Gtk.Application
 		example_pointer_relay(this, ui_builder, _e7_events);
 		example_inspector(ui_builder);
 		example_object_inspector(ui_builder, this);
+		example_enum_flags_state(ui_builder);
+		example_composite_widgets(ui_builder);
+		example_auto_widgets(ui_builder);
+		example_auto_value_mode_widgets(ui_builder);
 	}
 
 	protected override void shutdown ()
@@ -349,10 +389,4 @@ public class DemoAndTutorial : Gtk.Application
 			})
 		);
 	}
-
-
-
-
-
-
 }

@@ -46,6 +46,7 @@ namespace GData
 
 		private static HashTable<string, PropertyAlias> _alias_hash = null;
 
+
 		private HashTable<Type, string> _hash = null;
 
 		private string _name = "";
@@ -77,6 +78,63 @@ namespace GData
 		{
 			if (_alias_hash == null)
 				_alias_hash = new HashTable<string, PropertyAlias>(str_hash, str_equal);
+		}
+
+		/**
+		 * Finds closest hierarchy match for specied alias and type in its
+		 * registrations.
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param alias_name Alias name
+		 * @param type Type that needs resolving
+		 * @return Property name if found, null if not
+		 */
+		public static string? get_alias_property_for (string alias_name, Type type)
+		{
+			return (PropertyAlias.get_instance(alias_name).find_for (type));
+		}
+
+		/**
+		 * Finds closest hierarchy match for default value alias and type in its
+		 * registrations.
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param type Type that needs resolving
+		 * @return Property name if found, null if not
+		 */
+		public static string? get_default_value_property_for (Type type)
+		{
+			return (get_alias_property_for(ALIAS_DEFAULT, type));
+		}
+
+		/**
+		 * Finds closest hierarchy match for visibility alias and type in its
+		 * registrations.
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param type Type that needs resolving
+		 * @return Property name if found, null if not
+		 */
+		public static string? get_visibility_property_for (Type type)
+		{
+			return (get_alias_property_for(ALIAS_VISIBILITY, type));
+		}
+
+		/**
+		 * Finds closest hierarchy match for sensitivity alias and type in its
+		 * registrations.
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param type Type that needs resolving
+		 * @return Property name if found, null if not
+		 */
+		public static string? get_sensitivity_property_for (Type type)
+		{
+			return (get_alias_property_for(ALIAS_SENSITIVITY, type));
 		}
 
 		/**
@@ -137,6 +195,7 @@ namespace GData
 		 * original value instead
 		 * 
 		 * @since 0.1
+		 * 
 		 * @param type Object type alias property name was requested for
 		 * @param original_val Original value
 		 * @return Alias if found and original value if not
@@ -154,13 +213,39 @@ namespace GData
 		 * found it returns null
 		 * 
 		 * @since 0.1
+		 * 
 		 * @param type Object type alias property name was requested for
-		 * @param original_val Original value
 		 * @return Alias if found and null if not
 		 */
 		public string? get_for (Type type)
 		{
 			return (_hash.get (type));
+		}
+
+		/**
+		 * Unlike get_for() which returns only exact match, find_for() returns
+		 * nearest hierarchy match as well which makes it suitable for discovery
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param type Object type alias property name was requested for
+		 * @return Alias if found and null if not
+		 */
+		public string? find_for (Type type)
+		{
+			string? res = get_for (type);
+			if (res != null)
+				return (res);
+			// Iterate trough types and find nearest match
+			int hierarchy_gap = int.MAX;
+			_hash.for_each ((k,v) => {
+				int _hierarchy_gap = get_hierarchy_gap(type, k);
+				if (_hierarchy_gap < hierarchy_gap) {
+					res = v;
+					hierarchy_gap = _hierarchy_gap;
+				}
+			});
+			return (res);
 		}
 
 		private static uint type_hash (Type type)

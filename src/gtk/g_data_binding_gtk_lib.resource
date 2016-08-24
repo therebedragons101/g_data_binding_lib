@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gtk/g_data_binding_gtk">
+    <file compressed="true">data/auto_container.ui</file>
+    <file compressed="true">data/auto_container_row.ui</file>
+    <file compressed="true">data/auto_container_values.ui</file>
+    <file compressed="true">data/auto_value_widget.ui</file>
+    <file compressed="true">data/auto_value_mode_widget.ui</file>
+    <file compressed="true">data/auto_widget.ui</file>
     <file compressed="true">data/enum_flags_menu_button.ui</file>
     <file compressed="true">data/enum_flags_values.ui</file>
     <file compressed="true">data/inspector.ui</file>

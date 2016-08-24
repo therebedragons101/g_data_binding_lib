@@ -2,6 +2,11 @@ namespace GData
 {
 	public delegate void ParamSpecDelegate (ParamSpec pspec);
 
+	public static Type safe_get_type (Object? obj)
+	{
+		return ((obj == null) ? Type.INVALID : obj.get_type());
+	}
+
 	public static bool can_translate_value_type (Type val1, Type val2)
 	{
 		return ((GLib.Value.type_compatible(val1, val2) == true) ||

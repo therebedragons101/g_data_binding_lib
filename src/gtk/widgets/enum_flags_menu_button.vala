@@ -64,7 +64,7 @@ namespace GDataGtk
 				val.set_enum(int_value);
 			GLib.Value str = GLib.Value (typeof(string));
 			val.transform (ref str);
-			value_label.label = str.get_string();
+			value_label.label = str.get_string().replace(convert_to_type_name(get_value_interface().model_type.name()), "");
 		}
 
 		/**

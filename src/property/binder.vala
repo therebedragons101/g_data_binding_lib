@@ -160,6 +160,23 @@ namespace GData
 		public bool is_silent { get; private set; default = false; }
 
 		/**
+		 * Allows mapping to be redirected to specialized mappers which are more
+		 * familiar with particular objects and know more about structure which
+		 * allows things like group mapping
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param mapper Binding mapper object
+		 * @return Specified mapper object to enable api chaining in objective
+		 *         oriented languages
+		 */
+		public BinderMapper set_mapper (BinderMapper mapper)
+		{
+			mapper.binder_object = this;
+			return (mapper);
+		}
+
+		/**
 		 * Signal emited upon successful call to Binder.bind(...)
 		 * 
 		 * Allows debug tapping in bindings to debug when binding goes up/down
@@ -172,7 +189,6 @@ namespace GData
 		 * @param binding Newly created BindingInterface
 		 */
 		public signal void binding_created (BindingInterface? binding);
-
 		/**
 		 * Creates new instance of Binder class
 		 * 

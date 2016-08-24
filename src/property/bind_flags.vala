@@ -214,7 +214,13 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 */
-		USE_ORIGINAL_TYPES = USE_ORIGINAL_SOURCE_TYPE | USE_ORIGINAL_TARGET_TYPE;
+		USE_ORIGINAL_TYPES = USE_ORIGINAL_SOURCE_TYPE | USE_ORIGINAL_TARGET_TYPE,
+		/**
+		 * Specifies debugging is enabled for binding
+		 * 
+		 * @since 0.1
+		 */
+		DEBUG;
 
 		/**
 		 * Checks if FLOOD_DETECTION flag is enabled or not

@@ -4,6 +4,11 @@ namespace GData
 	 * Delegate method specifying creation of BindingDataTransfer object for
 	 * object and property.
 	 * 
+	 * TODO, source optimization level needs to be inserted under this structure
+	 * That will bring memory consumption to near zero as well as it will bring
+	 * better performance. Task: LOW LEVEL/LOW IMPORTANCE as neither is really
+	 * problematic
+	 * 
 	 * @since 0.1
 	 * 
 	 * @param object Object that will be handled
@@ -21,9 +26,10 @@ namespace GData
 	 * 
 	 * @since 0.1
 	 */
-	public class BindingDataTransfer : Object
+	public class BindingDataTransfer : Object, BindingDataTransferInterface
 	{
 		private bool creation = true;
+		private Type _introspection_type = Type.INVALID;
 
 		private StrictWeakRef _wref = null;
 		/**
@@ -31,39 +37,21 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 */
-		public weak Object? get_object() 
+		public unowned Object? get_object()
 		{
 			return (_wref.target);
 		}
 
 		/**
-		 * Provides name as bindable point when redirection is done to this
-		 * object it self
+		 * Specifies if transfer data is valid or not. It can be invalid for
+		 * multiple reasons.
+		 * - It was only invoked for introspection
+		 * - Data is not correct
 		 * 
 		 * @since 0.1
 		 */
-		public string property_name {
-			owned get { return (get_name()); }
-		}
-
-		/**
-		 * Provides nick as bindable point when redirection is done to this
-		 * object it self
-		 * 
-		 * @since 0.1
-		 */
-		public string property_nick {
-			owned get { return (get_nick()); }
-		}
-
-		/**
-		 * Provides blurb as bindable point when redirection is done to this
-		 * object it self
-		 * 
-		 * @since 0.1
-		 */
-		public string property_blurb {
-			owned get { return (get_blurb()); }
+		public virtual bool is_valid { 
+			get { return ((get_object() == null) || (get_name() == "")); }
 		}
 
 		/**
@@ -99,6 +87,22 @@ namespace GData
 		}
 
 		/**
+		 * Specifies type of handled object. Note that this is available even
+		 * when real reference is presented and all resolving in STATIC types
+		 * should be handled trough this and not object reference
+		 * 
+		 * Default handling returns GObject type
+		 * 
+		 * @since 0.1
+		 * 
+		 * @return Object type 
+		 */
+		public virtual Type get_introspection_type()
+		{
+			return (_introspection_type);
+		}
+
+		/**
 		 * Returns string representation of handled object type which is useful
 		 * to distinct when non GObject type is wrapped inside to get real type
 		 * name
@@ -126,6 +130,7 @@ namespace GData
 		public virtual string get_name()
 		{
 			GLib.error ("Abstract method");
+			return ("");
 		}
 
 		/**
@@ -162,6 +167,7 @@ namespace GData
 		public virtual Type get_value_type()
 		{
 			GLib.error ("Abstract method");
+			return (Type.INVALID);
 		}
 
 		/**
@@ -221,28 +227,13 @@ namespace GData
 		}
 
 		/**
-		 * Signal emited when data is changed. Implementations handling custom
-		 * properties or non GObject types should invoke this signal to notify
-		 * data changed in property
-		 * 
-		 * @since 0.1
-		 */
-		public signal void changed();
-
-		/**
-		 * Signal emited if object reference is dropped prematurely
-		 * 
-		 * @since 0.1
-		 */
-		public signal void reference_dropped();
-
-		/**
 		 * Most important method in derived classes. This is invoked as part of
 		 * construction and at this point object should get to know what it 
 		 * needs to handle data and signaling
 		 * 
 		 * Object reference is already accessible trough get_object() at this 
-		 * point
+		 * point if this is not introspection only object. In case of STATIC
+		 * get_introspection_type() should be used instead
 		 * 
 		 * Signal should not be connected at this point as binding invokes
 		 * connect_signal() and disconnect_signal() when needed
@@ -277,8 +268,27 @@ namespace GData
 		 * @param obj Object containing property
 		 * @param property_name Property name
 		 */
+		public BindingDataTransfer.introspection_only (Type class_type, string property_name)
+		{
+			_introspection_type = class_type;
+			_wref = new StrictWeakRef (null, handle_invalid);
+			resolve (property_name);
+		}
+
+		/**
+		 * Creates BindingSide and calls resolve() which needs to be overriden
+		 * in subclasses
+		 * 
+		 * If reference to object drops reference_dropped() signal is invoked
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param obj Object containing property
+		 * @param property_name Property name
+		 */
 		public BindingDataTransfer (Object? obj, string property_name)
 		{
+			_introspection_type = (obj != null) ? obj.get_type() : GLib.Type.INVALID;
 			_wref = new StrictWeakRef (obj, handle_invalid);
 			resolve (property_name);
 		}

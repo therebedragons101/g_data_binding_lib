@@ -60,6 +60,24 @@ namespace GData
 		public abstract void unbind();
 
 		/**
+		 * Returns full binding information about source
+		 * 
+		 * @since 0.1
+		 * 
+		 * @return Full binding information about source.
+		 */
+		public abstract BindingDataTransferInterface get_source_binding_data_transfer_information();
+
+		/**
+		 * Returns full binding information about target
+		 * 
+		 * @since 0.1
+		 * 
+		 * @return Full binding information about target
+		 */
+		public abstract BindingDataTransferInterface get_target_binding_data_transfer_information();
+
+		/**
 		 * Adds property to binding as notification its data has changed
 		 * 
 		 * @since 0.1

@@ -71,6 +71,16 @@ namespace GData
 			}
 		}
 
+		/**
+		 * Convenience access to inverted state value
+		 * 
+		 * @since 0.1
+		 */
+		public bool inverted_state {
+			get { return (!state); }
+			set { state = !value; }
+		}
+
 		private uint _flags = 0;
 		/**
 		 * Returns complete value of flags in bound property
@@ -94,8 +104,10 @@ namespace GData
 			}
 			bool prev = _state;
 			_state = has_set_flag(_flags, _watched_flag);
-			if (prev != _state)
+			if (prev != _state) {
 				notify_property ("state");
+				notify_property("inverted-state");
+			}
 		}
 
 		internal FlagState.as_group_element (FlagStateGroup group, uint flag)

@@ -9,6 +9,9 @@ namespace GData
 	 * property proxy follows all changes to data source and updates connected
 	 * party
 	 * 
+	 * TODO, update proxy property to use BindingDataTransfer so foreign objects
+	 * and their properties get enabled
+	 * 
 	 * @since 0.1
 	 */
 	public class ProxyProperty : Object

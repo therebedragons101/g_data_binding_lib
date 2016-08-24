@@ -1,5 +1,18 @@
 namespace GDataGtk
 {
+	internal string convert_to_type_name (string str)
+	{
+		string res = "";
+		for (int i=0; i<str.length; i++) {
+			string p = str.substring(i, 1);
+			if ((res != "") && (p == p.up()) && ((res.length > 1) &&(res.substring(res.length-2,1) != "_")))
+				res += "_" + p;
+			else
+				res += p.up();
+		}
+		return (res + "_");
+	}
+
 	public static void set_height_margins (Gtk.Widget? widget, int margin)
 	{
 		if (widget == null)
@@ -86,6 +99,13 @@ namespace GDataGtk
 		while (w != null) {
 			assign_css (w, css);
 			wname += "_";
+			w = (Gtk.Widget) ui_builder.get_object (wname);
+		}
+		wname = widget_name + "=";
+		w = (Gtk.Widget) ui_builder.get_object (wname);
+		while (w != null) {
+			assign_css (w, css);
+			wname += "=";
 			w = (Gtk.Widget) ui_builder.get_object (wname);
 		}
 	}
