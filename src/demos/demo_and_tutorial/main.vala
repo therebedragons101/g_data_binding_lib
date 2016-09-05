@@ -21,7 +21,9 @@ public class DemoAndTutorial : Gtk.Application
 		"simple_binding/example_state_objects",
 		"simple_binding/example_validation",
 		"simple_binding/example_value_objects",
+		"advanced_binding/example_boolean_conditions",
 		"advanced_binding/example_enum_flags_state",
+		"advanced_binding/example_triggers",
 		"mapping/example_auto_widgets",
 		"mapping/example_auto_value_mode_widgets",
 		"mapping/example_composite_widgets"

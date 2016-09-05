@@ -185,6 +185,20 @@ namespace GData
 		}
 
 		/**
+		 * Evaluates if all properties in group are valid or not
+		 * 
+		 * @since 0.1
+		 */
+		public bool is_valid {
+			get {
+				for (int i=0; i<get_n_items(); i++)
+					if (((ProxyProperty) get_item(i)).is_valid() == false)
+						return (false);
+				return (true);
+			}
+		}
+
+		/**
 		 * Get the item at position.
 		 * 
 		 * @since 0.1
