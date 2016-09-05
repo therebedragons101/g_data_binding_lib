@@ -68,6 +68,11 @@ namespace GDataGtk
 		 * default already registers some defaults. This is easy to override
 		 * with custom DefaultWidgets class
 		 * 
+		 * Note that get_default() not only instances singleton if needed, it
+		 * also calls init(). This does not happen when instance is set 
+		 * differently with set_default() and calling init() falls solely into
+		 * applications responsability.
+		 * 
 		 * @since 0.1
 		 */
 		public static DefaultWidgets get_default()
@@ -75,10 +80,26 @@ namespace GDataGtk
 			if (_instance == null) {
 				_instance = new DefaultWidgets();
 				_instance._default_fallback = __default_fallback;
-				_initialize_default_widgets();
-				_initialize_default_properties();
+				init();
 			}
 			return (_instance);
+		}
+
+		/**
+		 * Sets new default widgets creation mechanism. If this is called then
+		 * only right moment is before init() or get_instance(). If either of
+		 * those two was called before this was set application will throw
+		 * error and quit
+		 * 
+		 * @since 0.1
+		 */
+		public static void set_default(DefaultWidgets instance)
+		{
+			if (_instance != null) {
+				GLib.error ("DefaultWidgets.set_default() called too late");
+				return;
+			}
+			_instance = instance;
 		}
 
 		private static void _initialize_default_widgets()
@@ -136,52 +157,19 @@ namespace GDataGtk
 		}
 
 		/**
-		 * Initializes default registrations
+		 * Initializes default registrations. Init can be called even if 
+		 * default instance was swapped with set_default() at which point Init
+		 * will add default registrations to that specific instance
 		 * 
 		 * @since 0.1
 		 */
 		public static void init()
 		{
-			get_default();
-		}
-
-		internal class CustomCreationDescription
-		{
-			public EditMode mode { get; set; default = EditMode.VIEW; }
-			public ParamSpec? pspec { get; set; default = null; }
-			public Type data_type { get; set; default = GLib.Type.INVALID; }
-			public CreateCustomWidgetDelegate? specific_property_delegate { get; set; default = null; }
-			public CreateCustomTypeWidgetDelegate? specific_type_delegate { get; set; default = null; }
-			public ConditionCheckDelegate? condition_check { get; set; default = null; }
-
-			public bool is_valid {
-				get { return (((creates_for_property() == true) && (pspec != null) && (specific_property_delegate != null)) ||
-				              ((creates_for_property() == false) && (data_type != GLib.Type.INVALID) && (specific_type_delegate != null))); }
-			}
-
-			public bool creates_for_property()
-			{
-				return (_specific_property_delegate != null);
-			}
-
-			public CustomCreationDescription.for_property (EditMode mode, ParamSpec pspec, CreateCustomWidgetDelegate method)
-			{
-				this.mode = mode;
-				this.pspec = pspec;
-				this.data_type = pspec.value_type;
-				this.specific_property_delegate = method;
-			}
-
-			public CustomCreationDescription.for_type (EditMode mode, Type data_type, CreateCustomTypeWidgetDelegate method, ConditionCheckDelegate? condition_check)
-			{
-				this.mode = mode;
-				this.data_type = data_type;
-				this.specific_type_delegate = method;
-				this.condition_check = condition_check;
-			}
-
-			private CustomCreationDescription()
-			{
+			if (_instance == null)
+				get_default();
+			else {
+				_initialize_default_widgets();
+				_initialize_default_properties();
 			}
 		}
 
@@ -361,7 +349,7 @@ namespace GDataGtk
 			for (int i=0; i<_registrations.length; i++)
 				if (_registrations.data[i].creates_for_property() == false)
 					if ((_registrations.data[i].mode == mode) && (_registrations.data[i].data_type == data_type))
-						if (_registrations.data[i].condition_check == null) 
+						if (_registrations.data[i].condition_check == null)
 							return (_registrations.data[i]);
 			if ((go_deep == true) && (_fallback != null))
 				return (_fallback._get_for_type(mode, data_type, go_deep));
@@ -409,9 +397,11 @@ namespace GDataGtk
 		 */
 		public Gtk.Widget? create_binding_transfer_widget (EditMode mode, BindingDataTransferInterface? binding_transfer, out string widget_value_property)
 		{
-			if ((binding_transfer == null) || (binding_transfer.is_valid == false))
+			if ((binding_transfer == null) || (binding_transfer.is_introspectable == false))
 				return (null);
-			ParamSpec? pspec = TypeInformation.get_instance().find_property_from_ref (binding_transfer.get_object(), binding_transfer.get_name());
+
+			//TODO, this is not adequate
+			ParamSpec? pspec = TypeInformation.get_instance().find_property_from_type (binding_transfer.get_introspection_type(), binding_transfer.get_name());
 			if (pspec != null)
 				return (create_property_widget (mode, pspec, out widget_value_property));
 			else
@@ -443,10 +433,11 @@ namespace GDataGtk
 			if (param == null)
 				return (null);
 			CustomCreationDescription? desc = _get_for_property(mode, param, true);
-			if (desc == null)
-				desc = _get_for_type (mode, param.value_type, true);
 			if (desc != null)
 				return (desc.specific_property_delegate(mode, param, out widget_value_property));
+			desc = _get_for_type (mode, param.value_type, true);
+			if (desc != null)
+				return (desc.specific_type_delegate(mode, param.value_type, out widget_value_property));
 			return (null);
 		}
 

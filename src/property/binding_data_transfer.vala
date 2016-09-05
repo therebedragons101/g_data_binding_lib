@@ -7,7 +7,12 @@ namespace GData
 	 * TODO, source optimization level needs to be inserted under this structure
 	 * That will bring memory consumption to near zero as well as it will bring
 	 * better performance. Task: LOW LEVEL/LOW IMPORTANCE as neither is really
-	 * problematic
+	 * problematic. 
+	 * 
+	 * TODO, Optimization is severe change in how introspection and
+	 * binding is handled, this is why it needs to be done when nothing else is
+	 * happening or evolving. Waiting it out until 0.9 is best course of action
+	 * since at that time there will be no unknowns
 	 * 
 	 * @since 0.1
 	 * 
@@ -39,6 +44,8 @@ namespace GData
 		 */
 		public unowned Object? get_object()
 		{
+			if (_wref == null)
+				return (null);
 			return (_wref.target);
 		}
 
@@ -50,8 +57,17 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 */
-		public virtual bool is_valid { 
-			get { return ((get_object() == null) || (get_name() == "")); }
+		public virtual bool is_valid {
+			get { return ((get_object() != null) && (get_name() != "")); }
+		}
+
+		/**
+		 * Specifies if data transfer is at least introspectable if not valid
+		 * 
+		 * @since 0.1
+		 */
+		public virtual bool is_introspectable {
+			get { return ((is_valid == true) || (_introspection_type != GLib.Type.INVALID)); }
 		}
 
 		/**
@@ -113,7 +129,7 @@ namespace GData
 		 * 
 		 * @return Object type name
 		 */
-		public virtual string get_object_type()
+		public virtual string get_object_type_name()
 		{
 			if (_wref.is_valid_ref() == false)
 				return ("");

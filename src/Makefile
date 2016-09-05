@@ -130,10 +130,10 @@ GENERICS_SOURCES := ${COMMON_NAME}_generics${NAME_SUFFIX}.vala \
 GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	${RESOURCE}${COMMON_NAME}_gtk${NAME_SUFFIX}.* \
 	${COMMON_INTERNAL} \
+	gtk/contracts/gtk_buildable_mapper.vala \
 	gtk/inspector/binding_inspector.vala \
 	gtk/inspector/binding_namespace_view_mode.vala \
 	gtk/inspector/contract_event_description.vala \
-	gtk/inspector/default_widgets.vala \
 	gtk/inspector/event_array.vala \
 	gtk/inspector/event_description.vala \
 	gtk/inspector/event_filter_mode.vala \
@@ -146,10 +146,16 @@ GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	gtk/widgets/auto_widget.vala \
 	gtk/widgets/bindable_composite_widget.vala \
 	gtk/widgets/creation_edit_mode.vala \
+	gtk/widgets/custom_creation_description.vala \
+	gtk/widgets/default_widgets.vala \
 	gtk/widgets/edit_mode.vala \
 	gtk/widgets/edit_mode_control.vala \
+	gtk/widgets/edit_mode_control_interface.vala \
+	gtk/widgets/enum_flags_label.vala \
 	gtk/widgets/enum_flags_menu_button.vala \
+	gtk/widgets/enum_flags_mode.vala \
 	gtk/widgets/enum_flags_popover.vala \
+	gtk/widgets/enum_flags_string.vala \
 	gtk/widgets/enum_flags_values.vala \
 	gtk/widgets/enum_flags_value_interface.vala \
 	gtk/widgets/methods.vala \
@@ -164,6 +170,7 @@ GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	gtk/widgets/reference_monitor_row.vala \
 	gtk/widgets/reference_monitor_show_view.vala \
 	gtk/widgets/simple_entry_box.vala \
+	gtk/widgets/size_group_collection.vala \
 	gtk/widgets/smooth_list_box_row.vala \
 	gtk/widgets/state_image.vala \
 	gtk/widgets/title_description_row.vala \

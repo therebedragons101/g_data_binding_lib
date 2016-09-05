@@ -5418,7 +5418,9 @@ needs to have Gtk.Buildable id (name) same as property it wants to be mapped to<
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
-                                        <property name="label" translatable="yes">This uses simplest possible widget there is
+                                        <property name="label" translatable="yes">Exact same thing can be used on main interface as well as long as naming connections are respected. Another use of this is mapping listbox rows
+
+This uses simplest possible widget there is
 https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/demos/demo_and_tutorial/interface.ui
 
 namespace Demo
@@ -5426,9 +5428,9 @@ namespace Demo
 	[GtkTemplate(ui="/org/gtk/demo_and_tutorial/person_composite_widget.ui")]
 	public class PersonCompositeWidget : Gtk.Grid
 	{
-		[GtkChild] private Gtk.Entry name;
-		[GtkChild] private Gtk.Entry surname;
-		[GtkChild] private Gtk.Entry required;
+		[GtkChild] private Gtk.Entry property_name;
+		[GtkChild] private Gtk.Entry property_surname;
+		[GtkChild] private Gtk.Entry property_required;
 	}
 }</property>
                                       </object>
@@ -5442,14 +5444,42 @@ namespace Demo
                                       <object class="GtkBox">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="spacing">8</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="spacing">6</property>
                                         <child>
-                                          <object class="GtkBox" id="widget1">
+                                          <object class="GtkBox">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="orientation">vertical</property>
+                                            <property name="spacing">8</property>
                                             <child>
-                                              <placeholder/>
+                                              <object class="GtkBox" id="widget1">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="orientation">vertical</property>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkBox" id="widget2">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="orientation">vertical</property>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">1</property>
+                                              </packing>
                                             </child>
                                           </object>
                                           <packing>
@@ -5459,12 +5489,43 @@ namespace Demo
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkBox" id="widget2">
+                                          <object class="GtkBox">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="orientation">vertical</property>
                                             <child>
-                                              <placeholder/>
+                                              <object class="GtkCheckButton" id="set_2_insensitive">
+                                                <property name="label" translatable="yes">Switches second custom widget between sensitive and insensitive (not as whole, but each widget separately. only name and surname)</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="valign">start</property>
+                                                <property name="active">True</property>
+                                                <property name="draw_indicator">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckButton" id="set_2_visible">
+                                                <property name="label" translatable="yes">Switches second custom widget between visible and invisible (not as whole, but each widget separately. only name and required)</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="valign">start</property>
+                                                <property name="active">True</property>
+                                                <property name="draw_indicator">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">1</property>
+                                              </packing>
                                             </child>
                                           </object>
                                           <packing>
@@ -5691,7 +5752,7 @@ is not the case. If inspected with gtk-inspector, it will show there is empty Gt
                                               <object class="GtkLabel">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="label" translatable="yes">&lt;b&gt;VIEW&lt;/b&gt;</property>
+                                                <property name="label" translatable="yes">&lt;b&gt;VIEW unless changed&lt;/b&gt;</property>
                                                 <property name="use_markup">True</property>
                                               </object>
                                               <packing>
@@ -5704,7 +5765,7 @@ is not the case. If inspected with gtk-inspector, it will show there is empty Gt
                                               <object class="GtkLabel">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="label" translatable="yes">&lt;b&gt;EDIT&lt;/b&gt;</property>
+                                                <property name="label" translatable="yes">&lt;b&gt;EDIT unless changed&lt;/b&gt;</property>
                                                 <property name="use_markup">True</property>
                                               </object>
                                               <packing>
@@ -5977,6 +6038,24 @@ is not the case. If inspected with gtk-inspector, it will show there is empty Gt
                                               <packing>
                                                 <property name="left_attach">5</property>
                                                 <property name="top_attach">4</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkToggleButton" id="invert_auto_widget_mode">
+                                                <property name="label" translatable="yes">Inverts mode between VIEW and EDIT to show runtime capability of auto widgets
+
+Since these are neither bound nor handled by application data is lost in process in this demo.
+There is nothing wrong with that as it is part of the design. In case of not bound handling data
+of auto widgets is purely responsability on side of application. Something this demo is not meant 
+to do</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">6</property>
+                                                <property name="width">9</property>
                                               </packing>
                                             </child>
                                           </object>

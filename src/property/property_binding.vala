@@ -566,22 +566,22 @@ namespace GData
 		{
 			if ((_target_transfer.is_valid_ref() == false) && (set_default == false)) {
 				if (flags.IS_CONDITIONAL() == false)
-					GLib.warning ("Source object %s is not alive", _source_transfer.get_object_type());
+					GLib.warning ("Source object %s is not alive", _source_transfer.get_object_type_name());
 				return;
 			}
 			if (_target_transfer.is_valid_ref() == false) {
 				if (flags.IS_CONDITIONAL() == false)
-					GLib.warning ("Target object %s is not alive", _target_transfer.get_object_type());
+					GLib.warning ("Target object %s is not alive", _target_transfer.get_object_type_name());
 				return;
 			}
 			if ((_target_transfer.get_property_flags() & ParamFlags.WRITABLE) != ParamFlags.WRITABLE) {
 				if (flags.IS_CONDITIONAL() == false)
-					GLib.warning ("Property (target) %s.\"%s\" is not writable", _target_transfer.get_object_type(), target_property);
+					GLib.warning ("Property (target) %s.\"%s\" is not writable", _target_transfer.get_object_type_name(), target_property);
 				return;
 			}
 			if ((set_default == false) && ((_source_transfer.get_property_flags() & ParamFlags.READABLE) != ParamFlags.READABLE)) {
 				if (flags.IS_CONDITIONAL() == false)
-					GLib.warning ("Property (source) %s.\"%s\" is not readable", _source_transfer.get_object_type(), source_property);
+					GLib.warning ("Property (source) %s.\"%s\" is not readable", _source_transfer.get_object_type_name(), source_property);
 				return;
 			}
 			__update_from_source (set_default);
@@ -630,22 +630,22 @@ namespace GData
 		{
 			if (_source_transfer.is_valid_ref() == false) {
 				if (flags.IS_CONDITIONAL() == false)
-					GLib.warning ("Source object %s is not alive", _source_transfer.get_object_type());
+					GLib.warning ("Source object %s is not alive", _source_transfer.get_object_type_name());
 				return;
 			}
 			if ((_target_transfer.is_valid_ref() == false) && (set_default == false)) {
 				if (flags.IS_CONDITIONAL() == false)
-					GLib.warning ("Target object %s is not alive", _target_transfer.get_object_type());
+					GLib.warning ("Target object %s is not alive", _target_transfer.get_object_type_name());
 				return;
 			}
 			if ((_source_transfer.get_property_flags() & ParamFlags.WRITABLE) != ParamFlags.WRITABLE) {
 				if (flags.IS_CONDITIONAL() == false)
-					GLib.warning ("Property (source) %s.\"%s\" is not writable", _source_transfer.get_object_type(), source_property);
+					GLib.warning ("Property (source) %s.\"%s\" is not writable", _source_transfer.get_object_type_name(), source_property);
 				return;
 			}
 			if ((set_default == false) && ((_target_transfer.get_property_flags() & ParamFlags.READABLE) != ParamFlags.READABLE)) {
 				if (flags.IS_CONDITIONAL() == false)
-					GLib.warning ("Property (target) %s.\"%s\" is not readable", _target_transfer.get_object_type(), target_property);
+					GLib.warning ("Property (target) %s.\"%s\" is not readable", _target_transfer.get_object_type_name(), target_property);
 				return;
 			}
 			__update_from_target (set_default);

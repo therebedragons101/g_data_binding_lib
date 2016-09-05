@@ -345,7 +345,7 @@ namespace GDataGtk
 				if (has_set_flag(_creation_edit_mode, CreationEditMode.VIEW) == true) {
 					_read_widget = _default_widgets.create_binding_transfer_widget (EditMode.VIEW, _source_transfer, out _read_property);
 					if (_read_widget == null) {
-						GLib.warning ("Could not resolve default widget for (%s).%s type=%s", _source_transfer.get_object_type(), 
+						GLib.warning ("Could not resolve default widget for (%s).%s type=%s", _source_transfer.get_object_type_name(), 
 						              _source_transfer.get_name(), _source_transfer.get_value_type().name());
 						_read_widget = _default_widgets.default_fallback (EditMode.VIEW, _source_transfer.get_value_type(), out _read_property);
 					}

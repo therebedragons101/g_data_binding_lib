@@ -240,6 +240,51 @@ namespace GData
 				method (pspec);
 		}
 
+		/**
+		 * Iterates trough type properties and returns array of their names
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param type Type being iterated
+		 * @return Array of property names
+		 */
+		public string[] get_all_type_property_names (Type type)
+		{
+			ObjectClass ocl = (ObjectClass) type.class_ref();
+			ParamSpec[] lst = ocl.list_properties();
+			string[] res = new string[lst.length];
+			if (res.length > 0) {
+				int cnt = 0;
+				foreach (ParamSpec pspec in lst) {
+					res[cnt] = pspec.name;
+					cnt++;
+				}
+			}
+			return (res);
+		}
+
+		/**
+		 * Iterates trough type properties and returns array of their names
+		 * 
+		 * @since 0.1
+		 * 
+		 * @param type Type being iterated
+		 * @return Array of property names
+		 */
+		public ParamSpec[] get_all_type_properties (Type type)
+		{
+			ObjectClass ocl = (ObjectClass) type.class_ref();
+			ParamSpec[] lst = ocl.list_properties();
+			ParamSpec[] res = new ParamSpec[lst.length];
+			if (res.length > 0) {
+				int cnt = 0;
+				foreach (ParamSpec pspec in lst) {
+					res[cnt] = pspec;
+					cnt++;
+				}
+			}
+			return (res);
+		}
 
 		/**
 		 * Iterates trough reference type properties by calling specified delegate 

@@ -20,6 +20,26 @@ namespace GData
 		public abstract bool is_valid { get; }
 
 		/**
+		 * Specifies if data transfer is at least introspectable if not valid
+		 * 
+		 * @since 0.1
+		 */
+		public abstract bool is_introspectable { get; }
+
+		/**
+		 * Specifies type of handled object. Note that this is available even
+		 * when real reference is presented and all resolving in STATIC types
+		 * should be handled trough this and not object reference
+		 * 
+		 * Default handling returns GObject type
+		 * 
+		 * @since 0.1
+		 * 
+		 * @return Object type 
+		 */
+		public abstract Type get_introspection_type();
+
+		/**
 		 * Provides name as bindable point when redirection is done to this
 		 * object it self
 		 * 
@@ -73,7 +93,7 @@ namespace GData
 		 * 
 		 * @return Object type name
 		 */
-		public abstract string get_object_type();
+		public abstract string get_object_type_name();
 
 		/**
 		 * Returns property name

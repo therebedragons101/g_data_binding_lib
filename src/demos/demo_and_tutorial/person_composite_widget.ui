@@ -44,7 +44,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkEntry" id="name">
+      <object class="GtkEntry" id="property_name">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
       </object>
@@ -54,7 +54,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkEntry" id="surname">
+      <object class="GtkEntry" id="property_surname">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
       </object>
@@ -64,7 +64,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkEntry" id="required">
+      <object class="GtkEntry" id="property_required">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
       </object>

@@ -6,7 +6,7 @@ namespace GDataGtk
 	 * 
 	 * @since 0.1
 	 */
-	public class EditModeControl : Object
+	public class EditModeControl : Object, EditModeControlInterface
 	{
 		private EditMode _mode = EditMode.VIEW;
 		/**
@@ -20,28 +20,8 @@ namespace GDataGtk
 				if (_mode == value)
 					return;
 				_mode = value;
-				notify_property ("editing");
+				Signal.emit_by_name (this, "notify::editing");
 			}
-		}
-
-		/**
-		 * Convenience boolean access to mode property
-		 * 
-		 * @since 0.1
-		 */
-		public bool editing {
-			get { return (mode == EditMode.EDIT); }
-			set { mode = (value == true) ? EditMode.EDIT : EditMode.VIEW; return; }
-		}
-
-		/**
-		 * Inverts current state between edit and view
-		 * 
-		 * @since 0.1
-		 */
-		public void invert()
-		{
-			mode = (mode == EditMode.VIEW) ? EditMode.EDIT : EditMode.VIEW;
 		}
 
 		/**

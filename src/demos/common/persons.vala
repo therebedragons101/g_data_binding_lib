@@ -61,9 +61,9 @@ namespace Demo
 		}
 	}
 
-	private static ObjectArray<Person>? persons = null;
-	private static Person? john_doe = null;
-	private static Person? unnamed_person = null;
+	public static ObjectArray<Person>? persons = null;
+	public static Person? john_doe = null;
+	public static Person? unnamed_person = null;
 
 /*	public static ObjectArray<Person> persons {
 		get {
