@@ -1,0 +1,27 @@
+h1 {
+    background-color:darkgray;
+    color:black;
+    padding-left:5pt;
+    padding-top:5pt; 
+    padding-bottom:5pt; 
+    border-radius: 5pt; 
+    border-color: black; 
+    border-style: solid; 
+    border-width: 2pt;
+}
+h2 {
+    background-color:darkgray;
+    color:black;
+    padding-left:5pt;
+    padding-top:5pt; 
+    padding-bottom:5pt; 
+    border-radius: 5pt; 
+}
+h3 {
+    background-color:darkgray;
+    color:black;
+    padding-left:5pt;
+    padding-top:5pt; 
+    padding-bottom:5pt; 
+    border-radius: 5pt; 
+}

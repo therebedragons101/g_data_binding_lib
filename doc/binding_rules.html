@@ -1,0 +1,98 @@
+<link rel="stylesheet" href="styles.css">
+<h1>Binding rules</h1>
+<a href="index.html">Back to main page</a>
+<p>
+<span style="color:red">IMPORTANT!</span> There is a live demonstration of these flags in 
+demo_and_tutorial which comes in same project. This is probably much easier to understand when
+looking at it visually
+</p><p>
+<h3>DEFAULT</h3>
+Specifies data transfer is only done from <b>Source</b> to <b>Target</b> and there is no initial
+data synchronization at the moment when connection is established. Unless <b>BIDIRECTIONAL</b>
+is specified all data changes to <b>Target</b> will be ignored. The one case when this is not so
+is if connection also specifies <b>REVERSE_DIRECTION</b> in which case main direction is from
+<b>Target</b> to <b>Source</b>
+<h3>SYNC_CREATE</h3>
+Specifies data synchronization at the moment when connection is established (this also means time
+of connection unfreeze). Data synchronization is based on other specified rules. If one of rules
+is also <b>REVERSE_DIRECTION</b>, this changes synchronization to be from <b>Target</b> to 
+<b>Source</b> instead of usual <b>Source</b> to <b>Target</b>. Other flag that can change how
+synchronization is done is <b>INVERT_BOOLEAN</b> which if specified negates the boolean value on
+synchronization.
+<h3>BIDIRECTIONAL</h3>
+Specifies data transfer between properties on changes is going in both directions. Note that main 
+synchronization direction will still be in single direction as defined by flag priority. With
+<b>BIDIRECTIONAL</b> data is transferred as soon as change notification is propagated from either
+side
+<h3>INVERT_BOOLEAN</h3>
+Specifies that any boolean value should be inverted on data transfer which makes it convenient to
+automate inverted conditions
+<h3>REVERSE_DIRECTION</h3>
+Inverts direction where it declares that main point of data is <b>Target</b> and not <b>Source</b>
+as in default conditions. Unless <b>BIDIRECTIONAL</b> was specified this plays role in which data
+is transferred or synchronized.
+<h3>MANUAL_EVENTS_FROM_SOURCE</h3>
+Disables all notifications from <b>Source</b> and data is only updated when application manually
+calls <b>update_from_source()</b>. This is useful when live data change in object is not desired
+action
+<h3>MANUAL_EVENTS_FROM_TARGET</h3>
+Disables all notifications from <b>Target</b> and data is only updated when application manually
+calls <b>update_from_target()</b>. This is useful when live data change in object is not desired
+action
+<h3>MANUAL_UPDATE</h3>
+This is simple combination of both <b>MANUAL_EVENTS_FROM_SOURCE</b> and <b>MANUAL_EVENTS_FROM_TARGET</b>
+<h3>INACTIVE</h3>
+<span style="color:red">IMPORTANT!</span> Unlike all other flags, this is the only flag that can 
+change during lifetime. One example of that change is if binding is frozen from application side
+and changes again when application unfreezes same binding. If this flag is specified at the binding
+creation, then binding starts in inactive mode where nothing including synchronization is emitted
+until its state changes
+<h3>SOURCE_UPDATE_FLOOD_DETECTION, TARGET_UPDATE_FLOOD_DETECTION</h3>
+<p>When writing responsive applications or just being careful about cpu usage in application this
+flag can mean a lot. This flag main purpose is to control <b>Active</b> bindings, but it can be
+used for other purposes as well.
+</p>
+<p>One example case where this is really handy is when group of connections tracks currently
+selected object. Problem which can arise is that if user keeps scrolling over items, application
+can take large hit on cpu as it has to reestablish all connections to new target. This is when
+flood detection comes handy. If specified amount of consecutive refreshes are lower than specified
+flood interval, binding emits flood start and emits flood end once this is over. By default
+once flood is active changes are simply ignored and only continued on end of message spam. While
+this action does not need signals by default, signals can come handy in order to present situation
+in correct way (demo_and_tutorial for example grays out label and changes its title to "Flood in
+progress" for the duration of flood).
+</p>
+<h3>FLOOD_DETECTION</h3>
+This is simple combination of both <b>SOURCE_UPDATE_FLOOD_DETECTION</b> and <b>TARGET_UPDATE_FLOOD_DETECTION</b>
+<h3>SOURCE_DELAYED, TARGET_DELAYED</h3>
+Similar to flood detection this provides static delay to data transfer if another event occurs 
+during delay, delay is prolonged for another delay_interval. example usecase is binding search 
+controls where you don't want to spam search requests
+<h3>DELAYED</h3>
+This is simple combination of both <b>SOURCE_DELAYED</b> and <b>TARGET_DELAYED</b>
+<h3>CUSTOM_EVENTS_ONLY</h3>
+Suppresses connection to to original notification and only uses custom specified events. Unlike
+<b>MANUAL_UPDATE</b> this still uses any additionally specified notifications and signals
+<h3>SUPPRESS_WARNINGS</h3>
+In normal mode binding when impossible reports errors to console, but sometimes "try or fail"
+approach comes handy and this is when this flag should be used. In case of failed binding
+creation no error is reported to console and only thing that happens is the fact that <b>bind</b>
+returns <b>null</b> result
+<h3>USE_ORIGINAL_SOURCE_TYPE, USE_ORIGINAL_TARGET_TYPE</h3>
+<p>g_data_binding_lib comes with handy resolving when some object is not really represented by its
+own data, but instead binding should be used on some of its internals same as property discovery.
+These flags make it possible to still access original object if needed as redirection will not
+happen</p>
+<p>Simplest case of this is looking at <b>GSettings</b> object. Its own properties do not
+reflect his data that would most probably be edited in 99.9% of the time. This is why binding
+allows to redirect to that by default, but in remote case when binding actually needs to be done
+at original property, these flags allow to do so</p>
+<h3>USE_ORIGINAL_TYPES</h3>
+This is simple combination of both <b>USE_ORIGINAL_SOURCE_TYPE</b> and <b>USE_ORIGINAL_TARGET_TYPE</b>
+<h3>DEBUG</h3>
+This is not opposite from <b>SUPPRESS_WARNINGS</b> as main purpose is to debug certain binding
+to get notified about absolutely everything happening internally. As such connection bind/unbind,
+data transfer and everything gets logged into console. This should not be enabled unless there is
+a need for it and disabled as soon as it is not needed anymore
+</p>
+<a href="index.html">Back to main page</a>

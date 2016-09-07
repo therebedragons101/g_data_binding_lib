@@ -1,0 +1,81 @@
+<link rel="stylesheet" href="styles.css">
+<h1>What is data binding?</h1>
+<a href="index.html">Back to main page</a>
+
+<p>Data binding when simplified is probably best described as having two points connected with set of rules and
+those rules are what defines their synchronization. At this point data binding needs to be separated into two
+groups <b>Active</b> and <b>Passive</b>. With <b>Passive</b> data bindings things are really simple. You connect
+two objects and their properties and those get updated as defined. While it looks really simple, it is not so. 
+Problem that arises with <b>Passive</b> data binding is that if you need to change connected object, you need to
+drop all bindings and then manually reestablish them, while <b>Active</b> data binding takes care of that
+internally. But, to understand <b>Active</b> data binding one must understand <b>Passive</b> first.
+</p>
+<p><b>All that said, Passive binding still has its uses</b>. If one wants to have tracked changes in list of
+items represented in ListBox, creating <b>Active</b> binding for each item might be more of a burden than success.
+Items in list will most probably be statical for whole life time and even more so, using <b>Passive</b> data
+binding is much less straining on memory than <b>Active</b> which needs to store quite a bit more data in order
+to sustain it self
+</p>
+<p><b><span style="color:red">IMPORTANT!</span></b> Even though it might look <b>Active</b> binding is better than <b>Passive</b> this is not the
+case. They are equally useful and they each serve their own purposes. One of the most important things in data
+binding is knowing which one to use when and to do that one needs to distinct between how they work and how they
+maintain connection
+</p>
+<h3><b>Difference between Active and Passive data binding</b></h3>
+<p><b>Passive</b> data binding is simple.
+<li>Establish connection and the rules of it</li>
+<li>Connection is active until either of connected parties reaches <b>EOL (end of life)</b> or until <b>unbind</b> is called</li>
+<li><b>Problem:</b> When data binding is done or <b>Source</b> or <b>Target</b> needs to be changed everything 
+needs to be reestablished manually for next editing, which makes it inconvenient for binding things to changing selection</li>
+</p>
+<p><b>Active</b> data binding is more complex on the other hand.
+<li>First requirement for active data binding is having some sort of changeable data point like
+<a href="what_is_contract.html">Contract</a></li>
+<li>Establish connection between that active point and targets</li>
+<li>At this point unlike <b>Passive</b> data binding, whenever <b>source</b> changes connection will be dropped
+and reestablished automatically</li>
+<li><b>Problem:</b> If this is repeated for every item in really long list, this amounts to quite a bit more
+ram usage as necessary. <b>Active</b> binding needs to keep extra information on how to reestablish connection
+back when connection changes</li>
+</p>
+<p><b><span style="color:red">How to know which one to use in specific case?</span></b>. This is simple... Question lifetime of object and 
+<li>if lifetime is short lived where <b>source</b> point will change. Use <b>Active</b></li>
+<li>if lifetime is long, use <b>Passive</b></li>
+</p>
+<p>Simplest example is application handling the list of items and allowing for modifications of them. List of items
+is long term as widget displaying that list will always display the same list. Currently selected object which
+allows for modifications is not as it can change with selection in list widget. This is why it is most efficient
+to bind list items with <b>Passive</b>, create <a href="what_is_contract.html">Contract</a> which follows current
+selection and bind editing widgets with <b>Active</b> on that contract.
+</p>
+<p>By doing this, application will use the least resources possible and result will be no different than it would be if
+application was either using <b>Active</b> binding for every item or use <b>Passive</b> everywhere and manually
+reestablish connection. The real difference is the amount of source and resources used which is required for either
+approach to work. All <b>Active</b> will require about same amount of source as optimal, but require much more
+ram than necessary, while going with all <b>Passive</b> will amount to few bytes less than optimal and end up with
+a lot more source code than optimal.
+</p>
+<p><b><span style="color:red">IMPORTANT!</span></b> Note that both <b>Active</b> and <b>Passive</b> share exact same
+<a href="binding_rules.html">Binding rules</a>
+</p>
+<h3><b>Passive data binding</b></h3>
+<p>In most common scenario this is when some widget needs to display value of object property and dispatch its
+notifications to object. This usually means that widget first needs to be loaded with data and then tracked for
+all modifications and synchronized back to original object. This usually takes a lot of code to make it work as
+it should.
+</p>
+<p>Example:</p>
+<p>Object person has property <b>name</b> and this needs to be displayed and edited in some entry widget. At the
+start value of that property needs to be set to <b>text</b> property of entry widget, then (if changes needs to
+be instant) one needs to connect to <b>changed</b> signal on that widget and set data back to object in that
+signal handler or that needs to be taken care of when editing is done. In either case, responsibility is purely
+on application. This doesn't even mention cases on how to handle when data is not present or editing is not
+possible. But, the worst is when you add all these in application and end up with whole lot of code that is
+crosslinked across whole application
+</p>
+<p>Person object definitely has more than one property and there is a good question how</p>
+<p>With <b>Passive</b> data binding things are much simpler. All it takes is to <b>bind</b> (connect) them at 
+editing start and then either <b>unbind</b> or wait until either of connected objects reaches its end of
+life at which point binding is automatically unreferenced.
+</p>
+<a href="index.html">Back to main page</a>
