@@ -179,7 +179,25 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 */
-		DELAYED,
+		SOURCE_DELAYED,
+		/**
+		 * Similar to flood detection this provides static delay to data 
+		 * transfer if another event occurs during delay, delay is prolonged for
+		 * another delay_interval. example usecase is binding search controls 
+		 * where you don't want to spam search requests
+		 * 
+		 * @since 0.1
+		 */
+		TARGET_DELAYED,
+		/**
+		 * Similar to flood detection this provides static delay to data 
+		 * transfer if another event occurs during delay, delay is prolonged for
+		 * another delay_interval. example usecase is binding search controls 
+		 * where you don't want to spam search requests
+		 * 
+		 * @since 0.1
+		 */
+		DELAYED = SOURCE_DELAYED | TARGET_DELAYED,
 		/**
 		 * Specifies binding data transfer only relies on additionally specified
 		 * events and original property should not be connected
@@ -188,12 +206,12 @@ namespace GData
 		 */
 		CUSTOM_EVENTS_ONLY,
 		/**
-		 * Specifies all error reporting should be supressed as there is no
+		 * Specifies all error reporting should be suppressed as there is no
 		 * guarantee that binding is possible
 		 * 
 		 * @since 0.1
 		 */
-		SUPRESS_WARNINGS,
+		SUPPRESS_WARNINGS,
 		/**
 		 * Specifies binding should not use registered handler and instead use
 		 * handler specified in its original_type property
@@ -319,7 +337,7 @@ namespace GData
 		 */
 		public bool IS_CONDITIONAL()
 		{
-			return ((this & BindFlags.SUPRESS_WARNINGS) == BindFlags.SUPRESS_WARNINGS);
+			return ((this & BindFlags.SUPPRESS_WARNINGS) == BindFlags.SUPPRESS_WARNINGS);
 		}
 
 		/**
