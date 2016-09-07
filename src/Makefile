@@ -68,6 +68,7 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	contracts/binding_suspension_group.vala \
 	contracts/binding_state_objects.vala \
 	contracts/binding_value_objects.vala \
+	contracts/boolean_condition.vala \
 	contracts/consts.vala \
 	contracts/contract_change_type.vala \
 	contracts/contract_mapper_interface.vala \

@@ -6541,9 +6541,8 @@ or less exact same case with application triggers with one difference that inste
                                             <property name="can_focus">False</property>
                                             <property name="hexpand">True</property>
                                             <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;BooleanCondition&lt;/b&gt;&lt;/big&gt;
-Both serve same purpose while handling exact same problem on different level. One handles enumeration values and one flag values. 
-While EnumState and FlagState can be used standalone it is probably far better to use them trough its respective group as it will share 
-FlagState for every access to same flag or combination of it once requested</property>
+Boolean condition is more or less the same as contract state object, except it can be used outside of contracts. Being that it is derived from
+ProxyPropertyGroup it works more or less the same as Trigger with one difference of having &lt;b&gt;state&lt;/b&gt; property</property>
                                             <property name="use_markup">True</property>
                                             <property name="xalign">0</property>
                                           </object>
@@ -6554,7 +6553,22 @@ FlagState for every access to same flag or combination of it once requested</pro
                                           </packing>
                                         </child>
                                         <child>
-                                          <placeholder/>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="tooltip_markup" translatable="yes">&lt;small&gt;&lt;i&gt;PropertyBinding.bind (basic_entry_left, "text", basic_entry_right, "text", BindFlags.SYNC_CREATE);&lt;/i&gt;&lt;/small&gt;</property>
+                                            <property name="halign">start</property>
+                                            <property name="hexpand">True</property>
+                                            <property name="label" translatable="yes">Usage is more or less the same with exception of how method is being used. In case of Trigger signal is emited every time evaluation
+method returns true, while in case of BooleanCondition method result is assigned to &lt;b&gt;state&lt;/b&gt; property which means change notification is
+only emited when &lt;b&gt;state&lt;/b&gt; changes.</property>
+                                            <property name="use_markup">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
                                         </child>
                                         <child>
                                           <placeholder/>

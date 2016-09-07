@@ -1,19 +1,16 @@
 namespace GData
 {
 	/**
-	 * Delegate used to check if trigger needs to be emited or not
+	 * Delegate used to reset state in BooleanCondition
 	 * 
 	 * @since 0.1
 	 * 
 	 * @return If returned value is true, then signal trigger is emited
 	 */
-	public delegate bool TriggerEmissionDelegate();
+	public delegate bool BooleanConditionDelegate();
 
 	/**
-	 * Simple database like trigger for application purposes. Being that trigger
-	 * is derived from ProxyPropertyGroup its value gets reevaluated whenever
-	 * any property in group changes and if conditions are right then trigger
-	 * is emited.
+	 * Used to track property changes and provide their state.
 	 * 
 	 * In order to simplify everything, processing of values should be direct
 	 * and not trough ProxyProperty values as main purpose of this class is not
@@ -34,40 +31,45 @@ namespace GData
 	 * 
 	 * @since 0.1
 	 */
-	public class Trigger : ProxyPropertyGroup
+	public class BooleanCondition : ProxyPropertyGroup
 	{
-		private TriggerEmissionDelegate? _method = null;
+		private BooleanConditionDelegate? _method = null;
 		/**
-		 * Method used to verify need for trigger emission. If method returns 
-		 * true, then trigger will be emited.
+		 * Method used to reset state value property on changes
 		 * 
 		 * @since 0.1
 		 */
-		public TriggerEmissionDelegate? method {
+		public BooleanConditionDelegate? method {
 			get { return (_method); }
 			set {
 				if (_method == value)
 					return;
 				_method = value;
-				check_trigger();
+				check_state();
 			}
 		}
 
-		private void check_trigger()
-		{
-			if (_method == null)
-				return;
-			if (_method() == true)
-				trigger();
-		}
-
+		private bool _state = false;
 		/**
-		 * Signal is emited when any property in group changes and on
-		 * reevaluation trough method true is returned
+		 * Provides state property
 		 * 
 		 * @since 0.1
 		 */
-		public signal void trigger();
+		public bool state {
+			get { return (_state); }
+			set {
+				if (_state == value)
+					return;
+				_state = value;
+			}
+		}
+
+		private void check_state()
+		{
+			if (_method == null)
+				return;
+			state = _method();
+		}
 
 		/**
 		 * Creates new Trigger
@@ -76,10 +78,10 @@ namespace GData
 		 * 
 		 * @param method Method used to reevaluate need for trigger emission
 		 */
-		public Trigger (TriggerEmissionDelegate? method = null)
+		public BooleanCondition (BooleanConditionDelegate? method = null)
 		{
 			_method = method;
-			this.value_changed.connect (check_trigger);
+			this.value_changed.connect (check_state);
 		}
 	}
 }
