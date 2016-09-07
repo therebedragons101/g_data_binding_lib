@@ -1,5 +1,22 @@
 <link rel="stylesheet" href="styles.css">
 <h1>What is data binding source?</h1>
 <a href="index.html">Back to main page</a>
-<p></p>
+<p>There are always two sides of data binding that needs to be provided <b>Source</b> and <b>Target</b>.
+When defining new binding both have to provided in order to enable the connection. While they
+can be just plain ordinary object, they can as well be data provided by <b>Pointer</b> or <b>Contract</b>.
+In case of <b>Pointer</b>/<b>Contract</b> data can change without the need to rebind, but this is
+only possible with <b>Active</b> binding. In this case, <b>Pointer</b>/<b>Contract</b> take
+care of notifications what needs to be changed and how or even the fact if binding is possible (data
+they can point could be <b>null</b> or simply object type that does not contain specified property which
+makes binding impossible) 
+</p>
+<p>Binding source explained in simplest way is the main data origin point. Whenever you bind 
+two properties there very slim possibility of every encountering situation when one side would
+not be prevalent to another
+</p>
+<p>In case of binding, object being edited and widgets displaying/editing it are not of the same
+importance. Object data is always based on him, while widget could as well display only selected
+object.
+</p>
+<p><b>Source</b> is the prevalent side of the binding. Side that generates data persistence</p>
 <a href="index.html">Back to main page</a>
