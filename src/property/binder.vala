@@ -22,6 +22,7 @@ namespace GData
 	 */
 	public class Binder : Object, HasDescription
 	{
+		private static Binder _default_silent_binder = null;
 		private static Binder __default_binder = null;
 		private static Binder _default_binder = null;
 
@@ -30,6 +31,24 @@ namespace GData
 		                                                 owned PropertyBindingTransformFunc? transform_from = null)
 		{
 			return ((BindingInterface?) PropertyBinding.bind (source, source_property, target, target_property, flags, (owned) transform_to, (owned) transform_from));
+		}
+
+		/**
+		 * Creates or resolves basic silent binder that can be used for internal
+		 * purposes
+		 * 
+		 * Note that this is by default used in BindingContract to resolve their
+		 * binder property value unless specified otherwise
+		 * 
+		 * @since 0.1
+		 * 
+		 * @return Current default binder
+		 */
+		public static Binder get_default_silent()
+		{
+			if (_default_silent_binder == null)
+				_default_silent_binder = new Binder.silent();
+			return (_default_silent_binder);
 		}
 
 		/**
