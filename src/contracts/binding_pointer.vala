@@ -52,8 +52,8 @@ namespace GData
 		 * @since 0.1
 		 */
 		[Description (name="Object description", blurb="Object description")]
-		public string description { 
-			owned get { 
+		public string description {
+			owned get {
 				if (_description == "")
 					return ("id(@%i) %s".printf(id, stored_as));
 				return (_description); 

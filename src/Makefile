@@ -147,6 +147,7 @@ GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	gtk/widgets/auto_value_mode_widget.vala \
 	gtk/widgets/auto_widget.vala \
 	gtk/widgets/bindable_composite_widget.vala \
+	gtk/widgets/character_case_mode.vala \
 	gtk/widgets/creation_edit_mode.vala \
 	gtk/widgets/custom_creation_description.vala \
 	gtk/widgets/default_widgets.vala \
@@ -158,6 +159,8 @@ GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	gtk/widgets/enum_flags_mode.vala \
 	gtk/widgets/enum_flags_popover.vala \
 	gtk/widgets/enum_flags_string.vala \
+	gtk/widgets/enum_flags_string_control.vala \
+	gtk/widgets/enum_flags_string_interface.vala \
 	gtk/widgets/enum_flags_values.vala \
 	gtk/widgets/enum_flags_value_interface.vala \
 	gtk/widgets/methods.vala \

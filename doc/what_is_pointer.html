@@ -6,4 +6,24 @@ other uses as well. Sometimes <a href="what_is_contract.html">Contract</a> is ju
 while sometimes it is much easier to extend <b>Pointer</b> than <a href="what_is_contract.html">Contract</a>.
 One case of such extensions are relaying pointers which only serve to relay <b>source</b> to different object
 </p>
+<p>Binding pointer is easier to understand if it is compared to regular pointers. All that regular pointer does
+is pointing to address of where data exists. Exact same thing goes for binding pointers with one exception.
+Beside just pointing to data it also provides complete signal system that can be used to track changes.
+</p>
+<h2>Properties</h2>
+<h3>property Object? data { get; set; }</h3>
+Pointer value, but since that could be another pointer pointing to another pointer and so on, this is not
+really application friendly. Application when needed should use method <b>get_source()</b> which resolves
+complete chain and returns absolute end of chain no matter how complex 
+<h2>Signals</h2>
+<h3>signal void before_source_change (BindingPointer source, bool same_type, Object? next_source);</h3>
+This signal happens just in a moment before pointer will start pointing elsewhere.
+<h3>signal void source_changed (BindingPointer source);</h3>
+Signal is emitted as first thing when data changes
+<h3>signal void connect_notifications (Object? obj);</h3>
+When connecting things like contract bindings, this is probably most convenient time. Not only source is
+already resolved, it is also guaranteed safe moment when dispatch of <b>source_changed</b> already occurred
+<h3>signal void disconnect_notifications (Object? obj);</h3>
+When disconnecting things like contract bindings this is again best time to do it.
+<h3>signal void data_changed (BindingPointer source, string data_change_cookie);</h3>
 <a href="index.html">Back to main page</a>
