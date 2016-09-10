@@ -2,12 +2,26 @@ using GData;
 
 namespace GDataGtk
 {
+	/**
+	 * EnumFlagsMenuButton provides button with popover that can be used to edit
+	 * flags and enums
+	 * 
+	 * @since 0.1
+	 */
 	[GtkTemplate(ui="/org/gtk/g_data_binding_gtk/data/enum_flags_menu_button.ui")]
 	public class EnumFlagsMenuButton : Gtk.MenuButton, EnumFlagsValueInterface
 	{
 		[GtkChild] private Gtk.Label value_label;
 
-		private EnumFlagsString str;
+		private EnumFlagsString _value_string;
+		/**
+		 * Allows access to display options and control
+		 * 
+		 * @since 0.1
+		 */
+		public EnumFlagsString value_string {
+			get { return (_value_string); }
+		}
 
 		/**
 		 * Enum or Flags type being handled
@@ -74,8 +88,8 @@ namespace GDataGtk
 			get_value_interface().notify["int-value"].connect (() => { notify_property("int-value"); });
 			get_value_interface().notify["uint-value"].connect (() => { notify_property("uint-value"); });
 			get_value_interface().notify["model-type"].connect (() => { notify_property("model-type"); });
-			str = new EnumFlagsString (this);
-			_auto_binder().bind(str, "text", value_label, "label", BindFlags.SYNC_CREATE);
+			_value_string = new EnumFlagsString (this);
+			_auto_binder().bind(value_string, "text", value_label, "label", BindFlags.SYNC_CREATE);
 		}
 	}
 }
