@@ -103,13 +103,13 @@ namespace GDataGtk
 
 		private string _resolve_flags_val_str (uint val)
 		{
+			uint nval = val;
 			FlagsClass cls = (FlagsClass) model_type.class_ref();
-			cls.mask = val;
 			string t = "";
 			for (int i=0; i<cls.values.length; i++) {
-				if (has_set_flag (cls.mask, cls.values[i].value) == true) {
+				if (has_set_flag (nval, cls.values[i].value) == true) {
 					t += ((t != "") ? _or_definition : "") + _get_flags_value_str(cls.values[i], mode, character_case);
-					cls.mask = unset_flag(cls.mask, cls.values[i].value);
+					nval = unset_flag(nval, cls.values[i].value);
 				}
 			}
 			return (t);

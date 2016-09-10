@@ -144,18 +144,10 @@ namespace GData
 			if (is_valid() == false)
 				return;
 			GLib.Value nval = GLib.Value(parm.value_type);
-stdout.printf ("set_value %s.%s\n", get_connected_object().get_type().name(), parm.name);
-			if (copy_or_transform_value(val, ref nval) == true) {
-stdout.printf ("set_property val=%s:%lu, nval=%s:%lu\n", val.type().name(), val.get_uint(), nval.type().name(), nval.get_flags());
-				if (parm.value_validate(nval) == true)
+			if (copy_or_transform_value(val, ref nval) == true)
 				get_connected_object().set_property (parm.name, nval);
-				else
-				stdout.printf ("WTF?\n");
-				}
 			else
 				GLib.warning ("ProxyProperty.get_property_value().Incompatible types");
-stdout.printf ("set_property val=%s:%lu, nval=%s:%lu\n", val.type().name(), val.get_uint(), nval.type().name(), nval.get_flags());
-stdout.printf ("set_value.end\n");
 		}
 
 		/**
