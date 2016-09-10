@@ -46,11 +46,15 @@ namespace GData
 				return (__invalid_value);
 			}
 			set {
+stdout.printf ("assign val\n");
 				if ((is_valid() == true) && (bidirectional == true)) {
 					GLib.Value val = GLib.Value(typeof(uint));
 					val.set_uint (value);
+stdout.printf ("assign val\n");
 					set_property_value (val);
+stdout.printf ("assign val.end1\n");
 				}
+stdout.printf ("assign val.end\n");
 			}
 		}
 

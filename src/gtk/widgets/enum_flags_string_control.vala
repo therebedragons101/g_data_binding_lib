@@ -19,13 +19,13 @@ namespace GDataGtk
 		 * 
 		 * @since 0.1
 		 */
-		public CharacterCaseMode character_case { get; set; default = CharacterCaseMode.UPCASE; }
+		public CharacterCaseMode character_case { get; set; default = CharacterCaseMode.PRESENTABLE; }
 		/**
 		 * Specifies mode of value representation that can be either VALUE,
 		 * NAME, NICK or CUSTOM
 		 * 
 		 * @since 0.1
 		 */
-		public EnumFlagsMode mode { get; set; default = EnumFlagsMode.NAME; }
+		public EnumFlagsMode mode { get; set; default = EnumFlagsMode.NICK; }
 	}
 }

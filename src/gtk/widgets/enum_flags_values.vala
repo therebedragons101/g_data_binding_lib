@@ -28,7 +28,7 @@ namespace GDataGtk
 	 * @since 0.1
 	 */
 	[GtkTemplate (ui="/org/gtk/g_data_binding_gtk/data/enum_flags_values.ui")]
-	public class EnumFlagsValues : Gtk.Box, EnumFlagsValueInterface
+	public class EnumFlagsValues : Gtk.Box, EnumFlagsValueInterface, EnumFlagsStringInterface
 	{
 		private bool assigning = false;
 		private bool toggle_assigning = false;
@@ -85,6 +85,52 @@ namespace GDataGtk
 		}
 
 		/**
+		 * Not used
+		 * 
+		 * @since 0.1
+		 */
+		public string or_definition { get; set; }
+
+		private CharacterCaseMode _character_case = CharacterCaseMode.PRESENTABLE;
+		/**
+		 * Specifies character case conversion if any
+		 * 
+		 * @since 0.1
+		 */
+		public CharacterCaseMode character_case {
+			get { return (_character_case); }
+			set {
+				if (_character_case == value)
+					return;
+				_character_case = value;
+			}
+		}
+
+		private EnumFlagsMode _mode = EnumFlagsMode.NICK;
+		/**
+		 * Specifies how enum/flags values should be represented in string
+		 * 
+		 * @since 0.1
+		 */
+		public EnumFlagsMode mode {
+			get { return (_mode); }
+			set {
+				if (_mode == value)
+					return;
+				_mode = value;
+			}
+		}
+
+		private string get_modeled_string (EnumFlagsValueObject o)
+		{
+			if (o.is_flags() == true)
+				return (_get_flags_value_str (o.flagsv, mode, character_case));
+			else
+				return (_get_enum_value_str (o.enumv, mode, character_case));
+			
+		}
+
+		/**
 		 * Binds specific type to internal listbox and assigns correct state of
 		 * internal items
 		 * 
@@ -99,7 +145,14 @@ namespace GDataGtk
 				EnumFlagsValueObject obj = (EnumFlagsValueObject) o;
 				Gtk.ListBoxRow row = new Gtk.ListBoxRow();
 				row.set_data<int> ("item-value", obj.value);
-				Gtk.CheckButton check = new Gtk.CheckButton.with_label (obj.name.replace(convert_to_type_name(type.name()), ""));
+//				Gtk.CheckButton check = new Gtk.CheckButton.with_label (obj.name.replace(convert_to_type_name(type.name()), ""));
+				Gtk.CheckButton check = new Gtk.CheckButton.with_label (get_modeled_string(obj));
+				this.notify["mode"].connect (() => {
+					check.label = get_modeled_string(obj);
+				});
+				this.notify["character-case"].connect (() => {
+					check.label = get_modeled_string(obj);
+				});
 				check.set_data<int> ("item-value", obj.value);
 				row.set_data<StrictWeakReference<Gtk.CheckButton?>> ("check", new StrictWeakReference<Gtk.CheckButton?>(check));
 				check.visible = true;
@@ -158,3 +211,4 @@ namespace GDataGtk
 		}
 	}
 }
+

@@ -45,6 +45,7 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	common/delegates.vala \
 	common/gobject_array.vala \
 	common/has_description.vala \
+	common/invalid_enum_type.vala \
 	common/object_information.vala \
 	common/ref_timeout.vala \
 	common/reference_monitor.vala \

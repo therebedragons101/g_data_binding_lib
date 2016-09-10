@@ -28,7 +28,12 @@ namespace GDataGtk
 			}
 		}
 
-		private CharacterCaseMode _character_case = CharacterCaseMode.UPCASE;
+		private CharacterCaseMode _character_case = CharacterCaseMode.PRESENTABLE;
+		/**
+		 * Specifies character case conversion if any
+		 * 
+		 * @since 0.1
+		 */
 		public CharacterCaseMode character_case {
 			get { return (_character_case); }
 			set {
@@ -39,7 +44,7 @@ namespace GDataGtk
 			}
 		}
 
-		private EnumFlagsMode _mode = EnumFlagsMode.NAME;
+		private EnumFlagsMode _mode = EnumFlagsMode.NICK;
 		/**
 		 * Specifies how enum/flags values should be represented in string
 		 * 
@@ -89,39 +94,11 @@ namespace GDataGtk
 			}
 		}
 
-		private string _set_case (string str)
-		{
-			if (_character_case == CharacterCaseMode.UPCASE)
-				return (str.up());
-			else if (_character_case == CharacterCaseMode.LOCASE)
-				return (str.down());
-			return (str);
-		}
-
 		private string _resolve_enum_val_str (int val)
 		{
 			EnumClass cls = (EnumClass) model_type.class_ref();
 			EnumValue? vval = cls.get_value(val);
-			if (vval == null)
-				return ("Invalid value %i".printf (val));
-			if (mode == EnumFlagsMode.NUMBER)
-				return ("%i".printf(vval.value));
-			if (mode == EnumFlagsMode.NAME)
-				return (vval.value_name);
-			if (mode == EnumFlagsMode.NICK)
-				return (vval.value_nick);
-			return ("unhandled mode");
-		}
-
-		private string __resolve_flags_val_str (FlagsValue val)
-		{
-			if (mode == EnumFlagsMode.NUMBER)
-				return ("%lu".printf(val.value));
-			if (mode == EnumFlagsMode.NAME)
-				return (val.value_name);
-			if (mode == EnumFlagsMode.NICK)
-				return (val.value_nick);
-			return ("unhandled mode");
+			return (_get_enum_value_str (vval, mode, character_case));
 		}
 
 		private string _resolve_flags_val_str (uint val)
@@ -129,10 +106,11 @@ namespace GDataGtk
 			FlagsClass cls = (FlagsClass) model_type.class_ref();
 			cls.mask = val;
 			string t = "";
-			while (cls.mask != 0) {
-				FlagsValue? vval = cls.get_first_value(val);
-				t += ((t != "") ? _or_definition : "") + __resolve_flags_val_str(vval);
-				cls.mask = unset_flag(cls.mask, vval.value);
+			for (int i=0; i<cls.values.length; i++) {
+				if (has_set_flag (cls.mask, cls.values[i].value) == true) {
+					t += ((t != "") ? _or_definition : "") + _get_flags_value_str(cls.values[i], mode, character_case);
+					cls.mask = unset_flag(cls.mask, cls.values[i].value);
+				}
 			}
 			return (t);
 		}
@@ -143,9 +121,9 @@ namespace GDataGtk
 				_text = "";
 			else {
 				if (model_type.is_enum() == true)
-					_text = _set_case (_resolve_enum_val_str (int_value));
+					_text = _resolve_enum_val_str (int_value);
 				else if (model_type.is_flags() == true)
-					_text = _set_case (_resolve_flags_val_str (uint_value));
+					_text = _resolve_flags_val_str (uint_value);
 				else
 					_text = "invalid type";
 			}
@@ -166,7 +144,7 @@ namespace GDataGtk
 		 */
 		public Type? model_type {
 			get { return (_value_object.model_type); }
-			set { value_object.model_type = value; }
+			set { _value_object.model_type = value; }
 		}
 
 		/**
@@ -176,7 +154,7 @@ namespace GDataGtk
 		 */
 		public int int_value {
 			get { return (_value_object.int_value); }
-			set { value_object.int_value = value; }
+			set { _value_object.int_value = value; }
 		}
 
 		/**
@@ -186,7 +164,7 @@ namespace GDataGtk
 		 */
 		public uint uint_value {
 			get { return (_value_object.uint_value); }
-			set { value_object.uint_value = value; } 
+			set { _value_object.uint_value = value; } 
 		}
 
 		private void handle_control_reset()
@@ -197,12 +175,12 @@ namespace GDataGtk
 		}
 
 		/**
-		 * Sets mode control object which is shared amongs all widgets of this
-		 * type for certain group
+		 * Sets mode control object which is shared amongs all widgets/strings
+		 * handling this type for certain group
 		 * 
 		 * @since 0.1
 		 * 
-		 * @param control Control object for EDIT/VIEW mode
+		 * @param control Control object for enum/flags display mode
 		 */
 		public EnumFlagsString set_mode_control (EnumFlagsStringInterface? control)
 		{
@@ -231,10 +209,15 @@ namespace GDataGtk
 		 * 
 		 * @param value_object Object used for value/type information
 		 */
-		public EnumFlagsString (EnumFlagsValueInterface value_object, EnumFlagsMode mode = EnumFlagsMode.NICK)
+		public EnumFlagsString (EnumFlagsValueInterface value_object, EnumFlagsMode mode = EnumFlagsMode.NICK, CharacterCaseMode character_case = CharacterCaseMode.PRESENTABLE)
 		{
 			handle_control_reset();
 			this.value_object = value_object;
+			this.mode = mode;
+			this.character_case = character_case;
+			this.value_object.notify["int-value"].connect (() => {
+				handle_notify_change();
+			});
 		}
 	}
 }

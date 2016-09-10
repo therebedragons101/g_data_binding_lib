@@ -20,6 +20,12 @@ namespace GDataGtk
 		 */
 		UPCASE,
 		/**
+		 * Upcases first character and replaces _ and - with space
+		 * 
+		 * @since 0.1
+		 */
+		PRESENTABLE,
+		/**
 		 * Convert to locase string
 		 * 
 		 * @since 0.1

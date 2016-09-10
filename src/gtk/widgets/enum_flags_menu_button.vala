@@ -1,9 +1,13 @@
+using GData;
+
 namespace GDataGtk
 {
 	[GtkTemplate(ui="/org/gtk/g_data_binding_gtk/data/enum_flags_menu_button.ui")]
 	public class EnumFlagsMenuButton : Gtk.MenuButton, EnumFlagsValueInterface
 	{
 		[GtkChild] private Gtk.Label value_label;
+
+		private EnumFlagsString str;
 
 		/**
 		 * Enum or Flags type being handled
@@ -55,18 +59,6 @@ namespace GDataGtk
 			return ((EnumFlagsValueInterface) popover);
 		}
 
-		private void set_caption()
-		{
-			GLib.Value val = GLib.Value (model_type);
-			if (model_type.is_flags() == true)
-				val.set_flags(uint_value);
-			else
-				val.set_enum(int_value);
-			GLib.Value str = GLib.Value (typeof(string));
-			val.transform (ref str);
-			value_label.label = str.get_string().replace(convert_to_type_name(get_value_interface().model_type.name()), "");
-		}
-
 		/**
 		 * Create new EnumFlagsMenuButton
 		 * 
@@ -82,10 +74,8 @@ namespace GDataGtk
 			get_value_interface().notify["int-value"].connect (() => { notify_property("int-value"); });
 			get_value_interface().notify["uint-value"].connect (() => { notify_property("uint-value"); });
 			get_value_interface().notify["model-type"].connect (() => { notify_property("model-type"); });
-			notify["int-value"].connect (() => {
-				set_caption();
-			});
-			set_caption();
+			str = new EnumFlagsString (this);
+			_auto_binder().bind(str, "text", value_label, "label", BindFlags.SYNC_CREATE);
 		}
 	}
 }

@@ -13,6 +13,59 @@ namespace GDataGtk
 		return (res + "_");
 	}
 
+	internal string _get_presentable_str (string str)
+	{
+		if ((str == null) || (str.length == 0))
+			return ("");
+		if (str.length == 1)
+			return (str.up());
+		string s = str.substring(0,1).up() + str.substring(1);
+		return (s.replace("-", " ").replace("_", " "));
+	}
+
+	public string change_str_case (string str, CharacterCaseMode ccase)
+	{
+		if (ccase == CharacterCaseMode.UPCASE)
+			return (str.up());
+		else if (ccase == CharacterCaseMode.LOCASE)
+			return (str.down());
+		else if (ccase == CharacterCaseMode.PRESENTABLE)
+			return (_get_presentable_str(str));
+		return (str);
+	}
+
+	internal string __get_enum_value_str (EnumValue? val, EnumFlagsMode mode)
+	{
+		if (mode == EnumFlagsMode.NUMBER)
+			return ("%lu".printf(val.value));
+		if (mode == EnumFlagsMode.NAME)
+			return (val.value_name);
+		if (mode == EnumFlagsMode.NICK)
+			return (val.value_nick);
+		return ("unhandled mode");
+	}
+
+	internal string _get_enum_value_str (EnumValue? val, EnumFlagsMode mode, CharacterCaseMode ccase)
+	{
+		return (change_str_case (__get_enum_value_str (val, mode), ccase));
+	}
+
+	internal string __get_flags_value_str (FlagsValue? val, EnumFlagsMode mode)
+	{
+		if (mode == EnumFlagsMode.NUMBER)
+			return ("%lu".printf(val.value));
+		if (mode == EnumFlagsMode.NAME)
+			return (val.value_name);
+		if (mode == EnumFlagsMode.NICK)
+			return (val.value_nick);
+		return ("unhandled mode");
+	}
+
+	internal string _get_flags_value_str (FlagsValue? val, EnumFlagsMode mode, CharacterCaseMode ccase)
+	{
+		return (change_str_case (__get_flags_value_str (val, mode), ccase));
+	}
+
 	public static void set_height_margins (Gtk.Widget? widget, int margin)
 	{
 		if (widget == null)
