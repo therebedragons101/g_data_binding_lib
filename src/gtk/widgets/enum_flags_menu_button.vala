@@ -84,6 +84,7 @@ namespace GDataGtk
 		public EnumFlagsMenuButton(Type type = typeof(UnspecifiedEnumType), int val = 0)
 		{
 			popover = new EnumFlagsPopover(this, type, val);
+			((EnumFlagsPopover) popover).set_mode_control (_value_string);
 			// set complete 1:1 reliance on property notifications
 			get_value_interface().notify["int-value"].connect (() => { notify_property("int-value"); });
 			get_value_interface().notify["uint-value"].connect (() => { notify_property("uint-value"); });

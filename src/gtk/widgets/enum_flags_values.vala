@@ -145,7 +145,6 @@ namespace GDataGtk
 				EnumFlagsValueObject obj = (EnumFlagsValueObject) o;
 				Gtk.ListBoxRow row = new Gtk.ListBoxRow();
 				row.set_data<int> ("item-value", obj.value);
-//				Gtk.CheckButton check = new Gtk.CheckButton.with_label (obj.name.replace(convert_to_type_name(type.name()), ""));
 				Gtk.CheckButton check = new Gtk.CheckButton.with_label (get_modeled_string(obj));
 				this.notify["mode"].connect (() => {
 					check.label = get_modeled_string(obj);

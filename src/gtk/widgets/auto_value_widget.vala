@@ -99,7 +99,7 @@ namespace GDataGtk
 		{
 			if (_widget != null) {
 				remove (_widget);
-//				_widget.destroy();
+				_widget.destroy();
 				_widget = null;
 			}
 		}

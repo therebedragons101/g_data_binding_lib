@@ -324,10 +324,12 @@ namespace GDataGtk
 			if (_read_widget != null) {
 				read_alignment.remove (_read_widget);
 				_read_widget.destroy();
+				_read_widget = null;
 			}
 			if (_write_widget != null) {
 				write_alignment.remove (_write_widget);
 				_write_widget.destroy();
+				_write_widget = null;
 			}
 			BindingDataTransfer? _source_transfer = BindingDefaults.get_instance().get_transfer_object_for (object, property_name, false);
 			_label = (_source_transfer == null) ? "" : _source_transfer.get_nick();
