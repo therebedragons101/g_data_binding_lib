@@ -17,9 +17,13 @@
     <file compressed="true">simple_binding/example_state_objects.vala</file>
     <file compressed="true">simple_binding/example_validation.vala</file>
     <file compressed="true">simple_binding/example_value_objects.vala</file>
+    <file compressed="true">advanced_binding/example_boolean_conditions.vala</file>
+    <file compressed="true">advanced_binding/example_triggers.vala</file>
     <file compressed="true">advanced_binding/example_enum_flags_state.vala</file>
     <file compressed="true">mapping/example_auto_widgets.vala</file>
     <file compressed="true">mapping/example_auto_value_mode_widgets.vala</file>
     <file compressed="true">mapping/example_composite_widgets.vala</file>
+    <file compressed="true">mapping/example_auto_container_values.vala</file>
+    <file compressed="true">mapping/example_auto_container_mode_values.vala</file>
   </gresource>
 </gresources>

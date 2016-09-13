@@ -202,9 +202,7 @@ namespace GData
 		 */
 		public string safe_get_for (Type type, string original_val)
 		{
-			string? res = _hash.get (type);
-			if (res == null)
-				GLib.warning ("DefaultProperties._get_for (%s) error. Already registered!", type.name());
+			string? res = find_for (type);
 			return ((res != null) ? res : original_val);
 		}
 

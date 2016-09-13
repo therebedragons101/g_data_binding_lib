@@ -208,7 +208,7 @@ namespace GDataGtk
 				items.set_markup (small("%s%s".printf(section_title("PROPERTIES"), _items_)));
 			}
 			item_padding_box.visible = !((is_binding_contract(pointer) == false) || (_items_ == ""));
-			// value objects
+			// state objects
 			_items_ = "";
 			if (is_binding_contract(pointer) == true) {
 				GObjectArray? sarr = c.get_data<GObjectArray> (BINDING_SOURCE_STATE_DATA);
@@ -217,8 +217,8 @@ namespace GDataGtk
 						_items_ = "%s%s%s".printf(_items_, (_items_ == "") ? "" : "\n", bold("\"%s\"").printf(as_state_object(sarr.data[i]).name));
 				states.set_markup (small("%s%s".printf(section_title("STATE OBJECTS"), _items_)));
 			}
-			value_padding_box.visible = !((is_binding_contract(pointer) == false) || (_items_ == ""));
-			// state objects
+			state_padding_box.visible = !((is_binding_contract(pointer) == false) || (_items_ == ""));
+			// value objects
 			_items_ = "";
 			if (is_binding_contract(pointer) == true) {
 				GObjectArray? varr = c.get_data<GObjectArray> (BINDING_SOURCE_VALUE_DATA);
@@ -227,7 +227,7 @@ namespace GDataGtk
 						_items_ = "%s%s%s".printf(_items_, (_items_ == "") ? "" : "\n", bold("\"%s\"").printf(as_binding_object(varr.data[i]).name));
 				values.set_markup (small("%s%s".printf(section_title("VALUE OBJECTS"), _items_)));
 			}
-			state_padding_box.visible = !((is_binding_contract(pointer) == false) || (_items_ == ""));
+			value_padding_box.visible = !((is_binding_contract(pointer) == false) || (_items_ == ""));
 		}
 
 		private void handle_pointer_invalid()

@@ -26,7 +26,9 @@ public class DemoAndTutorial : Gtk.Application
 		"advanced_binding/example_triggers",
 		"mapping/example_auto_widgets",
 		"mapping/example_auto_value_mode_widgets",
-		"mapping/example_composite_widgets"
+		"mapping/example_composite_widgets",
+		"mapping/example_auto_container_values",
+		"mapping/example_auto_container_mode_values"
 	};
 
 	public class StorageInspectRow : Gtk.ListBoxRow
@@ -310,6 +312,10 @@ public class DemoAndTutorial : Gtk.Application
 		example_composite_widgets(ui_builder);
 		example_auto_widgets(ui_builder);
 		example_auto_value_mode_widgets(ui_builder);
+		example_auto_container_values(ui_builder);
+		example_auto_container_mode_values(ui_builder);
+		example_boolean_conditions(ui_builder);
+		example_triggers(ui_builder);
 	}
 
 	protected override void shutdown ()

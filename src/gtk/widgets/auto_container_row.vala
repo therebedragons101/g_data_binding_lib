@@ -77,7 +77,39 @@ namespace GDataGtk
 		private void set_tooltip ()
 		{
 			if (_data_widget != null)
-				_data_widget.set_tooltip_markup (data_tooltip);
+				_data_widget.set_tooltip_markup ((_control.show_tooltips == true) ? _specified_tooltip : "");
+		}
+
+		private DefaultWidgets? _default_widgets = null;
+		/**
+		 * Specifies DefaultWidgets object which was used to create widget. This
+		 * can be changed at any time and widget will simply adapt to be
+		 * recreated in new mode.
+		 * 
+		 * If this is changed during runtime, then value store/assign falls
+		 * solely into applications responsability. If widget was bound to some
+		 * data this shouldn't be problem, only case when this is needed is when
+		 * for some reason data was manipulated directly on widgets
+		 * 
+		 * @since 0.1
+		 */
+		public DefaultWidgets default_widgets {
+			owned get {
+				if (_default_widgets == null)
+					return (DefaultWidgets.get_default());
+				return (_default_widgets);
+			}
+			set {
+				if (_default_widgets == value)
+					return;
+				_default_widgets = value;
+				if (get_data_widget() != null) {
+					if (get_data_widget().get_type().is_a(typeof(AutoValueModeWidget)) == true)
+						((AutoValueModeWidget) get_data_widget()).default_widgets = _default_widgets;
+					else if (get_data_widget().get_type().is_a(typeof(AutoValueWidget)) == true)
+						((AutoValueWidget) get_data_widget()).default_widgets = _default_widgets;
+				}
+			}
 		}
 
 		/**
@@ -95,13 +127,13 @@ namespace GDataGtk
 			if (_data_widget == widget)
 				return;
 			if (_data_widget != null) {
-				value_alignment.remove (_data_widget);
+				widget_alignment.remove (_data_widget);
 				_data_widget.destroy();
 				_data_widget = null;
 			}
 			_data_widget = widget;
 			if (_data_widget != null) {
-				value_alignment.add (_data_widget);
+				widget_alignment.add (_data_widget);
 				if (_data_widget.get_type().is_a(typeof(Gtk.Buildable)) == true)
 					((Gtk.Buildable) _data_widget).set_name (set_under_name);
 				_data_widget.visible = true;
@@ -244,11 +276,17 @@ namespace GDataGtk
 				_auto_binder().bind (_control, "label-opacity", label_alignment, "opacity", BindFlags.SYNC_CREATE);
 				_auto_binder().bind (_control, "label-halignment", label_alignment, "halign", BindFlags.SYNC_CREATE);
 				_auto_binder().bind (_control, "label-halignment", label_alignment, "halign", BindFlags.SYNC_CREATE);
-				_auto_binder().bind (this, "tooltip-text", this, "tooltip", BindFlags.SYNC_CREATE);
-				_control.notify["show-tootips"].connect (() => { notify_property("tooltip-text"); });
+//				_auto_binder().bind (this, "tooltip-text", this, "tooltip", BindFlags.SYNC_CREATE);
+				this.notify["data-tooltip"].connect (() => {
+					tooltip_text = data_tooltip;
+				});
+				_control.notify["show-tooltips"].connect (() => {
+					notify_property("tooltip-markup");
+					notify_property("data-tooltip");
+				});
 				_control.notify["labels-use-markup"].connect (() => { notify_property("label"); });
 			}
-			this.notify["tootip-text"].connect (() => { set_tooltip(); });
+//			this.notify["tooltip-markup"].connect (() => { set_tooltip_markup(data_tooltip); });
 		}
 	}
 }

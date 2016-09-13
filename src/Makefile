@@ -21,6 +21,7 @@ all: resources \
      ${COMMON_NAME}_generics${NAME_SUFFIX}.so \
      ${COMMON_NAME}_gtk${NAME_SUFFIX}.so \
      demo-and-tutorial \
+     demo-address-book \
      tests \
      hack-for-gir-bug \
      ${LIBRARY_NAME}-${LIB_VERSION}.typelib \
@@ -47,6 +48,7 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	common/has_description.vala \
 	common/invalid_enum_type.vala \
 	common/object_information.vala \
+	common/property_info_attribute.vala \
 	common/ref_timeout.vala \
 	common/reference_monitor.vala \
 	common/reference_monitor_group.vala \
@@ -59,6 +61,7 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	common/weak_reference_t.vala \
 	contracts/binding_pointer.vala \
 	contracts/binding_contract.vala \
+	contracts/binding_contract_mapper.vala \
 	contracts/binding_group.vala \
 	contracts/binding_information.vala \
 	contracts/binding_information_interface.vala \
@@ -72,7 +75,6 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	contracts/boolean_condition.vala \
 	contracts/consts.vala \
 	contracts/contract_change_type.vala \
-	contracts/contract_mapper_interface.vala \
 	contracts/contract_storage.vala \
 	contracts/custom_binding_source_state.vala \
 	contracts/custom_binding_source_value.vala \
@@ -134,6 +136,7 @@ GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	${RESOURCE}${COMMON_NAME}_gtk${NAME_SUFFIX}.* \
 	${COMMON_INTERNAL} \
 	gtk/contracts/gtk_buildable_mapper.vala \
+	gtk/contracts/gtk_buildable_contract_mapper.vala \
 	gtk/inspector/binding_inspector.vala \
 	gtk/inspector/binding_namespace_view_mode.vala \
 	gtk/inspector/contract_event_description.vala \
@@ -143,7 +146,9 @@ GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
 	gtk/inspector/methods.vala \
 	gtk/inspector/object_inspector_window.vala \
 	gtk/widgets/auto_container_control.vala \
+	gtk/widgets/auto_container_mode_values.vala \
 	gtk/widgets/auto_container_row.vala \
+	gtk/widgets/auto_container_values.vala \
 	gtk/widgets/auto_value_widget.vala \
 	gtk/widgets/auto_value_mode_widget.vala \
 	gtk/widgets/auto_widget.vala \
@@ -197,6 +202,11 @@ DEMO_SOURCES := demos/demo_and_tutorial/main.vala \
 	${RESOURCE}demo_and_tutorial.* \
 	gtk/inspector/event_array.vala \
 	gtk/inspector/methods.vala
+
+DEMO_ADDRESS_BOOK_SOURCES := demos/demo_address_book/contact.vala \
+	demos/demo_address_book/main_window.vala \
+	${RESOURCE}demo_address_book.* \
+	demos/demo_address_book/main.vala
 
 PACKAGES := --pkg gio-2.0
 DEMO_PACKAGES := --pkg gtk+-3.0
@@ -294,6 +304,22 @@ demo-and-tutorial:
 		-o ${BIN}demo_and_tutorial \
 	${DEMO_INCLUDES} \
 	${DEMO_SOURCES}
+
+demo-address-book:
+	valac \
+		--target-glib=2.38 \
+		--gresources=demos/demo_address_book/demo_address_book.resource \
+		${PACKAGES} \
+		${DEMO_PACKAGES} \
+		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
+		${INCLUDES}${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.vapi \
+		${INCLUDES}${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR}.vapi \
+		-X -I${INCLUDES} \
+		-X ${LIBRARY_NAME}${LIB_MAJOR}.so \
+		-X ${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.so \
+		-X ${COMMON_NAME}_gtk${NAME_SUFFIX}${LIB_MAJOR}.so \
+		-o ${BIN}demo_address_book \
+	${DEMO_ADDRESS_BOOK_SOURCES}
 
 tests:
 	valac \

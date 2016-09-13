@@ -728,7 +728,7 @@ namespace GData
 			}
 			if (source == target) {
 				if (flags.IS_CONDITIONAL() == false)
-					GLib.warning ("(source == target), there is probably better way to bind the properties");
+					GLib.warning ("(source == target => %s>%s), there is probably better way to bind the properties", source_property, target_property);
 				return (null);
 			}
 
@@ -778,9 +778,12 @@ namespace GData
 			}
 			if ((srcwrite == true) &&
 			    ((_source_transfer.get_property_flags() & ParamFlags.WRITABLE) != ParamFlags.WRITABLE)) {
-				if (flags.IS_CONDITIONAL() == false)
+				if ((flags.IS_CONDITIONAL() == false) && (flags.IS_CONDITIONAL_WRITE() == false))
 					GLib.warning ("Type %s (source) does not contain WRITABLE property with name \"%s\"", source.get_type().name(), srcprop);
-				return (null);
+				if (flags.IS_CONDITIONAL_WRITE() == false)
+					return (null);
+				else
+					flags = flags & ~(BindFlags.BIDIRECTIONAL);
 			}
 			if ((tgtread == true) &&
 			    ((_target_transfer.get_property_flags() & ParamFlags.READABLE) != ParamFlags.READABLE)) {

@@ -330,8 +330,9 @@ namespace GData
 		 * 
 		 * @param mapper Mapper object
 		 */
-		public ContractMapperInterface set_binding_mapper (ContractMapperInterface mapper)
+		public BindingContractMapper set_mapper (BindingContractMapper mapper)
 		{
+			mapper.contract_object = this;
 			return (mapper);
 		}
 
@@ -602,3 +603,4 @@ namespace GData
 		}
 	}
 }
+

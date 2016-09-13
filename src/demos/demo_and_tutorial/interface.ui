@@ -1989,7 +1989,8 @@ This just shows examples of binding data manipulation which is following &lt;b&g
 </property>
                                                 <property name="halign">start</property>
                                                 <property name="label" translatable="yes">&lt;b&gt;Binding with default registered properties (hover on label to see source)&lt;/b&gt;
-&lt;small&gt;this allows using of &lt;b&gt;&amp;amp;&lt;/b&gt; as property name which is then discovered from type registry&lt;/small&gt;</property>
+&lt;small&gt;this allows for example using of &lt;b&gt;&amp;amp;&lt;/b&gt; as property name which is then discovered from type registry. &lt;b&gt;Note that default/visibility/sensitivity already have its default
+aliases.&lt;/b&gt; &amp;amp; is here used just as example of how to use PropertyAlias&lt;/small&gt;</property>
                                                 <property name="use_markup">True</property>
                                               </object>
                                               <packing>
@@ -6352,6 +6353,232 @@ depending on mode setting. This makes same gui effective to switch between read/
                                     <property name="position">2</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <object class="GtkBox" id="example_auto_container_values">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="custom_data2_____">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Automatic container with values (AutoContainerValues)&lt;/b&gt;&lt;/big&gt;
+There are few imporant things to know about this
+- Main thing about this container is simplicity, for more complex layout see &lt;b&gt;AutoContainerModeValues&lt;/b&gt;
+- Container automatically creates widgets based on layout and widgets are AutoValueWidget
+- If needed SizeGroupCollection can be supplied on building which takes care that all widgets for same property will be in same size group
+- Mode EDIT/VIEW can be changed on the fly same as AutoValueWidget
+- No binding is done upon creation as this would only make working with it more complex. For binding suggested method are Mapper objects
+- Orientation can be either HORIZONTAL or VERTICAL, which makes this suitable for ListBox row automated creation
+- AutoContainerModeValues provides almost the same thing with two exceptions: widgets are dual state and have automatic label, so if there is
+   a need for object editing, that one is much more suitable
+- Automatic containers use layout to provide property editors so nothing says it is not possible to use custom grouping with more of them
+- It uses exact same approach as Gtk Composite Widgets example. Once widget is created, it gets assigned buildable name (prefix+name+suffix)
+   and then binding or use with contract can be done with Mapper</property>
+                                        <property name="use_markup">True</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Editable container</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox" id="auto_container_box">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <child>
+                                          <placeholder/>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Label auto container (usable to create ListBox row header, easiest way to override for custom effect is simply deriving new DefaultWidgets
+and override EditMode.VIEW for typeof(string))
+Also, note the use of SizeGroupCollection between this and View container created next</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">3</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox" id="auto_container_header">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="orientation">vertical</property>
+                                        <child>
+                                          <placeholder/>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">4</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">View container</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">5</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox" id="auto_container_view_box">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="orientation">vertical</property>
+                                        <child>
+                                          <placeholder/>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">6</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="name">auto_container_values</property>
+                                    <property name="title" translatable="yes">Auto container values</property>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="example_auto_container_mode_values">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="custom_data2______">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Automatic container with dual mode values and information (AutoContainerModeValues)&lt;/b&gt;&lt;/big&gt;
+Most of the things are exactly the same as AutoContainerValues with few exceptions
+- All widgets (if property supports that) are dual state and switchable between VIEW/EDIT with animation on the fly
+- It supports automatic labels and tooltips that can be controlled with &lt;b&gt;control&lt;/b&gt; property</property>
+                                        <property name="use_markup">True</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox" id="auto_mode_container_box">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <child>
+                                          <placeholder/>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="spacing">8</property>
+                                        <child>
+                                          <object class="GtkToggleButton" id="show_labels">
+                                            <property name="label" translatable="yes">Labels visible</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkToggleButton" id="show_tooltips">
+                                            <property name="label" translatable="yes">Show tooltips</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkBox" id="ac_edit_mode">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="orientation">vertical</property>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">2</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">2</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="name">auto_mode_container</property>
+                                    <property name="title" translatable="yes">Auto container mode values</property>
+                                    <property name="position">4</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
@@ -6617,9 +6844,9 @@ FlagState for every access to same flag or combination of it once requested</pro
 object by contract or pointer)
 
 at this point getting any flag is done by
-&lt;i&gt;	FlagState my_state = my_flag_group(MyFlagsType.FLAGS_VALUE)&lt;/i&gt;
+&lt;i&gt;	FlagState my_state = my_flag_group.get_state (MyFlagsType.FLAGS_VALUE)&lt;/i&gt;
 where nothing prevents from doing this
-&lt;i&gt;	FlagState my_state = my_flag_group(MyFlagsType.FLAG_VALUE | MyFlagsType.OTHER_FLAG_VALUE)&lt;/i&gt;
+&lt;i&gt;	FlagState my_state = my_flag_group.get_state (MyFlagsType.FLAG_VALUE | MyFlagsType.OTHER_FLAG_VALUE)&lt;/i&gt;
 
 at this point my_state has automatically updated bindable "&lt;b&gt;state&lt;/b&gt;" property which reflects current state of flag being set or not. This is
 especially efficient way to control GUI widgets</property>

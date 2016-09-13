@@ -1,5 +1,25 @@
+using GData;
+
 namespace GDataGtk
 {
+	internal string[] resolve_type_layout (Type class_type, string[] layout)
+	{
+		if (layout == null)
+			return (new string[0]);
+		if (layout.length == 0)
+			return (TypeInformation.get_instance().get_all_type_property_names(class_type));
+		return (layout);
+	}
+
+	internal string[] resolve_object_layout (Type class_type, string[] layout)
+	{
+		if (layout == null)
+			return (new string[0]);
+		if (layout.length == 0)
+			return (TypeInformation.get_instance().get_all_type_property_names(class_type));
+		return (layout);
+	}
+
 	internal string convert_to_type_name (string str)
 	{
 		string res = "";

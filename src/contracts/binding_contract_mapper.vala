@@ -2,7 +2,7 @@ namespace GData
 {
 	/**
 	 * Interface that allows easier mapping of object. This is not to be
-	 * confused with BindingContractMapper which is very similar. ContractMapper
+	 * confused with BinderMapper which is very similar. BindingContractMapper
 	 * does exact same job on contract level which means that binding don't just
 	 * fall apart when source or target is unvailable.
 	 * 
@@ -23,14 +23,14 @@ namespace GData
 	 * 
 	 * @since 0.1
 	 */
-	public interface BinderMapper : Object
+	public interface BindingContractMapper : Object
 	{
 		/**
-		 * Binder object that instigated this interface
+		 * Contract owning this mapper
 		 * 
 		 * @since 0.1
 		 */
-		public abstract Binder binder_object { get; set; }
+		public abstract BindingContract contract_object { get; set; }
 
 		/**
 		 * Maps complete object structure from source to target. Map internally
@@ -39,7 +39,7 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 * 
-		 * @param source Source object
+		 * @param source_type Source object type
 		 * @param target Target object
 		 * @param common_target_property_alias Common target property alias
 		 * @param flags Binding flags
@@ -47,14 +47,14 @@ namespace GData
 		 * @param suffix Suffix for widget names during discovery
 		 * @return Array of created bindings
 		 */
-		public BindingInterface[] map_all (Object? source, Object? target, string common_target_property_alias, 
-		                                   BindFlags flags=BindFlags.SYNC_CREATE, string prefix = "", string suffix = "")
+		public BindingInformationInterface[] map_all (Type source_type, Object? target, string common_target_property_alias, 
+		                                              BindFlags flags=BindFlags.SYNC_CREATE, string prefix = "", string suffix = "")
 		{
-			BindingInterface[] res = new BindingInterface[0];
-			if ((source == null) || (target == null))
+			BindingInformationInterface[] res = new BindingInformationInterface[0];
+			if ((target == null))
 				return (res);
 			GLib.Array<string> aprops = new GLib.Array<string>();
-			TypeInformation.get_instance().iterate_type_properties(source.get_type(), (p) => {
+			TypeInformation.get_instance().iterate_type_properties(source_type, (p) => {
 				aprops.append_val(p.name);
 			});
 			if (aprops.length == 0)
@@ -64,7 +64,7 @@ namespace GData
 				props[i] = aprops.data[(uint) i];
 				aprops.remove_index (i);
 			}
-			res = map_properties (source, target, props, ALIAS_DEFAULT, flags, prefix, suffix);
+			res = map_properties (source_type, target, props, ALIAS_DEFAULT, flags, prefix, suffix);
 			return (res);
 		}
 
@@ -78,16 +78,16 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 * 
-		 * @param source Source object
+		 * @param source_type Source object type
 		 * @param target Target object
 		 * @param flags Binding flags
 		 * @param prefix Prefix for widget names during discovery
 		 * @param suffix Suffix for widget names during discovery
 		 * @return Array of created bindings
 		 */
-		public BindingInterface[] map (Object? source, Object? target, BindFlags flags=BindFlags.SYNC_CREATE, string prefix = "", string suffix = "")
+		public BindingInformationInterface[] map (Type source_type, Object? target, BindFlags flags=BindFlags.SYNC_CREATE, string prefix = "", string suffix = "")
 		{
-			return (map_all (source, target, ALIAS_DEFAULT, flags, prefix, suffix));
+			return (map_all (source_type, target, ALIAS_DEFAULT, flags, prefix, suffix));
 		}
 
 		/**
@@ -95,7 +95,7 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 * 
-		 * @param source Source object
+		 * @param source_type Source object type
 		 * @param target Target object
 		 * @param layout Names of properties or layouts that need to be binded
 		 * @param common_target_property_alias Common target property alias
@@ -104,8 +104,8 @@ namespace GData
 		 * @param suffix Suffix for widget names during discovery
 		 * @return Array of created bindings
 		 */
-		public abstract BindingInterface[] map_properties (Object? source, Object? target, string[] layout, string common_target_property_alias,
-		                                                   BindFlags flags=BindFlags.SYNC_CREATE, string prefix = "", string suffix = "");
+		public abstract BindingInformationInterface[] map_properties (Type source_type, Object? target, string[] layout, string common_target_property_alias,
+		                                                              BindFlags flags=BindFlags.SYNC_CREATE, string prefix = "", string suffix = "");
 
 		/**
 		 * Resolving of objects being mapped is exactly the same as in map()
@@ -117,7 +117,7 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 * 
-		 * @param source Source object
+		 * @param source_type Source object type
 		 * @param source_property Name of source property that is being used as
 		 *                        mapping point
 		 * @param target Target object
@@ -130,10 +130,10 @@ namespace GData
 		 * @param transform_from Method used to transform data
 		 * @return Array of created bindings
 		 */
-		public abstract BindingInterface[] map_single (Object? source, string source_property, Object? target, string[] layout,
-		                                               string common_target_property_alias, BindFlags flags=BindFlags.SYNC_CREATE,
-		                                               string prefix = "", string suffix = "", owned PropertyBindingTransformFunc? transform_to = null, 
-		                                               owned PropertyBindingTransformFunc? transform_from = null);
+		public abstract BindingInformationInterface[] map_single (Type source_type, string source_property, Object? target, string[] layout,
+		                                                          string common_target_property_alias, BindFlags flags=BindFlags.SYNC_CREATE,
+		                                                          string prefix = "", string suffix = "", owned PropertyBindingTransformFunc? transform_to = null, 
+		                                                          owned PropertyBindingTransformFunc? transform_from = null);
 
 		/**
 		 * All binding mappers should for consistency reasons call this method
@@ -141,7 +141,7 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 * 
-		 * @param source Source object
+		 * @param source_type Source object type
 		 * @param source_property Source property name
 		 * @param target Target object
 		 * @param target_property Target property name
@@ -150,13 +150,13 @@ namespace GData
 		 * @param transform_from Method used to transform data
 		 * @return Created binding or null if unsucessful
 		 */
-		protected BindingInterface? bind (Object? source, string source_property, Object? target, string target_property,
-		                                  BindFlags flags, owned PropertyBindingTransformFunc? transform_to = null, 
-		                                  owned PropertyBindingTransformFunc? transform_from = null)
+		protected BindingInformationInterface? bind (Type source_type, string source_property, Object? target, string target_property,
+		                                             BindFlags flags, owned PropertyBindingTransformFunc? transform_to = null, 
+		                                             owned PropertyBindingTransformFunc? transform_from = null)
 		{
-			if ((source == null) || (target == null))
+			if (target == null)
 				return (null);
-			BindingDataTransfer? trs = (BindingDataTransfer?) BindingDefaults.get_instance().get_transfer_object_for (source, source_property, false);
+			BindingDataTransfer? trs = (BindingDataTransfer?) BindingDefaults.get_instance().get_introspection_object_for (source_type, source_property, false);
 			BindingDataTransfer? trt = (BindingDataTransfer?) BindingDefaults.get_instance().get_transfer_object_for (target, target_property, false);
 			return (bind_transfers (trs, trt, flags, transform_to, transform_from));
 		}
@@ -173,9 +173,9 @@ namespace GData
 		 * @param transform_from Method used to transform data
 		 * @return Created binding or null if unsucessful
 		 */
-		protected BindingInterface? bind_transfers (BindingDataTransfer? source, BindingDataTransfer? target,
-		                                            BindFlags flags, owned PropertyBindingTransformFunc? transform_to = null, 
-		                                            owned PropertyBindingTransformFunc? transform_from = null)
+		protected BindingInformationInterface? bind_transfers (BindingDataTransferInterface? source, BindingDataTransferInterface? target,
+		                                                       BindFlags flags, owned PropertyBindingTransformFunc? transform_to = null, 
+		                                                       owned PropertyBindingTransformFunc? transform_from = null)
 		{
 			if ((source == null) || (target == null))
 				return (null);
@@ -185,7 +185,7 @@ namespace GData
 					return (null);
 			if (can_translate_value_type(source.get_value_type(), target.get_value_type()) == false)
 				return (null);
-			BindingInterface res = binder_object.bind (source.get_object(), source.get_name(), target.get_object(), target.get_name(), flags, transform_to, transform_from);
+			BindingInformationInterface res = contract().bind (source.get_name(), target.get_object(), target.get_name(), flags, transform_to, transform_from);
 			return (res);
 		}
 
@@ -194,9 +194,10 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 */
-		public Binder binder()
+		public BindingContract contract()
 		{
-			return (binder_object);
+			return (contract_object);
 		}
 	}
 }
+

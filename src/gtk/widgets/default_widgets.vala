@@ -151,9 +151,9 @@ namespace GDataGtk
 				.register (typeof(Gtk.CheckButton), "active")
 				.register (typeof(Gtk.RadioButton), "active");
 			PropertyAlias.get_instance(ALIAS_VISIBILITY)
-				.register (typeof(Gtk.Entry), "visible");
+				.register (typeof(Gtk.Widget), "visible");
 			PropertyAlias.get_instance(ALIAS_SENSITIVITY)
-				.register (typeof(Gtk.Entry), "sensitive");
+				.register (typeof(Gtk.Widget), "sensitive");
 		}
 
 		/**

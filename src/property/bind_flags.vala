@@ -34,6 +34,20 @@ namespace GData
 		 */
 		BIDIRECTIONAL,
 		/**
+		 * Specifies write is not necessarily possible. If this flag is set then
+		 * BIDIRECTIONAL will be disabled if that is so
+		 * 
+		 * @since 0.1
+		 */
+		CONDITIONAL_WRITE,
+		/**
+		 * Simple combination of BIDIRECTIONAL and CONDITIONAL_WRITE for easier
+		 * use
+		 * 
+		 * @since 0.1
+		 */
+		CONDITIONAL_BIDIRECTIONAL = BIDIRECTIONAL | CONDITIONAL_WRITE,
+		/**
 		 * Specifies boolean inversion when assigning boolean value.
 		 * 
 		 * @since 0.1
@@ -338,6 +352,16 @@ namespace GData
 		public bool IS_CONDITIONAL()
 		{
 			return ((this & BindFlags.SUPPRESS_WARNINGS) == BindFlags.SUPPRESS_WARNINGS);
+		}
+
+		/**
+		 * Checks if BIND_IF_POSSIBLE flag is set
+		 * 
+		 * @since 0.1
+		 */
+		public bool IS_CONDITIONAL_WRITE()
+		{
+			return ((this & BindFlags.CONDITIONAL_WRITE) == BindFlags.CONDITIONAL_WRITE);
 		}
 
 		/**

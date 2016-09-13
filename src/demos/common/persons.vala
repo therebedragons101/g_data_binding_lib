@@ -28,11 +28,14 @@ namespace Demo
 
 	public class Person : Object, ObjectInformation
 	{
+		[Description (nick="Name", blurb="Edit persons name")]
 		public string name { get; set; }
+		[Description (nick="Surname", blurb="Edit persons surname")]
 		public string surname { get; set; }
+		[Description (nick="Required", blurb="Edit persons required field")]
 		public string required { get; set; }
-
-		public StatusFlags status { get; set; }
+		[Description (nick="Status", blurb="Edit persons status")]
+		public StatusFlags status { get; set; default = StatusFlags.ALIVE; }
 
 		public PersonInfo info { get; set; }
 

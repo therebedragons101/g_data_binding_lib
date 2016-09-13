@@ -12,13 +12,13 @@ namespace GDataGtk
 		 * 
 		 * @since 0.1
 		 */
-		public bool show_labels { get; set; default = false; }
+		public bool show_labels { get; set; default = true; }
 		/**
 		 * Specifies if auto widget tools are visible or not
 		 * 
 		 * @since 0.1
 		 */
-		public bool show_tools { get; set; default = false; }
+		public bool show_tools { get; set; default = true; }
 		/**
 		 * Specifies label horizontal alignment
 		 * 
@@ -30,7 +30,7 @@ namespace GDataGtk
 		 * 
 		 * @since 0.1
 		 */
-		public Gtk.Align label_valignment { get; set; default = Gtk.Align.START; }
+		public Gtk.Align label_valignment { get; set; default = Gtk.Align.CENTER; }
 		/**
 		 * Specifies opacity of label widgets
 		 * 
@@ -58,7 +58,7 @@ namespace GDataGtk
 		 * 
 		 * @since 0.1
 		 */
-		public bool show_tooltips { get; set; default = false; }
+		public bool show_tooltips { get; set; default = true; }
 		/**
 		 * Specifies if tooltips use markup or not
 		 * 
@@ -73,3 +73,4 @@ namespace GDataGtk
 		public Gtk.Orientation orientation { get; set; default = Gtk.Orientation.HORIZONTAL; }
 	}
 }
+

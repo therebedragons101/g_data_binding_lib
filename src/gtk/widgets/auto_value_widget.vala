@@ -76,6 +76,23 @@ namespace GDataGtk
 			}
 		}
 
+		private string _data_tooltip = "";
+		/**
+		 * Specifies tooltip that should be shown on widgets
+		 * 
+		 * @since 0.1
+		 */
+		public string data_tooltip {
+			get { return (_data_tooltip); }
+			set {
+				if (_data_tooltip == value)
+					return;
+				_data_tooltip = value;
+				if (_widget != null)
+					_widget.set_tooltip_text (_data_tooltip);
+			}
+		}
+
 		public Gtk.Widget? get_widget()
 		{
 			return (_widget);
@@ -111,6 +128,8 @@ namespace GDataGtk
 				add (_widget);
 			}
 			widget_renewed();
+			if (_widget != null)
+				_widget.set_tooltip_text (_data_tooltip);
 		}
 
 		public void _renew_for_binding_transfer (BindingDataTransfer? tr)

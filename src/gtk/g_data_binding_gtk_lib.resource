@@ -2,6 +2,7 @@
 <gresources>
   <gresource prefix="/org/gtk/g_data_binding_gtk">
     <file compressed="true">data/auto_container.ui</file>
+    <file compressed="true">data/auto_container_mode_values.ui</file>
     <file compressed="true">data/auto_container_row.ui</file>
     <file compressed="true">data/auto_container_values.ui</file>
     <file compressed="true">data/auto_value_widget.ui</file>

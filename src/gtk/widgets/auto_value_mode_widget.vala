@@ -36,6 +36,25 @@ namespace GDataGtk
 		private Type _created_for = GLib.Type.INVALID;
 		private string _created_for_property = "";
 
+		private string _data_tooltip = "";
+		/**
+		 * Specifies tooltip that should be shown on widgets
+		 * 
+		 * @since 0.1
+		 */
+		public string data_tooltip {
+			get { return (_data_tooltip); }
+			set {
+				if (_data_tooltip == value)
+					return;
+				_data_tooltip = value;
+				if (_read_widget != null)
+					_read_widget.set_tooltip_markup (_data_tooltip);
+				if (_write_widget != null)
+					_write_widget.set_tooltip_markup (_data_tooltip);
+			}
+		}
+
 		private EditMode _current_edit_mode = EditMode.VIEW;
 		/**
 		 * Specifies current edit mode in which widget is in
@@ -208,6 +227,10 @@ namespace GDataGtk
 				_internal_binding = _auto_binder().bind (_write_widget, _get_value_binding_property(EditMode.EDIT),
 				                                         _read_widget, _get_value_binding_property(EditMode.VIEW), BindFlags.SYNC_CREATE);
 			widget_renewed();
+			if (_read_widget != null)
+				_read_widget.set_tooltip_markup (_data_tooltip);
+			if (_write_widget != null)
+				_write_widget.set_tooltip_markup (_data_tooltip);
 		}
 
 		private void _renew_for_binding_transfer (BindingDataTransfer? tr)
@@ -272,8 +295,7 @@ namespace GDataGtk
 		}
 
 		/**
-		 * Sets mode control object which is shared amongs all widgets of this
-		 * type for certain group
+		 * Sets mode control object which is redispatched to this one
 		 * 
 		 * @since 0.1
 		 * 
@@ -287,6 +309,7 @@ namespace GDataGtk
 			}
 			if (control != null)
 				_mode_control_binding = _auto_binder().bind (control, "mode", this, "mode", BindFlags.SYNC_CREATE);
+			notify_property ("mode");
 			return (this);
 		}
 
