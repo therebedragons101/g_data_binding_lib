@@ -108,7 +108,8 @@ namespace DemoAddressBook
 			remove_button.clicked.connect (() => { _contacts.remove ((Contact) ((SmoothListBoxRow) address_list.get_selected_row()).object); });
 			edit_button.clicked.connect (() => { _edit_control.mode = EditMode.EDIT; });
 			add_contact_button.clicked.connect (() => { 
-				_contacts.add ((Contact) _editing_contract.get_source()); 
+				_contacts.add ((Contact) _editing_contract.get_source());
+				ct = null;
 				_editing_contract.data = (address_list.get_selected_row() != null) ? ((SmoothListBoxRow) address_list.get_selected_row()).object : null;;
 				_edit_control.mode = EditMode.VIEW;
 			});
