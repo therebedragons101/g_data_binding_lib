@@ -32,14 +32,7 @@ namespace DemoAddressBook
 		private EditModeControl _edit_control = new EditModeControl (EditMode.VIEW);
 		private ProxyPropertyGroup _edit_condition = new ProxyPropertyGroup();
 
-		private string _current_search = "";
-		public string current_search { 
-			get { return (_current_search); }
-			set {
-				_current_search = value;
-				_apply_search();
-			}
-		}
+		public string current_search { get; set; default = ""; }
 
 		private void _apply_search()
 		{
@@ -92,7 +85,8 @@ namespace DemoAddressBook
 				remove_button.sensitive = ((_editing_contract.data != null) && (_edit_control.mode == EditMode.VIEW));
 				edit_button.sensitive = ((_editing_contract.data != null) && (_edit_control.mode == EditMode.VIEW));
 				explore_selected_object.sensitive = ((_editing_contract.data != null) && (_edit_control.mode == EditMode.VIEW));
-				new_person_buttons_box.visible = ((_editing_contract.data != null) && (_editing_contract.data == ct));
+				add_contact_button.visible = ((_editing_contract.data != null) && (_editing_contract.data == ct));
+				new_person_buttons_box.visible = (_edit_control.mode == EditMode.EDIT);
 			});
 			_edit_condition.value_changed(); // trigger proxy property group event
 			_editing_contract.add_state (new CustomBindingSourceState ("validity", _editing_contract, "Contact name validity", ((src) => {
@@ -120,6 +114,7 @@ namespace DemoAddressBook
 
 			explore_contract.clicked.connect (() => { GDataGtk.BindingInspector.show(_editing_contract); });
 			explore_selected_object.clicked.connect (() => { GDataGtk.ObjectInspector.add_object(((SmoothListBoxRow) address_list.get_selected_row()).object); });
+			notify["current-search"].connect (() => { _apply_search(); });
 		}
 	}
 }
