@@ -37,9 +37,8 @@ namespace DemoAddressBook
 
 		private void _apply_search()
 		{
-			address_list.@foreach ((w) => {
-				SmoothListBoxRow r = (SmoothListBoxRow) w;
-				r.revealed = ((Contact) r.object).full_name.down().contains(current_search.down());
+			address_list.@foreach ((r) => {
+				((SmoothListBoxRow) r).revealed = ((Contact) ((SmoothListBoxRow) r).object).full_name.down().contains(current_search.down());
 			});
 		}
 
@@ -88,7 +87,6 @@ namespace DemoAddressBook
 				explore_selected_object.sensitive = ((_editing_contract.data != null) && (_edit_control.mode == EditMode.VIEW));
 				add_contact_button.visible = ((_editing_contract.data != null) && (_editing_contract.data == ct));
 				new_person_buttons_box.visible = (_edit_control.mode == EditMode.EDIT);
-				address_list.sensitive = (_edit_control.mode == EditMode.VIEW);
 				search_entry.sensitive = (_edit_control.mode == EditMode.VIEW);
 				cancel_new_contact.label = ((_editing_contract.data != null) && (_editing_contract.data == ct)) ? "Cancel" : "Close";
 			});

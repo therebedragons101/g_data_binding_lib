@@ -4,11 +4,94 @@
 <p>Pointers mainly only serve as base for <a href="what_is_contract.html">Contract</a>, although they have many
 other uses as well. Sometimes <a href="what_is_contract.html">Contract</a> is just unnecessary for certain uses
 while sometimes it is much easier to extend <b>Pointer</b> than <a href="what_is_contract.html">Contract</a>.
-One case of such extensions are relaying pointers which only serve to relay <b>source</b> to different object
+One case of such extensions are relaying pointers which only serve to relay <b>source</b> to different object as 
+well as enabling ease of customized subclasses (also read little Q&A after explanation)
 </p>
 <p>Binding pointer is easier to understand if it is compared to regular pointers. All that regular pointer does
 is pointing to address of where data exists. Exact same thing goes for binding pointers with one exception.
-Beside just pointing to data it also provides complete signal system that can be used to track changes.
+Beside just pointing to data it also provides complete signal system that can be used to track changes when they
+are redirected to any other data in any way possible.
+</p>
+<p><div style="text-align: center;"><object type="image/svg+xml" data="pointers-1.svg">
+  Your browser does not support SVG
+</object><small><p>Simple pointer-data relationship</p></small>
+</div></p>
+<p>In this case pointers <b>data</b> property simply points to some object. Whenever <b>data</b> is redirected
+elsewhere pointer emits following signals that can be connected from any client</p>
+<li><b>disconnect_notifications</b> - note that this only happens if pointer was pointing to valid data</li>
+<li><b>before_source_change</b> - note that this only happens if pointer was pointing to valid data</li>
+<li><b>source_changed</b> - note that this only happens if pointer is now pointing to valid data</li>
+<li><b>connect_notifications</b> - note that this only happens if pointer is now pointing to valid data</li>
+<p>As much as this seems unwarranted at first glance, it is not. <b>BindingPointer</b> and <b>BindingContract</b> take advantage
+of this tractability since they automatically connect to these notifications and redeploy them to their clients
+when relationship is not simple pointer-data</p>
+<p><b>Complex chained pointer relationships</b></p>
+<p>In most cases application can be defined as complex tree of relationships and taking advantage of
+this automatism.</p>
+<p><div style="text-align: center;"><object type="image/svg+xml" data="pointers-2.svg">
+  Your browser does not support SVG
+</object><small><p>More complex pointer-pointer-data relationship</p></small></div></p>
+<p>In this case there are two pointers. One is not pointing to actual data, but rather it is pointing to
+another pointer which does point to active data.</p>
+<p>Whenever middle pointer is updated, all the notifications and all the tractability is passed to his
+client pointer as well.</p>
+<p><b>Why would this be useful and why pointing to same data when it could be just one point from beginnging?</b></p>
+<li>For one, separating application in smaller parts is always big benefit and by having same data always reliably
+synchronized is another big benefit</li>
+<li>Two parts of software can handle same data differently with different validations and different needs</li>
+<li><b>It does not need to be same data at all</b>. When any pointer uses redirection it will point to completely different
+object and at the same time he will be updated every time when his command chain says to do so. Case and point
+example of this is <b>BindingPointerFromPropertyValue</b> which instead of propagating data (or end of its chain) adds another
+thing to the table. It looks up if specified property is available in currently pointed source data and proclaims
+value of that property as its own end of chain (or in case if that is another pointer it returns end of that chain)</li>
+<p><b>Creating first binding tree structure (static data pipeline)</b></p>
+<p>Before basic diagram scheme this should most probably require simplification. Best case for that are
+database foreign keys. When two tables are connected with foreign key it basically creates static known point
+of how two different data objects relate and which object from second table is relevant for object in table
+specifiying foreign key</p>
+<p>And binding pointer static pipeline is exactly that. By preemptive description of relations application
+can reliably know what is available, how it is available and what it should do without code intervention</p>
+<p><div style="text-align: center;"><object type="image/svg+xml" data="pointers-3.svg">
+  Your browser does not support SVG
+</object><small><p>Tree like data relationship pipeline</p></small>
+</div></p>
+<p>While this diagram might look scary it is not. It is perfectly simple.</p>
+<li>There is one main binding pointer which can reliably control everything (green).</li>
+<li>There are two pointers connected to main pointer, but instead of simply providing same object as main pointer,
+they each relay their source to respective property they handle.</li>
+<li>At no point do client pointers need to be updated as this will happen each time change occurs. Be it that main
+pointer starts pointing to one of B,C,D persons or managing property in currently handled object changed (boss is changed in company or
+persons employment object is changed)</li>
+<li>In case when main pointer points to person who is also boss of that company, both main and "boss" connected
+pointer will point at the same data</li>
+<li>In case of main pointer pointing to <b>null</b> (or object that doesn't contain respective property) both client
+pointers will be notified about invalidity</li>
+<li>In case if there would be 5th person that is not employed, "company" client pointer would be <b>null</b></li>
+<p><b>This static pipeline can now be used as simple as possible.</b> There is only one interaction point (main pointer) while
+everything else is automated</p>
+<p>
+<h2>Q&A</h2>
+<p><b>Q. If pointers don't do anything but point to data, why would I use them?</b></p>
+<p>A. In most cases, you wouldn't. In most cases <b>BindingContract</b> will be far better choice</p>
+<p><b>Q. If that is so, then why Pointers? Why not simply go with contracts?</b></p>
+<p>A. Stuffing contract functionality at low level would only hamper the design and flexibility. Keeping <b>BindingPointer</b>
+simple is good for custom extensions of data redirection like <b>BindingPointerFromPropertyValue</b>. Wheter it is
+redirection or event dispatch customization, it is far better to have simple extendable class than having one that
+is requiring you to break things in order to get it done.</p>
+<p>And there is a fact that simply chaining contract(pointer) is most basic thing possible. This gives all benefits
+of simple design as well as absolute customization possibilities and at the same time retain full functionality</p>
+<p>Based that <b>BindingContract</b> is just subclass of <b>BindingPointer</b> everything learned here is also valid
+for contracts where only thing that needs to be added is knowing that extra functionality</p>
+<p><b>Q. Is there any other benefit when using pointers as chain links?</b></p>
+<p>A. Yes, less memory use, less signals. In short, more efficient application</p>
+<p><b>Q. Isn't that too much signaling? What if I iterate fast over items?</b></p>
+<p>A. Not even remotely. It has all signals for all states that need to be dispatched in order to have clean design
+upwards. For example of fast iteration, solutions are trivial at best. Subclass <b>BindingPointer</b> to use as your own custom chain link
+and track source changes in a way where you either set pointers <b>suspended</b> property to true or simply stop
+changing source until certain delay between changes shows up and then set up last promoted source. In fact by having
+good static data pipeline, there is nothing easier to reflect that in gui as well. This is exactly one of the reasons
+why there is <b>BindingPointer</b> and there is <b>BindingContract</b>. To create extensions like this as trivial as
+they can be</p>
 </p>
 <h2>Properties</h2>
 <h3>property Object? data { get; set; }</h3>
@@ -26,4 +109,8 @@ already resolved, it is also guaranteed safe moment when dispatch of <b>source_c
 <h3>signal void disconnect_notifications (Object? obj);</h3>
 When disconnecting things like contract bindings this is again best time to do it.
 <h3>signal void data_changed (BindingPointer source, string data_change_cookie);</h3>
+<h3>method Object? get_source();</h3>
+This method is probably only pointer method that needs to be remembered. This method always resolves data
+at the end of the specified chain no matter how complex that chain is.
+<h2></h2>
 <a href="index.html">Back to main page</a>
