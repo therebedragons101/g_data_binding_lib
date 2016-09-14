@@ -25,3 +25,11 @@ h3 {
     padding-bottom:5pt; 
     border-radius: 5pt; 
 }
+blockquote {
+    background-color:lightblue;;
+    color:black;
+    padding-left:5pt;
+    padding-top:5pt; 
+    padding-bottom:5pt; 
+    border-radius: 5pt; 
+}

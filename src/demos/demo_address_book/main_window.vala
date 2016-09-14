@@ -22,6 +22,7 @@ namespace DemoAddressBook
 		[GtkChild] private Gtk.Button explore_contract;
 		[GtkChild] private Gtk.Button explore_selected_object;
 		[GtkChild] private Gtk.Entry search_entry;
+		[GtkChild] private Gtk.LinkButton tutorial_link;
 
 		private Contact ct;
 		private ObjectArray<Contact> _contacts = new ObjectArray<Contact>();
@@ -87,6 +88,9 @@ namespace DemoAddressBook
 				explore_selected_object.sensitive = ((_editing_contract.data != null) && (_edit_control.mode == EditMode.VIEW));
 				add_contact_button.visible = ((_editing_contract.data != null) && (_editing_contract.data == ct));
 				new_person_buttons_box.visible = (_edit_control.mode == EditMode.EDIT);
+				address_list.sensitive = (_edit_control.mode == EditMode.VIEW);
+				search_entry.sensitive = (_edit_control.mode == EditMode.VIEW);
+				cancel_new_contact.label = ((_editing_contract.data != null) && (_editing_contract.data == ct)) ? "Cancel" : "Close";
 			});
 			_edit_condition.value_changed(); // trigger proxy property group event
 			_editing_contract.add_state (new CustomBindingSourceState ("validity", _editing_contract, "Contact name validity", ((src) => {
@@ -115,6 +119,7 @@ namespace DemoAddressBook
 			explore_contract.clicked.connect (() => { GDataGtk.BindingInspector.show(_editing_contract); });
 			explore_selected_object.clicked.connect (() => { GDataGtk.ObjectInspector.add_object(((SmoothListBoxRow) address_list.get_selected_row()).object); });
 			notify["current-search"].connect (() => { _apply_search(); });
+			tutorial_link.label = "Step by step tutorial for this demo";
 		}
 	}
 }

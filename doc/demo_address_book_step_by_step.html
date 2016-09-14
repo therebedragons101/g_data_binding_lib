@@ -1,0 +1,268 @@
+<link rel="stylesheet" href="styles.css">
+<h1>Demo Address Book sample step by step</h1>
+<a href="index.html">Back to main page</a>
+<p>Demo address book serves as first real world example of effective use. Note that for reason of not
+doing too much, this demo avoids some things which are probably certain to be questioned when looking
+at data binding. In short, this is probably most trivial case that could ever be encountered. Same step
+by step demos will show more advanced tasks. Note that this demo is less than 90 lines of code when
+code needed for Gtk and <b>Contact</b> class is discounted
+</p>
+<h3>What does it tackle?</h3>
+<p><li>Auto layouting, both passive and active. Passive for listbox and active for selected item</li>
+<li>Simple <b>BindingContract</b> usage</li>
+<li><b>ProxyPropertyGroup</b> usage</li>
+<li><b>BuildableMapper</b> usage (both, passive and active)</li>
+</p>
+<h3>What does it avoids to keep it simple? (These will be featured in next examples)</h3>
+<p><li>Complex contract/pointer relationships</li>
+<li><b>Trigger</b>, <b>BooleanCondition</b>, <b>EnumStateGroup</b>, <b>FlagStateGroup</b></li>
+<li>Composite Gtk Widgets</li>
+<li>Creation of custom registered state widgets</li>
+<li>Creation of lookup widgets for complex pointer/contract relationships</li>
+</p>
+<h2>Important things to know before the beginning</h2>
+<p>Unlike in usual cases this demo shows how to create application in a different way than usual forcing
+all actions everywhere and checking every condition at every moment. Why not let the application just 
+handle it right instead of constantly correcting the way it should work. With well designed static binding
+pipeline this is exact effect that is achieved.
+</p>
+<p>This is much easier to understand if one looks from principle of gaming engine. What you want there
+is efficient static pipeline with as little as possible dynamic parts. Exact same thing is here. Whole
+demo is condition based and connected to the point where application reacts by it self without any
+intervention from development side once conditions are set right. Not only it will most probably work
+better/faster, the LOC will most probably be whole lot smaller</p>
+
+<h2>Step by step</h2>
+<p>The first part is just normal day by day routine of creating custom widget which is in this case
+<b>MainWindow</b></p>
+<blockquote><pre><code>using GData;
+using GData.Generics;
+using GDataGtk;
+
+namespace DemoAddressBook
+{
+	[GtkTemplate (ui="/org/gtk/demo_address_book/main_window.ui")]
+	public class MainWindow : Gtk.Window
+	{
+		[GtkChild] private Gtk.ListBox address_list;
+		[GtkChild] private Gtk.Stack address_stack;
+		[GtkChild] private Gtk.Box no_address;
+		[GtkChild] private Gtk.Box address_page_box;
+		[GtkChild] private Gtk.Box address_editor;
+		[GtkChild] private Gtk.Box editor_contents;
+		[GtkChild] private Gtk.Box new_person_buttons_box;
+		[GtkChild] private Gtk.Button cancel_new_contact;
+		[GtkChild] private Gtk.Button add_contact_button;
+		[GtkChild] private Gtk.Button add_button;
+		[GtkChild] private Gtk.Button remove_button;
+		[GtkChild] private Gtk.Button edit_button;
+		[GtkChild] private Gtk.Button explore_contract;
+		[GtkChild] private Gtk.Button explore_selected_object;
+		[GtkChild] private Gtk.Entry search_entry;
+
+		public MainWindow()
+		{
+		}
+	}
+}
+</code></pre></blockquote>
+<p>Next in line is allocation of certain variables which are needed. For passive binding
+there is certain need of getting Binder object and in this case since <b>AutoContainerValues</b>
+for automatic layout of listbox rowsis used, there is also the need for <b>GtkBuildableMapper</b>.
+Same goes for our list of objects that contains contacts and serves as model for listbox.
+</p>
+<p>Reason why <b>Binder</b> is allocated as silent() is simple. In case of mapping lists, it is
+probably not good idea to clutter inspector with too much irrelevant information</p>
+<blockquote><pre><code>		private Binder _binder = new GData.Binder.silent();
+		private GtkBuildableMapper _mapper = new GDataGtk.GtkBuildableMapper();
+		private ObjectArray<Contact> _contacts = new ObjectArray<Contact>();
+</code></pre></blockquote>
+<p>For active selection display and editing there is a need for <b>BindingContract</b>. While this
+could be done without it, application code would be much more cluttered as in that case, there
+would be whole lot of rebinding or dropping bindings which is completely automated in active
+binding with <b>BindingContract</b>.
+</p>
+<p>Next thing in line for this demo is adding two more things. One is variable where new contact
+that is not yet in list will be stored and second one is <b>GtkBuildableContractMapper</b> which serves
+exact same purpose as previous mapper object with difference that this one will be mapping active
+bindings instead of passive.
+</p>
+<p>Why the need for active bindings? Unlike previously passive display of listbox rows where same
+object is displayed in same widgets for whole lifetime, editor will not fit here. Data being displayed
+or edited changes with selection as well as with the condition of editing new item which is not yet
+in list.
+</p>
+<p>In this case active bindings on contract bring exact same data stability as passive objects from
+list. Contract will simply establish or drop bindings when conditions are right/wrong </p>
+<blockquote><pre><code>		private BindingContract _editing_contract = new BindingContract();
+		private Contact ct;
+		private GtkBuildableContractMapper _cmapper = new GDataGtk.GtkBuildableContractMapper();
+</code></pre></blockquote>
+<p>Next things used in this demo are <b>ProxyPropertyGroup</b> and <b>EditModeControl</b>. Note that
+demo could work exactly the same without later as in this case edit control is not shared or requires
+central manipulation. Instead of <b>_edit_control</b> demo could as well use <b>mode</b> property on
+<b>AutoContainerModeValues</b>. Usage of this is just for demo readability
+</p>
+<p><b>ProxyPropertyGroup</b> on the other hand is one of vital things as it serves as common trigger
+on two separate property changes in two different objects. It simply consolidates two messages into
+single one in a simple and readable way.
+</p>
+<p><b>_edit_condition</b> is needed in order to control sensitivity of toolbar buttons, visibility of
+confirmation...
+</p>
+<blockquote><pre><code>		private EditModeControl _edit_control = new EditModeControl (EditMode.VIEW);
+		private ProxyPropertyGroup _edit_condition = new ProxyPropertyGroup();
+
+			//... in code
+			_edit_condition.add_property ("data", _editing_contract, "data", GLib.Value(typeof(Object)));
+			_edit_condition.add_property ("mode", _edit_control, "mode", GLib.Value(typeof(EditMode)));
+</code></pre></blockquote>
+<p>Handling of proxy property group changes</p>
+<blockquote><pre><code>			_edit_condition.value_changed.connect (() => {
+				address_stack.visible_child = (_editing_contract.data != null) ? address_page_box : no_address;
+				add_button.sensitive = (_edit_control.mode == EditMode.VIEW);
+				remove_button.sensitive = ((_editing_contract.data != null) && (_edit_control.mode == EditMode.VIEW));
+				edit_button.sensitive = ((_editing_contract.data != null) && (_edit_control.mode == EditMode.VIEW));
+				explore_selected_object.sensitive = ((_editing_contract.data != null) && (_edit_control.mode == EditMode.VIEW));
+				add_contact_button.visible = ((_editing_contract.data != null) && (_editing_contract.data == ct));
+				new_person_buttons_box.visible = (_edit_control.mode == EditMode.EDIT);
+				search_entry.sensitive = (_edit_control.mode == EditMode.VIEW);
+				cancel_new_contact.label = ((_editing_contract.data != null) && (_editing_contract.data == ct)) ? "Cancel" : "Close";
+			});
+			_edit_condition.value_changed(); // trigger proxy property group event for initialization
+</code></pre></blockquote>
+<p>At this point there are already handled quite a lot of stable points in application</p>
+<li>Whenever contract <b>data</b> changes, stack will either display placeholder if there is no data or
+display widgets in current respective edit mode</li>
+<li>Add toolbar button will always be sensitive unless current editing mode is EDIT. In case of EDIT it is rendered insensitive</li>
+<li>Remove/Edit toolbar buttons will be same as Add with exception of additional condition that contract has to point to some dataq</li>
+<li>Cancel/Add button panel under editor will be visible whenever editing mode is EDIT where Add will only be visible if edited object is the new one</li>
+<li>Adding currently selected Contact to object inspector will only be available in VIEW mode </li>
+<li>Search entry is insensitive whenever editing is in progress</li>
+<li>Editing cancellation button will reflect state on editing new or exisiting one with different caption</li>
+<p>Next thing in line is letting our list box to know how to fill its contents and bind it with model. This
+is normal Gtk <b>bind_model()</b> call with three exception</p>
+<li>It uses <b>SmoothListBoxRow</b> for fancier handling of visibility (note that in this case <b>revealed</b> must be used instead of <b>visible</b> whenever animation effect is desired</li>
+<li>It uses <b>AutoContainerValues</b> to automatically create line contents (in this case only <b>full_name</b> and <b>city</b> properties</li>
+<li>It uses <b>SizeGroupCollection</b> whenever new automatic row container is created. This means that columns will always be sized correctly</li>
+<blockquote><pre><code>			SizeGroupCollection sz = new SizeGroupCollection (address_list, Gtk.SizeGroupMode.HORIZONTAL);
+			address_list.bind_model (_contacts, (o) => {
+				SmoothListBoxRow row = new SmoothListBoxRow(o);
+				AutoContainerValues auto_container = new AutoContainerValues(EditMode.VIEW);
+				auto_container.visible = true;
+				// Create layout for type of Contact, but only for full_name and city properties
+				// Specify property_ prefix to per property created widgets
+				// Pass the size group collection so widgets are added to its respective column 
+				auto_container.create_type_layout (typeof(Contact), new string[2] { "full-name", "city" }, "property_", "", sz);
+				// Once layout is created, all that it needs to be done is point mapper object to container and specify widgets are named with property_ prefix string
+				_binder.set_mapper (_mapper)
+					.map (o, auto_container, BindFlags.SYNC_CREATE, "property_");
+				row.visible = true;
+				// In case of <b>SmoothListBoxRow</b> items need to be added to <b>get_container()</b> and not to row it self
+				row.get_container().add (auto_container);
+				return (row);
+			});
+</code></pre></blockquote>
+<p>Next thing in line is defining list box actions</p>
+<li>Whenever new line is selected, contract data is pointed to it and edit mode is set to VIEW (note that all conditions to handle mode change are already handled)</li>
+<blockquote><pre><code>			address_list.row_selected.connect ((r) => {
+				if ((r != null) && (_editing_contract.data == ((SmoothListBoxRow) r).object))
+					return;
+				_editing_contract.data = (r != null) ? ((SmoothListBoxRow) r).object : null;
+				_edit_control.mode = EditMode.VIEW;
+			});
+</code></pre></blockquote>
+<li>Whenever line is activated contract is pointed to that object and edit mode is set to EDIT (note that all conditions to handle mode change are already handled)</li>
+<blockquote><pre><code>			address_list.row_activated.connect ((r) => {
+				_editing_contract.data = ((SmoothListBoxRow) r).object;
+				_edit_control.mode = EditMode.EDIT;
+			});
+</code></pre></blockquote>
+<p>Next in line is simply creation of our editor contents and in this case contents will be created automatically with <b>AutoContainerModeValues</b> which is
+set to always listen to previously specified mode control.
+</p>
+<p><b>AutoContainerModeValues</b> by it self always creates dual state widgets for both VIEW and EDIT where state is changed by animation</p>
+<blockquote><pre><code>			AutoContainerModeValues auto_editor = new AutoContainerModeValues(EditMode.VIEW);
+			auto_editor.set_mode_control (_edit_control);
+			auto_editor.visible = true;
+			editor_contents.pack_start (auto_editor);
+			// Simply create full layout for type Contact and specify property_ prefix to all built widgets
+			auto_editor.create_type_layout (typeof(Contact), ALL_PROPERTIES, "property_");
+			// Use contract mapper to create complete binding structure on contract. Note the use of CONDITIONAL_BIDIRECTIONAL
+			// which specifies editing is not necessarily possible in which case binding will fall back to read only without
+			// any errors (in this type, full_name which is readonly would not be possible to be handled wit BIDIRECTIONAL)
+			_editing_contract.set_mapper (_cmapper)
+				.map (typeof(Contact), auto_editor, BindFlags.SYNC_CREATE|BindFlags.CONDITIONAL_BIDIRECTIONAL, "property_");
+</code></pre></blockquote>
+<p>Next in line is new data validity which is simply stated by adding state object on our contract. In this case condition
+is simple: first_name and last_name must be filled.</p>
+<p>And next action is simply binding editors "Add" buttons <b>sensitive</b> property to this newly created state objects <b>state</b> property</p>
+<blockquote><pre><code>			_editing_contract.add_state (new CustomBindingSourceState ("validity", _editing_contract, "Contact name validity", ((src) => {
+				return ((src.data != null) && (((Contact) src.data).first_name != "") && (((Contact) src.data).last_name != ""));
+			}), new string[2] { "first-name", "last-name" }));
+			_binder.bind (_editing_contract.get_state_object("validity"), "state", add_contact_button, "sensitive", BindFlags.SYNC_CREATE);
+</code></pre></blockquote>
+<p>Adding and starting edit of new contact is trivial as previously defined pipeline already handles everything it is needed</p>
+<p>So all that it needs to be done is creating new contact and assigning it to contract (which is already bound to all editing widgets from
+previous mapping) and set mode to EDIT</p>
+<blockquote><pre><code>			add_button.clicked.connect (() => {
+				ct = new Contact();
+				_editing_contract.data = ct;
+				_edit_control.mode = EditMode.EDIT;
+			});
+</code></pre></blockquote>
+<p>Note that since remove button sensitivity is already bound to be rendered impossible to click when no data is selected error checking is not needed
+</p> 
+<blockquote><pre><code>			remove_button.clicked.connect (() => { _contacts.remove ((Contact) ((SmoothListBoxRow) address_list.get_selected_row()).object); });
+</code></pre></blockquote>
+<p>For edit button all things are already known. Contract was set to listbox selection by default, so no need to tell which one to edit and simply set
+editor to EDIT mode</p>
+<blockquote><pre><code>			edit_button.clicked.connect (() => { _edit_control.mode = EditMode.EDIT; });
+</code></pre></blockquote>
+<p>When editors "Add" button is clicked handling is again trivial as possible.</p>
+<li>Edited object is known from contract (although <b>ct</b> could be used in this case as well)</li>
+<li>All that is needed is to reset all 3 things. Set our temporary object to null, pointing contract back to listbox selection and set mode to VIEW</li>
+<blockquote><pre><code>			add_contact_button.clicked.connect (() => { 
+				_contacts.add ((Contact) _editing_contract.get_source());
+				ct = null;
+				_editing_contract.data = (address_list.get_selected_row() != null) ? ((SmoothListBoxRow) address_list.get_selected_row()).object : null;;
+				_edit_control.mode = EditMode.VIEW;
+			});
+</code></pre></blockquote>
+<p>Cancelling new contact is even simpler than inserting it. Simply pointing contract back to listbox selection and setting mode to VIEW</p>
+<blockquote><pre><code>			cancel_new_contact.clicked.connect (() => {
+				_editing_contract.data = (address_list.get_selected_row() != null) ? ((SmoothListBoxRow) address_list.get_selected_row()).object : null;
+				_edit_control.mode = EditMode.VIEW;
+			});
+</code></pre></blockquote>
+
+<p>Adding search functionality is another completely trivial task. While demo could as well use <b>SearchEntry</b> from Gtk,
+it doesn't do so in order to show the <b>DELAYED</b> binding.</p>
+<p>In this case <b>MainWindow</b> contains <b>current_search</b> string property which is bound to two things.
+</p>
+<li><b>DELAYED</b> binding with search entry widget (gets exact same delayed effect as <b>SearchEntry</b></li>
+<li>Whenever property is changed it calls <b>_apply_search()</b> method. And since <b>DELAYED</b> is handling correct
+timeouts, search won't simply spam on every keypress</li>
+<blockquote><pre><code>		public string current_search { get; set; default = ""; }
+
+		private void _apply_search()
+		{
+			address_list.@foreach ((w) => {
+				SmoothListBoxRow r = (SmoothListBoxRow) w;
+				r.revealed = ((Contact) r.object).full_name.down().contains(current_search.down());
+			});
+		}
+		
+		//... in code
+		_binder.bind (this, "current-search", search_entry, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL | BindFlags.DELAYED);
+		notify["current-search"].connect (() => { _apply_search(); });
+</code></pre></blockquote>
+<p>Other parts of code</p>
+<li>Example of Placeholder widget use (Placeholder widget is one of widgets provided by <b>g_data_binding_gtk_lib</b></li>
+<blockquote><pre><code>		no_address.add (new Placeholder.from_icon("No data selected"));
+</code></pre></blockquote>
+<li>Bind both inspector buttons for demo to be able to explore its own data for more clarity</li>
+<blockquote><pre><code>			explore_contract.clicked.connect (() => { GDataGtk.BindingInspector.show(_editing_contract); });
+			explore_selected_object.clicked.connect (() => { GDataGtk.ObjectInspector.add_object(((SmoothListBoxRow) address_list.get_selected_row()).object); });
+</code></pre></blockquote>
+<a href="index.html">Back to main page</a>
