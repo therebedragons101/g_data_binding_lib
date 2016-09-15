@@ -30,9 +30,136 @@ its own set of rules of what to do and when</p>
 mechanism that is needed in order to fill most of the blanks and in case of source not being specified this is only blank
 field in contract rule. In case of contract <b>bind(...)</b> call being done while contract is already knowing all the right
 data, rule takes immediate effect.</p>
+<p>One more important thing to point out is that since <b>BindingContract</b> is derived from <b>BindingPointer</b>, it doesn't need
+to have pointer as its source. <b>BindingContract</b> is perfectly capable of filling that role by it self, but in case of
+having <b>BindingPointer</b> as its source it also inherits all those traits. There are also reasons why contract would depend on
+pointers.</p>
+<li>One reason is to be able to fulfill the role in designing static data pipeline tree</li>
+<li>Another reason is control over contract with custom pointers or just by redirection like <b>BindingPointerFromPropertyValue</b></li>
+<h2>Expansion on previous pointer explanation</h2>
+<p>The first pointer example had a simple relationship</p>
+<p><div style="text-align: center;"><object type="image/svg+xml" data="pointers-1.svg">
+  Your browser does not support SVG
+</object><small><p>Simple pointer-data relationship</p></small>
+</div></p>
+<p>If pointer in case is swapped with contract, this relationship stays completely unchanged. We have a bit smarter pointer and
+we have data object that is being pointed at</p>
+<p><div style="text-align: center;"><object type="image/svg+xml" data="contract-2.svg">
+  Your browser does not support SVG
+</object><small><p>Simple contract-data relationship</p></small>
+</div></p>
+<p>Code that produces this result</p>
+<blockquote><pre><code>	BindingContract my_contract = new BindingContract(my_data_object);
+</code></pre></blockquote>
+<p>The only thing that changed is that now unlike before, we can specify rules and conditions to it. Lets assume that there are
+few things</p>
+<li>Data object has <b>name</b> and <b>surname</b> property</li>
+<li>We have form with two entry widgets where <b>text</b> property is used to hold edited data</li>
+<li>Since our contract points to data object, that data object will be treated as <b>Source</b> and widgets will be treated
+as target objects</li>
+<p>So here is the point where rules can be added</p>
+<code><pre><blockquote>	my_contract.bind ("name", my_entry1, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+	my_contract.bind ("surname", my_entry2, "text", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
+	// For more BindFlags information see <a href="binding_rules.html">Binding rules</a>
+</code></pre></blockquote>
+<p>First thing that should be noticed is that binding never said which object, only which target. This is by intentional
+design that enables contract to work like previously described pointers</p>
+<p>At this point we ended up with this</p>
+<p><div style="text-align: center;"><object type="image/svg+xml" data="contract-3.svg">
+  Your browser does not support SVG
+</object><small><p>Complex contract-data tree structure with bindings</p></small>
+</div></p>
+<p>Since contract was already pointed out to data object and both bindings are possible contract makes those two
+active immediately. At this point no matter which side is changed, other side will reflect that change as well. What
+happened is this</p>
+<li>Since <b>SYNC_CREATE</b> was specified binding filled respective data from source to target asap</li>
+<li>Since <b>BIDIRECTIONAL</b> was specified binding is connected to changes on both sides and as such it doesn't
+matter if entry is edited or object is being assigned new property value, other side will be updated as well</li>
+<p>If contract at time of binding wouldn't be pointing at active object, but instead point at <b>null</b> story would
+be different. Contract would only store rules and wait for the moment when data is available.</p>
+<p>If contract at any moment gets information about new source (or just points its <b>data</b> property elsewhere) all
+rules get updated by either reflecting new connection or just being dropped if rule cannot be fulfilled</p>
+<p>At this point only thing left to do is expanding 3rd pointer example to contract logic. Diagram in that example was
+this</p>
+<p><div style="text-align: center;"><object type="image/svg+xml" data="pointers-3.svg">
+  Your browser does not support SVG
+</object><small><p>Tree like data relationship pipeline</p></small>
+</div></p>
+<p>At this point only thing that matters from that picture is left side and 3 pointers being used. Everything else is
+exactly the same.</p>
+<p>So if structure is now changed to this</p>
+<p><div style="text-align: center;"><object type="image/svg+xml" data="contract-4.svg">
+  Your browser does not support SVG
+</object><small><p>Tree like data relationship pipeline</p></small>
+</div></p>
+<p>Code that produces this result</p>
+<blockquote><pre><code>	BindingContract my_contract = new BindingContract(my_data_object);
+	BindingContract my_boss_contract = new BindingContract (my_contract.hold(new BindingPointerFromPropertyValue(my_pointer, "boss"));
+	BindingContract my_company_contract = new BindingContract (my_contract.hold(new BindingPointerFromPropertyValue(my_pointer, "company"));
+	// Note the use of hold() here. Calling hold() automatically locks binding pointer to its own lifetime and no reference keeping
+	// is necessary. Being that g_data_binding_lib is designed to be memory proactive, this would either require manual
+	// reference keeping or it would require storing it into PointerStorage. But, in this case pointer is solely dependent
+	// on my_contract and only specified one single time, so best thing possible is to just lock its lifetime to its master
+	... adding binding rules to now known contracts ...
+</code></pre></blockquote>
+<p>then result we got is single point data tree. Whenever new data being pointed out by master node, all three contracts
+reflect this change and rebind everything as necessary.</p>
+<h2>Contract validation</h2>
+<p>As part of contracts internals contract already supports validation. But, since life is not perfect so it is not this topic.
+Single point validation rarely works... if and even then it is not really effective. As such <b>g_data_binding_lib</b> possesses
+the ability to specify validation per rule, but it goes far into making other possibilities available as well </p>
+<p>Definition of <b>bind()</b> method</p>
+<blockquote><pre><code>	public BindingInformationInterface <b>bind</b> (string source_property, Object target, string target_property, BindFlags flags = BindFlags.DEFAULT, 
+	                                         owned PropertyBindingTransformFunc? transform_to = null, owned PropertyBindingTransformFunc? transform_from = null,
+	                                         owned SourceValidationFunc? source_validation = null)
+</code></pre></blockquote>
+<p>Each binding imposed on contract can impose validation and cumulative value of all validations is always reflected in <b>is_valid</b>
+property on contract. <b>is_valid</b> can as such be used as binding point for things like setting sensitivity of <b>Apply</b> button
+and so on.</p>
+<p>There is a good reason why validation method is done per binding and not per contract. Bindings can be added or removed on the fly
+and as such condition would change constantly as well which makes maintaining this condition in single place small step away of insanity</p>
+<p>Only problem is that I am yet to see one single example where one validation would be enough to handle even most simple problems</p>
+<p>This is why <b>g_data_binding_lib</b> introduces a lot of other ways to validate object as well as ways to promote validation results in
+better ways. But, those at this point are better to just be separated away. Here is just a list
+<li><a href="what_is_value_object.html"><b>Binding value object</b></a></li>
+<li><a href="what_is_state_object.html"><b>Binding state object</b></a></li>
+<li><a href="what_is_proxy_property.html"><b>Proxy property and proxy property group</b></a></li>
+<li><a href="what_is_boolean_condition.html"><b>Boolean conditions</b></a></li>
+<li><a href="what_is_trigger.html"><b>Triggers</b></a></li>
+<li><a href="what_is_enum_state.html"><b>Enum states</b></a></li>
+<li><a href="what_is_flag_state.html"><b>Flags states</b></a></p></li>
+<h2>Contract runtime inspection and tractability</h2>
+<p><b>g_data_binding_lib</b> comes with quite a few runtime inspectors that allow inspection of data flow. One of those is
+<a href="what_is_binding_inspector.html"><b>Binding inspector</b></a></p>
+<iframe width="480" height="270"
+src="https://www.youtube.com/embed/ua8IgmbfRqA">
+</iframe>
+<p>Main purpose of binding inspector is being able to reflect all binding data (unless intentionally hidden) as well as
+inspection of other things related to binding</p>
 <h2>Q&A</h2>
 <p><b>Q. Why BindingContract, why not just Contract?</b></p>
 <p>A. Reason for that is simple. BindingContract handles bindings specifically, while contracts can be applied to many
 other topics. Data binding is just one of them and this makes API cleaner.</p>
-
+<p><b>Q. Why making each widget target, why not form?</b></p>
+<p>A. Again simple reason. Doing this is clean and predictable. Instead of trying forcing some generic middle layer which
+would completely break 90% of design and flexibility it is far better to add layer that can resolve that for you. This is
+why g_data_binding_lib introduces <a href="what_is_mapper.html"><b>Mapper objects</b></a> for</p>
+<p><b>Q. What if contract points to object that doesn't have it? For example if object is different type than binding. How do I reflect that?</b></p>
+<p>A. Simple. In this case contract will not activate that rule, but at the same time design of g_data_binding_lib makes
+it possible to predict that situation and be statically prepared for it. Most common case of solution would be to use
+<a href="what_is_value_object.html"><b>Binding value object</b></a> or <a href="what_is_state_object.html"><b>Binding state object</b></a>.
+And this is not where choice ends. There are also <a href="what_is_proxy_property.html"><b>Proxy property and proxy property group</b></a>,
+<a href="what_is_boolean_condition.html"><b>Boolean conditions</b></a>, <a href="what_is_trigger.html"><b>Triggers</b></a>,
+<a href="what_is_enum_state.html"><b>Enum states</b></a> and <a href="what_is_flag_state.html"><b>Flags states</b></a> and choice of
+solution doesn't end here. The reason why this is not explained here is simple... to not overload with information that would
+just end up confusing.</p>
+<p>Easiest to see this in action and explained is <a href="demo_address_book_step_by_step.html">Demo address book step by step</a>. Take note
+that this example takes simplest approaches as it is lesson nr.1. Other step-by-step demos show different ways</p>
+<p><b>Q. What to do when scrolling fast over items or any other action like that? Without contracts this can be controlled easily</b></p>
+<p>A. Big mistake. With contracts and binding pointers this can be controlled even easier, it only takes one line to achieve that
+result which won't be prone to error or forgotten condition. In fact there is whole lot of solutions with custom pointers or
+simply using <b>ThrottlingBindingPointer</b> which does exactly this. When <b>ThrottlingBindingPointer</b> detects data flood, it
+assigns is data as <b>null</b> (there are signals for flood start and end as well if this is preferred) and waits until specified 
+delay passes without new source being assigned. After that it simply propagates its last assigned source. All that it would took 
+in last diagram is wrapping previously main point into <b>ThrottlingBindingPointer</b> and use this one instead to change the maintained source</p>
 <a href="index.html">Back to main page</a>

@@ -7,9 +7,10 @@
 License (GPL/LGPL)
 
 **IMPORTANT!
-Currently there is a bug in Vala that needs patch in order to compile
+Currently as of 0.32 there is a bug in Vala that needs patch in order to compile
 https://bugzilla.gnome.org/show_bug.cgi?id=769903 or anything related to flags
-just crashes application
+just crashes application. Patch is now upstream, but it will only take effect in
+next release.
 
 To get as simple and best possible overview running "demo_and_tutorial" is
 probably by far best method as tutorial not only shows how to do bindings,

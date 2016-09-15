@@ -16,6 +16,9 @@ are redirected to any other data in any way possible.
   Your browser does not support SVG
 </object><small><p>Simple pointer-data relationship</p></small>
 </div></p>
+<p>Code that produces this result</p>
+<blockquote><pre><code>	BindingPointer my_pointer = new BindingPointer(my_data_object);
+</code></pre></blockquote>
 <p>In this case pointers <b>data</b> property simply points to some object. Whenever <b>data</b> is redirected
 elsewhere pointer emits following signals that can be connected from any client</p>
 <li><b>disconnect_notifications</b> - note that this only happens if pointer was pointing to valid data</li>
@@ -31,6 +34,10 @@ this automatism.</p>
 <p><div style="text-align: center;"><object type="image/svg+xml" data="pointers-2.svg">
   Your browser does not support SVG
 </object><small><p>More complex pointer-pointer-data relationship</p></small></div></p>
+<p>Code that produces this result</p>
+<blockquote><pre><code>	BindingPointer my_pointer = new BindingPointer(my_data_object);
+	BindingPointer my_client_pointer = new BindingPointer (my_pointer);
+</code></pre></blockquote>
 <p>In this case there are two pointers. One is not pointing to actual data, but rather it is pointing to
 another pointer which does point to active data.</p>
 <p>Whenever middle pointer is updated, all the notifications and all the tractability is passed to his
@@ -55,6 +62,11 @@ can reliably know what is available, how it is available and what it should do w
   Your browser does not support SVG
 </object><small><p>Tree like data relationship pipeline</p></small>
 </div></p>
+<p>Code that produces this result</p>
+<blockquote><pre><code>	BindingPointer my_pointer = new BindingPointer(my_data_object);
+	BindingPointerFromPropertyValue my_boss_pointer = new BindingPointerFromPropertyValue(my_pointer, "boss");
+	BindingPointerFromPropertyValue my_company_pointer = new BindingPointerFromPropertyValue(my_pointer, "company");
+</code></pre></blockquote>
 <p>While this diagram might look scary it is not. It is perfectly simple.</p>
 <li>There is one main binding pointer which can reliably control everything (green).</li>
 <li>There are two pointers connected to main pointer, but instead of simply providing same object as main pointer,
@@ -75,7 +87,7 @@ everything else is automated</p>
 <p>A. In most cases, you wouldn't. In most cases <b>BindingContract</b> will be far better choice</p>
 <p><b>Q. If that is so, then why Pointers? Why not simply go with contracts?</b></p>
 <p>A. Stuffing contract functionality at low level would only hamper the design and flexibility. Keeping <b>BindingPointer</b>
-simple is good for custom extensions of data redirection like <b>BindingPointerFromPropertyValue</b>. Wheter it is
+simple is good for custom extensions of data redirection like <b>BindingPointerFromPropertyValue</b> or <b>ThrottlingBindingPointer</b>. Wheter it is
 redirection or event dispatch customization, it is far better to have simple extendable class than having one that
 is requiring you to break things in order to get it done.</p>
 <p>And there is a fact that simply chaining contract(pointer) is most basic thing possible. This gives all benefits
