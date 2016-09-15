@@ -1,5 +1,38 @@
 <link rel="stylesheet" href="styles.css">
 <h1>What is data binding contract?</h1>
 <a href="index.html">Back to main page</a>
-<p></p>
+<p><b>IMPORTANT NOTES!!</b><p>
+<p>Understanding <a href="what_is_pointer.html">BindingPointer</a> <b>is prerequisite for this topic.</b> <b>BindingContract</b> is
+derived from it and as such inherits all its traits of how and when data is accessible or when it reacts to notifications</p>
+<p>Same thing goes for understanding <a href="basic_explanation.html">Basic explanation of data binding</a>, where in this case
+contract is pure example of <b>Active</b> data binding</p>
+<h3>What is binding contract?</h3>
+<p>In simplest term it is a <a href="what_is_pointer.html">BindingPointer</a> which adds contracted data functionality to pointers
+data awareness.</p>
+<p>Just like blank contracts in real life, <b>BindingContract</b> prepares the set of rules which must be followed when both parties
+are specified and available for communication. In real life blank contract looks something like this, the only difference here is
+that <b>BindingContract</b> is not one single element like in example. <b>BindingContract</b> is holding a group of contracts like
+this one for each specific rule that has been imposed and since it is being derived from <b>BindingPointer</b> it also possesses
+all the awareness to know when rules are possible and when not. As such main purpose of contract is just handling the activity of
+specified rules in order to either make them effective or ineffective when conditions say so</p>
+<p><div style="text-align: center;"><object type="image/svg+xml" data="contract-1.svg">
+  Your browser does not support SVG
+</object><small><p>Simplified real life contract</p></small>
+</div></p>
+<p>In case of <b>BindingContract</b> this is simple. When any contract calls <b>bind(...)</b> it doesn't necessarily mean binding
+is active. What it really means is that contract issued binding rule that will be used whenever possible and fills as many blanks
+as possible. And it also means that this contract rule will be in effect whenever conditions are allowing for that (unless prevented
+by application, which could as well suspend contract for some reason for some time duration)</p>
+<p>If contract source (<b>data</b> property) is another contract or some binding pointer, there is no guarantee that data
+being pointed out at the moment is there or that this will always be the case. And this is the reason why contract holds
+its own set of rules of what to do and when</p>
+<p>Due to the fact that that contract is derived from pointer, contract already has all the source awareness and notification
+mechanism that is needed in order to fill most of the blanks and in case of source not being specified this is only blank
+field in contract rule. In case of contract <b>bind(...)</b> call being done while contract is already knowing all the right
+data, rule takes immediate effect.</p>
+<h2>Q&A</h2>
+<p><b>Q. Why BindingContract, why not just Contract?</b></p>
+<p>A. Reason for that is simple. BindingContract handles bindings specifically, while contracts can be applied to many
+other topics. Data binding is just one of them and this makes API cleaner.</p>
+
 <a href="index.html">Back to main page</a>
