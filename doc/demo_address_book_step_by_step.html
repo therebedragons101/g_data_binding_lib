@@ -230,11 +230,11 @@ previous mapping) and set mode to EDIT</p>
 </code></pre></blockquote>
 <p>Note that since remove button sensitivity is already bound to be rendered impossible to click when no data is selected error checking is not needed
 </p> 
-<blockquote><pre><code>			remove_button.clicked.connect (() => { _contacts.remove ((Contact) ((SmoothListBoxRow) address_list.get_selected_row()).object); });
+<blockquote><pre><code>	remove_button.clicked.connect (() => { _contacts.remove ((Contact) ((SmoothListBoxRow) address_list.get_selected_row()).object); });
 </code></pre></blockquote>
 <p>For edit button all things are already known. Contract was set to listbox selection by default, so no need to tell which one to edit and simply set
 editor to EDIT mode</p>
-<blockquote><pre><code>			edit_button.clicked.connect (() => { _edit_control.mode = EditMode.EDIT; });
+<blockquote><pre><code>	edit_button.clicked.connect (() => { _edit_control.mode = EditMode.EDIT; });
 </code></pre></blockquote>
 <p>When editors "Add" button is clicked handling is again trivial as possible.</p>
 <li>Edited object is known from contract (although <b>ct</b> could be used in this case as well)</li>
@@ -275,7 +275,7 @@ timeouts, search won't simply spam on every keypress</li>
 </code></pre></blockquote>
 <p>Other parts of code</p>
 <li>Example of Placeholder widget use (Placeholder widget is one of widgets provided by <b>g_data_binding_gtk_lib</b></li>
-<blockquote><pre><code>		no_address.add (new Placeholder.from_icon("No data selected"));
+<blockquote><pre><code>	no_address.add (new Placeholder.from_icon("No data selected"));
 </code></pre></blockquote>
 <li>Bind both inspector buttons for demo to be able to explore its own data for more clarity</li>
 <blockquote><pre><code>	explore_contract.clicked.connect (() => { GDataGtk.BindingInspector.show(_editing_contract); });

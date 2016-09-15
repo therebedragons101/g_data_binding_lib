@@ -204,7 +204,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="relief">none</property>
-                    <property name="uri">http://gdatabindinglib.co.nf/demo_address_book_step_by_step.html</property>
+                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/demo_address_book_step_by_step.html</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
