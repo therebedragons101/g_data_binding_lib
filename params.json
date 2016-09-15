@@ -1,0 +1,6 @@
+{
+  "name": "g_data_binding_lib",
+  "tagline": "Data Binding Library in Vala (with g-object-introspection)",
+  "body": "### Project overview\r\ng_data_binding_lib mainly serves one purpose only and that is completely abstract application data from application gui without sacrificing any design choices or suffer any penalties.\r\n\r\n### Documentation\r\n[Online documentation and step by step examples](https://therebedragons101.github.io/g_data_binding_lib/doc/index.html)\r\n\r\nAPI documentation is written, but it is still not built by default because newer and better build mechanism is on TODO list (I don't like autotools or cmake and current makefile is not full featured or supporting crossplatform). \r\n\r\n### Screencasts\r\n[Channel](https://www.youtube.com/channel/UCJZj-InbHNSByGiHjweGXIA)\r\n\r\n### Authors and Contributors\r\nAuthor: @therebedragons101\r\n\r\n### Support or Contact\r\nPreferred way of reporting any bug, problem or missing feature is github issue tracker",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
