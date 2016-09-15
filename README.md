@@ -1,5 +1,7 @@
 # Data binding library in Vala (GLib)
 
+[Main project and documentation page](https://therebedragons101.github.io/g_data_binding_lib/)
+
 **Scroll down for videos and screenshots**
 
 License (GPL/LGPL)
