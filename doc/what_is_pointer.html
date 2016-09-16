@@ -12,12 +12,20 @@ is pointing to address of where data exists. Exact same thing goes for binding p
 Beside just pointing to data it also provides complete signal system that can be used to track changes when they
 are redirected to any other data in any way possible.
 </p>
+<p>Pointers destination is assigned to <b>data</b> property, but due to the nature how they work <b>data</b> is
+not reliable way to discern destination. Real destination can be resolved with <b>get_source()</b> method. Second
+example shows exactly that situation where pointer points to another pointer which points to data object. In that
+case, even though their <b>data</b> differs, destination is the same</p>
 <p><div style="text-align: center;"><object type="image/svg+xml" data="pointers-1.svg">
   Your browser does not support SVG
 </object><small><p>Simple pointer-data relationship</p></small>
 </div></p>
 <p>Code that produces this result</p>
 <blockquote><pre><code>	BindingPointer my_pointer = new BindingPointer(my_data_object);
+</code></pre></blockquote>
+<p>This is exact same effect as</p>
+<blockquote><pre><code>	BindingPointer my_pointer = new BindingPointer(null);
+	my_pointer.data = my_data_object;
 </code></pre></blockquote>
 <p>In this case pointers <b>data</b> property simply points to some object. Whenever <b>data</b> is redirected
 elsewhere pointer emits following signals that can be connected from any client</p>

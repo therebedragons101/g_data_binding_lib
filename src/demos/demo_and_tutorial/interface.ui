@@ -2334,41 +2334,6 @@ to register "string:text" on all objects that support it and not on those that d
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkLabel">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">&lt;b&gt;Property aliases (hover on label to see source)&lt;/b&gt;
-&lt;small&gt;their use is simple to understand you declare specific property name and then register which property is relevant for that purpose for specific type. note
-that real property name takes precedence over alias and only case when alias will be used is when original object does not contain specified property.
-PropertyBinding.bind uses this by default as fallback for nonexisting properties&lt;/small&gt;
-
-&lt;b&gt;PropertyAlias class&lt;/b&gt;
-&lt;b&gt;static&lt;/b&gt; bool &lt;b&gt;contains&lt;/b&gt; (string alias) - peeks if alias exists
-&lt;b&gt;static&lt;/b&gt; PropertyAlias &lt;b&gt;get_instance&lt;/b&gt; (string alias) - returns alias if exists, otherwise creates new one and returns it
-PropertyAlias &lt;b&gt;register&lt;/b&gt; (Type type, string alias) - alias registration for type (returns alias group to allow API chaining)
-string? &lt;b&gt;get_for&lt;/b&gt; (Type type) - returns property name for alias or null if not registered
-string &lt;b&gt;safe_get_for&lt;/b&gt; (Type type, string original) - same as &lt;b&gt;get_for&lt;/b&gt; except it returns original value instead of null
-
-&lt;small&gt;Example:
-// note that "alias:" in alias name is only for readability purposes, not as requirement
-PropertyAlias.get_instance ("alias:custom-name")
-	.register (type(SomeType), "some-type-property")
-	.register (type(OtherType), "other-type-property");
-
-at this point binding will know what to use for "alias:custom-name" in types SomeType and OtherType which makes "alias:custom-name" valid binding
-point for them&lt;/small&gt;
-
-values registered for purpose of this tutorial</property>
-                                                <property name="use_markup">True</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">1</property>
-                                                <property name="width">3</property>
-                                              </packing>
-                                            </child>
-                                            <child>
                                               <object class="GtkBox">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
@@ -2486,6 +2451,33 @@ values registered for purpose of this tutorial</property>
                                                 <property name="width">3</property>
                                               </packing>
                                             </child>
+                                            <child>
+                                              <object class="GtkBox">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="spacing">8</property>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is PropertyAlias?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_property_alias.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="width">3</property>
+                                              </packing>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="expand">True</property>
@@ -2533,54 +2525,40 @@ just as any other object type. This is a feature, not a bug!&lt;/b&gt;</property
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkLabel">
+                                              <object class="GtkBox">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="tooltip_markup" translatable="yes">&lt;small&gt;&lt;i&gt;Person john_doe = new Person("John", "Doe");
-Person unnamed_person = new Person("Unnamed", "Person");
-
-// note the use of pointer storage here
-//
-// this allows avoiding local variable as pointer is accessible by name
-// and in this case this is solely for demo purpose
-PointerStorage.add("example4-pointer", new BindingPointer(john_doe));
-
-e4_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_1");
-e4_set_1.toggled.connect (() =&gt; {
-	if (e4_set_1.active == true)
-		PointerStorage.find("example4-pointer").data = john_doe;
-});
-e4_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_2");
-e4_set_2.toggled.connect (() =&gt; {
-	if (e4_set_2.active == true)
-		PointerStorage.find("example4-pointer").data = unnamed_person;
-});
-e4_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e4_set_3");
-e4_set_3.toggled.connect (() =&gt; {
-	if (e4_set_3.active == true)
-		PointerStorage.find("example4-pointer").data = null;
-});&lt;/i&gt;&lt;/small&gt;</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">&lt;b&gt;Class description (hover over label to see source)&lt;/b&gt;
-&lt;small&gt;binding pointer serves as object that can point to source by having controlled reference handling and defines how data updates are dispatched. but, probably 
-most important feature is chaining support and its control signals
-
-&lt;span color='red'&gt;property&lt;/span&gt; &lt;b&gt;reference_type&lt;/b&gt; - STRONG/WEAK define how reference is treated. with WEAK no reference is made, with STRONG exactly 1 reference is created
-and being locked until binding pointer refers to it. no matter how complex chaining, it will always be 1 reference. can only be specified on pointer creation
-&lt;span color='red'&gt;property&lt;/span&gt; &lt;b&gt;update_type&lt;/b&gt;- PROPERTY/MANUAL defines if object is dispatching its own signals or reliance goes straight to custom handling. if binding object is 
-chained onto another binding object &lt;b&gt;update_type&lt;/b&gt; will not return its own value, but rather value of the chained pointer. can only be specified on pointer 
-creation
-&lt;span color='red'&gt;property&lt;/span&gt; &lt;b&gt;data&lt;/b&gt; - can hold 3 types of values (object reference, SELF, null). when value is set signals are dispatched (change source in this demo to get exact
-picture of how/when/how. note that it is probably better to use signals than notify for this property as it provides more information
-&lt;span color='red'&gt;signal&lt;/span&gt; &lt;b&gt;data_changed&lt;/b&gt; is probably the only one needing explanation. when binding pointer declares &lt;b&gt;update_type&lt;/b&gt; as MANUAL it is emission of this signal is
-expected to notify when bindings need update for that source. note that signal has (BindingPointer, string) parameters where second can be used to fine 
-grain what needs to be updated
-&lt;span color='red'&gt;virtual method&lt;/span&gt; &lt;b&gt;get_source()&lt;/b&gt; resolves end of chain pointer is pointing at. &lt;b&gt;this method plays vital role in later chapters and will be explained then&lt;/b&gt;
-
-other signals are simply better left to visual representation. just change source for binding pointer and listbox will represent what was happening and when
-
-&lt;/small&gt;DEMO (change source and watch how binding pointer reacts)</property>
-                                                <property name="use_markup">True</property>
+                                                <property name="spacing">8</property>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">Basic explanation</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/basic_explanation.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingPointer?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_pointer.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -2711,32 +2689,6 @@ other signals are simply better left to visual representation. just change sourc
                                             <property name="vexpand">True</property>
                                             <property name="row_spacing">6</property>
                                             <property name="column_spacing">8</property>
-                                            <child>
-                                              <object class="GtkLabel">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">&lt;b&gt;PointerStorage class&lt;/b&gt;
-&lt;b&gt;static&lt;/b&gt; PointerStorage? &lt;b&gt;find&lt;/b&gt; (string name) - peeks if storage exists and return reference if it does or null
-&lt;b&gt;static&lt;/b&gt; PointerStorage &lt;b&gt;get_default&lt;/b&gt;() - returns default storage if it exists, otherwise creates new one and returns that one
-&lt;b&gt;static&lt;/b&gt; PointerStorage &lt;b&gt;get_storage&lt;/b&gt; (string name) - returns storage if it exists, otherwise creates new one and returns that one
-BindingPointer? &lt;b&gt;add&lt;/b&gt; (string name, BindingPointer? pointer) - adds pointer to storage
-void &lt;b&gt;remove&lt;/b&gt; (string name) - removes pointer from storage
-
-&lt;small&gt;Example:
-PointerStorage.get_storage ("my-storage").add ("my-pointer", new BindingPointer());
-PointerStorage.get_storage ("my-storage").add ("my-pointer-contract", new BindingContract()); // since contract is derived from pointer this is possible
-PointerStorage.get_storage ("my-storage").find ("my-pointer").bind...&lt;/small&gt;
-
-values are registered for purpose of this tutorial</property>
-                                                <property name="use_markup">True</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">1</property>
-                                                <property name="width">3</property>
-                                              </packing>
-                                            </child>
                                             <child>
                                               <object class="GtkBox">
                                                 <property name="visible">True</property>
@@ -2874,6 +2826,33 @@ to situations where all gui parts need to follow current situation</property>
                                                 <property name="width">3</property>
                                               </packing>
                                             </child>
+                                            <child>
+                                              <object class="GtkBox">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="spacing">8</property>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is PropertyAlias?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_property_pointer_storage.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="width">3</property>
+                                              </packing>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="expand">True</property>
@@ -2920,55 +2899,55 @@ please refer to previous page and DO NOT PROCEED UNTIL YOU DO!</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkLabel">
+                                              <object class="GtkBox">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="tooltip_markup" translatable="yes">&lt;i&gt;// note the use of contract storage here
-//
-// this allows avoiding local variable as contract is accessible by name
-// and in this case this is solely for demo purpose
-ContractStorage.get_default()
-	.add("example5", new BindingContract(john_doe))
-		.bind ("name", ui_builder.get_object ("e5_name"), "label", GLib.BindingFlags.SYNC_CREATE)
-		.bind ("surname", ui_builder.get_object ("e5_surname"), "label", GLib.BindingFlags.SYNC_CREATE);
-
-e5_set_1 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_1");
-e5_set_1.toggled.connect (() =&gt; {
-	if (e5_set_1.active == true)
-		ContractStorage.get_default().find("example5").data = john_doe;
-});
-e5_set_2 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_2");
-e5_set_2.toggled.connect (() =&gt; {
-	if (e5_set_2.active == true)
-		ContractStorage.get_default().find("example5").data = unnamed_person;
-});
-e5_set_3 = (Gtk.CheckButton) ui_builder.get_object ("e5_set_3");
-e5_set_3.toggled.connect (() =&gt; {
-	if (e5_set_3.active == true)
-		ContractStorage.get_default().find("example5").data = null;
-});
-&lt;/i&gt;
-</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">&lt;b&gt;Class description (hover over label to see source)&lt;/b&gt;
-&lt;small&gt;binding contract extends the Binding Pointer by adding possibility to handle property bindings on specified source by adding/removing. bindings can either
-be added/removed as single entity or as group. their addition checks if reference for specified binding already exists or not. if binding is present its lock
-counter is increased by 1, if not binding is added to the contract. when removing binding does not get removed if lock counter didn't reach 0. this and group
-handling makes it available for groups to share bindings with no worry
-
-&lt;span color='red'&gt;property&lt;/span&gt; &lt;b&gt;is_valid&lt;/b&gt; - specifies validity of source data it points to. each property binding can introduce its own condition and result of &lt;b&gt;is_valid&lt;/b&gt; is cumulative
-of all active bindings in contract. this is useful to have automatic handling of buttons like "Apply". note that contract can add other conditions with state objects
-&lt;span color='red'&gt;property&lt;/span&gt; &lt;b&gt;length&lt;/b&gt; - number of bindings in contract
-&lt;span color='red'&gt;property&lt;/span&gt; &lt;b&gt;suspended&lt;/b&gt; - contract suspension disables all data traffic contract is specifying (useful to temporarily disable gui refresh when processing)
-&lt;span color='red'&gt;property&lt;/span&gt; &lt;b&gt;default_target&lt;/b&gt; - automatic binding pointer that is specified as target with &lt;b&gt;bind_default&lt;/b&gt; which simplifies handling of data binding when contract
-handles more than one property between two objects. this also guaratees single point of maintenancy to change target just as &lt;b&gt;data&lt;/b&gt; does it for source
-&lt;span color='red'&gt;property&lt;/span&gt; &lt;b&gt;can_bind&lt;/b&gt; - true if currently binding is possible, false if not
-&lt;span color='red'&gt;signal&lt;/span&gt; &lt;b&gt;contract_changed (contract)&lt;/b&gt; - sent whenever contract is disolved or renewed
-&lt;span color='red'&gt;signal&lt;/span&gt; &lt;b&gt;bindings_changed (contract)&lt;/b&gt; - sent whenever bindings are added or removed
-
-&lt;b&gt;NOTE! API to add bindings is exactly the same as PropertyBinding with one exception of adding validity function parameter
-WARNING! do not use "data" notification as check point. use signals&lt;/b&gt;&lt;/small&gt;</property>
-                                                <property name="use_markup">True</property>
+                                                <property name="spacing">8</property>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">Basic explanation</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/basic_explanation.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingPointer?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_pointer.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingContract?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_contract.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">2</property>
+                                                  </packing>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -3208,31 +3187,6 @@ reference handling. by simply throwing contract into storage, there is guarantee
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkLabel">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">&lt;b&gt;ContractStorage class&lt;/b&gt;
-&lt;b&gt;static&lt;/b&gt; ContractStorage? &lt;b&gt;find&lt;/b&gt; (string alias) - peeks if storage exists and return reference if it does or null
-&lt;b&gt;static&lt;/b&gt; ContractStorage &lt;b&gt;get_storage&lt;/b&gt; (string name) - returns storage if it exists, otherwise creates new one and returns that one
-&lt;b&gt;static&lt;/b&gt; ContractStorage &lt;b&gt;get_default&lt;/b&gt; () - returns storage if it exists, otherwise creates new one and returns that one
-BindingContract? &lt;b&gt;add&lt;/b&gt; (string name, BindingContract? contract) - adds contract to storage
-void &lt;b&gt;remove&lt;/b&gt; (string name) - removes contract from storage
-
-&lt;small&gt;Example:
-ContractStorage.get_storage ("my-storage").add ("my-contract", new BindingContract());
-ContractStorage.get_storage ("my-storage").find ("my-contract").bind...&lt;/small&gt;
-
-values are registered for purpose of this tutorial</property>
-                                                <property name="use_markup">True</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">1</property>
-                                                <property name="width">3</property>
-                                              </packing>
-                                            </child>
-                                            <child>
                                               <object class="GtkBox">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
@@ -3350,6 +3304,33 @@ values are registered for purpose of this tutorial</property>
                                                 <property name="width">3</property>
                                               </packing>
                                             </child>
+                                            <child>
+                                              <object class="GtkBox">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="spacing">8</property>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is PropertyAlias?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_property_contract_storage.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="width">3</property>
+                                              </packing>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="expand">True</property>
@@ -3393,6 +3374,63 @@ can have its own set of bindings and value/state objects which is different from
                                               </packing>
                                             </child>
                                             <child>
+                                              <object class="GtkBox">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="spacing">8</property>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">Basic explanation</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/basic_explanation.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingPointer?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_pointer.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingContract?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_contract.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">2</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
                                               <object class="GtkLabel">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
@@ -3433,7 +3471,7 @@ being shown in listbox are events propagated on &lt;b&gt;"sub-contract"&lt;/b&gt
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">True</property>
-                                                <property name="position">1</property>
+                                                <property name="position">2</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -3501,7 +3539,7 @@ being shown in listbox are events propagated on &lt;b&gt;"sub-contract"&lt;/b&gt
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">True</property>
-                                                <property name="position">2</property>
+                                                <property name="position">3</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -3622,7 +3660,7 @@ being shown in listbox are events propagated on &lt;b&gt;"sub-contract"&lt;/b&gt
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">True</property>
-                                                <property name="position">3</property>
+                                                <property name="position">4</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -3636,7 +3674,7 @@ being shown in listbox are events propagated on &lt;b&gt;"sub-contract"&lt;/b&gt
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">True</property>
-                                                <property name="position">4</property>
+                                                <property name="position">5</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -3664,7 +3702,7 @@ being shown in listbox are events propagated on &lt;b&gt;"sub-contract"&lt;/b&gt
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">True</property>
-                                                <property name="position">5</property>
+                                                <property name="position">6</property>
                                               </packing>
                                             </child>
                                           </object>
@@ -3784,6 +3822,63 @@ pointing to changed, then contract bindings will have to be adapted as well agai
                                               </packing>
                                             </child>
                                             <child>
+                                              <object class="GtkBox">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="spacing">8</property>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">Basic explanation</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/basic_explanation.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingPointer?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_pointer.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingContract?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_contract.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">2</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
                                               <object class="GtkLabel">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
@@ -3810,7 +3905,7 @@ PropertyBinding.bind(my_contract, "is_valid", ui_builder.get_object ("evo_b1"), 
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">True</property>
-                                                <property name="position">1</property>
+                                                <property name="position">2</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -3824,7 +3919,7 @@ PropertyBinding.bind(my_contract, "is_valid", ui_builder.get_object ("evo_b1"), 
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">True</property>
-                                                <property name="position">3</property>
+                                                <property name="position">4</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -3967,7 +4062,7 @@ PropertyBinding.bind(my_contract, "is_valid", ui_builder.get_object ("evo_b1"), 
                                               <packing>
                                                 <property name="expand">True</property>
                                                 <property name="fill">True</property>
-                                                <property name="position">4</property>
+                                                <property name="position">5</property>
                                               </packing>
                                             </child>
                                           </object>
@@ -4017,23 +4112,70 @@ checks. state objects can be added/removed per contract on a whim</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkLabel">
+                                              <object class="GtkBox">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">this example simply adds "validity" state object on contract
-
-Example:
-&lt;i&gt;// adding custom state value to contract
-my_contract.add_state (new CustomBindingSourceState ("validity", my_contract, ((src) =&gt; {
-	return ((src.data != null) &amp;amp;&amp;amp; (((Person) src.data).required != ""));
-}), new string[1] { "required" }));
-
-// BINDING! note the static use as this object is available for whole lifetime of contract unless removed
-// bind to state. note that state is updated whenever contract source changes or specified properties in respective class 
-// get changed which makes it perfectly ok to use simple binding as this connection will be stable for whole contract life
-PropertyBinding.bind (my_contract.get_state_object("validity"), "state", required_not_empty, "sensitive", BindFlags.SYNC_CREATE);&lt;/i&gt;</property>
-                                                <property name="use_markup">True</property>
+                                                <property name="spacing">8</property>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">Basic explanation</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/basic_explanation.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingPointer?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_pointer.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingContract?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_contract.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">2</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">button</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_state_object.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">3</property>
+                                                  </packing>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -4052,7 +4194,7 @@ PropertyBinding.bind (my_contract.get_state_object("validity"), "state", require
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">True</property>
-                                                <property name="position">2</property>
+                                                <property name="position">3</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -4185,7 +4327,7 @@ PropertyBinding.bind (my_contract.get_state_object("validity"), "state", require
                                               <packing>
                                                 <property name="expand">True</property>
                                                 <property name="fill">True</property>
-                                                <property name="position">3</property>
+                                                <property name="position">4</property>
                                               </packing>
                                             </child>
                                           </object>
@@ -4234,37 +4376,70 @@ functionality per case. value objects can be added/removed per contract on a whi
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkLabel">
+                                              <object class="GtkBox">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">this example simply adds "length" value object on contract
-
-Example:
-&lt;small&gt;&lt;i&gt;BindingContract my_contract = ContractStorage.get_storage("example-value-objects").add ("my-contract", new BindingContract());
-bind_person_model ((Gtk.ListBox) ui_builder.get_object ("evvo_list"), persons, my_contract);
-
-my_contract.bind ("name", ui_builder.get_object ("evvo_1"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-my_contract.bind ("surname", ui_builder.get_object ("evvo_2"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-my_contract.bind ("required", ui_builder.get_object ("evvo_3"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-
-// adding custom value to contract
-my_contract.add_source_value (new CustomBindingSourceData&amp;lt;string&amp;gt; ("length", my_contract, 
-	((src) =&gt; {
-		return ("(cumulative of string lengths)=&gt;%i".printf((src.data != null) ? ((Person) src.data).name.length + ((Person) src.data).surname.length + 
-			((Person) src.data).required.length : 0));
-	}), 
-	((a,b) =&gt; { return ((a == b) ? 0 : 1); }), 
-	"", false, ALL_PROPERTIES));
-
-// bind to binding value. note that value is updated whenever contract source changes or specified properties in respective class get changed
-// which makes it perfectly ok to use simple binding as this connection will be stable for whole contract life
-PropertyBinding.bind (my_contract.get_source_value ("length"), "data", ui_builder.get_object ("evvo_4"), "&amp;amp;", BindFlags.SYNC_CREATE, 
-	(binding, srcval, ref targetval) =&gt; {
-		targetval.set_string (((CustomBindingSourceData&amp;lt;string&amp;gt;) binding.source).data);
-		return true;
-	});&lt;/i&gt;&lt;/small&gt;</property>
-                                                <property name="use_markup">True</property>
+                                                <property name="spacing">8</property>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">Basic explanation</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/basic_explanation.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingPointer?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_pointer.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingContract?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_contract.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">2</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">button</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_value_object.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">3</property>
+                                                  </packing>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -4283,7 +4458,7 @@ PropertyBinding.bind (my_contract.get_source_value ("length"), "data", ui_builde
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">True</property>
-                                                <property name="position">2</property>
+                                                <property name="position">3</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -4443,7 +4618,7 @@ length for all 3 strings
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">True</property>
-                                                <property name="position">3</property>
+                                                <property name="position">4</property>
                                               </packing>
                                             </child>
                                           </object>
@@ -4499,47 +4674,70 @@ relays can be used in various ways
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkLabel">
+                                                  <object class="GtkBox">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="tooltip_markup" translatable="yes">&lt;small&gt;BindingContract my_contract = ContractStorage.get_storage("example-relay").add ("main-contract", new BindingContract());
-bind_person_model ((Gtk.ListBox) ui_builder.get_object ("e7_list"), persons, my_contract);
-
-BindingPointer infoptr = my_contract.hold (new BindingPointerFromPropertyValue (my_contract, "info"));
-BindingPointer parentptr = my_contract.hold (new BindingPointerFromPropertyValue (my_contract, "parent"));
-
-BindingContract info_contract = ContractStorage.get_storage("example-relay").add ("info-contract", new BindingContract(infoptr));
-BindingContract parent_contract = ContractStorage.get_storage("example-relay").add ("parent-contract", new BindingContract(parentptr));
-
-my_contract.bind ("name", ui_builder.get_object ("e7_1"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-	.bind ("surname", ui_builder.get_object ("e7_2"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-	.bind ("required", ui_builder.get_object ("e7_3"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-
-info_contract.bind ("some_num", ui_builder.get_object ("e7_s1_1"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-
-parent_contract.bind ("name", ui_builder.get_object ("e7_s2_1"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-	.bind ("surname", ui_builder.get_object ("e7_s2_2"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL)
-	.bind ("required", ui_builder.get_object ("e7_s2_3"), "&amp;amp;", BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL);
-
-PropertyBinding.bind(parent_contract, "is-valid", ui_builder.get_object ("e7_s2_g"), "visible", BindFlags.SYNC_CREATE);
-
-bind_event_listbox ((Gtk.ListBox) ui_builder.get_object ("e7_events"), _e7_events);
-connect_binding_contract_events (parent_contract, _e7_events);
-&lt;/small&gt;</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="label" translatable="yes">&lt;small&gt;easiest to understand is data redirection and for that there already exists class that handles that case BindingPointerFromPropertyValue
-which overrides &lt;b&gt;get_source()&lt;/b&gt; in a way where source it propagates is not the object set as &lt;b&gt;data&lt;/b&gt;, but rather object which is specified
-as defined property value in that object.
-this allows creation of complex data maps as well as separation of data per task
-
-Example:
-main contract source is specified as current selection (Person) in listbox. Person object on the other hand contains (Person) &lt;b&gt;parent&lt;/b&gt; and
-(PersonInfo) &lt;b&gt;info&lt;/b&gt; properties. by defining pointer as BindingPointerFromPropertyValue (main_contract, "info") for subcontract source two
-things happen. all binding for that contract will be relayed to object represented in &lt;b&gt;info&lt;/b&gt; and that source will be updated on two
-conditions: &lt;b&gt;data&lt;/b&gt; (main or sub) points somewhere else or there was &lt;b&gt;"info"&lt;/b&gt; notification on object pointed by main. as such, tree like 
-contract structure is possible&lt;/small&gt;
-&lt;b&gt;Events on parent relay contract (hover on label to see source)&lt;/b&gt;</property>
-                                                    <property name="use_markup">True</property>
+                                                    <property name="spacing">8</property>
+                                                    <child>
+                                                      <object class="GtkLinkButton">
+                                                        <property name="label" translatable="yes">Basic explanation</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="receives_default">True</property>
+                                                        <property name="relief">none</property>
+                                                        <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/basic_explanation.html</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkLinkButton">
+                                                        <property name="label" translatable="yes">What is BindingPointer?</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="receives_default">True</property>
+                                                        <property name="relief">none</property>
+                                                        <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_pointer.html</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">1</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkLinkButton">
+                                                        <property name="label" translatable="yes">What is BindingContract?</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="receives_default">True</property>
+                                                        <property name="relief">none</property>
+                                                        <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_contract.html</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">2</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkLinkButton">
+                                                        <property name="label" translatable="yes">button</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="receives_default">True</property>
+                                                        <property name="relief">none</property>
+                                                        <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_pointer_relay.html</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">3</property>
+                                                      </packing>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -5115,18 +5313,25 @@ As part of &lt;b&gt;g_data_bindings_gtk_lib&lt;/b&gt; there is ability to enable
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkLabel">
+                                              <object class="GtkBox">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">&lt;b&gt;BindingInspector API&lt;/b&gt;
-All API is static to make things simpler
-
-public static Gtk.Window &lt;b&gt;window&lt;/b&gt; { get; }
-public static void &lt;b&gt;show&lt;/b&gt; (BindingPointer? inspect = null)
-
-Example:</property>
-                                                <property name="use_markup">True</property>
+                                                <property name="spacing">8</property>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is PropertyAlias?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_binding_inspector.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -5214,19 +5419,25 @@ Binding inspector made for standalone use</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel">
+                                          <object class="GtkBox">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="label" translatable="yes">&lt;b&gt;ObjectInspector API&lt;/b&gt;
-All API that is meant for custom inspections inside application is static to make things simpler
-
-public static void &lt;b&gt;add_object&lt;/b&gt; (Object? obj);
-public static void &lt;b&gt;add_multiple&lt;/b&gt; (Object?[] obj);
-public static void &lt;b&gt;clean&lt;/b&gt; ();
-
-Example:</property>
-                                            <property name="use_markup">True</property>
+                                            <property name="spacing">8</property>
+                                            <child>
+                                              <object class="GtkLinkButton">
+                                                <property name="label" translatable="yes">What is PropertyAlias?</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">True</property>
+                                                <property name="relief">none</property>
+                                                <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_object_inspector.html</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -5415,6 +5626,48 @@ needs to have Gtk.Buildable id (name) same as property it wants to be mapped to<
                                       </packing>
                                     </child>
                                     <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="spacing">8</property>
+                                        <child>
+                                          <object class="GtkLinkButton">
+                                            <property name="label" translatable="yes">Basic explanation</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">True</property>
+                                            <property name="relief">none</property>
+                                            <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/basic_explanation.html</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLinkButton">
+                                            <property name="label" translatable="yes">What is BindingPointer?</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">True</property>
+                                            <property name="relief">none</property>
+                                            <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_mapper.html</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
                                       <object class="GtkLabel">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -5438,7 +5691,7 @@ namespace Demo
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">1</property>
+                                        <property name="position">2</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5539,7 +5792,7 @@ namespace Demo
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">2</property>
+                                        <property name="position">3</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -5580,6 +5833,48 @@ automated generation respects that</property>
                                           </packing>
                                         </child>
                                         <child>
+                                          <object class="GtkBox">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="spacing">8</property>
+                                            <child>
+                                              <object class="GtkLinkButton">
+                                                <property name="label" translatable="yes">Basic explanation</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">True</property>
+                                                <property name="relief">none</property>
+                                                <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/basic_explanation.html</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLinkButton">
+                                                <property name="label" translatable="yes">What is BindingPointer?</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">True</property>
+                                                <property name="relief">none</property>
+                                                <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_auto_value_widget.html</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
                                           <object class="GtkLabel">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
@@ -5590,7 +5885,7 @@ is not the case. If inspected with gtk-inspector, it will show there is empty Gt
                                           <packing>
                                             <property name="expand">False</property>
                                             <property name="fill">True</property>
-                                            <property name="position">1</property>
+                                            <property name="position">2</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -6063,7 +6358,7 @@ to do</property>
                                           <packing>
                                             <property name="expand">False</property>
                                             <property name="fill">True</property>
-                                            <property name="position">2</property>
+                                            <property name="position">3</property>
                                           </packing>
                                         </child>
                                       </object>
@@ -6104,6 +6399,48 @@ depending on mode setting. This makes same gui effective to switch between read/
                                       </packing>
                                     </child>
                                     <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="spacing">8</property>
+                                        <child>
+                                          <object class="GtkLinkButton">
+                                            <property name="label" translatable="yes">Basic explanation</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">True</property>
+                                            <property name="relief">none</property>
+                                            <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/basic_explanation.html</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLinkButton">
+                                            <property name="label" translatable="yes">What is BindingPointer?</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">True</property>
+                                            <property name="relief">none</property>
+                                            <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_auto_value_mode_widget.html</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
                                       <object class="GtkLabel">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -6113,7 +6450,7 @@ depending on mode setting. This makes same gui effective to switch between read/
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">1</property>
+                                        <property name="position">2</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -6343,7 +6680,7 @@ depending on mode setting. This makes same gui effective to switch between read/
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">2</property>
+                                        <property name="position">3</property>
                                       </packing>
                                     </child>
                                   </object>
