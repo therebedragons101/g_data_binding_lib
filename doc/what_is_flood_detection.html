@@ -1,0 +1,99 @@
+<link rel="stylesheet" href="styles.css">
+<h1>What is flood detection and why would I care?</h1>
+<a href="index.html">Back to main page</a>
+<p>It is probably easier to explain why than what. If you have some event that constantly triggers
+gui refresh, this is not really good sign for your work. Limiting that to bare minimum is first
+step towards making application better. And gui is not the only point where one should be careful
+about this. This is valid for any data binding in application and developer should know best what
+is important and what not</p>
+<p><b>What</b> is more complex as data flood can happen for many reasons and on many levels.
+<b>g_data_binding_lib</b> tries its best to allow automatic detection on every possible level,
+but the decision what is important and which solution is correct is solely responsability of
+application</p>
+<p>First step towards decision on which way is correct is analyzing the layer on which it
+happens and then analyzing the smallest point of common interaction</p>
+<p><b>Few examples of flood</b></p>
+<li>If some widget is connected to signal which is constantly spammed when nature of application
+does not demand that interface gets redrawn whole time</li>
+<li>If static data pipeline tree is getting source change in fast intervals</li>
+<li>If two widgets are bound and one of them changes its value</li>
+<p><b>Solutions</b></p>
+<p>As already said before <b>g_data_binding_lib</b> tries to allow solving this problem on every
+possible level</p>
+<li>You can solve it on property binding level when creating binding by specifiying <b>FLOOD_DETECTION</b></li>
+<li>You can solve it on property binding level by having one binding that enables detection and then
+use signals emitted on that binding to handle it manually</li>
+<li>You can solve it on pointer level by wrapping your data root point into <b>ThrottlingBindingPointer</b></li>
+<li>You can solve it on contract binding rules which allow first two solutions as well</li>
+<p>Main thing is that there is no right solution to the problem and this differs from one problem to
+another. Only thing that is sure is the need to find lowest common denominator and decide on the way
+how this event should be presented to user.</p>
+<p><b>Low level explanation of flood detection solution on PropertyBinding level</b></p>
+<p><b>demo_and_tutorial</b> has example of solving this on <b>Passive</b> binding by tracking signals,
+graying out label and changing title and then on flood stop restoring functionality back.</p>
+<p>Note that flood in that demo is intentional.</p>
+<iframe width="480" height="270"
+src="https://www.youtube.com/embed/8JesTku71h0">
+</iframe>
+<p>Tutorial intentionally invokes too fast timer that is lasting while toggle button is active. But,
+instead of constantly refreshing gui, this only happens 5 times</p>
+<p><b>PropertyBinding</b> can be controlled to handle it exactly as application demands</p>
+<li>by setting <b>promote_flood_limit</b> (default value is 5)</li>
+<li>by setting <b>flood_interval</b> (default value is 100ms)</li>
+<p>Binding in this case is really simple</p>
+<blockquote><pre><code>	// flood detection enabled binding
+	PropertyBinding basic4 = PropertyBinding.bind (demo, "counter", 
+	                                               ui_builder.get_object ("basic_label_right4"), "label", 
+	                                               BindFlags.FLOOD_DETECTION | BindFlags.SYNC_CREATE);
+</code></pre></blockquote>
+<p>What this does is perfectly simple. Once it detects 5 too fast data changes it simply stops
+promoting new data until one full interval without any data change occurs and then promotes last
+change</p>
+<p>The only problem with that is that gui either shows wrong information or just simply looks like it
+locked up</p>
+<p>This is why demo in that case uses two signals <b>flood_detected</b> and <b>flood_stopped</b> in
+order to create correctly presented information which does not spam redraw, but rather informs user
+about its temporarily stalled state</p>
+<blockquote><pre><code>	public void flooded (BindingInterface binding)
+	{
+		((Gtk.Button) __ui_builder.get_object ("basic_label_right4")).sensitive = false;
+		((Gtk.Label) __ui_builder.get_object ("basic_label_right4")).label = 
+			"*** FLOODING *** last before freeze=>%i".printf(__demo._counter);
+	}
+	// ... code ...
+	basic4.flood_detected.connect (flooded);
+</code></pre></blockquote>
+<p>It connects to signal <b>flood_detected</b> and when signal is emitted it simply grays out the
+label and sets its title to "*** FLOODING ***..."</p>
+<blockquote><pre><code>	public void flood_over (BindingInterface binding)
+	{
+		((Gtk.Label) __ui_builder.get_object ("basic_label_right4")).sensitive = true;
+	}
+	// ... code ...
+	basic4.flood_stopped.connect (flood_over);
+</code></pre></blockquote>
+<p>To handle the even of <b>flood_over</b> things are simpler. All that it is needed to do is
+ungraying of the label. Label title on the other hand is already correct since at the time of this
+signal, data binding already emitted that last data change</p>
+<p><b>Problem with this solution</b>. This is usable when only one connection is the problem. Doing
+<b>FLOOD_DETECTION</b> on every binding is probably last thing that should be done... ever.</p>
+<p><b>How to handle it correctly when more than one needs attention like this?</b></p>
+<li>Use one single binding to detect flood, connect to its signals and then maintain everything from
+that point. In most cases same flood is connected to more than one event.</li>
+<li>Look up if this can be handled on upper level in case of <b>Active</b> bindings. In case of
+<b>Active</b> bindings solving this on property level is the last thing that should be considered as
+it is much more precise to control it trough pointer/contract unless this flood is happening on object
+level</li>
+<p><b>How to handle it on pointer/contract level?</b></p>
+<p>This can be achieved by simply adding <b>ThrottlingBindingPointer</b> into your data tree as control
+point. When done like this, you can assign data without single shred of concern to this aspect.
+<b>ThrottlingBindingPointer</b> will simply stop promoting changes when it detects flood and assign
+<b>null</b> as its current data. Second thing that it does is assigning <b>throttle_active</b> to <b>true</b>.
+This makes it really easy to discern between <b>null</b> and <b>null</b> to show different correct state in
+application.</p>
+<blockquote><pre><code>	ThrottlingBindingPointer my_new_root_data_point = new ThrottlingBindingPointer (my_old_root_data_point);
+</code></pre></blockquote>
+<p>All that is needed is one simple line of code and then using this new pointer as your tree root.</p>
+<p>Note that even in case of <b>Active</b> bindings there are problems that need to be handled at property level. As said at
+the beginning: <b>There is no right solution, there is only correct handling of situation</b></p>
+<a href="index.html">Back to main page</a>

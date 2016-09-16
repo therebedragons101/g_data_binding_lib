@@ -48,6 +48,7 @@ and changes again when application unfreezes same binding. If this flag is speci
 creation, then binding starts in inactive mode where nothing including synchronization is emitted
 until its state changes
 <h3>SOURCE_UPDATE_FLOOD_DETECTION, TARGET_UPDATE_FLOOD_DETECTION</h3>
+<a href="what_is_flood_detection.html">What is flood detection and why would I care?</a>
 <p>When writing responsive applications or just being careful about cpu usage in application this
 flag can mean a lot. This flag main purpose is to control <b>Active</b> bindings, but it can be
 used for other purposes as well.
@@ -63,7 +64,8 @@ in correct way (demo_and_tutorial for example grays out label and changes its ti
 progress" for the duration of flood).
 </p>
 <h3>FLOOD_DETECTION</h3>
-This is simple combination of both <b>SOURCE_UPDATE_FLOOD_DETECTION</b> and <b>TARGET_UPDATE_FLOOD_DETECTION</b>
+<a href="what_is_flood_detection.html">What is flood detection and why would I care?</a>
+<p>This is simple combination of both <b>SOURCE_UPDATE_FLOOD_DETECTION</b> and <b>TARGET_UPDATE_FLOOD_DETECTION</b></p>
 <h3>SOURCE_DELAYED, TARGET_DELAYED</h3>
 Similar to flood detection this provides static delay to data transfer if another event occurs 
 during delay, delay is prolonged for another delay_interval. example usecase is binding search 
