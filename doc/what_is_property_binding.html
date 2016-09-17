@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="styles.css">
+<h1>What is PropertyBinding and what is its purpose</h1>
+<a href="index.html">Back to main page</a>
+<h2>Property binding freeze()/unfreeze()</h2>
+<p>this allows fine control over when to process messages and when not. each freeze() increments freeze counter and binding is not unfrozen until 
+there is equivalent amount of unfreeze() calls at which point CREATE_SYNC is renewed</p>
+<p>there are two freeze(bool) levels</p>
+<li>soft (keeps property signals and ignores transfer, safe to employ in every occasion)</li>
+<li>hard (removes signals until unfrozen, requires thinking if this is suitable or not)</li>
+<p>depending on situation one might be cheaper than another and order of soft/hard does not matter. hard superseeds soft and unfreeze() restores both</p>
+<h2>Q&A</h2>
+<p><b>Q. GLib already has binding, why not just use that one?</b></p>
+<p>A. Short answer... the one in GLib simply has no functionality that is needed and trying to go in political debates
+to get changes approved would seriously slow down this project</p>
+<p>Long answer... At the beginning <b>g_data_binding_lib</b> used exactly that. <b>PropertyBinding</b> is introduced for 
+few reasons, but most importantly because <b>GBinding</b> cannot produce all needed binding
+possibilities like flood detection, delayed/reverse binding or manual update and there is my unwillingness to go into debate why this would be 
+useful until i have concrete example. (at the risk of sounding pretentious here, but my head simply hurts when person on the other
+side does not see the whole picture and whole thing becomes nonsense talk when two sides don't even speak same thing. full
+picture is much easier to convey when there is concrete example and I really suck with words)</p>
+<p>Another case why is the fact that this way I can support older GLib versions, where support if this was part of GLib would
+be limited to inclusion data</p>
+<p>API is more or less exactly the same as <b>GBinding</b> so if needed, adding same functionality to <b>GBinding</b> is trivial which would 
+allow to completely remove <b>PropertyBinding</b> <b>which is something i would very much prefer after this is ironed out</b>. This
+wish doesn't come without drawback though. If I tried that, this would come to really hard decision what to propose. Just proposing
+changes to <b>GBinding</b> would be 1/10th of solution. There are quite a few things that would need to be proposed as well where I
+hardly doubt they all would be approved</p>
+<a href="index.html">Back to main page</a>

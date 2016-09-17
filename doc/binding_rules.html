@@ -28,19 +28,23 @@ side
 Specifies that any boolean value should be inverted on data transfer which makes it convenient to
 automate inverted conditions
 <h3>REVERSE_DIRECTION</h3>
-Inverts direction where it declares that main point of data is <b>Target</b> and not <b>Source</b>
+<a href="what_is_reverse_binding.html">What is reverse binding and what is its purpose?</a>
+<p>Inverts direction where it declares that main point of data is <b>Target</b> and not <b>Source</b>
 as in default conditions. Unless <b>BIDIRECTIONAL</b> was specified this plays role in which data
-is transferred or synchronized.
+is transferred or synchronized.</p>
 <h3>MANUAL_EVENTS_FROM_SOURCE</h3>
-Disables all notifications from <b>Source</b> and data is only updated when application manually
+<a href="what_is_manual_update.html">What is manual update and why would I care?</a>
+<p>Disables all notifications from <b>Source</b> and data is only updated when application manually
 calls <b>update_from_source()</b>. This is useful when live data change in object is not desired
-action
+action</p>
 <h3>MANUAL_EVENTS_FROM_TARGET</h3>
-Disables all notifications from <b>Target</b> and data is only updated when application manually
+<a href="what_is_manual_update.html">What is manual update and why would I care?</a>
+<p>Disables all notifications from <b>Target</b> and data is only updated when application manually
 calls <b>update_from_target()</b>. This is useful when live data change in object is not desired
-action
+action</p>
 <h3>MANUAL_UPDATE</h3>
-This is simple combination of both <b>MANUAL_EVENTS_FROM_SOURCE</b> and <b>MANUAL_EVENTS_FROM_TARGET</b>
+<a href="what_is_manual_update.html">What is manual update and why would I care?</a>
+<p>This is simple combination of both <b>MANUAL_EVENTS_FROM_SOURCE</b> and <b>MANUAL_EVENTS_FROM_TARGET</b></p>
 <h3>INACTIVE</h3>
 <span style="color:red">IMPORTANT!</span> Unlike all other flags, this is the only flag that can 
 change during lifetime. One example of that change is if binding is frozen from application side
@@ -67,11 +71,13 @@ progress" for the duration of flood).
 <a href="what_is_flood_detection.html">What is flood detection and why would I care?</a>
 <p>This is simple combination of both <b>SOURCE_UPDATE_FLOOD_DETECTION</b> and <b>TARGET_UPDATE_FLOOD_DETECTION</b></p>
 <h3>SOURCE_DELAYED, TARGET_DELAYED</h3>
-Similar to flood detection this provides static delay to data transfer if another event occurs 
+<a href="what_is_delayed_binding.html">What is delayed binding and why would I care?</a>
+<p>Similar to flood detection this provides static delay to data transfer if another event occurs 
 during delay, delay is prolonged for another delay_interval. example usecase is binding search 
-controls where you don't want to spam search requests
+controls where you don't want to spam search requests</p>
 <h3>DELAYED</h3>
-This is simple combination of both <b>SOURCE_DELAYED</b> and <b>TARGET_DELAYED</b>
+<a href="what_is_delayed_binding.html">What is delayed binding and why would I care?</a>
+<p>This is simple combination of both <b>SOURCE_DELAYED</b> and <b>TARGET_DELAYED</b></p>
 <h3>CUSTOM_EVENTS_ONLY</h3>
 Suppresses connection to to original notification and only uses custom specified events. Unlike
 <b>MANUAL_UPDATE</b> this still uses any additionally specified notifications and signals

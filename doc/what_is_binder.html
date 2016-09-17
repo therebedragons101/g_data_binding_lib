@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="styles.css">
+<h1>What is Binder and what is its purpose?</h1>
+<a href="index.html">Back to main page</a>
+<p><b>Binder</b> is a special class that allows having control and information over binding in application and serves as extra
+layer between application and bindings.</p>
+<p><b>Binder</b> has few things are needed to know</p>
+<li><b>For naysayers! </b><span style="color:red"><b>IT IS NOT REQUIRED AT ALL</b></span>, although <b>BindingContract</b> will do that (by default it uses Binder.<b>get_default</b>() unless specified 
+custom in its <b>binder</b> property)</li>
+<li>In most all cases 1 binder is exactly what is needed in application and more to the fact default is already correct although I really
+suggest using custom <b>Binder</b> reference which can then be easily swapped per need on global scale</li>
+<li>Binder can specify custom creation method for <b>BindingInterface</b> (by default it simply wraps <b>PropertyBinding.bind</b>)</li>
+<li>You can set different default Binder with <b>set_default</b> at application start and forget about it. As such any <b>BindingContract</b> you
+create later, it will use that one. Note that the fact that <b>BindingContract</b> uses <b>get_default()</b> makes late decision on custom <b>Binder</b>
+much less problematic with this as your whole application will start using your custom even if decision to create one came late in project life</li>
+<li>API is exactly the same as <b>PropertyBinding.bind</b>, except in case of Binder use it will be <b>my_binder_reference.bind</b> or 
+<b>Binder.get_default().bind</b></li>
+<li><b>Binder</b> allows ease of binding with <a href="what_is_mapper.html">Mapper objects</a> which comes in play when you want to
+have custom automated bindings</li>
+<h2>When and why use Binder?</h2>
+<li>It is always good decision to create your own reference at application start and assign that one as <b>set_default()</b></li>
+<li>Need for debugging. create new Binder instance where creation method is simply wrapped <b>BindingProperty.bind</b> with debug output.
+this combined with binders <b>binding_created</b> signal allows tapping in whole creation</li>
+<li>You need custom property bindings instead of PropertyBinding, all that Binder or data binding requires is that bindings being created
+are implementing <b>BindingInterface</b>. One of the main reasons for <b>Binder</b> to exist are foreign objects which can then easily be
+incorporated into the design</li>
+<li>If you want to hide some bindings from <a href="what_is_binding_inspector.html">Binding inspector</a>. In case when you use <b>Binder</b> to
+fill contents of ListBox it is probably far better to create silent <b>Binder</b> which will not promote new bindings to inspector. As such
+<b>Binding inspector</b> contents will be much cleaner to follow than it would be if there were bindings for tens of thousands of items where
+each item contains 4 or 5 bindings that are replicated whole time</li>
+<p>The fact that application can tap into debugging per contract makes this extremely convenient</p>
+<a href="index.html">Back to main page</a>

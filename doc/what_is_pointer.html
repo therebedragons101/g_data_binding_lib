@@ -1,6 +1,12 @@
 <link rel="stylesheet" href="styles.css">
 <h1>What is data binding pointer?</h1>
 <a href="index.html">Back to main page</a>
+<p><b>BindingPointer</b> is the corner stone of complex databinding in this project and it is absolute 
+<span style="color:red"><b><u><b>MUST UNDERSTAND</b></u></b></span> in order to proceed with <b>Active</b>
+data bindings. Not understanding it would only lead to not understanding everything else including 
+the design of this project</p>
+<p></p><b>NOTE! BindingProperty intentionally doesn't work by treating BindingPointers as advanced contract binding does and treats 
+just as any other object type. This is a feature, not a bug!</b></p>
 <p>Pointers mainly only serve as base for <a href="what_is_contract.html">Contract</a>, although they have many
 other uses as well. Sometimes <a href="what_is_contract.html">Contract</a> is just unnecessary for certain uses
 while sometimes it is much easier to extend <b>Pointer</b> than <a href="what_is_contract.html">Contract</a>.
@@ -15,7 +21,9 @@ are redirected to any other data in any way possible.
 <p>Pointers destination is assigned to <b>data</b> property, but due to the nature how they work <b>data</b> is
 not reliable way to discern destination. Real destination can be resolved with <b>get_source()</b> method. Second
 example shows exactly that situation where pointer points to another pointer which points to data object. In that
-case, even though their <b>data</b> differs, destination is the same</p>
+case, even though their <b>data</b> differs, destination is the same. It should be noted that in most cases unless
+implementing custom internals, <b>get_source()</b> is not really needed on application side. Only case when that is
+so is when application wants to use it for some reason.</p>
 <p><div style="text-align: center;"><object type="image/svg+xml" data="pointers-1.svg">
   Your browser does not support SVG
 </object><small><p>Simple pointer-data relationship</p></small>

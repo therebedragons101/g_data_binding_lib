@@ -10,6 +10,7 @@ public class DemoAndTutorial : Gtk.Application
 	public const string[] code_pages = {
 		"main_demo",
 		"simple_binding/example_alias_and_freeze",
+		"simple_binding/example_binder",
 		"simple_binding/example_contract_chaining",
 		"simple_binding/example_contract_set_data",
 		"simple_binding/example_custom_property_binding",

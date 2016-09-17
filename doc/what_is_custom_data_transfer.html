@@ -1,0 +1,62 @@
+<link rel="stylesheet" href="styles.css">
+<h1>What is custom data transfer?</h1>
+<a href="index.html">Back to main page</a>
+<p>Custom data transfer explained in simplest form is custom method used to convert data from one form to another
+where standard conversions cannot do the job. <b>Note that examples here use PropertyBinding since at this point
+Binder topic is still yet to be explained. Using Binder objects is defacto better method</b></p>
+<blockquote><pre><code>	public delegate bool PropertyBindingTransformFunc (BindingInterface binding, Value source_value, ref Value target_value);
+</code></pre></blockquote>
+<p>It has to be explained that <b>source_value</b> and <b>target_value</b> are not related to <b>source</b> and <b>target</b>.
+<b>source_value</b> is always value that needs to be converted/translated in order to be assigned as <b>target_value</b>. This
+means that if method was specifying translation from <b>target</b> to <b>source</b>, <b>source_value</b> will contain current value
+of bound property in <b>target</b> and <b>target_value</b> will need to be filled with contents suitable for bound property in
+<b>source</b>.</p>
+<h2>Two ways of defining custom transfer</h2>
+<li><b>Using standard GLib.Value conversion mechanism</b></li>
+<p>In this case specified method converts between <b>source</b> and <b>target</b> GLib.Value and returns <b>true</b>.
+In this case all the rest falls into binding responsability. Whenever translation method returns <b>true</b> binding
+will internally assign <b>target</b> value to bound property</p>
+<blockquote><pre><code>	PropertyBinding.bind (my_text_widget, "text", 
+	                      my_label, "label", 
+	                      BindFlags.SYNC_CREATE, 
+		((b, src, ref tgt) => {
+			tgt.set_string("value=" + src.get_string());
+			return (true);
+		}));
+</code></pre></blockquote>
+<li><b>Using direct assigning of value to destination</b></li>
+<p>First requirement to do so is making sure that specified translation method returns <b>false</b> which stops
+binding from trying to assign <b>target</b> value to bound property as it makes it look like translation didn't succeed.
+At this point any manual assigning will take effect and it won't be overridden by binding internals.</p>
+<p>In this case assigning/not assigning value is completely responsibility of this method.</p>
+<p>This second method can come handy when all that you need is trigger to know when something needs to happen and 
+translation method can do much more than just assigning the value it was supposed to.</p>
+<blockquote><pre><code>	PropertyBinding.bind (ui_builder.get_object ("custom_binding_l2"), "text", 
+	                      ui_builder.get_object ("custom_binding_r2"), "text", 
+	                      BindFlags.SYNC_CREATE | BindFlags.BIDIRECTIONAL, 
+		((binding, src, ref tgt) => {
+			// in case when this would be known object assignment might as well be direct like
+			// my_entry.text = my_other_entry.text
+			((Gtk.Entry) binding.target).text = ((Gtk.Entry) binding.source).text;
+			return (false);
+		}),
+		((binding, src, ref tgt) => {
+			((Gtk.Entry) binding.source).text = ((Gtk.Entry) binding.target).text;
+			return (false);
+		}));
+</code></pre></blockquote>
+<h2>Registering transfer method on GLib level as custom transformation method</h2>
+<p><b>Note!</b> When using first method it should be noted that GLib.Value has translation mechanism of its own which
+can be used to specify translations globally.</p>
+<p>Application can simply register GLib.Value translation method and be done with it.</p>
+<p>Example:</p>
+<blockquote><pre><code>	GLib.Value.register_transform_func (typeof(string), typeof(bool), ((src, ref tgt) => {
+		tgt.set_boolean ((src.get_string() != "") && (src.get_string() != null));
+	}));
+</code></pre></blockquote>
+<p>This code actively registers translation of <b>string</b> to <b>bool</b> and specifies that <b>bool</b> value
+should be <b>true</b> whenever string is not <b>null</b> and not empty.</p>
+<p>Problem with this is that application can sometimes have different conversions between same types. This can
+as well be solved by defining your most needed as global transform function and supply correct conversion methods
+in cases when this is not so.</p>
+<a href="index.html">Back to main page</a>
