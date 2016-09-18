@@ -13,6 +13,7 @@ public class DemoAndTutorial : Gtk.Application
 		"simple_binding/example_binder",
 		"simple_binding/example_contract_chaining",
 		"simple_binding/example_contract_set_data",
+		"simple_binding/example_contract_suspension",
 		"simple_binding/example_custom_property_binding",
 		"simple_binding/example_inspector",
 		"simple_binding/example_object_inspector",
@@ -307,6 +308,7 @@ public class DemoAndTutorial : Gtk.Application
 		example_contract_chaining(this, ui_builder, _e6_events);
 		example_validation(this, ui_builder);
 		example_pointer_hold();
+		example_contract_suspension();
 		example_state_objects(this, ui_builder);
 		example_value_objects(this, ui_builder);
 		example_pointer_relay(this, ui_builder, _e7_events);

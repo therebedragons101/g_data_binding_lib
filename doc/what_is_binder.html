@@ -16,6 +16,14 @@ much less problematic with this as your whole application will start using your 
 <b>Binder.get_default().bind</b></li>
 <li><b>Binder</b> allows ease of binding with <a href="what_is_mapper.html">Mapper objects</a> which comes in play when you want to
 have custom automated bindings</li>
+<h2>How is Binder used in <b>Active</b> bindings with contract?</h2>
+<p><b>BindingContract</b> can specify custom <b>Binder</b> object trough its <b>binder</b> property. By default, <b>BindingContract</b> takes
+value of <b>Binder.get_default()</b> and uses that one, but this can be overridden at any time. Whenever contracts needs to create <b>Passive</b>
+binding it does so trough its relevant <b>Binder</b> object</p>
+<p>This makes it really tractable as <b>Binder</b> objects contain reflection signals which can be used to track <b>Passive</b> binding
+creation on the fly. And in case of custom extended <b>Binder</b> this is even more obvious</p>
+<p>Each time <b>Binder</b> object creates new binding it tries to emit signal <b>binding_created</b> unless <b>Binder</b> instance was
+created as silent. This same mechanism is used in <b>Binding inspector</b> as well/</p>
 <h2>When and why use Binder?</h2>
 <li>It is always good decision to create your own reference at application start and assign that one as <b>set_default()</b></li>
 <li>Need for debugging. create new Binder instance where creation method is simply wrapped <b>BindingProperty.bind</b> with debug output.

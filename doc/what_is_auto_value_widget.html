@@ -1,5 +1,63 @@
 <link rel="stylesheet" href="styles.css">
-<h1>What is Binder and what is its purpose</h1>
+<h1>What is AutoValueWidget and what is its purpose?</h1>
 <a href="index.html">Back to main page</a>
-<p></p>
+<p>Main purpose of <b>AutoValueWidget</b> is to have possibility of controlled way to automatically create
+application layout for more complex auto layouting widgets that are supplied with library as this only serves
+as part of that layout</p>
+<p>Before <b>NAY!</b> it should be noted that it does so with absolute 0 of sacrificing the design possibilities
+in any way. <b>NAY!</b> is usual reaction from people who already tried automatic layouts and since there is not
+one even remotely usable the reaction is perfectly acceptable. Only differences being that design of automatic layouting in
+<b>g_data_binding_gtk_lib</b> takes completely different direction than any other solutions and that all the
+flaws of automatic layouting have been taken into account here</p>
+<p><b>AutoValueWidget</b> uses <a href="what_is_default_widgets.html">DefaultWidgets</a> in order to build its
+contents and this is what makes this widget really flexible and probably far more controllable than any other
+widget in Gtk. (Read the <b>registration</b> part of <b>DefaultWidgets</b> for more information)</p>
+<h4>What are automatic widgets?</h4>
+<p>Case and point is that the possibility of manipulation and registration this makes it very flexible part
+that can be used to develop application with much less struggle and much more control than ever</p>
+<p>Automatic widget in case of <b>AutoValueWidget</b> is by default only empty <b>GtkAlignment</b> that needs to
+be filled with contents and this is done when creating that widget as this can be done by either requesting
+(note that both of these can be custom registered in <b>DefaultWidgets</b></p>
+<p><li>specific data type</li></p>
+<blockquote><pre><code>	my_widget1 = new AutoValueWidget.with_type(typeof(int), EditMode.VIEW);
+	// or
+	my_widget2 = new AutoValueWidget.with_type(typeof(string), EditMode.EDIT);
+	// or
+	my_widget3 = new AutoValueWidget.with_type(typeof(MyDataType), EditMode.EDIT);
+</code></pre></blockquote>
+<p>As long as <b>DefaultWidgets</b> knows how to create one single widget, it won't matter if that widget is
+for example composite widget. Widget should have enough self sustaining code to create it self as well as
+enough code to manage data</p>
+<p><li>specific property in some object type</li></p>
+<blockquote><pre><code>	new AutoValueWidget.with_property(typeof(Person), "surname", EditMode.EDIT)
+</code></pre></blockquote>
+<p>In this case the requested widget information is residing in class <b>Person</b> under property <b>surname</b>.
+How <a href="what_is_default_widgets.html">DefaultWidgets</a> does its job in this case it is best described there
+and should not be delved into here. 
+</p>
+<h4>Changing the editing state on the fly</h4>
+<p><b>AutoValueWidget</b> supports changing edit state on the fly trough its <b>mode</b> property or it allows
+to connect same <b>mode</b> property to central management object with <b>set_mode_control()</b> and 
+<b>EditModeControlInterface</b></p>
+<p>What it should be noted is that when state is changed on the fly, whole responsibility falls on application
+as this is something that is way to customized to handled in any generic way, at least on the level of
+<b>AutoValueWidget</b></p>
+<p>When changing state is preferred, there is probably far better choice with
+<a href="what_is_auto_value_mode_widget.html"><b>AutoValueModeWidget</b></a> which not only comes with prebuilt
+both states EDIT and VIEW, but also retains value internally when state is changed</p>
+<h4>What are the uses of <b>AutoValueWidget</b>?</h4>
+<p>Most importantly, this widget is intended where state won't change and you need as simple layout as possible</p>
+<p><li>Like for example ListBox rows</li></p>
+<p><li>Like for example content preview</li></p>
+<p><li>Having centralized managed control over which widget is used per application part where change then reflects
+all over the application without the need to correct it everywhere (example, if you decide to change way you
+edit Date in application, this would normally require editing all forms where corresponding widget was used. In
+case of <b>AutoValueWidget</b> this is not so. All that needs to be done is editing the registration method and whole
+thing is over. But, to make this even more effective more than one <b>DefaultWidgets</b> can be used in application
+and control that on the fly.</li></p>
+<p>and so on</p>
+<p>Note that while <b>AutoValueWidget</b> contains whole functionality, this most probably comes into far more
+visible perspective when used trough <a href="what_is_auto_container_values.html"><b>AutoContainerValues</b></a>
+which internally uses exactly <b>AutoValueWidget</b> as its core of functionality in order to generate its contents. 
+When used like that generating controlled layout is really simple</p>
 <a href="index.html">Back to main page</a>

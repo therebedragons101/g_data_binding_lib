@@ -1,5 +1,16 @@
 <link rel="stylesheet" href="styles.css">
-<h1>What is Binder and what is its purpose</h1>
+<h1>What is AutoValueModeWidget and what is its purpose</h1>
 <a href="index.html">Back to main page</a>
-<p></p>
+<p>Most of the functionality and purpose is the same as <a href="what_is_auto_value_widget.html"><b>AutoValueWidget</b></a>, but
+there is one big difference</p>
+<p><b>AutoModeValueWidget</b> has more complex setup as it is intended to be used in more complex editors. Most notable differences
+between <b>AutoValueWidget</b> and <b>AutoValueModeWidget</b> are as following</p>
+<p><li><b>AutoValueWidget</b> only has one state (EDIT or VIEW) and although it can be switched, it is not as effective as
+<b>AutoValueModeWidget</b> which features both states proactively and when switched between EDIT and VIEW it does that by animation</li></p>
+<p><li>Main intended use of <b>AutoValueModeWidget</b> is to be used inside of <a href="what_is_auto_container_row.html"><b>AutoContainerRow</b></a>. When
+combined with that it makes it perfect auto layouting setup which is exactly how
+<a href="what_is_auto_container_mode_values.html"><b>AutoContainerModeValues</b></a> does its job</li></p>
+<p><li><b>AutoValueWidget</b> by default unless there is developer intervention loses data being edited when switched between EDIT and
+VIEW where <b>AutoValueModeWidget</b> does not since it does not need to switch widget completely, but rather just switch internal
+<b>GtkStack</b> page</li></p>
 <a href="index.html">Back to main page</a>

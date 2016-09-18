@@ -4864,8 +4864,7 @@ exceed interval speed and in case of consecutive signals it simply waits out for
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="hexpand">True</property>
-                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Contract suspension&lt;/b&gt;&lt;/big&gt;
-Main purpose of suspension is providing another way for contract to control gui and data flow</property>
+                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Contract suspension&lt;/b&gt;&lt;/big&gt;</property>
                                                 <property name="use_markup">True</property>
                                                 <property name="xalign">0</property>
                                               </object>
@@ -4876,29 +4875,89 @@ Main purpose of suspension is providing another way for contract to control gui 
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkLabel">
+                                              <object class="GtkBox">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">each contract has simple property
-
-	bool &lt;b&gt;suspended&lt;/b&gt; { get; set; }
-
-which defines whether contract is active or not (note that contract can be invalid even when not suspended as suspended state is not
-connected with validity of bindings.
-
-when &lt;b&gt;suspended&lt;/b&gt; is set to true, contract instantly releases all active bindings it holds and goes in dormant state, once contract is 
-unsuspended bindings are instantly restored and active if that is possible
-
-&lt;b&gt;NOTE!&lt;/b&gt;
-for group maintainance of &lt;b&gt;suspended&lt;/b&gt; there is a possibility to use class &lt;b&gt;BindingSuspensionGroup&lt;/b&gt; which allows setting &lt;b&gt;suspended&lt;/b&gt; 
-for all contracts in that group. note that trying to manually set that property is not possible</property>
-                                                <property name="use_markup">True</property>
+                                                <property name="spacing">8</property>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">Basic explanation</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/basic_explanation.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingPointer?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_pointer.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingContract?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_contract.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">2</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is contract suspension and what it is used for?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_contract_suspension.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">3</property>
+                                                  </packing>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">True</property>
                                                 <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">Beside simple code there is not much to show here. Click "Show code sample" to see it</property>
+                                                <property name="use_markup">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">2</property>
                                               </packing>
                                             </child>
                                           </object>

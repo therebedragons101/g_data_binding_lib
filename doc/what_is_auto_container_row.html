@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="styles.css">
+<h1>What is AutoContainerRow and what is its purpose</h1>
+<a href="index.html">Back to main page</a>
+<p>Main purpose of widget is providing with easy and uniform way to achieve automatic layouting</p>
+<p><li><b>AutoContainerRow</b> has ability to have automatic labels for fields</li></p>
+<p><li><b>AutoContainerRow</b> has ability to set up common tooltip for it self no matter which mode it is in</li></p>
+<p><li><b>AutoContainerRow</b> has few helper methods that make layouting really easy. Most notable are
+<b>get_label_sizing_alignment()</b>, <b>get_value_sizing_alignment()</b> and <b>get_tools_sizing_alignment()</b> which
+represent exact rectangles to size specific parts of the row which is split in 3 parts</li></p>
+<p><blockquote><li>Label part that is intended to pack widget used for row label</li>
+<li>Value part which is intended to pack widget used for editing/viewing row data</li>
+<li>Tools part which is intended to pack additional widgets if they needed to be added to that row</li></blockquote></p>
+<p><div style="text-align: center;"><object type="image/svg+xml" data="auto_container_row_layout.svg">
+  Your browser does not support SVG
+</object><small><p>AutoContainerRow layout parts</p></small>
+</div></p>
+<p>Note that <b>AutoContainerRow</b> does not necessarily need to be paired with either <b>AutoValueWidget</b> nor with
+<b>AutoValueModeWidget</b> as it never directly refers to those two and all work is done either trough sizing parts or
+trough <b>set_data_widget()</b>, <b>set_action_widget()</b> or <b>set_label_widget()</b></p>
+<p>This enables very efficient way to use it for various purposes outside of <b>g_data_binbing_gtk_lib</b> scope. Although
+using <b>AutoContainerControl</b> is probably suggested in any case as that one serves as common visual controller over
+group of rows and is one of creation parameters as well</p>
+<a href="index.html">Back to main page</a>

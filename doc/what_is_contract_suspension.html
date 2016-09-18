@@ -11,8 +11,26 @@ take effect again and contract enables them if that is possible in current situa
 connected with validity of bindings.</p>
 <p>When <b>suspended</b> is set to true, contract instantly releases all active bindings it holds and goes in dormant state, once contract is 
 unsuspended bindings are instantly restored and active if that is possible</p>
-
 <p><b>NOTE!</b></p>
 <p>For group maintainance of <b>suspended</b> there is a possibility to use class <b>BindingSuspensionGroup</b> which allows setting <b>suspended</b> 
 for all contracts in that group. note that trying to manually set that property is not possible</p>
+<h4>Examples</h4>
+<p>Maintenance over single contract</p>
+<blockquote><pre><code>	// create binding contract
+	my_contract = new BindingContract();
+	// control suspended state
+	my_contract.suspended = true;
+</code></pre></blockquote>
+<p>Maintenance over multiple contracts with group</p>
+<blockquote><pre><code>	// same control can be achieved by grouping more contracts
+	contract1_in_group = new BindingContract();
+	contract2_in_group = new BindingContract();
+	// create suspension group
+	suspension_group = new BindingSuspensionGroup();
+	// add both contracts to group
+	suspension_group.add (contract1_in_group);
+	suspension_group.add (contract2_in_group);
+	// now suspension can be controlled from group object
+	suspension_group.suspended = true;
+</code></pre></blockquote>
 <a href="index.html">Back to main page</a>

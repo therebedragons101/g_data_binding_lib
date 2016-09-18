@@ -1,5 +1,90 @@
 <link rel="stylesheet" href="styles.css">
-<h1>What is Binder and what is its purpose</h1>
+<h1>What is Mapper object and what is its purpose?</h1>
 <a href="index.html">Back to main page</a>
-<p></p>
+<h4>First and foremost, there are two kinds of Mapper objects</h4>
+<p><li>Mappers producing <b>Passive</b> bindings</li></p>
+<p><li>Mappers producing <b>Active</b> bindings</li></p>
+<h4>Next important thing is that Mapper object does not really exists. Mapper by default is interface only and solely relying
+on custom extensions</h4>
+<p>As such there is</p>
+<p><li><a href="https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/property/binder_mapper.vala"><b>BinderMapper</b></a> interface producing <b>Passive</b> bindings </li></p>
+<p>and</p>
+<p><li><a href="https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/contracts/binding_contract_mapper.vala"><b>BindingContractMapper</b></a> interface producing <b>Active</b> bindings</li></p>
+<p>When creating custom <b>Mapper</b> object, most of the code for either one will be the same. The only difference is resulting mapping description</p>
+<h4>Example implementations of custom Mapper</h4>
+<p><b>g_data_binding_gtk_lib</b> comes with such case already implemented. It implements mapping trough glade interface files
+where it is possible to resolve widgets from GUI description file automatically when implementation follows certain rules of
+GUI design</p>
+<p>In case of BuildableMapper, every widget in glade file can specify its <b>id</b> which is stored in <b>Gtk.Buildable.name</b>
+property. This makes it easy to design GUI in mind with properly naming your widgets so they can fall into automatic resolving
+trough properties of class that is being handled.</p>
+<p>Bare in mind that <b>Mapper</b> allows discovery by adding <b>prefix</b> and <b>suffix</b> to the name in order to avoid
+otherwise unavoidable clashes between master property name and name of property in widget. Most common case of such class
+would be property named <b>name</b> where every Gtk widget already has property that is named so. In this case, using
+<b>prefix</b> and <b>suffix</b> allows to name widgets differently and still enable whole discovery</p>
+<p><li><a href="https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/gtk/contracts/gtk_buildable_mapper.vala"><b>GtkBuildableMapper</b></a> for producing <b>Passive</b> bindings </li></p>
+<p>and</p>
+<p><li><a href="https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/gtk/contracts/gtk_buildable_contract_mapper.vala"><b>GtkBuildableContractMapper</b></a> for producing <b>Active</b> bindings</li></p>
+<h4>Example of Mapper usage</h4>
+<p>Example taken from <b>demo_and_tutorial</b> Composite Gtk Widgets that uses <b>GtkBuildableMapper</b></p>
+<p>Creation of two composite template widgets that are basic thing in Gtk and then inserting them into
+corresponding box</p>
+<blockquote><pre><code>	// pack composite widgets into interface
+	PersonCompositeWidget wdg1 = new PersonCompositeWidget();
+	PersonCompositeWidget wdg2 = new PersonCompositeWidget();
+	((Gtk.Box) ui_builder.get_object ("widget1")).pack_start (wdg1, true, false);
+	((Gtk.Box) ui_builder.get_object ("widget2")).pack_start (wdg2, true, false);
+</blockquote></pre></code>
+<p>Note that in case of <b>GtkBuildableMapper</b> there is a need to register default <b>PropertyAlias</b> registrations
+in order to allow it to know which is default property handling data in some widget since this is not provided from
+core Gtk</p>
+<blockquote><pre><code>	// this only has to be called once per application in case of mapping
+	// as it registers property aliases for widgets, in this case binding
+	// is done to ALIAS_DEFAULT property alias which needs to be registered
+	// for widgets
+	DefaultWidgets.init();
+</blockquote></pre></code>
+<p>Allocation of <b>Binder</b> and <b>GtkBuildableMapper</b></p>
+<blockquote><pre><code>	// allocate binder and widget mapper
+	Binder b = new GData.Binder.silent();
+	GtkBuildableMapper mapper = new GDataGtk.GtkBuildableMapper();
+</blockquote></pre></code>
+<p>Now mapping can begin. <b>Binder</b> has method named <b>set_mapper</b> which temporarily shifts
+mapping to specified mapper object and in this case <b>Mapper</b> is ordered to resolve possible bindings
+that are based on properties of object contained in <b>persons.data[index]</b>, bindings must be
+<b>BIDIRECTIONAL</b> and when doing the discovery it should use specific naming where it searches for
+widget with buildable name (ID) that starts with "property_" and then continues with name of property in
+original object</p>
+<blockquote><pre><code>	// map first widget
+	b.set_mapper (mapper)
+		.map (persons.data[0], wdg1, BindFlags.SYNC_CREATE|BindFlags.BIDIRECTIONAL, "property_");
+	// map second widget
+	b.set_mapper (mapper)
+		.map (persons.data[1], wdg2, BindFlags.SYNC_CREATE|BindFlags.BIDIRECTIONAL, "property_");
+</blockquote></pre></code>
+<p>More than occasionally there is a need to do same kind of mapping, except the source of mapping
+is not data it self, but rather some property that defines activity of mapped widgets</p>
+<p>In this case mapper is requested to map single bool property in checkbox <b>active</b> and map it
+to widget property that is registering sensitivity/visibility. Another part of request is that it doesn't
+do that all over the board but only for specific properties in data class</p>
+<p>And same as in previous part, when discovering widgets in composite properties it should use prefix "property_"</p>
+<blockquote><pre><code>	// maping sensitivity to checkbox, but this time only name and surname
+	b.set_mapper (mapper)
+		.map_single (ui_builder.get_object ("set_2_insensitive"), "active", wdg2,
+			new string[2] { "name", "surname"}, ALIAS_SENSITIVITY, BindFlags.SYNC_CREATE, "property_");
+	// maping visibility to checkbox, but this time only name and surname
+	b.set_mapper (mapper)
+		.map_single (ui_builder.get_object ("set_2_visible"), "active", wdg2,
+			new string[2] { "name", "required"}, ALIAS_VISIBILITY, BindFlags.SYNC_CREATE, "property_");
+</blockquote></pre></code>
+<h4>Predicted uses of mappers</h4>
+<p>Some parts of <b>g_data_binding_gtk_lib</b> come with predefault use of <b>Mapper</b> objects in mind.</p>
+<p>Most importantly this is visible in</p>
+<p><li><a href="what_is_auto_value_widget.html">AutoValueWidget</a></li></p>
+<p><li><a href="what_is_auto_value_mode_widget.html">AutoValueModeWidget</a></li></p>
+<p><li><a href="what_is_auto_container_values.html">AutoContainerValues</a></li></p>
+<p><li><a href="what_is_auto_container_mode_values.html">AutoContainerModeValues</a></li></p>
+<p>All these share one thing in common. Whenever possible and known, they automatically assign <b>Buildable</b> name
+of the widget in specified pattern that can later be used in <b>Mapper</b>
+</p>
 <a href="index.html">Back to main page</a>

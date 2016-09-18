@@ -1,6 +1,6 @@
 using GData;
 
-namespace Demo
+namespace DemoAndTutorial
 {
 	private BindingPointer my_pointer;
 
