@@ -4764,7 +4764,7 @@ exceed interval speed and in case of consecutive signals it simply waits out for
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="halign">start</property>
-                                                <property name="label" translatable="yes">Links to code with custom pointers</property>
+                                                <property name="label" translatable="yes">Links to code with custom pointers that can serve as examples</property>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>

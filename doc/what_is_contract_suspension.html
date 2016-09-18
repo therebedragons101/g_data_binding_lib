@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="styles.css">
+<h1>What is contract suspension and what it is used for?</h1>
+<a href="index.html">Back to main page</a>
+<p>In short... Main purpose of suspension is providing another way for contract to control gui and data flow. When contract is suspended
+so are all its binding rules and no binding will take effect until contracts suspended state is lifted. When lifted contract binding rules
+take effect again and contract enables them if that is possible in current situation</p>
+<p>Each contract has simple property</p>
+<blockquote><pre><code>	bool <b>suspended</b> { get; set; }
+</code></pre></blockquote>
+<p>which defines whether contract is active or not (note that contract can be invalid even when not suspended as suspended state is not
+connected with validity of bindings.</p>
+<p>When <b>suspended</b> is set to true, contract instantly releases all active bindings it holds and goes in dormant state, once contract is 
+unsuspended bindings are instantly restored and active if that is possible</p>
+
+<p><b>NOTE!</b></p>
+<p>For group maintainance of <b>suspended</b> there is a possibility to use class <b>BindingSuspensionGroup</b> which allows setting <b>suspended</b> 
+for all contracts in that group. note that trying to manually set that property is not possible</p>
+<a href="index.html">Back to main page</a>

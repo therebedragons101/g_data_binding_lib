@@ -10,10 +10,15 @@
 which resolves source it was pointed to initially and then instead of returning that object it resolves value of property
 that is specified with <b>data_property_name</b>. the fact that it breaks the chain provides with possibility of having source
 source being pointed out of regular chain</p>
-
+<p>Example code from <b>BindingPointerFromPropertyValue</b></p>
+<a href="https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/contracts/binding_pointer_from_property_value.vala"><b>BindingPointerFromPropertyValue</b></a>
 <h4>By tapping into data transfer and add custom manipulation (this is only valid for pointers that specify MANUAL as their update type.</h4>
 <p><b>signal</b> <b>data_changed</b> (BindingPointer pointer, string data_change_cookie)</p>
 <p>doing this allows controlling how data updates will be dispatched and also use it for any other purpose possible. one
 possible use is signal throttling where there is a need to limit amount of signals per time. example of this is
 <b>ThrotledManualBindingPointer</b></p>
-<a href="index.html">Back to main page</a>
+<p>Example code from <b>ThrotledManualBindingPointer</b></p>
+<a href="https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/contracts/throtling_binding_pointer.vala"><b>ThrotlingBindingPointer</b></a>
+<p>Example code from <b>DelayedBindingPointer</b></p>
+<a href="https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/contracts/delayed_binding_pointer.vala"><b>DelayedBindingPointer</b></a>
+<p><a href="index.html">Back to main page</a></p>
