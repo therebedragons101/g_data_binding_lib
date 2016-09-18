@@ -2339,11 +2339,7 @@ it becomes bindable property for that type&lt;/small&gt;</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="hexpand">True</property>
-                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;PointerStorage&lt;/b&gt;&lt;/big&gt;
-binding pointer storage serves as storage point for pointers that are accessible by name (string) or to just have one reference kept
-alive when local variable is unwanted. it also allows easy access to pointers without the need to obfuscate code with either having
-to keep passing pointer as parameter for methods or have code referencing to it self all over the project. good design often leads 
-to situations where all gui parts need to follow current situation</property>
+                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;PointerStorage&lt;/b&gt;&lt;/big&gt;</property>
                                                 <property name="use_markup">True</property>
                                                 <property name="xalign">0</property>
                                               </object>
@@ -2731,9 +2727,7 @@ please refer to previous page and DO NOT PROCEED UNTIL YOU DO!</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="hexpand">True</property>
-                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Contract storage&lt;/b&gt;&lt;/big&gt;
-main purpose is either having easy accessible contracts all across the application by name while secondary purpose is simple
-reference handling. by simply throwing contract into storage, there is guaranteed 1 reference until it is removed</property>
+                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Contract storage&lt;/b&gt;&lt;/big&gt;</property>
                                                 <property name="use_markup">True</property>
                                                 <property name="xalign">0</property>
                                               </object>
@@ -2975,9 +2969,7 @@ reference handling. by simply throwing contract into storage, there is guarantee
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="hexpand">True</property>
-                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;BindingContract/BindingPointer chaining&lt;/b&gt;&lt;/big&gt;
-the fact that &lt;b&gt;BindingContract&lt;/b&gt; is derived from &lt;b&gt;BindingPointer&lt;/b&gt; makes this almost equivalent with one single difference, contract
-can have its own set of bindings and value/state objects which is different from one being chained to</property>
+                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;BindingContract/BindingPointer chaining&lt;/b&gt;&lt;/big&gt;</property>
                                                 <property name="use_markup">True</property>
                                                 <property name="xalign">0</property>
                                               </object>
@@ -3334,7 +3326,7 @@ being shown in listbox are events propagated on &lt;b&gt;"sub-contract"&lt;/b&gt
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkBox">
+                                      <object class="GtkBox" id="example_pointer_hold">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="orientation">vertical</property>
@@ -3349,9 +3341,7 @@ being shown in listbox are events propagated on &lt;b&gt;"sub-contract"&lt;/b&gt
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="hexpand">True</property>
-                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Pointer/Contract hold()/release()&lt;/b&gt;&lt;/big&gt;
-although PointerStorage allow safe storing of pointers and contracts, naming everything can be really inconvenient. this is when 
-hold()/release() should be used as using hold() on some pointer only holds it alive as long as holding object is being alive</property>
+                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Pointer/Contract hold()/release()&lt;/b&gt;&lt;/big&gt;</property>
                                                 <property name="use_markup">True</property>
                                                 <property name="xalign">0</property>
                                               </object>
@@ -3362,33 +3352,74 @@ hold()/release() should be used as using hold() on some pointer only holds it al
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkLabel">
+                                              <object class="GtkBox">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">&lt;span color='yellow'&gt;&lt;i&gt;(this is also valid for pointers and contracts since contract is derived from pointer, pointer can as well hold contract)&lt;/i&gt;&lt;/span&gt;
-main purpose for this is having reliable chain lifetimes while removing as much strain from application code as possible. this is needed
-because main design follows 0 references if possible in order to put all the handling into hands of application developer
-
-Methods in BindingPointer
-BindingPointer &lt;b&gt;hold&lt;/b&gt;(BindingPointer);
-void &lt;b&gt;release&lt;/b&gt;(BindingPointer);
-
-Example:
-&lt;i&gt;my_contract = new BindingContract();
-my_contract.data = my_contract.hold(new BindingPointer(my_contract.hold(new BindingPointer()));
-
-// created chain where source (&lt;b&gt;data&lt;/b&gt; is propagated as pointer - pointer -&gt; contract, but also generated correct references to
-// guarantee that both pointers will be kept alive until the one holding them dies&lt;/i&gt;
-
-note that calling &lt;b&gt;release&lt;/b&gt;(pointer) is not really needed unless it is really wanted. when holding object dies, all contracts/pointers 
-being held are released as well</property>
-                                                <property name="use_markup">True</property>
+                                                <property name="spacing">8</property>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">Basic explanation</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/basic_explanation.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingPointer?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_pointer.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is pointer hold()/release()?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_pointer_hold_release.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">2</property>
+                                                  </packing>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">True</property>
                                                 <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">Beside simple code there is not much to show here. Click "Show code sample" to see it</property>
+                                                <property name="use_markup">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">2</property>
                                               </packing>
                                             </child>
                                           </object>
@@ -3679,13 +3710,7 @@ pointing to changed, then contract bindings will have to be adapted as well agai
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="hexpand">True</property>
-                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Custom state object on contracts&lt;/b&gt;&lt;/big&gt;
-main purpose of state objects is giving possibility of static state binding (visibility/sensitivity) and completely remove all need to
-track which source is now active. State object refreshes whenever either source in application. changes or notification for one of 
-its registered properties was emitted. this allows having single simple PropertyBinding to buttons like Apply or other similar 
-conditions.
-this also simplifies bindings as main objects don't need to be cluttered with all sorts of random properties to support all the needed
-checks. state objects can be added/removed per contract on a whim</property>
+                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Custom state object on contracts&lt;/b&gt;&lt;/big&gt;</property>
                                                 <property name="use_markup">True</property>
                                                 <property name="xalign">0</property>
                                               </object>
@@ -3944,12 +3969,7 @@ checks. state objects can be added/removed per contract on a whim</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="hexpand">True</property>
-                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Custom value objects on contracts&lt;/b&gt;&lt;/big&gt;
-much like state objects, main purpose of value objects is giving possibility of static binding and completely remove all need to
-track which source is now active. Value object refreshes whenever either source in application. changes or notification for one of 
-its registered properties was emitted. this allows having single simple PropertyBinding to specific value that is automatically updated
-this also simplifies bindings as main objects don't need to be cluttered with all sorts of random properties to support all the needed
-functionality per case. value objects can be added/removed per contract on a whim</property>
+                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Custom value objects on contracts&lt;/b&gt;&lt;/big&gt;</property>
                                                 <property name="use_markup">True</property>
                                                 <property name="xalign">0</property>
                                               </object>
@@ -4241,13 +4261,7 @@ length for all 3 strings
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="hexpand">True</property>
-                                                    <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Binding pointer relays (all later chapters are extension or explanation of this)&lt;/b&gt;&lt;/big&gt;
-&lt;span color='yellow'&gt;&lt;i&gt;(this is also valid for contracts since contract is derived from pointer)&lt;/i&gt;&lt;/span&gt; relaying of binding pointers is used to extend the automatism
-for source propagation in order to minimize application code and adds possibility of more complex designed data maps as this can
-create subcontract/subpointer that gets controlled by its main contract.
-relays can be used in various ways
-- source redirection
-- data transfer handling modification (note that this is only valid for pointers specifiying MANUAL data transfer)</property>
+                                                    <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Binding pointer relays&lt;/b&gt;&lt;/big&gt;</property>
                                                     <property name="use_markup">True</property>
                                                     <property name="xalign">0</property>
                                                   </object>
@@ -4678,8 +4692,7 @@ exceed interval speed and in case of consecutive signals it simply waits out for
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="hexpand">True</property>
-                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Custom binding pointers&lt;/b&gt;&lt;/big&gt;
-&lt;span color='yellow'&gt;&lt;i&gt;(word of warning, contract is derived from pointer, this is one thing that is suggested to be kept on pointers alone)&lt;/i&gt;&lt;/span&gt;</property>
+                                                <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Custom binding pointers&lt;/b&gt;&lt;/big&gt;</property>
                                                 <property name="use_markup">True</property>
                                                 <property name="xalign">0</property>
                                               </object>
@@ -4690,32 +4703,135 @@ exceed interval speed and in case of consecutive signals it simply waits out for
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkLabel">
+                                              <object class="GtkBox">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">pointers have 2 distinct extension possibilities
-
-- changing the way source is resolved
-
-	Object? &lt;b&gt;redirect_to&lt;/b&gt; (&lt;span color='red'&gt;ref&lt;/span&gt; redirect_in_play) 
-		&lt;i&gt;allows redirection of source and at the same time breaking the chain. example of this is &lt;b&gt;BindingPointerFromPropertyValue&lt;/b&gt;
-		which resolves source it was pointed to initially and then instead of returning that object it resolves value of property
-		that is specified with &lt;b&gt;data_property_name&lt;/b&gt;. the fact that it breaks the chain provides with possibility of having source
-		source being pointed out of regular chain&lt;/i&gt;
-
-- tapping into data transfer and add custom manipulation (this is only valid for pointers that specify MANUAL as their update type.
-
-	&lt;span color='red'&gt;signal&lt;/span&gt; &lt;b&gt;data_changed&lt;/b&gt; (BindingPointer pointer, string data_change_cookie)
-		&lt;i&gt;doing this allows controlling how data updates will be dispatched and also use it for any other purpose possible. one
-		possible use is signal throttling where there is a need to limit amount of signals per time. example of this is
-		&lt;b&gt;ThrotledManualBindingPointer&lt;/b&gt;&lt;/i&gt;</property>
-                                                <property name="use_markup">True</property>
+                                                <property name="spacing">8</property>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">Basic explanation</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/basic_explanation.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">What is BindingPointer?</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/what_is_pointer.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">Extending BindingPointer functionality with custom pointers</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://therebedragons101.github.io/g_data_binding_lib/doc/custom_binding_pointers.html</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">2</property>
+                                                  </packing>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">True</property>
                                                 <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">Links to code with custom pointers</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkBox">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="orientation">vertical</property>
+                                                <property name="spacing">6</property>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">BindingPointerFromPropertyValue</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="halign">start</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/contracts/binding_pointer_from_property_value.vala</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">ThrotlingBindingPointer</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="halign">start</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/contracts/throtling_binding_pointer.vala</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLinkButton">
+                                                    <property name="label" translatable="yes">DelayedBindingPointer</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="halign">start</property>
+                                                    <property name="relief">none</property>
+                                                    <property name="uri">https://github.com/therebedragons101/g_data_binding_lib/blob/master/src/contracts/delayed_binding_pointer.vala</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">2</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">3</property>
                                               </packing>
                                             </child>
                                           </object>

@@ -1,5 +1,19 @@
 <link rel="stylesheet" href="styles.css">
-<h1>What is Binder and what is its purpose</h1>
+<h1>What is ContractStorage and what is its purpose</h1>
 <a href="index.html">Back to main page</a>
-<p></p>
+<p>Binding contract storage serves as storage point for contracts that are accessible by name (string) or to just have one reference kept
+alive when local variable is unwanted.</p>
+<p>It also allows easy access to pointers without the need to obfuscate code with either having to keep passing contract as parameter 
+for methods or have code referencing to it self all over the project. good design often leads to situations where all GUI parts need
+to follow current situation from otherwise separated code</p>
+<p>Both</p>
+<li>using <b>ContractStorage</b> for reference holding. Storing it into storage automatically guarantees holding of one reference to
+keep object alive</li>
+<li>using <b>ContractStorage</b> to access same contract from unrelated parts of code</li>
+<p>are intended ways of usage</p>
+<p>Note that that unlike <b>PointerStorage</b> which can hold pointers as well as contract, <b>ContractStorage</b> cannot do that. Only
+thing allowed to be stored is BindingContract and its subclassses</p>
+<h1>ContractStorage runtime inspection</h1>
+<p>Among other things pointers stored in storage can be easily accessed for inspection in <a href="what_is_binding_inspector.html">Binding inspector</a>
+trough its search options where beside manual search by name or id there are also pages to search manually trough <b>PointerStorage</b> and <b>ContractStorage</b></p>
 <a href="index.html">Back to main page</a>

@@ -1,10 +1,57 @@
 <link rel="stylesheet" href="styles.css">
-<h1>What is Binder and what is its purpose</h1>
+<h1>What is PropertyAlias and what is its purpose?</h1>
 <a href="index.html">Back to main page</a>
-<p>property aliases allow easier binding across the application. example: one of the annoying things when you build gui per need in
-application life span is knowing which property in gui widget is handling data. Gtk.Entry has "text", Gtk.Label has "label" and there.
-is simply no other way than tedious discovery. alias registration can also provide blind type safety with correct use as it is possible 
-to register "string:text" on all objects that support it and not on those that don't</p>
-<p>this allows registration of other than &amp; alias property names like for example "alias:text", where whole string is custom and not defined in any way.
-be aware that if alias clashes with real property name, real property takes precedence</p>
+<p>Problem at hand. When trying to automate how bindings are mapped, there is often inconsistency where property names cannot be predictable.
+Case in point example in Gtk is property name in widget which is responsible to handle data content</p>
+<p>As such in Gtk there is</p>
+<li><b>label</b> property in <b>GtkLabel</b></li>
+<li><b>text</b> property in <b>GtkEntry</b></li>
+<li><b>active</b> property in <b>GtkCheckBox</b></li>
+<li>... most widgets use their own property which is named differently than in the rest ...</li>
+<p>First and foremost, there is absolutely nothing wrong with that as this makes widgets easier to work with when handling them manually.
+Problem only shows when this same thing is tried to be approached from different side which is not really working with them directly.
+In case of <b>g_data_binding_lib</b> most serious example would be <a href="what_is_mapper.html">Mapper objects</a> or 
+<a href="what_is_default_widgets.html">DefaultWidgets</a></p>
+<p>This is where PropertyAlias gets its value. It enables possibility to register same property under different name. As such it is easy
+to consolidate all properties with same workload under the same name and still keep the good side of properly named properties for 
+manual work</p>
+<p>Mainly, property aliases allow easier binding across the application. example: one of the annoying things when you build gui per need in
+application life span is knowing which property in gui widget is handling data. This allows registration of property names like for example 
+"alias:text", where whole string is custom and not defined in any way.</p>
+<p>Functionality does not end with just widget property name. It is usable for many other things like reporting or list displayes where data
+being shown is not necessarily of the same type</p>
+<h2>Usage</h2>
+<p>Defining custom alias is pretty much straight forward</p>
+<blockquote><pre><code>	PropertyAlias.get_instance("alias:text")
+		.register (typeof(Gtk.Entry), "text")
+		.register (typeof(Gtk.Label), "label");
+</code></pre></blockquote>
+<p>This would register two aliases for "alias:text". One for GtkEntry under "text" and one for GtkLabel under "label"</p>
+<p>While resolving is again really simple</p>
+<blockquote><pre><code>	string my_alias = PropertyAlias.get_instance("alias:text")
+		.safe_get_for (typeof(Gtk.Entry), "text");
+</code></pre></blockquote>
+<p>or</p>
+<blockquote><pre><code>	string my_alias = PropertyAlias.get_alias_property_for("alias:text", typeof(GtkEntry));
+</code></pre></blockquote>
+<p>There are few things to be noted.</p>
+<li><b>get_instance()</b> automatically creates alias group, so <b>get_instance()</b> can never return <b>null</b>.
+If this is for some reason unwanted application can call <b>bool PropertyAlias.contains(alias)</b> and avoid creation</li>
+<li><b>safe_get_for(...)</b> specifies original value as well for safety reasons and if alias is not found for specified type, that one is returned.
+If this is not necessary then <b>get_for(...)</b> can be used</li>
+<li><b>PropertyAlias</b> already contains calls for <b>get_default_value_property_for</b>, <b>get_visibility_property_for</b> and 
+<b>get_sensitivity_property_for</b></li>
+<h2>Runtime inspection</h2>
+<p><a href="what_is_binding_inspector.html">Binding inspector</a> can be used to inspect all registrations during application run</p>
+<h2>Usage in g_data_binding_lib</h2>
+<p>Most important is the use in <a href="what_is_default_widgets.html">DefaultWidgets</a> where <b>DefaultWidgets.init()</b> registers most
+common widgets for 3 aliases</p>
+<li><b>map::alias::default-value-property</b> which is registered for widgets data content property (defined const is <b>ALIAS_DEFAULT</b>)</li>
+<li><b>map::alias::visibility</b> which is registered for widgets visibility property (defined const is <b>ALIAS_VISIBILITY</b>)</li>
+<li><b>map::alias::sensitivity</b> which is registered for widgets sensitivity property (defined const is <b>ALIAS_SENSITIVITY</b>)</li>
+<p>Note that both <b>visible</b> and <b>sensitive</b> are already done in the way that would not require the registration. Those two are
+more or less only registered in order to be able to be accessed the same as some foreign objects which could as well have them, but under
+different names</p>
+<p><b>Be aware that if alias clashes with real property name, real property takes precedence. Alias is also valid for all the subclasses unless
+overridden specifically</b></p>
 <a href="index.html">Back to main page</a>

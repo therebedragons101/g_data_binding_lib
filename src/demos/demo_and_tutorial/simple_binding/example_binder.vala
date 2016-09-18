@@ -3,7 +3,7 @@ using GData.Generics;
 
 namespace Demo
 {
-	public void example_binder (DemoAndTutorial demo, Gtk.Builder ui_builder)
+	public void example_binder (Gtk.Builder ui_builder)
 	{
 		// ordinary binding from source to target with automatic data transfer
 		Binder.get_default().bind (ui_builder.get_object ("basic_entry_left1"), "text", 

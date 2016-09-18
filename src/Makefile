@@ -79,6 +79,7 @@ SOURCES := ${LIBRARY_NAME}.vala \
 	contracts/custom_binding_source_state.vala \
 	contracts/custom_binding_source_value.vala \
 	contracts/custom_property_notification_binding_source.vala \
+	contracts/delayed_binding_pointer.vala \
 	contracts/delegates.vala \
 	contracts/enum_state.vala \
 	contracts/enum_state_group.vala \

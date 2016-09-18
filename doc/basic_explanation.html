@@ -78,4 +78,18 @@ crosslinked across whole application
 editing start and then either <b>unbind</b> or wait until either of connected objects reaches its end of
 life at which point binding is automatically unreferenced.
 </p>
+<h3><b>Active data binding</b></h3>
+<p>In most common scenario this would be some sort of address book where you have list of contacts and editing
+panel.</p>
+<p>List of contacts is holding per item same contact across whole life time, so that part is best served with
+<b>Passive</b>.</p>
+<p>Current selection and editing on the other hand not. When you select new item, editor must be adapted to
+display that data and this change of display is valid trough whole application life time. So, instead of
+bind/unbind whole time, it is better to use <b>Active</b> binding which does that automatically. Unlike
+<b>Passive</b> which relies on everything being available <b>Active</b> does not. <b>Active</b> data binding
+carries its own set of rules instead of hard binding and only takes care of activation/deactivation. In short
+<b>Active</b> data binding internally creates <b>Passive</b> binding for each rule and controls it</p>
+<p><b>Active</b> data binding is better described in </p>
+<p><li><a href="what_is_pointer.html">What is data binding pointer?</a></li>
+<li><a href="what_is_contract.html">What is data binding contract?</a></li></p>
 <a href="index.html">Back to main page</a>

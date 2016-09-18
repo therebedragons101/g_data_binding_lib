@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="styles.css">
+<h1>How to extend BindingPointer functionality with custom pointers?</h1>
+<a href="index.html">Back to main page</a>
+<p>Pointers have 2 distinct extension possibilities</p>
+
+<h4>By changing the way source is resolved</h4>
+
+<p>Object? <b>redirect_to</b> (<b>ref</b> redirect_in_play)</p> 
+<p>allows redirection of source and at the same time breaking the chain. example of this is <b>BindingPointerFromPropertyValue</b>
+which resolves source it was pointed to initially and then instead of returning that object it resolves value of property
+that is specified with <b>data_property_name</b>. the fact that it breaks the chain provides with possibility of having source
+source being pointed out of regular chain</p>
+
+<h4>By tapping into data transfer and add custom manipulation (this is only valid for pointers that specify MANUAL as their update type.</h4>
+<p><b>signal</b> <b>data_changed</b> (BindingPointer pointer, string data_change_cookie)</p>
+<p>doing this allows controlling how data updates will be dispatched and also use it for any other purpose possible. one
+possible use is signal throttling where there is a need to limit amount of signals per time. example of this is
+<b>ThrotledManualBindingPointer</b></p>
+<a href="index.html">Back to main page</a>

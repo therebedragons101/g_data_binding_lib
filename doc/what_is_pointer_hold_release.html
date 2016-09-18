@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="styles.css">
+<h1>What is the purpose of BindingPointer hold()/release()?</h1>
+<a href="index.html">Back to main page</a>
+<p>Although PointerStorage allow safe storing of pointers and contracts, naming everything can be really inconvenient
+beside the fact that it can amount to a lot of otherwise unnecessary code. This is exact situation when 
+hold()/release() should be used as using hold() on some pointer only holds it alive as long as holding object is being alive</p>
+<p><span style="color:blue;"><i>(this is also valid for pointers and contracts since contract is derived from pointer, pointer can as well hold contract)</i></span></p>
+<p>Main purpose for this is having reliable chain lifetimes while removing as much strain from application code as possible. this is needed
+because main design follows 0 references if possible in order to put all the handling into hands of application developer</p>
+
+<p>Methods in BindingPointer</p>
+<li>BindingPointer <b>hold</b>(BindingPointer);</li>
+<li>void <b>release</b>(BindingPointer);</li>
+
+<p>Example:</p>
+<blockquote><pre><code>	my_contract = new BindingContract();
+	my_contract.data = my_contract.hold(new BindingPointer(my_contract.hold(new BindingPointer()));
+
+	// created chain where source (<b>data</b> is propagated as pointer - pointer -> contract, but also generated correct references to
+	// guarantee that both pointers will be kept alive until the one holding them dies</i>
+</code></pre></blockquote>
+<p>Note that calling <b>release(my_pointer)</b> is not really needed unless it is really wanted. When holding object dies, all contracts/pointers 
+being held are released as well</p>
+<a href="index.html">Back to main page</a>

@@ -129,6 +129,10 @@ and as such condition would change constantly as well which makes maintaining th
 		}));
 </code></pre></blockquote>
 <p>This example specifies value of <b>name</b> and value of <b>surname</b> must not be "". If any validation fails <b>is_valid</b> is set to <b>false</b></p>
+<p>Each contract even if it interacts with same object can have its own validation set based on bindings it handles as each binding
+can introduce its own condition. this is why <b>is_valid</b> always represents correct validity state no matter what contract is currently binding to
+this enables possibility of having single "Apply" button that is always correctly sensitive/insensitive. if source type contract is 
+pointing to changed, then contract bindings will have to be adapted as well again leading to <b>is_valid</b> representing correct value</p>
 <p><b>Personal note!</b> Only problem is that I am yet to see one single example where one validation would be enough to handle even most simple problems.
 Personally, I prefer control with <a href="what_is_proxy_property.html"><b>Proxy property and proxy property group</b></a> 
 or <a href="what_is_state_object.html"><b>Binding state object</b></a> 

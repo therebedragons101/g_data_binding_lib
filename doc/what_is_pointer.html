@@ -98,6 +98,11 @@ pointers will be notified about invalidity</li>
 <p><b>This static pipeline can now be used as simple as possible.</b> There is only one interaction point (main pointer) while
 everything else is automated</p>
 <p>
+<h2>Long term reference holding</h2>
+<p>Beside usual manual way <b>BindingPointer</b> allows three additional ways of holding its references</p>
+<li>using <b>BindingPointer</b> <a href="what_is_pointer_hold_release.html">hold()/release()</a></li>
+<li>using <a href="what_is_pointer_storage.html">What is PointerStorage?</a></li>
+<li>using <b>BindingReferenceType.STRONG</b> on pointer that holds reference to pointer that needs to be kept alive</li>
 <h2>Q&A</h2>
 <p><b>Q. If pointers don't do anything but point to data, why would I use them?</b></p>
 <p>A. In most cases, you wouldn't. In most cases <b>BindingContract</b> will be far better choice</p>

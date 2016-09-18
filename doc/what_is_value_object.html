@@ -1,5 +1,9 @@
 <link rel="stylesheet" href="styles.css">
 <h1>What is Binder and what is its purpose</h1>
 <a href="index.html">Back to main page</a>
-<p></p>
+<p>much like state objects, main purpose of value objects is giving possibility of static binding and completely remove all need to
+track which source is now active. Value object refreshes whenever either source in application. changes or notification for one of 
+its registered properties was emitted. this allows having single simple PropertyBinding to specific value that is automatically updated
+this also simplifies bindings as main objects don't need to be cluttered with all sorts of random properties to support all the needed
+functionality per case. value objects can be added/removed per contract on a whim</p>
 <a href="index.html">Back to main page</a>
