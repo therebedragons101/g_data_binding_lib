@@ -9,8 +9,8 @@
     <file compressed="true">simple_binding/example_binder.vala</file>
     <file compressed="true">simple_binding/example_contract_chaining.vala</file>
     <file compressed="true">simple_binding/example_contract_set_data.vala</file>
+    <file compressed="true">simple_binding/example_contract_suspension.vala</file>
     <file compressed="true">simple_binding/example_custom_property_binding.vala</file>
-    <file compressed="true">simple_binding/example_contract_set_data.vala</file>
     <file compressed="true">simple_binding/example_inspector.vala</file>
     <file compressed="true">simple_binding/example_object_inspector.vala</file>
     <file compressed="true">simple_binding/example_pointer_hold.vala</file>

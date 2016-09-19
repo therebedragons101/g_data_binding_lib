@@ -1,6 +1,6 @@
 using GData;
 
-namespace DemoAndTutorial
+namespace Demo
 {
 	private BindingContract my_contract;
 	private BindingContract contract1_in_group;
