@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>GData.Generics.CustomBindingSourceData.CustomBindingSourceData &ndash; g_data_binding_generics_lib &ndash; Vala Binding Reference</title>
+    <link href="../style.css" rel="stylesheet" type="text/css"/><script src="../scripts.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div class="site_header">GData.Generics.CustomBindingSourceData.CustomBindingSourceData &ndash; g_data_binding_generics_lib Reference Manual</div>
+    <div class="site_body">
+      <div class="site_navigation">
+        <ul class="navi_main">
+          <li class="package_index"><a href="../index.html">Packages</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="package"><a href="index.htm">g_data_binding_generics_lib</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="GData.html">GData</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="GData.Generics.html">Generics</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="class"><a href="GData.Generics.CustomBindingSourceData.html">CustomBindingSourceData</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="property"><a href="GData.Generics.CustomBindingSourceData.always_refresh.html">always_refresh</a></li>
+          <li class="property"><a href="GData.Generics.CustomBindingSourceData.compare_func.html">compare_func</a></li>
+          <li class="property"><a href="GData.Generics.CustomBindingSourceData.data.html">data</a></li>
+          <li class="property"><a href="GData.Generics.CustomBindingSourceData.null_value.html">null_value</a></li>
+          <li class="property"><a href="GData.Generics.CustomBindingSourceData.resolve_data.html">resolve_data</a></li>
+          <li class="creation_method">CustomBindingSourceData</li>
+        </ul>
+      </div>
+      <div class="site_content">
+        <h1 class="main_title">CustomBindingSourceData</h1>
+        <hr class="main_hr"/>
+        <h2 class="main_title">Description:</h2>
+        <div class="main_code_definition"><span class="main_keyword">public</span> <b><span class="creation_method">CustomBindingSourceData</span></b> (<span class="main_basic_type"><span class="class">string</span></span> name, <span class="main_type"><a href="GData.BindingPointer.html" class="class">BindingPointer</a></span> source, <span class="main_basic_type"><span class="class">string</span></span> description = <span class="main_literal">""</span>, <span class="main_keyword">owned</span> <span class="main_type"><a href="GData.Generics.CustomBindingSourceDataFunc.html" class="delegate">CustomBindingSourceDataFunc</a></span>&lt;<span class="main_type"><span>T</span></span>&gt; get_data_method, <span class="main_keyword">owned</span> <span class="main_type"><span class="delegate">CompareFunc</span></span>&lt;<span class="main_type"><span>T</span></span>&gt;? compare_method, <span class="main_type"><span>T</span></span> null_value, <span class="main_basic_type"><span class="struct">bool</span></span> always_refresh = <span class="main_literal">false</span>, <span class="main_basic_type"><span class="class">string</span></span>[]? connected_properties = <span class="main_literal">null</span>)
+        </div>
+        <div class="description">
+          <p>Creates new CustomBindingSourceData</p>
+          <h2 class="main_title">Parameters:</h2>
+          <table class="main_parameter_table">
+            <tr>
+              <td class="main_parameter_table_name">name</td>
+              <td>
+                <p>Value object name </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="main_parameter_table_name">source</td>
+              <td>
+                <p>Binding pointer this object is connected to </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="main_parameter_table_name">get_data_method</td>
+              <td>
+                <p>Method used to calculate data </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="main_parameter_table_name">always_refresh</td>
+              <td>
+                <p>Specifies if value should be cached or not </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="main_parameter_table_name">connected_properties</td>
+              <td>
+                <p>Property names to which signals value object should connect. Specify ALL_PROPERTIES or null for cases when all or none are to be 
+                  used. </p>
+              </td>
+            </tr>
+          </table>
+          <h2 class="main_title">Since:</h2>
+          <p>0.1</p>
+        </div>
+      </div>
+    </div><br/>
+    <div class="site_footer">Generated by <a href="http://www.valadoc.org/">Valadoc</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>GData.set_debug_flags &ndash; g_data_binding_lib &ndash; Vala Binding Reference</title>
+    <link href="../style.css" rel="stylesheet" type="text/css"/><script src="../scripts.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div class="site_header">GData.set_debug_flags &ndash; g_data_binding_lib Reference Manual</div>
+    <div class="site_body">
+      <div class="site_navigation">
+        <ul class="navi_main">
+          <li class="package_index"><a href="../index.html">Packages</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="package"><a href="index.htm">g_data_binding_lib</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="GData.html">GData</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="enum"><a href="GData.BindFlags.html">BindFlags</a></li>
+          <li class="enum"><a href="GData.BindingPointerUpdateType.html">BindingPointerUpdateType</a></li>
+          <li class="enum"><a href="GData.BindingReferenceType.html">BindingReferenceType</a></li>
+          <li class="enum"><a href="GData.BindingSide.html">BindingSide</a></li>
+          <li class="enum"><a href="GData.CompareDataBy.html">CompareDataBy</a></li>
+          <li class="enum"><a href="GData.ContractChangeType.html">ContractChangeType</a></li>
+          <li class="enum"><a href="GData.DebugMessageType.html">DebugMessageType</a></li>
+          <li class="enum"><a href="GData.INVALID_ENUM_TYPE.html">INVALID_ENUM_TYPE</a></li>
+          <li class="enum"><a href="GData.InformationAvailability.html">InformationAvailability</a></li>
+          <li class="enum"><a href="GData.RowOrientation.html">RowOrientation</a></li>
+          <li class="interface"><a href="GData.BinderMapper.html">BinderMapper</a></li>
+          <li class="interface"><a href="GData.BindingContractMapper.html">BindingContractMapper</a></li>
+          <li class="interface"><a href="GData.BindingDataTransferInterface.html">BindingDataTransferInterface</a></li>
+          <li class="interface"><a href="GData.BindingGroup.html">BindingGroup</a></li>
+          <li class="interface"><a href="GData.BindingInformationInterface.html">BindingInformationInterface</a></li>
+          <li class="interface"><a href="GData.BindingInterface.html">BindingInterface</a></li>
+          <li class="interface"><a href="GData.BindingStateObjects.html">BindingStateObjects</a></li>
+          <li class="interface"><a href="GData.BindingValueObjects.html">BindingValueObjects</a></li>
+          <li class="interface"><a href="GData.DataFloodDetection.html">DataFloodDetection</a></li>
+          <li class="interface"><a href="GData.HasDescription.html">HasDescription</a></li>
+          <li class="interface"><a href="GData.ObjectInformation.html">ObjectInformation</a></li>
+          <li class="interface"><a href="GData.UniqueByProperies.html">UniqueByProperies</a></li>
+          <li class="class"><a href="GData.Attribute.html">Attribute</a></li>
+          <li class="class"><a href="GData.Binder.html">Binder</a></li>
+          <li class="class"><a href="GData.BindingContract.html">BindingContract</a></li>
+          <li class="class"><a href="GData.BindingDataTransfer.html">BindingDataTransfer</a></li>
+          <li class="class"><a href="GData.BindingDefaults.html">BindingDefaults</a></li>
+          <li class="class"><a href="GData.BindingInformation.html">BindingInformation</a></li>
+          <li class="class"><a href="GData.BindingNamespace.html">BindingNamespace</a></li>
+          <li class="class"><a href="GData.BindingPointer.html">BindingPointer</a></li>
+          <li class="class"><a href="GData.BindingPointerFromPropertyValue.html">BindingPointerFromPropertyValue</a></li>
+          <li class="class"><a href="GData.BindingSuspensionGroup.html">BindingSuspensionGroup</a></li>
+          <li class="class"><a href="GData.BooleanCondition.html">BooleanCondition</a></li>
+          <li class="class"><a href="GData.ContractStorage.html">ContractStorage</a></li>
+          <li class="class"><a href="GData.CustomBindingSourceState.html">CustomBindingSourceState</a></li>
+          <li class="class"><a href="GData.CustomBindingSourceValue.html">CustomBindingSourceValue</a></li>
+          <li class="class"><a href="GData.CustomPropertyNotificationBindingSource.html">CustomPropertyNotificationBindingSource</a></li>
+          <li class="class"><a href="GData.DelayedBindingPointer.html">DelayedBindingPointer</a></li>
+          <li class="class"><a href="GData.EnumFlagsModel.html">EnumFlagsModel</a></li>
+          <li class="class"><a href="GData.EnumFlagsValueObject.html">EnumFlagsValueObject</a></li>
+          <li class="class"><a href="GData.EnumState.html">EnumState</a></li>
+          <li class="class"><a href="GData.EnumStateGroup.html">EnumStateGroup</a></li>
+          <li class="class"><a href="GData.FlagState.html">FlagState</a></li>
+          <li class="class"><a href="GData.FlagStateGroup.html">FlagStateGroup</a></li>
+          <li class="class"><a href="GData.GObjectArray.html">GObjectArray</a></li>
+          <li class="class"><a href="GData.GObjectBindingDataTransfer.html">GObjectBindingDataTransfer</a></li>
+          <li class="class"><a href="GData.GSettingsBindingDataTransfer.html">GSettingsBindingDataTransfer</a></li>
+          <li class="class"><a href="GData.InvertedListModel.html">InvertedListModel</a></li>
+          <li class="class"><a href="GData.PointerNamespace.html">PointerNamespace</a></li>
+          <li class="class"><a href="GData.PointerStorage.html">PointerStorage</a></li>
+          <li class="class"><a href="GData.PropertyAlias.html">PropertyAlias</a></li>
+          <li class="class"><a href="GData.PropertyBinding.html">PropertyBinding</a></li>
+          <li class="class"><a href="GData.PropertyInfoAttribute.html">PropertyInfoAttribute</a></li>
+          <li class="class"><a href="GData.ProxyProperty.html">ProxyProperty</a></li>
+          <li class="class"><a href="GData.ProxyPropertyGroup.html">ProxyPropertyGroup</a></li>
+          <li class="class"><a href="GData.RefTimeout.html">RefTimeout</a></li>
+          <li class="class"><a href="GData.ReferenceMonitor.html">ReferenceMonitor</a></li>
+          <li class="class"><a href="GData.ReferenceMonitorGroup.html">ReferenceMonitorGroup</a></li>
+          <li class="class"><a href="GData.RowColumn.html">RowColumn</a></li>
+          <li class="class"><a href="GData.RowModel.html">RowModel</a></li>
+          <li class="class"><a href="GData.SignalControlledBindingPointer.html">SignalControlledBindingPointer</a></li>
+          <li class="class"><a href="GData.StrictWeakRef.html">StrictWeakRef</a></li>
+          <li class="class"><a href="GData.TimerControlledBindingPointer.html">TimerControlledBindingPointer</a></li>
+          <li class="class"><a href="GData.Trigger.html">Trigger</a></li>
+          <li class="class"><a href="GData.TypeInformation.html">TypeInformation</a></li>
+          <li class="class"><a href="GData.WeakRef.html">WeakRef</a></li>
+          <li class="class"><a href="GData.WeakRefWrapper.html">WeakRefWrapper</a></li>
+          <li class="constant"><a href="GData.ALIAS_DEFAULT.html">ALIAS_DEFAULT</a></li>
+          <li class="constant"><a href="GData.ALIAS_LENGTH.html">ALIAS_LENGTH</a></li>
+          <li class="constant"><a href="GData.ALIAS_MAX.html">ALIAS_MAX</a></li>
+          <li class="constant"><a href="GData.ALIAS_MIN.html">ALIAS_MIN</a></li>
+          <li class="constant"><a href="GData.ALIAS_SECRET.html">ALIAS_SECRET</a></li>
+          <li class="constant"><a href="GData.ALIAS_SENSITIVITY.html">ALIAS_SENSITIVITY</a></li>
+          <li class="constant"><a href="GData.ALIAS_VISIBILITY.html">ALIAS_VISIBILITY</a></li>
+          <li class="constant"><a href="GData.ALL_PROPERTIES.html">ALL_PROPERTIES</a></li>
+          <li class="constant"><a href="GData.MAJOR_VERSION.html">MAJOR_VERSION</a></li>
+          <li class="constant"><a href="GData.MINOR_VERSION.html">MINOR_VERSION</a></li>
+          <li class="constant"><a href="GData.NO_PROPERTY.html">NO_PROPERTY</a></li>
+          <li class="delegate"><a href="GData.AddedTypeAliasDelegate.html">AddedTypeAliasDelegate</a></li>
+          <li class="delegate"><a href="GData.AliasStorageDelegateFunc.html">AliasStorageDelegateFunc</a></li>
+          <li class="delegate"><a href="GData.BeforeSourceChangeDelegate.html">BeforeSourceChangeDelegate</a></li>
+          <li class="delegate"><a href="GData.BindingInterfaceDroppedDelegate.html">BindingInterfaceDroppedDelegate</a></li>
+          <li class="delegate"><a href="GData.BindingsChangedDelegate.html">BindingsChangedDelegate</a></li>
+          <li class="delegate"><a href="GData.BoolValueDelegate.html">BoolValueDelegate</a></li>
+          <li class="delegate"><a href="GData.BooleanConditionDelegate.html">BooleanConditionDelegate</a></li>
+          <li class="delegate"><a href="GData.CompareValueFunc.html">CompareValueFunc</a></li>
+          <li class="delegate"><a href="GData.ConnectNotificationsDelegate.html">ConnectNotificationsDelegate</a></li>
+          <li class="delegate"><a href="GData.ContractAddedToStorageDelegate.html">ContractAddedToStorageDelegate</a></li>
+          <li class="delegate"><a href="GData.ContractChangedDelegate.html">ContractChangedDelegate</a></li>
+          <li class="delegate"><a href="GData.ContractRemovedFromStorageDelegate.html">ContractRemovedFromStorageDelegate</a></li>
+          <li class="delegate"><a href="GData.ContractStorageDelegateFunc.html">ContractStorageDelegateFunc</a></li>
+          <li class="delegate"><a href="GData.CreateDataTransferFunc.html">CreateDataTransferFunc</a></li>
+          <li class="delegate"><a href="GData.CreateIntrospectionDataTransferFunc.html">CreateIntrospectionDataTransferFunc</a></li>
+          <li class="delegate"><a href="GData.CreatePropertyBinding.html">CreatePropertyBinding</a></li>
+          <li class="delegate"><a href="GData.CustomBindingSourceStateFunc.html">CustomBindingSourceStateFunc</a></li>
+          <li class="delegate"><a href="GData.CustomBindingSourceValueFunc.html">CustomBindingSourceValueFunc</a></li>
+          <li class="delegate"><a href="GData.DataChangedDelegate.html">DataChangedDelegate</a></li>
+          <li class="delegate"><a href="GData.DebugDelegate.html">DebugDelegate</a></li>
+          <li class="delegate"><a href="GData.DisconnectNotificationsDelegate.html">DisconnectNotificationsDelegate</a></li>
+          <li class="delegate"><a href="GData.FloodDetectedDelegate.html">FloodDetectedDelegate</a></li>
+          <li class="delegate"><a href="GData.FloodStoppedDelegate.html">FloodStoppedDelegate</a></li>
+          <li class="delegate"><a href="GData.GetObjectDescriptionStringDelegate.html">GetObjectDescriptionStringDelegate</a></li>
+          <li class="delegate"><a href="GData.IntValueDelegate.html">IntValueDelegate</a></li>
+          <li class="delegate"><a href="GData.ManualRecalculationDelegate.html">ManualRecalculationDelegate</a></li>
+          <li class="delegate"><a href="GData.NewStorageAddedDelegate.html">NewStorageAddedDelegate</a></li>
+          <li class="delegate"><a href="GData.ObjectIterationFunc.html">ObjectIterationFunc</a></li>
+          <li class="delegate"><a href="GData.ObjectValueDelegate.html">ObjectValueDelegate</a></li>
+          <li class="delegate"><a href="GData.ParamSpecDelegate.html">ParamSpecDelegate</a></li>
+          <li class="delegate"><a href="GData.PointerAddedToStorageDelegate.html">PointerAddedToStorageDelegate</a></li>
+          <li class="delegate"><a href="GData.PointerRemovedFromStorageDelegate.html">PointerRemovedFromStorageDelegate</a></li>
+          <li class="delegate"><a href="GData.PointerStorageDelegateFunc.html">PointerStorageDelegateFunc</a></li>
+          <li class="delegate"><a href="GData.PropertiesChangedDelegate.html">PropertiesChangedDelegate</a></li>
+          <li class="delegate"><a href="GData.PropertyBindingTransformFunc.html">PropertyBindingTransformFunc</a></li>
+          <li class="delegate"><a href="GData.SearchDelegate.html">SearchDelegate</a></li>
+          <li class="delegate"><a href="GData.SimpleDelegate.html">SimpleDelegate</a></li>
+          <li class="delegate"><a href="GData.SourceChangedDelegate.html">SourceChangedDelegate</a></li>
+          <li class="delegate"><a href="GData.SourceValidationFunc.html">SourceValidationFunc</a></li>
+          <li class="delegate"><a href="GData.StorageDelegateFunc.html">StorageDelegateFunc</a></li>
+          <li class="delegate"><a href="GData.StringValueDelegate.html">StringValueDelegate</a></li>
+          <li class="delegate"><a href="GData.TriggerEmissionDelegate.html">TriggerEmissionDelegate</a></li>
+          <li class="delegate"><a href="GData.ValueDelegate.html">ValueDelegate</a></li>
+          <li class="delegate"><a href="GData.WeakReferenceInvalid.html">WeakReferenceInvalid</a></li>
+          <li class="method"><a href="GData.CRITICAL.html">CRITICAL</a></li>
+          <li class="method"><a href="GData.FATAL.html">FATAL</a></li>
+          <li class="method"><a href="GData.GLIB_DEBUG_OUTPUT.html">GLIB_DEBUG_OUTPUT</a></li>
+          <li class="method"><a href="GData.INFORMATION.html">INFORMATION</a></li>
+          <li class="method"><a href="GData.WARNING.html">WARNING</a></li>
+          <li class="method"><a href="GData._debug_references.html">_debug_references</a></li>
+          <li class="method"><a href="GData._get_reference_count.html">_get_reference_count</a></li>
+          <li class="method"><a href="GData.add_instance_attribute.html">add_instance_attribute</a></li>
+          <li class="method"><a href="GData.add_property_attribute.html">add_property_attribute</a></li>
+          <li class="method"><a href="GData.add_type_attribute.html">add_type_attribute</a></li>
+          <li class="method"><a href="GData.as_binding_object.html">as_binding_object</a></li>
+          <li class="method"><a href="GData.as_contract.html">as_contract</a></li>
+          <li class="method"><a href="GData.as_contract_data.html">as_contract_data</a></li>
+          <li class="method"><a href="GData.as_contract_source.html">as_contract_source</a></li>
+          <li class="method"><a href="GData.as_pointer.html">as_pointer</a></li>
+          <li class="method"><a href="GData.as_pointer_data.html">as_pointer_data</a></li>
+          <li class="method"><a href="GData.as_pointer_source.html">as_pointer_source</a></li>
+          <li class="method"><a href="GData.as_state_object.html">as_state_object</a></li>
+          <li class="method"><a href="GData.can_translate_value.html">can_translate_value</a></li>
+          <li class="method"><a href="GData.can_translate_value_type.html">can_translate_value_type</a></li>
+          <li class="method"><a href="GData.cond_CRITICAL.html">cond_CRITICAL</a></li>
+          <li class="method"><a href="GData.cond_FATAL.html">cond_FATAL</a></li>
+          <li class="method"><a href="GData.cond_INFORMATION.html">cond_INFORMATION</a></li>
+          <li class="method"><a href="GData.cond_WARNING.html">cond_WARNING</a></li>
+          <li class="method"><a href="GData.copy_or_transform_value.html">copy_or_transform_value</a></li>
+          <li class="method"><a href="GData.debug_references.html">debug_references</a></li>
+          <li class="method"><a href="GData.find_instance_attributes.html">find_instance_attributes</a></li>
+          <li class="method"><a href="GData.find_property_attributes.html">find_property_attributes</a></li>
+          <li class="method"><a href="GData.find_type_attributes.html">find_type_attributes</a></li>
+          <li class="method"><a href="GData.get_hierarchy_gap.html">get_hierarchy_gap</a></li>
+          <li class="method"><a href="GData.get_reference_count.html">get_reference_count</a></li>
+          <li class="method"><a href="GData.get_version.html">get_version</a></li>
+          <li class="method"><a href="GData.has_description.html">has_description</a></li>
+          <li class="method"><a href="GData.is_binding_contract.html">is_binding_contract</a></li>
+          <li class="method"><a href="GData.is_binding_object.html">is_binding_object</a></li>
+          <li class="method"><a href="GData.is_binding_pointer.html">is_binding_pointer</a></li>
+          <li class="method"><a href="GData.is_object_information.html">is_object_information</a></li>
+          <li class="method"><a href="GData.is_state_object.html">is_state_object</a></li>
+          <li class="method"><a href="GData.remove_instance_attribute.html">remove_instance_attribute</a></li>
+          <li class="method"><a href="GData.remove_instance_attribute_by_type.html">remove_instance_attribute_by_type</a></li>
+          <li class="method"><a href="GData.remove_property_attribute.html">remove_property_attribute</a></li>
+          <li class="method"><a href="GData.remove_property_attribute_by_type.html">remove_property_attribute_by_type</a></li>
+          <li class="method"><a href="GData.remove_type_attribute.html">remove_type_attribute</a></li>
+          <li class="method"><a href="GData.remove_type_attribute_by_type.html">remove_type_attribute_by_type</a></li>
+          <li class="method"><a href="GData.safe_get_type.html">safe_get_type</a></li>
+          <li class="method">set_debug_flags</li>
+          <li class="method"><a href="GData.set_debug_state.html">set_debug_state</a></li>
+        </ul>
+      </div>
+      <div class="site_content">
+        <h1 class="main_title">set_debug_flags</h1>
+        <hr class="main_hr"/>
+        <h2 class="main_title">Description:</h2>
+        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><span class="method">set_debug_flags</span></b> (<span class="main_type"><a href="GData.DebugMessageType.html" class="enum">DebugMessageType</a></span> flags)
+        </div><br/>
+        <div class="namespace_note"><b>Namespace:</b> <a href="GData.html">GData</a>
+        </div>
+        <div class="package_note"><b>Package:</b> <a href="index.htm">g_data_binding_lib</a>
+        </div>
+      </div>
+    </div><br/>
+    <div class="site_footer">Generated by <a href="http://www.valadoc.org/">Valadoc</a>
+    </div>
+  </body>
+</html>

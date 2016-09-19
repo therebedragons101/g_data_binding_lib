@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>GDataGtk.DefaultWidgets.create_binding_transfer_widget &ndash; g_data_binding_gtk_lib &ndash; Vala Binding Reference</title>
+    <link href="../style.css" rel="stylesheet" type="text/css"/><script src="../scripts.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div class="site_header">GDataGtk.DefaultWidgets.create_binding_transfer_widget &ndash; g_data_binding_gtk_lib Reference Manual</div>
+    <div class="site_body">
+      <div class="site_navigation">
+        <ul class="navi_main">
+          <li class="package_index"><a href="../index.html">Packages</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="package"><a href="index.htm">g_data_binding_gtk_lib</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="GDataGtk.html">GDataGtk</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="class"><a href="GDataGtk.DefaultWidgets.html">DefaultWidgets</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="property"><a href="GDataGtk.DefaultWidgets.default_fallback.html">default_fallback</a></li>
+          <li class="property"><a href="GDataGtk.DefaultWidgets.fallback.html">fallback</a></li>
+          <li class="static_method"><a href="GDataGtk.DefaultWidgets.create_custom_instance.html">create_custom_instance</a></li>
+          <li class="static_method"><a href="GDataGtk.DefaultWidgets.get_default.html">get_default</a></li>
+          <li class="static_method"><a href="GDataGtk.DefaultWidgets.init.html">init</a></li>
+          <li class="static_method"><a href="GDataGtk.DefaultWidgets.set_default.html">set_default</a></li>
+          <li class="method">create_binding_transfer_widget</li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.create_default_fallback.html">create_default_fallback</a></li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.create_property_widget.html">create_property_widget</a></li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.create_type_widget.html">create_type_widget</a></li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.property_widget_registered.html">property_widget_registered</a></li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.register_for_data_type.html">register_for_data_type</a></li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.register_for_property.html">register_for_property</a></li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.type_widget_registered.html">type_widget_registered</a></li>
+        </ul>
+      </div>
+      <div class="site_content">
+        <h1 class="main_title">create_binding_transfer_widget</h1>
+        <hr class="main_hr"/>
+        <h2 class="main_title">Description:</h2>
+        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_type"><span class="class">Widget</span></span>? <b><span class="method">create_binding_transfer_widget</span></b> (<span class="main_type"><a href="GDataGtk.EditMode.html" class="enum">EditMode</a></span> mode, <span class="main_type"><a href="GData.BindingDataTransferInterface.html" class="interface">BindingDataTransferInterface</a></span>? binding_transfer, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="class">string</span></span> widget_value_property)
+        </div>
+        <div class="description">
+          <p>Creates widget for specific object property if registered. If not found and DefaultWidgets instance specifies fallback then that one is 
+            used as continuation and so on until the end of the registration chain. Since this specifies binding transfer data it also means this is 
+            safe to call even for foreign objects depending on the fact that they have registered data handler</p>
+          <p>When finding exact override for exact property and type is not successful, type widget is resolved in same way, but first it tries to get
+            exact object::property match trough create_property_widget()</p>
+          <p>Note that if unsuccessful, this does not invoke create_default_fallback() so application can be aware of this fact. Calling last stage 
+            default creation is solely up to implementation</p>
+          <h2 class="main_title">Parameters:</h2>
+          <table class="main_parameter_table">
+            <tr>
+              <td class="main_parameter_table_name">mode</td>
+              <td>
+                <p>Specifies VIEW/EDIT mode </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="main_parameter_table_name">binding_transfer</td>
+              <td>
+                <p>Binding data transfer object description </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="main_parameter_table_name">widget_value_property</td>
+              <td>
+                <p>Property in widget that specifies data content </p>
+              </td>
+            </tr>
+          </table>
+          <h2 class="main_title">Since:</h2>
+          <p>0.1</p>
+        </div>
+      </div>
+    </div><br/>
+    <div class="site_footer">Generated by <a href="http://www.valadoc.org/">Valadoc</a>
+    </div>
+  </body>
+</html>

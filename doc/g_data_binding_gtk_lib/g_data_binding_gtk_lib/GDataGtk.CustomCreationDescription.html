@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>GDataGtk.CustomCreationDescription &ndash; g_data_binding_gtk_lib &ndash; Vala Binding Reference</title>
+    <link href="../style.css" rel="stylesheet" type="text/css"/><script src="../scripts.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div class="site_header">GDataGtk.CustomCreationDescription &ndash; g_data_binding_gtk_lib Reference Manual</div>
+    <div class="site_body">
+      <div class="site_navigation">
+        <ul class="navi_main">
+          <li class="package_index"><a href="../index.html">Packages</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="package"><a href="index.htm">g_data_binding_gtk_lib</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="GDataGtk.html">GDataGtk</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="class">CustomCreationDescription</li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="property"><a href="GDataGtk.CustomCreationDescription.condition_check.html">condition_check</a></li>
+          <li class="property"><a href="GDataGtk.CustomCreationDescription.data_type.html">data_type</a></li>
+          <li class="property"><a href="GDataGtk.CustomCreationDescription.is_valid.html">is_valid</a></li>
+          <li class="property"><a href="GDataGtk.CustomCreationDescription.mode.html">mode</a></li>
+          <li class="property"><a href="GDataGtk.CustomCreationDescription.pspec.html">pspec</a></li>
+          <li class="property"><a href="GDataGtk.CustomCreationDescription.specific_property_delegate.html">specific_property_delegate</a></li>
+          <li class="property"><a href="GDataGtk.CustomCreationDescription.specific_type_delegate.html">specific_type_delegate</a></li>
+          <li class="creation_method"><a href="GDataGtk.CustomCreationDescription.CustomCreationDescription.for_property.html">
+              CustomCreationDescription.for_property</a></li>
+          <li class="creation_method"><a href="GDataGtk.CustomCreationDescription.CustomCreationDescription.for_type.html">
+              CustomCreationDescription.for_type</a></li>
+          <li class="method"><a href="GDataGtk.CustomCreationDescription.creates_for_property.html">creates_for_property</a></li>
+        </ul>
+      </div>
+      <div class="site_content">
+        <h1 class="main_title">CustomCreationDescription</h1>
+        <hr class="main_hr"/>
+        <h2 class="main_title">Object Hierarchy:</h2>
+        
+        <img class="main_diagram" usemap="#GDataGtk.CustomCreationDescription" alt="Object hierarchy for CustomCreationDescription" src="img/GDataGtk.CustomCreationDescription.png"/>
+      
+
+      <map id="GDataGtk.CustomCreationDescription" name="GDataGtk.CustomCreationDescription">
+<area shape="rect" id="node1" href="GDataGtk.CustomCreationDescription.html" title="GDataGtk.CustomCreationDescription" alt="" coords="5,101,309,149"/>
+</map>
+
+        <h2 class="main_title">Description:</h2>
+        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">class</span> <b><span class="class">CustomCreationDescription</span></b> : <span class="main_type"><span class="class">Object</span></span>
+        </div>
+        <div class="description">
+          <p>Provides automatic widget creation for either registration or caching purposes. For caching, correct description can be resolved at any 
+            time trough DefaultWidgets</p>
+          <h2 class="main_title">Since:</h2>
+          <p>0.1</p>
+        </div><br/>
+        <div class="namespace_note"><b>Namespace:</b> <a href="GDataGtk.html">GDataGtk</a>
+        </div>
+        <div class="package_note"><b>Package:</b> <a href="index.htm">g_data_binding_gtk_lib</a>
+        </div>
+        <h2 class="main_title">Content:</h2>
+        <h3 class="main_title">Properties:</h3>
+        <ul class="navi_inline">
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GDataGtk.EditMode.html" class="enum">EditMode</a></span> <b><a href="GDataGtk.CustomCreationDescription.mode.html" class="property">mode</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Mode this registration is for</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><span class="class">ParamSpec</span></span>? <b><a href="GDataGtk.CustomCreationDescription.pspec.html" class="property">pspec</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">TODO, Replace this with introspection transfer object</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><span class="struct">Type</span></span> <b><a href="GDataGtk.CustomCreationDescription.data_type.html" class="property">data_type</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Value type this registration is handling</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GDataGtk.CreateCustomWidgetDelegate.html" class="delegate">CreateCustomWidgetDelegate</a></span>? <b><a href="GDataGtk.CustomCreationDescription.specific_property_delegate.html" class="property">specific_property_delegate</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Registered delegate that creates new widget instance for class and 
+                property</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GDataGtk.CreateCustomTypeWidgetDelegate.html" class="delegate">CreateCustomTypeWidgetDelegate</a></span>? <b><a href="GDataGtk.CustomCreationDescription.specific_type_delegate.html" class="property">specific_type_delegate</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Registered delegate method for creation of widget that only handles 
+                value type</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GDataGtk.ConditionCheckDelegate.html" class="delegate">ConditionCheckDelegate</a></span>? <b><a href="GDataGtk.CustomCreationDescription.condition_check.html" class="property">condition_check</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Corner case value type handling that takes precedence over exact 
+                match. Examples for this are enum and flags which are specified with different type each time, but all types share the ability to 
+                resolve as flags/enum trough Type.is_flags</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GDataGtk.CustomCreationDescription.is_valid.html" class="property">is_valid</a></b> { <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Checks if description is valid or not. If it is not valid then it is 
+                not available for widget creation</span>
+            </div></li>
+        </ul>
+        <h3 class="main_title">Creation methods:</h3>
+        <ul class="navi_inline">
+          <li class="creation_method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <b><a href="GDataGtk.CustomCreationDescription.CustomCreationDescription.for_property.html" class="creation_method">CustomCreationDescription.for_property</a></b> (<span class="main_type"><a href="GDataGtk.EditMode.html" class="enum">EditMode</a></span> mode, <span class="main_type"><span class="class">ParamSpec</span></span> pspec, <span class="main_type"><a href="GDataGtk.CreateCustomWidgetDelegate.html" class="delegate">CreateCustomWidgetDelegate</a></span> method)
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Creates description for property widget generation</span>
+            </div></li>
+          <li class="creation_method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <b><a href="GDataGtk.CustomCreationDescription.CustomCreationDescription.for_type.html" class="creation_method">CustomCreationDescription.for_type</a></b> (<span class="main_type"><a href="GDataGtk.EditMode.html" class="enum">EditMode</a></span> mode, <span class="main_type"><span class="struct">Type</span></span> data_type, <span class="main_type"><a href="GDataGtk.CreateCustomTypeWidgetDelegate.html" class="delegate">CreateCustomTypeWidgetDelegate</a></span> method, <span class="main_type"><a href="GDataGtk.ConditionCheckDelegate.html" class="delegate">ConditionCheckDelegate</a></span>? condition_check)
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Creates description for value type widget generation</span>
+            </div></li>
+        </ul>
+        <h3 class="main_title">Methods:</h3>
+        <ul class="navi_inline">
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GDataGtk.CustomCreationDescription.creates_for_property.html" class="method">creates_for_property</a></b> ()
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Resolves if description is describing creation of widget for specific 
+                class/property or it is describing simple value type handling</span>
+            </div></li>
+        </ul>
+        <h3 class="main_title">Inherited Members:</h3>
+        <div class="box">
+          <div class="headline" onclick="toggle_box (this, 'box-content-199')">All known members inherited from class GLib.Object</div>
+          <div class="content" id="box-content-199">
+            <div class="column">
+              <ul class="navi_inline">
+                <li class="static_method">@new</li>
+                <li class="static_method">new_valist</li>
+                <li class="static_method">newv</li>
+                <li class="method">add_toggle_ref</li>
+                <li class="method">add_weak_pointer</li>
+                <li class="method">bind_property</li>
+                <li class="method">connect</li>
+                <li class="virtual_method">constructed</li>
+                <li class="method">disconnect</li>
+                <li class="virtual_method">dispose</li>
+                <li class="method">dup_data</li>
+                <li class="method">dup_qdata</li>
+                <li class="method">freeze_notify</li>
+                <li class="method">@get</li>
+              </ul>
+            </div>
+            <div class="column">
+              <ul class="navi_inline">
+                <li class="method">get_class</li>
+                <li class="method">get_data</li>
+                <li class="method">get_property</li>
+                <li class="method">get_qdata</li>
+                <li class="method">get_type</li>
+                <li class="method">notify_property</li>
+                <li class="method">@ref</li>
+                <li class="method">ref_sink</li>
+                <li class="method">replace_data</li>
+                <li class="method">replace_qdata</li>
+                <li class="method">remove_toggle_ref</li>
+                <li class="method">remove_weak_pointer</li>
+                <li class="method">@set</li>
+              </ul>
+            </div>
+            <div class="column">
+              <ul class="navi_inline">
+                <li class="method">set_data</li>
+                <li class="method">set_data_full</li>
+                <li class="method">set_property</li>
+                <li class="method">set_qdata</li>
+                <li class="method">set_qdata_full</li>
+                <li class="method">steal_data</li>
+                <li class="method">steal_qdata</li>
+                <li class="method">thaw_notify</li>
+                <li class="method">unref</li>
+                <li class="method">weak_ref</li>
+                <li class="method">weak_unref</li>
+                <li class="signal">notify</li>
+                <li class="field">ref_count</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><br/>
+    <div class="site_footer">Generated by <a href="http://www.valadoc.org/">Valadoc</a>
+    </div>
+  </body>
+</html>

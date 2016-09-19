@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>GData.Trigger &ndash; g_data_binding_lib &ndash; Vala Binding Reference</title>
+    <link href="../style.css" rel="stylesheet" type="text/css"/><script src="../scripts.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div class="site_header">GData.Trigger &ndash; g_data_binding_lib Reference Manual</div>
+    <div class="site_body">
+      <div class="site_navigation">
+        <ul class="navi_main">
+          <li class="package_index"><a href="../index.html">Packages</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="package"><a href="index.htm">g_data_binding_lib</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="GData.html">GData</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="class">Trigger</li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="property"><a href="GData.Trigger.method.html">method</a></li>
+          <li class="creation_method"><a href="GData.Trigger.Trigger.html">Trigger</a></li>
+          <li class="signal"><a href="GData.Trigger.trigger.html">trigger</a></li>
+        </ul>
+      </div>
+      <div class="site_content">
+        <h1 class="main_title">Trigger</h1>
+        <hr class="main_hr"/>
+        <h2 class="main_title">Object Hierarchy:</h2>
+        <img class="main_diagram" usemap="#GData.Trigger" alt="Object hierarchy for Trigger" src="img/GData.Trigger.png"/>
+
+      <map id="GData.Trigger" name="GData.Trigger">
+<area shape="rect" id="node1" href="GData.Trigger.html" title="GData.Trigger" alt="" coords="74,197,202,245"/>
+<area shape="rect" id="node2" href="GData.ProxyPropertyGroup.html" title="GData.ProxyPropertyGroup" alt="" coords="25,101,251,149"/>
+</map>
+
+        <h2 class="main_title">Description:</h2>
+        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">class</span> <b><span class="class">Trigger</span></b> : <span class="main_type"><a href="GData.ProxyPropertyGroup.html" class="class">ProxyPropertyGroup</a></span>
+        </div>
+        <div class="description">
+          <p>Simple database like trigger for application purposes. Being that trigger is derived from ProxyPropertyGroup its value gets reevaluated 
+            whenever any property in group changes and if conditions are right then trigger is emited.</p>
+          <p>In order to simplify everything, processing of values should be direct and not trough ProxyProperty values as main purpose of this class 
+            is not value resolving, but rather time when something needs to be reevaluated</p>
+          <p>Since ProxyProperty in nature allows tracking changes trough contracts and pointers, this also means that trigger is contract aware and 
+            if specified right way it can stay stable across whole application lifetime. Second thing that needs to be also noted is that each 
+            ProxyProperty can as well belong to different contract (or no contract at all) and trigger will still serve its notification job as it 
+            should</p>
+          <p>Note that nothing prevents one to have subclasses of ProxyProperty which provide value in more accessible way. Reason why they are not 
+            implemented is simple as this is best to be done in language extension. With Vala for example all that is needed is one generic class that
+            can handle all types while in languages that don't support generics this might be more complex</p>
+          <h2 class="main_title">Since:</h2>
+          <p>0.1</p>
+        </div><br/>
+        <div class="namespace_note"><b>Namespace:</b> <a href="GData.html">GData</a>
+        </div>
+        <div class="package_note"><b>Package:</b> <a href="index.htm">g_data_binding_lib</a>
+        </div>
+        <h2 class="main_title">Content:</h2>
+        <h3 class="main_title">Properties:</h3>
+        <ul class="navi_inline">
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GData.TriggerEmissionDelegate.html" class="delegate">TriggerEmissionDelegate</a></span>? <b><a href="GData.Trigger.method.html" class="property">method</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Method used to verify need for trigger emission. If method returns 
+                true, then trigger will be emited.</span>
+            </div></li>
+        </ul>
+        <h3 class="main_title">Creation methods:</h3>
+        <ul class="navi_inline">
+          <li class="creation_method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <b><a href="GData.Trigger.Trigger.html" class="creation_method">Trigger</a></b> (<span class="main_type"><a href="GData.TriggerEmissionDelegate.html" class="delegate">TriggerEmissionDelegate</a></span>? method = <span class="main_literal">null</span>)
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Creates new Trigger</span>
+            </div></li>
+        </ul>
+        <h3 class="main_title">Signals:</h3>
+        <ul class="navi_inline">
+          <li class="signal"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">signal</span> <span class="main_keyword">void</span> <b><a href="GData.Trigger.trigger.html" class="signal">trigger</a></b> ()
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Signal is emited when any property in group changes and on 
+                reevaluation trough method true is returned</span>
+            </div></li>
+        </ul>
+        <h3 class="main_title">Inherited Members:</h3>
+        <div class="box">
+          <div class="headline" onclick="toggle_box (this, 'box-content-66')">All known members inherited from class GData.ProxyPropertyGroup</div>
+          <div class="content" id="box-content-66">
+            <div class="column">
+              <ul class="navi_inline">
+                <li class="property"><a href="GData.ProxyPropertyGroup.is_valid.html">is_valid</a></li>
+                <li class="method"><a href="GData.ProxyPropertyGroup.add_property.html">add_property</a></li>
+                <li class="method"><a href="GData.ProxyPropertyGroup.add_proxy_property.html">add_proxy_property</a></li>
+                <li class="method"><a href="GData.ProxyPropertyGroup.get_by_name.html">get_by_name</a></li>
+                <li class="method"><a href="GData.ProxyPropertyGroup.get_by_instance.html">get_by_instance</a></li>
+              </ul>
+            </div>
+            <div class="column">
+              <ul class="navi_inline">
+                <li class="method"><a href="GData.ProxyPropertyGroup.remove_proxy_property_by_name.html">remove_proxy_property_by_name</a></li>
+                <li class="method"><a href="GData.ProxyPropertyGroup.remove_proxy_property.html">remove_proxy_property</a></li>
+                <li class="method"><a href="GData.ProxyPropertyGroup.clean.html">clean</a></li>
+                <li class="method"><a href="GData.ProxyPropertyGroup.get_item.html">get_item</a></li>
+                <li class="virtual_method"><a href="GData.ProxyPropertyGroup.get_item_type.html">get_item_type</a></li>
+              </ul>
+            </div>
+            <div class="column">
+              <ul class="navi_inline">
+                <li class="method"><a href="GData.ProxyPropertyGroup.get_n_items.html">get_n_items</a></li>
+                <li class="signal"><a href="GData.ProxyPropertyGroup.property_added.html">property_added</a></li>
+                <li class="signal"><a href="GData.ProxyPropertyGroup.property_removed.html">property_removed</a></li>
+                <li class="signal"><a href="GData.ProxyPropertyGroup.value_changed.html">value_changed</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <div class="headline" onclick="toggle_box (this, 'box-content-67')">All known members inherited from class GLib.Object</div>
+          <div class="content" id="box-content-67">
+            <div class="column">
+              <ul class="navi_inline">
+                <li class="static_method">@new</li>
+                <li class="static_method">new_valist</li>
+                <li class="static_method">newv</li>
+                <li class="method">add_toggle_ref</li>
+                <li class="method">add_weak_pointer</li>
+                <li class="method">bind_property</li>
+                <li class="method">connect</li>
+                <li class="virtual_method">constructed</li>
+                <li class="method">disconnect</li>
+                <li class="virtual_method">dispose</li>
+                <li class="method">dup_data</li>
+                <li class="method">dup_qdata</li>
+                <li class="method">freeze_notify</li>
+                <li class="method">@get</li>
+              </ul>
+            </div>
+            <div class="column">
+              <ul class="navi_inline">
+                <li class="method">get_class</li>
+                <li class="method">get_data</li>
+                <li class="method">get_property</li>
+                <li class="method">get_qdata</li>
+                <li class="method">get_type</li>
+                <li class="method">notify_property</li>
+                <li class="method">@ref</li>
+                <li class="method">ref_sink</li>
+                <li class="method">replace_data</li>
+                <li class="method">replace_qdata</li>
+                <li class="method">remove_toggle_ref</li>
+                <li class="method">remove_weak_pointer</li>
+                <li class="method">@set</li>
+              </ul>
+            </div>
+            <div class="column">
+              <ul class="navi_inline">
+                <li class="method">set_data</li>
+                <li class="method">set_data_full</li>
+                <li class="method">set_property</li>
+                <li class="method">set_qdata</li>
+                <li class="method">set_qdata_full</li>
+                <li class="method">steal_data</li>
+                <li class="method">steal_qdata</li>
+                <li class="method">thaw_notify</li>
+                <li class="method">unref</li>
+                <li class="method">weak_ref</li>
+                <li class="method">weak_unref</li>
+                <li class="signal">notify</li>
+                <li class="field">ref_count</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <div class="headline" onclick="toggle_box (this, 'box-content-68')">All known members inherited from interface GLib.ListModel</div>
+          <div class="content" id="box-content-68">
+            <div class="column">
+              <ul class="navi_inline">
+                <li class="abstract_method">get_item</li>
+                <li class="abstract_method">get_item_type</li>
+              </ul>
+            </div>
+            <div class="column">
+              <ul class="navi_inline">
+                <li class="abstract_method">get_n_items</li>
+                <li class="method">get_object</li>
+              </ul>
+            </div>
+            <div class="column">
+              <ul class="navi_inline">
+                <li class="signal">items_changed</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><br/>
+    <div class="site_footer">Generated by <a href="http://www.valadoc.org/">Valadoc</a>
+    </div>
+  </body>
+</html>

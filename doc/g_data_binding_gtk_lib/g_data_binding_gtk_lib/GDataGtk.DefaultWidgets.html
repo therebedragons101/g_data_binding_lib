@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>GDataGtk.DefaultWidgets &ndash; g_data_binding_gtk_lib &ndash; Vala Binding Reference</title>
+    <link href="../style.css" rel="stylesheet" type="text/css"/><script src="../scripts.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div class="site_header">GDataGtk.DefaultWidgets &ndash; g_data_binding_gtk_lib Reference Manual</div>
+    <div class="site_body">
+      <div class="site_navigation">
+        <ul class="navi_main">
+          <li class="package_index"><a href="../index.html">Packages</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="package"><a href="index.htm">g_data_binding_gtk_lib</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="GDataGtk.html">GDataGtk</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="class">DefaultWidgets</li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="property"><a href="GDataGtk.DefaultWidgets.default_fallback.html">default_fallback</a></li>
+          <li class="property"><a href="GDataGtk.DefaultWidgets.fallback.html">fallback</a></li>
+          <li class="static_method"><a href="GDataGtk.DefaultWidgets.create_custom_instance.html">create_custom_instance</a></li>
+          <li class="static_method"><a href="GDataGtk.DefaultWidgets.get_default.html">get_default</a></li>
+          <li class="static_method"><a href="GDataGtk.DefaultWidgets.init.html">init</a></li>
+          <li class="static_method"><a href="GDataGtk.DefaultWidgets.set_default.html">set_default</a></li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.create_binding_transfer_widget.html">create_binding_transfer_widget</a></li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.create_default_fallback.html">create_default_fallback</a></li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.create_property_widget.html">create_property_widget</a></li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.create_type_widget.html">create_type_widget</a></li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.property_widget_registered.html">property_widget_registered</a></li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.register_for_data_type.html">register_for_data_type</a></li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.register_for_property.html">register_for_property</a></li>
+          <li class="method"><a href="GDataGtk.DefaultWidgets.type_widget_registered.html">type_widget_registered</a></li>
+        </ul>
+      </div>
+      <div class="site_content">
+        <h1 class="main_title">DefaultWidgets</h1>
+        <hr class="main_hr"/>
+        <h2 class="main_title">Object Hierarchy:</h2>
+        <img class="main_diagram" usemap="#GDataGtk.DefaultWidgets" alt="Object hierarchy for DefaultWidgets" src="img/GDataGtk.DefaultWidgets.png"/>
+
+      <map id="GDataGtk.DefaultWidgets" name="GDataGtk.DefaultWidgets">
+<area shape="rect" id="node1" href="GDataGtk.DefaultWidgets.html" title="GDataGtk.DefaultWidgets" alt="" coords="5,5,221,53"/>
+</map>
+
+        <h2 class="main_title">Description:</h2>
+        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">class</span> <b><span class="class">DefaultWidgets</span></b>
+        </div>
+        <div class="description">
+          <p>Registration container for methods that can be used to automate gui creation per object properties or per data types</p>
+          <p>Application it self should more or less always use get_default() unless there is a need for specific conditional chaining in which case 
+            it can create new instance and set that one as fallback</p>
+          <p>This allows impacting creation at any level</p>
+          <p>Libraries should most probably generate following structure - its own registry instance - that has fallback in get_default(). With this 
+            setup library can set up as many custom creations as wanted and never impact the application, while at the same time take advantage of all
+            custom defaults made by application.</p>
+          <h2 class="main_title">Since:</h2>
+          <p>0.1</p>
+        </div><br/>
+        <div class="namespace_note"><b>Namespace:</b> <a href="GDataGtk.html">GDataGtk</a>
+        </div>
+        <div class="package_note"><b>Package:</b> <a href="index.htm">g_data_binding_gtk_lib</a>
+        </div>
+        <h2 class="main_title">Content:</h2>
+        <h3 class="main_title">Properties:</h3>
+        <ul class="navi_inline">
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><span class="class">DefaultWidgets</span></span>? <b><a href="GDataGtk.DefaultWidgets.fallback.html" class="property">fallback</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Allows chaining of default widget regirars. If requested generation 
+                fails then fallback is the next choice.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GDataGtk.CreateCustomTypeWidgetDelegate.html" class="delegate">CreateCustomTypeWidgetDelegate</a></span> <b><a href="GDataGtk.DefaultWidgets.default_fallback.html" class="property">default_fallback</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Specifies method which can create fallback widget. By default this 
+                creates simple label widget, but this can be replaced anytime by changing this property</span>
+            </div></li>
+        </ul>
+        <h3 class="main_title">Static methods:</h3>
+        <ul class="navi_inline">
+          <li class="static_method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">static</span> <span class="main_type"><span class="class">DefaultWidgets</span></span> <b><a href="GDataGtk.DefaultWidgets.get_default.html" class="static_method">get_default</a></b> ()
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Returns singleton instance for DefaultWidgetRegister. Note that 
+                default already registers some defaults. This is easy to override with custom DefaultWidgets class</span>
+            </div></li>
+          <li class="static_method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">static</span> <span class="main_keyword">void</span> <b><a href="GDataGtk.DefaultWidgets.set_default.html" class="static_method">set_default</a></b> (<span class="main_type"><span class="class">DefaultWidgets</span></span> instance)
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Sets new default widgets creation mechanism. If this is called then 
+                only right moment is before init() or get_instance(). If either of those two was called before this was set application will throw 
+                error and quit</span>
+            </div></li>
+          <li class="static_method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">static</span> <span class="main_keyword">void</span> <b><a href="GDataGtk.DefaultWidgets.init.html" class="static_method">init</a></b> ()
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Initializes default registrations. Init can be called even if default 
+                instance was swapped with set_default() at which point Init will add default registrations to that specific instance</span>
+            </div></li>
+          <li class="static_method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">static</span> <span class="main_type"><span class="class">DefaultWidgets</span></span> <b><a href="GDataGtk.DefaultWidgets.create_custom_instance.html" class="static_method">create_custom_instance</a></b> ()
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Creates custom default widget creation registrar</span>
+            </div></li>
+        </ul>
+        <h3 class="main_title">Methods:</h3>
+        <ul class="navi_inline">
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><span class="class">Widget</span></span>? <b><a href="GDataGtk.DefaultWidgets.create_default_fallback.html" class="method">create_default_fallback</a></b> (<span class="main_type"><a href="GDataGtk.EditMode.html" class="enum">EditMode</a></span> mode, <span class="main_type"><span class="class">ParamSpec</span></span>? param, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="class">string</span></span> widget_value_property)
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">This should be called when resolving correct widget was not possible
+              </span>
+            </div></li>
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GDataGtk.DefaultWidgets.property_widget_registered.html" class="method">property_widget_registered</a></b> (<span class="main_type"><a href="GDataGtk.EditMode.html" class="enum">EditMode</a></span> mode, <span class="main_type"><span class="class">ParamSpec</span></span> param, <span class="main_basic_type"><span class="struct">bool</span></span> go_deep = <span class="main_literal">false</span>)
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Checks if specified property registered specific widget creation or 
+                not</span>
+            </div></li>
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><span class="class">Widget</span></span>? <b><a href="GDataGtk.DefaultWidgets.create_binding_transfer_widget.html" class="method">create_binding_transfer_widget</a></b> (<span class="main_type"><a href="GDataGtk.EditMode.html" class="enum">EditMode</a></span> mode, <span class="main_type"><a href="GData.BindingDataTransferInterface.html" class="interface">BindingDataTransferInterface</a></span>? binding_transfer, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="class">string</span></span> widget_value_property)
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Creates widget for specific object property if registered. If not 
+                found and DefaultWidgets instance specifies fallback then that one is used as continuation and so on until the end of the registration
+                chain. Since this specifies binding transfer data it also means this is safe to call even for foreign objects depending on the fact 
+                that they have registered data handler</span>
+            </div></li>
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><span class="class">Widget</span></span>? <b><a href="GDataGtk.DefaultWidgets.create_property_widget.html" class="method">create_property_widget</a></b> (<span class="main_type"><a href="GDataGtk.EditMode.html" class="enum">EditMode</a></span> mode, <span class="main_type"><span class="class">ParamSpec</span></span>? param, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="class">string</span></span> widget_value_property)
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Creates widget for specific object property if registered. If not 
+                found and DefaultWidgets instance specifies fallback then that one is used as continuation and so on until the end of the registration
+                chain</span>
+            </div></li>
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GDataGtk.DefaultWidgets.type_widget_registered.html" class="method">type_widget_registered</a></b> (<span class="main_type"><a href="GDataGtk.EditMode.html" class="enum">EditMode</a></span> mode, <span class="main_type"><span class="struct">Type</span></span> data_type, <span class="main_basic_type"><span class="struct">bool</span></span> go_deep = <span class="main_literal">false</span>)
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Checks if specified data type registered specific widget creation or 
+                not.</span>
+            </div></li>
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><span class="class">Widget</span></span>? <b><a href="GDataGtk.DefaultWidgets.create_type_widget.html" class="method">create_type_widget</a></b> (<span class="main_type"><a href="GDataGtk.EditMode.html" class="enum">EditMode</a></span> mode, <span class="main_type"><span class="struct">Type</span></span> data_type, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="class">string</span></span> widget_value_property)
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Creates widget for specific data type if registered</span>
+            </div></li>
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GDataGtk.DefaultWidgets.register_for_property.html" class="method">register_for_property</a></b> (<span class="main_type"><a href="GDataGtk.EditMode.html" class="enum">EditMode</a></span> mode, <span class="main_type"><span class="class">ParamSpec</span></span>? param, <span class="main_type"><a href="GDataGtk.CreateCustomWidgetDelegate.html" class="delegate">CreateCustomWidgetDelegate</a></span> method)
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Registers creation method for specific property in specific object. If
+                creation already exists GLib.error is reported. If there is the need to specify another method for same thing, then different 
+                instances of DefaultWidgets should be used instead</span>
+            </div></li>
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GDataGtk.DefaultWidgets.register_for_data_type.html" class="method">register_for_data_type</a></b> (<span class="main_type"><a href="GDataGtk.EditMode.html" class="enum">EditMode</a></span> mode, <span class="main_type"><span class="struct">Type</span></span> data_type, <span class="main_type"><a href="GDataGtk.CreateCustomTypeWidgetDelegate.html" class="delegate">CreateCustomTypeWidgetDelegate</a></span> method, <span class="main_type"><a href="GDataGtk.ConditionCheckDelegate.html" class="delegate">ConditionCheckDelegate</a></span>? condition_check = <span class="main_literal">null</span>)
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Registers creation method for specific data type</span>
+            </div></li>
+        </ul>
+      </div>
+    </div><br/>
+    <div class="site_footer">Generated by <a href="http://www.valadoc.org/">Valadoc</a>
+    </div>
+  </body>
+</html>

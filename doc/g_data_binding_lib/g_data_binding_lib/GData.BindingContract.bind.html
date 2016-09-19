@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>GData.BindingContract.bind &ndash; g_data_binding_lib &ndash; Vala Binding Reference</title>
+    <link href="../style.css" rel="stylesheet" type="text/css"/><script src="../scripts.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div class="site_header">GData.BindingContract.bind &ndash; g_data_binding_lib Reference Manual</div>
+    <div class="site_body">
+      <div class="site_navigation">
+        <ul class="navi_main">
+          <li class="package_index"><a href="../index.html">Packages</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="package"><a href="index.htm">g_data_binding_lib</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="GData.html">GData</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="class"><a href="GData.BindingContract.html">BindingContract</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="property"><a href="GData.BindingContract.binder.html">binder</a></li>
+          <li class="property"><a href="GData.BindingContract.can_bind.html">can_bind</a></li>
+          <li class="property"><a href="GData.BindingContract.default_target.html">default_target</a></li>
+          <li class="property"><a href="GData.BindingContract.is_valid.html">is_valid</a></li>
+          <li class="property"><a href="GData.BindingContract.length.html">length</a></li>
+          <li class="property"><a href="GData.BindingContract.suspended.html">suspended</a></li>
+          <li class="creation_method"><a href="GData.BindingContract.BindingContract.html">BindingContract</a></li>
+          <li class="creation_method"><a href="GData.BindingContract.BindingContract.add_to_default_storage.html">
+              BindingContract.add_to_default_storage</a></li>
+          <li class="creation_method"><a href="GData.BindingContract.BindingContract.add_to_storage.html">BindingContract.add_to_storage</a></li>
+          <li class="method">bind</li>
+          <li class="method"><a href="GData.BindingContract.bind_default.html">bind_default</a></li>
+          <li class="method"><a href="GData.BindingContract.bind_group.html">bind_group</a></li>
+          <li class="method"><a href="GData.BindingContract.bind_information.html">bind_information</a></li>
+          <li class="virtual_method"><a href="GData.BindingContract.disconnect_contract.html">disconnect_contract</a></li>
+          <li class="method"><a href="GData.BindingContract.get_item.html">get_item</a></li>
+          <li class="method"><a href="GData.BindingContract.get_item_at_index.html">get_item_at_index</a></li>
+          <li class="method"><a href="GData.BindingContract.get_item_type.html">get_item_type</a></li>
+          <li class="method"><a href="GData.BindingContract.get_n_items.html">get_n_items</a></li>
+          <li class="virtual_method"><a href="GData.BindingContract.handle_weak_ref.html">handle_weak_ref</a></li>
+          <li class="method"><a href="GData.BindingContract.set_contract_description.html">set_contract_description</a></li>
+          <li class="method"><a href="GData.BindingContract.set_mapper.html">set_mapper</a></li>
+          <li class="method"><a href="GData.BindingContract.unbind.html">unbind</a></li>
+          <li class="method"><a href="GData.BindingContract.unbind_all.html">unbind_all</a></li>
+          <li class="method"><a href="GData.BindingContract.unbind_group.html">unbind_group</a></li>
+          <li class="signal"><a href="GData.BindingContract.bindings_changed.html">bindings_changed</a></li>
+          <li class="signal"><a href="GData.BindingContract.contract_changed.html">contract_changed</a></li>
+        </ul>
+      </div>
+      <div class="site_content">
+        <h1 class="main_title">bind</h1>
+        <hr class="main_hr"/>
+        <h2 class="main_title">Description:</h2>
+        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GData.BindingInformationInterface.html" class="interface">BindingInformationInterface</a></span> <b><span class="method">bind</span></b> (<span class="main_basic_type"><span class="class">string</span></span> source_property, <span class="main_type"><span class="class">Object</span></span> target, <span class="main_basic_type"><span class="class">string</span></span> target_property, <span class="main_type"><a href="GData.BindFlags.html" class="enum">BindFlags</a></span> flags = <b><a href="GData.BindFlags.DEFAULT.html" class="enumvalue">DEFAULT</a></b>, <span class="main_keyword">owned</span> <span class="main_type"><a href="GData.PropertyBindingTransformFunc.html" class="delegate">PropertyBindingTransformFunc</a></span>? transform_to = <span class="main_literal">null</span>, <span class="main_keyword">owned</span> <span class="main_type"><a href="GData.PropertyBindingTransformFunc.html" class="delegate">PropertyBindingTransformFunc</a></span>? transform_from = <span class="main_literal">null</span>, <span class="main_keyword">owned</span> <span class="main_type"><a href="GData.SourceValidationFunc.html" class="delegate">SourceValidationFunc</a></span>? source_validation = <span class="main_literal">null</span>)
+        </div>
+        <div class="description">
+          <p>Invokes creation of BindingInformation for specified parameters. If contract is active and everything is in order this also creates 
+            BindingInterface and activates data transfer</p>
+          <p>Main reasoning for this method is to allow chain API in objective languages which makes code much simpler to follow</p>
+          <p>NOTE! transform_from and transform_to can work in two ways. If value return is true, then newly converted value is assigned to property, 
+            if return is false, then that doesn't happen which can be used to assign property values directly and avoiding value conversion</p>
+          <h2 class="main_title">Parameters:</h2>
+          <table class="main_parameter_table">
+            <tr>
+              <td class="main_parameter_table_name">source_property</td>
+              <td>
+                <p>Source property name </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="main_parameter_table_name">target</td>
+              <td>
+                <p>Target object </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="main_parameter_table_name">target_property</td>
+              <td>
+                <p>Target property name </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="main_parameter_table_name">flags</td>
+              <td>
+                <p>Flags describing property binding creation </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="main_parameter_table_name">transform_to</td>
+              <td>
+                <p>Custom method to transform data from source value to target value </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="main_parameter_table_name">transform_from</td>
+              <td>
+                <p>Custom method to transform data from source value to target value </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="main_parameter_table_name">source_validation</td>
+              <td>
+                <p>Specifies custom method to validate this particular property in source object. When this is not specified, validity is true </p>
+              </td>
+            </tr>
+          </table>
+          <h2 class="main_title">Returns:</h2>
+          <table class="main_parameter_table">
+            <tr>
+              <td>
+                <p>Newly create BindingInformationInterface </p>
+              </td>
+            </tr>
+          </table>
+          <h2 class="main_title">Since:</h2>
+          <p>0.1</p>
+        </div>
+      </div>
+    </div><br/>
+    <div class="site_footer">Generated by <a href="http://www.valadoc.org/">Valadoc</a>
+    </div>
+  </body>
+</html>
