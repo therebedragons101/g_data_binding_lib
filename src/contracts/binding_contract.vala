@@ -416,6 +416,7 @@ namespace GData
 		 * property values directly and avoiding value conversion
 		 * 
 		 * @since 0.1
+		 * 
 		 * @param source_property Source property name
 		 * @param target_property Target property name
 		 * @param flags Flags describing property binding creation

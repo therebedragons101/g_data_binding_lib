@@ -262,12 +262,13 @@ ${COMMON_NAME}_generics${NAME_SUFFIX}.so:
 	${PACKAGES} \
 	${GENERICS_SOURCES}
 
+
 ${COMMON_NAME}_generics${NAME_SUFFIX}.doc:
 	valadoc \
 		--force \
-		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
 		${PACKAGES} \
 		${GENERICS_SOURCES} \
+		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
 		--directory=${DOCDIR}${COMMON_NAME}_generics${NAME_SUFFIX}
 
 ${COMMON_NAME}_gtk${NAME_SUFFIX}.so:
