@@ -20,7 +20,7 @@ namespace GData
 	 * with all sorts of random properties to support all the needed checks. 
 	 * State objects can be added/removed per contract without slightest regard
 	 * to state contract is in
-	 *  
+	 * 
 	 * NOTE!
 	 * While set_data()/get_data() is slow, they only occur on adding/removing 
 	 * state objects, where there is almost no use case binding contract could 
@@ -52,7 +52,7 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 * @param state_object State object being added
-		 * @returns Reference to added object in order to allow possibility of
+		 * @return Reference to added object in order to allow possibility of
 		 *          chain API in objective languages
 		 */
 		public CustomBindingSourceState add_state (CustomBindingSourceState state_object)

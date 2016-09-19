@@ -55,7 +55,7 @@ namespace GData
 		 * 
 		 * @since 0.1
 		 * @param data_object State object being added
-		 * @returns Reference to added object in order to allow possibility of
+		 * @return Reference to added object in order to allow possibility of
 		 *          chain API in objective languages
 		 */
 		public CustomPropertyNotificationBindingSource add_source_value (CustomPropertyNotificationBindingSource data_object)

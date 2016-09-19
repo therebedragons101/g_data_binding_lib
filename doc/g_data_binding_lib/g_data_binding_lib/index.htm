@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>g_data_binding_lib &ndash; Vala Binding Reference</title>
+    <link href="../style.css" rel="stylesheet" type="text/css"/><script src="../scripts.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div class="site_header">g_data_binding_lib Reference Manual</div>
+    <div class="site_body">
+      <div class="site_navigation">
+        <ul class="navi_main">
+          <li class="package_index"><a href="../index.html">Packages</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="package">g_data_binding_lib</li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="GData.html">GData</a></li>
+        </ul>
+      </div>
+      <div class="site_content">
+        <h1 class="main_title" id="g_data_binding_lib">g_data_binding_lib</h1>
+        <hr class="main_hr"/>
+        <h2 class="main_title">Description:</h2>
+        <h2 class="main_title">Content:</h2>
+        <h3 class="main_title">Namespaces:</h3>
+        <ul class="navi_inline">
+          <li class="namespace"><a href="GData.html">GData</a></li>
+          <h3 class="main_title">Interfaces:</h3>
+          <ul class="navi_inline">
+            <li class="interface"><a href="GData.HasDescription.html">HasDescription</a> - <span class="brief_description">Provides unified point for 
+                objects that have description property</span></li>
+            <li class="interface"><a href="GData.ObjectInformation.html">ObjectInformation</a> - <span class="brief_description">Provides additional 
+                way of generalizing information about objects that implement this interface</span></li>
+            <li class="interface"><a href="GData.UniqueByProperies.html">UniqueByProperies</a> - <span class="brief_description">UniqueByProperies is 
+                helper interface for ObjectArray and its only purpose is to enable definition of objects which can be compared by properties in 
+                uniform fashion</span></li>
+            <li class="interface"><a href="GData.BindingContractMapper.html">BindingContractMapper</a> - <span class="brief_description">Interface 
+                that allows easier mapping of object. This is not to be confused with BinderMapper which is very similar. BindingContractMapper does 
+                exact same job on contract level which means that binding don't just fall apart when source or target is unvailable.</span></li>
+            <li class="interface"><a href="GData.BindingGroup.html">BindingGroup</a> - <span class="brief_description">Interface designed for handling
+                group add/remove of property bindings on contract.</span></li>
+            <li class="interface"><a href="GData.BindingInformationInterface.html">BindingInformationInterface</a> - <span class="brief_description">
+                Interface for needed functionality in BindingInformation. This is only intended when there is a need to supply custom binding 
+                information and it is also used in BindingGroup</span></li>
+            <li class="interface"><a href="GData.BindingStateObjects.html">BindingStateObjects</a> - <span class="brief_description">IMPORTANT! Best 
+                and easiest method to understand state/value objects is to run tutorial demo. Demo focuses on visually exposing all internals and 
+                events and makes something complex something really trivial. It will be difference between minutes and god knows how long</span></li>
+            <li class="interface"><a href="GData.BindingValueObjects.html">BindingValueObjects</a> - <span class="brief_description">IMPORTANT! Best 
+                and easiest method to understand state/value objects is to run tutorial demo. Demo focuses on visually exposing all internals and 
+                events and makes something complex something really trivial. It will be difference between minutes and god knows how long</span></li>
+            <li class="interface"><a href="GData.BinderMapper.html">BinderMapper</a> - <span class="brief_description">Interface that allows easier 
+                mapping of object. This is not to be confused with BindingContractMapper which is very similar. ContractMapper does exact same job on 
+                contract level which means that binding don't just fall apart when source or target is unvailable.</span></li>
+            <li class="interface"><a href="GData.BindingDataTransferInterface.html">BindingDataTransferInterface</a></li>
+            <li class="interface"><a href="GData.BindingInterface.html">BindingInterface</a> - <span class="brief_description">Most basic property 
+                binding requirement</span></li>
+            <li class="interface"><a href="GData.DataFloodDetection.html">DataFloodDetection</a> - <span class="brief_description">DataFloodDetection 
+                interface defines basic flood detection functionality</span></li>
+          </ul>
+          <h3 class="main_title">Classes:</h3>
+          <ul class="navi_inline">
+            <li class="class"><a href="GData.Attribute.html">Attribute</a> - <span class="brief_description">.Net like attribute object</span></li>
+            <li class="class"><a href="GData.GObjectArray.html">GObjectArray</a> - <span class="brief_description">GObjectArray is holding list of non
+                generic objects and emits signals when objects are added or removed.</span></li>
+            <li class="class"><a href="GData.PropertyInfoAttribute.html">PropertyInfoAttribute</a> - <span class="brief_description">
+                PropertyInfoAttribute main purpose is to tackle deficiency of ParamSpec not being derived from GObject and as such not really useful 
+                for binding</span></li>
+            <li class="class"><a href="GData.RefTimeout.html">RefTimeout</a> - <span class="brief_description">RefTimeout is almost the same as 
+                GLib.Timeout with one exception of adding safety layer to its lifetime</span></li>
+            <li class="class"><a href="GData.ReferenceMonitor.html">ReferenceMonitor</a> - <span class="brief_description">Taps into reference 
+                lifetime and sends signal when reference is deleted. This monitor object has its own lifetime controlled by object being watched and 
+                as such any additional ref/unref is completely unwarranted or unecessary.</span></li>
+            <li class="class"><a href="GData.ReferenceMonitorGroup.html">ReferenceMonitorGroup</a> - <span class="brief_description">Provides grouping
+                of reference monitor object lifetimes in order to centrally manipulate notifications</span></li>
+            <li class="class"><a href="GData.StrictWeakRef.html">StrictWeakRef</a> - <span class="brief_description">Non-generic class StrictWeakRef 
+                is different from WeakRef in two things.</span></li>
+            <li class="class"><a href="GData.TypeInformation.html">TypeInformation</a></li>
+            <li class="class"><a href="GData.WeakRef.html">WeakRef</a> - <span class="brief_description">.Net C# Non-generic WeakRef like 
+                implementation</span></li>
+            <li class="class"><a href="GData.WeakRefWrapper.html">WeakRefWrapper</a> - <span class="brief_description">StrictWeakReference wrapped in 
+                GObject</span></li>
+            <li class="class"><a href="GData.BindingPointer.html">BindingPointer</a> - <span class="brief_description">IMPORTANT! Best and easiest 
+                method to understand binding pointers is to run tutorial demo. Demo focuses on visually exposing all internals and events and makes 
+                something complex something really trivial. It will be difference between minutes and god knows how long</span></li>
+            <li class="class"><a href="GData.BindingContract.html">BindingContract</a> - <span class="brief_description">IMPORTANT! Best and easiest 
+                method to understand binding contracts is to run tutorial demo. Demo focuses on visually exposing all internals and events and makes 
+                something complex something really trivial. It will be difference between minutes and god knows how long</span></li>
+            <li class="class"><a href="GData.BindingInformation.html">BindingInformation</a> - <span class="brief_description">BindingInformation 
+                holds information about binding as well as controls its creation and unbinding.</span></li>
+            <li class="class"><a href="GData.BindingPointerFromPropertyValue.html">BindingPointerFromPropertyValue</a> - 
+              <span class="brief_description">IMPORTANT! Best and easiest method to understand binding pointers is to run tutorial demo. Demo focuses 
+                on visually exposing all internals and events and makes something complex something really trivial. It will be difference between 
+                minutes and god knows how long</span></li>
+            <li class="class"><a href="GData.BindingSuspensionGroup.html">BindingSuspensionGroup</a></li>
+            <li class="class"><a href="GData.BooleanCondition.html">BooleanCondition</a> - <span class="brief_description">Used to track property 
+                changes and provide their state.</span></li>
+            <li class="class"><a href="GData.ContractStorage.html">ContractStorage</a> - <span class="brief_description">Storage for contracts in 
+                order to have guaranteed reference when there is no need for local variable or to have them globally accessible by name</span></li>
+            <li class="class"><a href="GData.CustomBindingSourceState.html">CustomBindingSourceState</a> - <span class="brief_description">
+                CustomBindingSourceState is state object implementation. Unlike value objects that are stored as 
+                CustomPropertyNotificationBindingSource in order to create flexible implementations state objects can only be stored as 
+                CustomBindingSourceState or its subclass. If there is a need for different state object, then classifying it as bool value object 
+                might be better</span></li>
+            <li class="class"><a href="GData.CustomBindingSourceValue.html">CustomBindingSourceValue</a> - <span class="brief_description">
+                CustomBindingSourceValue is one of value objects implementations. It serves as well as example on how to create custom value objects 
+                as having usable functionality. Unlike CustomBindingSourceData&lt;T&gt; this one uses GLib.Value for value type</span></li>
+            <li class="class"><a href="GData.CustomPropertyNotificationBindingSource.html">CustomPropertyNotificationBindingSource</a> - 
+              <span class="brief_description">CustomPropertyNotificationBindingSource is base class for value and state objects.</span></li>
+            <li class="class"><a href="GData.DelayedBindingPointer.html">DelayedBindingPointer</a> - <span class="brief_description">
+                DelayedBindingPointer serves throtling data refresh with most basic delay.</span></li>
+            <li class="class"><a href="GData.EnumState.html">EnumState</a> - <span class="brief_description">Allows active binding to specific boolean
+                flag and also supports object change if specified object was binding pointer</span></li>
+            <li class="class"><a href="GData.EnumStateGroup.html">EnumStateGroup</a> - <span class="brief_description">Specifies group monitoring of 
+                flags values and provides easy way to add specific monitoring states</span></li>
+            <li class="class"><a href="GData.FlagState.html">FlagState</a> - <span class="brief_description">Allows active binding to specific boolean
+                flag and also supports object change if specified object was binding pointer</span></li>
+            <li class="class"><a href="GData.FlagStateGroup.html">FlagStateGroup</a> - <span class="brief_description">Specifies group monitoring of 
+                flags values and provides easy way to add specific monitoring states</span></li>
+            <li class="class"><a href="GData.PointerNamespace.html">PointerNamespace</a> - <span class="brief_description">Class serves to store weak 
+                references for all pointers and it creates filesystem like structure</span></li>
+            <li class="class"><a href="GData.PointerStorage.html">PointerStorage</a> - <span class="brief_description">Storage for pointers in order 
+                to have guaranteed reference when there is no need for local variable or to have them globally accessible by name</span></li>
+            <li class="class"><a href="GData.ProxyProperty.html">ProxyProperty</a> - <span class="brief_description">Defines proxy access to one 
+                specific property and relays notifications that are connected to it</span></li>
+            <li class="class"><a href="GData.ProxyPropertyGroup.html">ProxyPropertyGroup</a> - <span class="brief_description">Specifies group 
+                monitoring of flags values and provides easy way to add specific monitoring states</span></li>
+            <li class="class"><a href="GData.SignalControlledBindingPointer.html">SignalControlledBindingPointer</a> - 
+              <span class="brief_description">BindingPointer subclass that defines data change dispatch is being maintained manually</span></li>
+            <li class="class"><a href="GData.TimerControlledBindingPointer.html">TimerControlledBindingPointer</a> - <span class="brief_description">
+                BindingPointer subclass that defines data change dispatch is being maintained manually and dispatch is being handled by timer</span>
+            </li>
+            <li class="class"><a href="GData.Trigger.html">Trigger</a> - <span class="brief_description">Simple database like trigger for application 
+                purposes. Being that trigger is derived from ProxyPropertyGroup its value gets reevaluated whenever any property in group changes and 
+                if conditions are right then trigger is emited.</span></li>
+            <li class="class"><a href="GData.Binder.html">Binder</a> - <span class="brief_description">Binder class is multipurpose class that can be 
+                used for different reasons - Controlling property binding creation for either debugging purposes or simply because there is a need for
+                different binding than the one provided by PropertyBinding - It can be interchangeable and specified per contract</span></li>
+            <li class="class"><a href="GData.BindingDataTransfer.html">BindingDataTransfer</a> - <span class="brief_description">Specifies get/set 
+                override for property value in binding. Do not store any hard references as it get passed in request and</span></li>
+            <li class="class"><a href="GData.BindingDefaults.html">BindingDefaults</a> - <span class="brief_description">Enables classes to specify 
+                its own way of property resolving and signaling</span></li>
+            <li class="class"><a href="GData.BindingNamespace.html">BindingNamespace</a> - <span class="brief_description">Provides access to all 
+                bindings done with any Binder. Manually connected property bindings are not stored</span></li>
+            <li class="class"><a href="GData.GObjectBindingDataTransfer.html">GObjectBindingDataTransfer</a> - <span class="brief_description">
+                Specifies get/set override for property value in binding. Do not store any hard references as it get passed in request and</span></li>
+            <li class="class"><a href="GData.GSettingsBindingDataTransfer.html">GSettingsBindingDataTransfer</a> - <span class="brief_description">
+                Handles transfer between for GSettings objects. If for some reason binding needs to be bound to original source when binding with 
+                objects of this type it is possible if binding specifies BindFlags.USE_ORIGINAL_SOURCE_TYPE or BindFlags.USE_ORIGINAL_TARGET_TYPE 
+                respectively based on which side of binding it is. In that case data transfer creation is redirected to GObject type of data transfer
+              </span></li>
+            <li class="class"><a href="GData.PropertyAlias.html">PropertyAlias</a> - <span class="brief_description">Storage for property aliases for 
+                any of possible reasons. - Need for relation to differently named properties in different classes - Simple property registration
+              </span></li>
+            <li class="class"><a href="GData.PropertyBinding.html">PropertyBinding</a> - <span class="brief_description">PropertyBinding is 
+                reimplementation of GBinding with added functionality. Main purpose for this class is handling data transfer between two properties 
+                based on how they were connected</span></li>
+            <li class="class"><a href="GData.EnumFlagsModel.html">EnumFlagsModel</a></li>
+            <li class="class"><a href="GData.EnumFlagsValueObject.html">EnumFlagsValueObject</a></li>
+            <li class="class"><a href="GData.InvertedListModel.html">InvertedListModel</a> - <span class="brief_description">List model that inverts 
+                order of displayed items whose lifetime depends solely on lifetime of handled model and as such it shouldn't ever be referenced 
+                manually.</span></li>
+            <li class="class"><a href="GData.RowColumn.html">RowColumn</a> - <span class="brief_description">Base class for row columns</span></li>
+            <li class="class"><a href="GData.RowModel.html">RowModel</a> - <span class="brief_description">Row model is base class to generate row 
+                representations in list widgets</span></li>
+          </ul>
+          <h3 class="main_title">Enums:</h3>
+          <ul class="navi_inline">
+            <li class="enum"><a href="GData.DebugMessageType.html">DebugMessageType</a></li>
+            <li class="enum"><a href="GData.CompareDataBy.html">CompareDataBy</a> - <span class="brief_description">CompareDataBy specifies how 
+                objects stored in ObjectArray are compared in order to allow handling of unique elements</span></li>
+            <li class="enum"><a href="GData.INVALID_ENUM_TYPE.html">INVALID_ENUM_TYPE</a> - <span class="brief_description">Simple case of invalid 
+                enum type</span></li>
+            <li class="enum"><a href="GData.BindingPointerUpdateType.html">BindingPointerUpdateType</a> - <span class="brief_description">Specifies 
+                type of update which should be handled on source pointed out by pointer</span></li>
+            <li class="enum"><a href="GData.BindingReferenceType.html">BindingReferenceType</a> - <span class="brief_description">Specifies how 
+                BindingPointer should handle reference on data that it points to</span></li>
+            <li class="enum"><a href="GData.ContractChangeType.html">ContractChangeType</a> - <span class="brief_description">Specifies type of change
+                that happened in contract for binding</span></li>
+            <li class="enum"><a href="GData.BindFlags.html">BindFlags</a> - <span class="brief_description">Flags specified upon creation of new 
+                BindingInterface to describe how binding should act</span></li>
+            <li class="enum"><a href="GData.BindingSide.html">BindingSide</a> - <span class="brief_description">Specifies binding side</span></li>
+            <li class="enum"><a href="GData.InformationAvailability.html">InformationAvailability</a> - <span class="brief_description">Specifies data
+                transfer information availability in order to specify how information is available per specific type registered in BindingDefaults
+              </span></li>
+            <li class="enum"><a href="GData.RowOrientation.html">RowOrientation</a> - <span class="brief_description">Specifies orientation how row 
+                should treat building when it needs to fill row</span></li>
+          </ul>
+          <h3 class="main_title">Constants:</h3>
+          <ul class="navi_inline">
+            <li class="constant"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">const</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="GData.MAJOR_VERSION.html" class="constant">MAJOR_VERSION</a></b>
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="constant"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">const</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="GData.MINOR_VERSION.html" class="constant">MINOR_VERSION</a></b>
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="constant"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">const</span> <span class="main_keyword">unowned</span> (<span class="main_keyword">unowned</span> <span class="main_basic_type"><span class="class">string</span></span>)[]? <b><a href="GData.ALL_PROPERTIES.html" class="constant">ALL_PROPERTIES</a></b>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Constant used to define CustomPropertyNotificationBindingSource to 
+                  track all properties without the need to name them</span>
+              </div></li>
+            <li class="constant"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">const</span> <span class="main_keyword">unowned</span> (<span class="main_keyword">unowned</span> <span class="main_basic_type"><span class="class">string</span></span>)[]? <b><a href="GData.NO_PROPERTY.html" class="constant">NO_PROPERTY</a></b>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Constant used to define CustomPropertyNotificationBindingSource to 
+                  not track</span>
+              </div></li>
+            <li class="constant"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">const</span> <span class="main_keyword">unowned</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="GData.ALIAS_DEFAULT.html" class="constant">ALIAS_DEFAULT</a></b>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Default mapping alias which specifies mapping should look up alias 
+                  for property in class that is specified as default</span>
+              </div></li>
+            <li class="constant"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">const</span> <span class="main_keyword">unowned</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="GData.ALIAS_VISIBILITY.html" class="constant">ALIAS_VISIBILITY</a></b>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Default mapping alias which specifies mapping should look up alias 
+                  for property in class that is specified to control visibility</span>
+              </div></li>
+            <li class="constant"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">const</span> <span class="main_keyword">unowned</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="GData.ALIAS_SENSITIVITY.html" class="constant">ALIAS_SENSITIVITY</a></b>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Default mapping alias which specifies mapping should look up alias 
+                  for property in class that is specified to control sensitivity</span>
+              </div></li>
+            <li class="constant"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">const</span> <span class="main_keyword">unowned</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="GData.ALIAS_MIN.html" class="constant">ALIAS_MIN</a></b>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Default mapping alias which specifies mapping should look up alias 
+                  for property in class that is specified to control min value</span>
+              </div></li>
+            <li class="constant"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">const</span> <span class="main_keyword">unowned</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="GData.ALIAS_MAX.html" class="constant">ALIAS_MAX</a></b>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Default mapping alias which specifies mapping should look up alias 
+                  for property in class that is specified to control max value</span>
+              </div></li>
+            <li class="constant"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">const</span> <span class="main_keyword">unowned</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="GData.ALIAS_LENGTH.html" class="constant">ALIAS_LENGTH</a></b>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Default mapping alias which specifies mapping should look up alias 
+                  for property in class that is specified to control length</span>
+              </div></li>
+            <li class="constant"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">const</span> <span class="main_keyword">unowned</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="GData.ALIAS_SECRET.html" class="constant">ALIAS_SECRET</a></b>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Default mapping alias which specifies mapping should look up alias 
+                  for property in class that is specified to control secret</span>
+              </div></li>
+          </ul>
+          <h3 class="main_title">Delegates:</h3>
+          <ul class="navi_inline">
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.DebugDelegate.html" class="delegate">DebugDelegate</a></b> (<span class="main_type"><a href="GData.DebugMessageType.html" class="enum">DebugMessageType</a></span> type, <span class="main_basic_type"><span class="class">string</span></span> facility, <span class="main_basic_type"><span class="class">string</span></span> message, <span class="main_basic_type"><span class="class">string</span></span> details)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.SimpleDelegate.html" class="delegate">SimpleDelegate</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Simplest delegate possible with no parameters and no return value
+                </span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.BoolValueDelegate.html" class="delegate">BoolValueDelegate</a></b> (<span class="main_basic_type"><span class="struct">bool</span></span> val)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Specifies delegate passing boolean value</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.IntValueDelegate.html" class="delegate">IntValueDelegate</a></b> (<span class="main_basic_type"><span class="struct">int</span></span> val)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Specifies delegate passing int value</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.StringValueDelegate.html" class="delegate">StringValueDelegate</a></b> (<span class="main_basic_type"><span class="class">string</span></span> val)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Specifies delegate passing string value</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.ValueDelegate.html" class="delegate">ValueDelegate</a></b> (<span class="main_type"><span class="struct">Value</span></span> val)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Specifies delegate passing GLib.Value type of value</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.ObjectValueDelegate.html" class="delegate">ObjectValueDelegate</a></b> (<span class="main_type"><span class="class">Object</span></span>? val)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Specifies delegate passing object value</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="GData.GetObjectDescriptionStringDelegate.html" class="delegate">GetObjectDescriptionStringDelegate</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj, <span class="main_basic_type"><span class="struct">bool</span></span> use_markup)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Specifies method to get object description</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.SearchDelegate.html" class="delegate">SearchDelegate</a></b> (<span class="main_basic_type"><span class="class">string</span></span> search_for)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Specifies simple delegate that passes search string</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.WeakReferenceInvalid.html" class="delegate">WeakReferenceInvalid</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Delegate being specified to StrictWeakReference upon its creation. 
+                  This is called when target it points to becomes invalid</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.ObjectIterationFunc.html" class="delegate">ObjectIterationFunc</a></b> (<span class="main_type"><span class="class">Object</span></span> obj)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.ParamSpecDelegate.html" class="delegate">ParamSpecDelegate</a></b> (<span class="main_type"><span class="class">ParamSpec</span></span> pspec)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GData.BooleanConditionDelegate.html" class="delegate">BooleanConditionDelegate</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Delegate used to reset state in BooleanCondition</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.ContractChangedDelegate.html" class="delegate">ContractChangedDelegate</a></b> (<span class="main_type"><a href="GData.BindingContract.html" class="class">BindingContract</a></span> contract)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Singnal sent when contract is renewed/disolved or when source 
+                  changes</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.BindingsChangedDelegate.html" class="delegate">BindingsChangedDelegate</a></b> (<span class="main_type"><a href="GData.BindingContract.html" class="class">BindingContract</a></span> contract, <span class="main_type"><a href="GData.ContractChangeType.html" class="enum">ContractChangeType</a></span> change_type, <span class="main_type"><a href="GData.BindingInformation.html" class="class">BindingInformation</a></span> binding)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Singnal sent when bindings in contract change</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.DataChangedDelegate.html" class="delegate">DataChangedDelegate</a></b> (<span class="main_type"><a href="GData.BindingPointer.html" class="class">BindingPointer</a></span> source, <span class="main_basic_type"><span class="class">string</span></span> data_change_cookie)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal that emits notification data in pointer has changed. When 
+                  needed, this signal should be emited either from outside code or from connections made in "connect-notifications". Later is probably
+                  much better for retaining clean code</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.ConnectNotificationsDelegate.html" class="delegate">ConnectNotificationsDelegate</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal is called whenever binding pointer "get_source()" would start
+                  pointing to new valid location and allows custom handling to control emission of custom notifications with "data-changed" This 
+                  signal is only emited when "binding-type" is MANUAL</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.DisconnectNotificationsDelegate.html" class="delegate">DisconnectNotificationsDelegate</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal is called when "get_source()" is just about to be starting 
+                  pointing to something else in order for custom binding pointer to be able to disconnect emission of custom "data-changed" 
+                  notifications This signal is only emited when "binding-type" is MANUAL</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.BeforeSourceChangeDelegate.html" class="delegate">BeforeSourceChangeDelegate</a></b> (<span class="main_type"><a href="GData.BindingPointer.html" class="class">BindingPointer</a></span> source, <span class="main_basic_type"><span class="struct">bool</span></span> same_type, <span class="main_type"><span class="class">Object</span></span>? next_source)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal specifies get_source() will be pointing to something else 
+                  after handling is over While it seems like a duplication of "connect-notifications", it is not.</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.SourceChangedDelegate.html" class="delegate">SourceChangedDelegate</a></b> (<span class="main_type"><a href="GData.BindingPointer.html" class="class">BindingPointer</a></span> source)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal is sent after get_source() points to new data.</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.NewStorageAddedDelegate.html" class="delegate">NewStorageAddedDelegate</a></b> (<span class="main_basic_type"><span class="class">string</span></span> storage_name)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal emited when new Storage is added</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.ContractAddedToStorageDelegate.html" class="delegate">ContractAddedToStorageDelegate</a></b> (<span class="main_basic_type"><span class="class">string</span></span> name, <span class="main_type"><a href="GData.BindingContract.html" class="class">BindingContract</a></span> obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal emited when new contract is added to storage</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.ContractRemovedFromStorageDelegate.html" class="delegate">ContractRemovedFromStorageDelegate</a></b> (<span class="main_basic_type"><span class="class">string</span></span> name, <span class="main_type"><a href="GData.BindingContract.html" class="class">BindingContract</a></span> obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal emited when contract is removed from storage</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.PointerAddedToStorageDelegate.html" class="delegate">PointerAddedToStorageDelegate</a></b> (<span class="main_basic_type"><span class="class">string</span></span> name, <span class="main_type"><a href="GData.BindingPointer.html" class="class">BindingPointer</a></span> obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal emited when new pointer is added to storage</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.PointerRemovedFromStorageDelegate.html" class="delegate">PointerRemovedFromStorageDelegate</a></b> (<span class="main_basic_type"><span class="class">string</span></span> name, <span class="main_type"><a href="GData.BindingPointer.html" class="class">BindingPointer</a></span> obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal emited when pointer is removed from storage</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.PropertiesChangedDelegate.html" class="delegate">PropertiesChangedDelegate</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal emited when properties that are connected change in custom 
+                  property notification source</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.ManualRecalculationDelegate.html" class="delegate">ManualRecalculationDelegate</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal that can be emited when there is a need for custom in custom 
+                  property notification source recalculation</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.StorageDelegateFunc.html" class="delegate">StorageDelegateFunc</a></b> (<span class="main_basic_type"><span class="class">string</span></span> storage_name)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Delegate used to connect to enumeration of for 3 tracking storages
+                </span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.ContractStorageDelegateFunc.html" class="delegate">ContractStorageDelegateFunc</a></b> (<span class="main_basic_type"><span class="class">string</span></span> name, <span class="main_type"><a href="GData.BindingContract.html" class="class">BindingContract</a></span> contract)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Delegate used to connect to enumeration of stored contracts</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.PointerStorageDelegateFunc.html" class="delegate">PointerStorageDelegateFunc</a></b> (<span class="main_basic_type"><span class="class">string</span></span> name, <span class="main_type"><a href="GData.BindingPointer.html" class="class">BindingPointer</a></span> pointer)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Delegate used to connect to enumeration of stored contracts</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GData.SourceValidationFunc.html" class="delegate">SourceValidationFunc</a></b> (<span class="main_type"><span class="struct">Value</span></span>? source_value)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Delegate used to validate value of property in order to determine 
+                  source data validity</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GData.CustomBindingSourceStateFunc.html" class="delegate">CustomBindingSourceStateFunc</a></b> (<span class="main_type"><a href="GData.BindingPointer.html" class="class">BindingPointer</a></span>? source)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Delegate used to resolve value of state objects</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_type"><span class="struct">Value</span></span> <b><a href="GData.CustomBindingSourceValueFunc.html" class="delegate">CustomBindingSourceValueFunc</a></b> (<span class="main_type"><a href="GData.BindingPointer.html" class="class">BindingPointer</a></span>? source)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Delegate used to evaluate value of value object</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="GData.CompareValueFunc.html" class="delegate">CompareValueFunc</a></b> (<span class="main_type"><span class="struct">Value</span></span> val1, <span class="main_type"><span class="struct">Value</span></span> val2)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Delegate used to compare two values</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GData.TriggerEmissionDelegate.html" class="delegate">TriggerEmissionDelegate</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Delegate used to check if trigger needs to be emited or not</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_type"><a href="GData.BindingDataTransfer.html" class="class">BindingDataTransfer</a></span> <b><a href="GData.CreateDataTransferFunc.html" class="delegate">CreateDataTransferFunc</a></b> (<span class="main_type"><span class="class">Object</span></span> object, <span class="main_basic_type"><span class="class">string</span></span> property_name)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Delegate method specifying creation of BindingDataTransfer object 
+                  for object and property.</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_type"><a href="GData.BindingDataTransferInterface.html" class="interface">BindingDataTransferInterface</a></span>? <b><a href="GData.CreateIntrospectionDataTransferFunc.html" class="delegate">CreateIntrospectionDataTransferFunc</a></b> (<span class="main_type"><span class="struct">Type</span></span> data_type, <span class="main_basic_type"><span class="class">string</span></span> property_name)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Creates introspection binding transfer interface. If registration 
+                  does not specify this, then type is treated as DYNAMIC</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.AddedTypeAliasDelegate.html" class="delegate">AddedTypeAliasDelegate</a></b> (<span class="main_type"><span class="struct">Type</span></span> type, <span class="main_basic_type"><span class="class">string</span></span> property_name)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal emitted when new type property alias is registered</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.FloodDetectedDelegate.html" class="delegate">FloodDetectedDelegate</a></b> (<span class="main_type"><a href="GData.BindingInterface.html" class="interface">BindingInterface</a></span> binding)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal sent when flood was detected</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.FloodStoppedDelegate.html" class="delegate">FloodStoppedDelegate</a></b> (<span class="main_type"><a href="GData.BindingInterface.html" class="interface">BindingInterface</a></span> binding)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal sent when previously detected flood stops</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.BindingInterfaceDroppedDelegate.html" class="delegate">BindingInterfaceDroppedDelegate</a></b> (<span class="main_type"><a href="GData.BindingInterface.html" class="interface">BindingInterface</a></span> binding)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Signal emited upon unbind of binding interface</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_keyword">void</span> <b><a href="GData.AliasStorageDelegateFunc.html" class="delegate">AliasStorageDelegateFunc</a></b> (<span class="main_type"><span class="struct">Type</span></span> type, <span class="main_basic_type"><span class="class">string</span></span> property_name)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Delegate used to connect to enumeration of stored aliases</span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GData.PropertyBindingTransformFunc.html" class="delegate">PropertyBindingTransformFunc</a></b> (<span class="main_type"><a href="GData.BindingInterface.html" class="interface">BindingInterface</a></span> binding, <span class="main_type"><span class="struct">Value</span></span> source_value, <span class="main_keyword">ref</span> <span class="main_type"><span class="struct">Value</span></span> target_value)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Delegate used to transform one value into another during binding
+                </span>
+              </div></li>
+            <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_type"><a href="GData.BindingInterface.html" class="interface">BindingInterface</a></span>? <b><a href="GData.CreatePropertyBinding.html" class="delegate">CreatePropertyBinding</a></b> (<span class="main_type"><span class="class">Object</span></span>? source, <span class="main_basic_type"><span class="class">string</span></span> source_property, <span class="main_type"><span class="class">Object</span></span>? target, <span class="main_basic_type"><span class="class">string</span></span> target_property, <span class="main_type"><a href="GData.BindFlags.html" class="enum">BindFlags</a></span> flags, <span class="main_keyword">owned</span> <span class="main_type"><a href="GData.PropertyBindingTransformFunc.html" class="delegate">PropertyBindingTransformFunc</a></span>? transform_to = <span class="main_literal">null</span>, <span class="main_keyword">owned</span> <span class="main_type"><a href="GData.PropertyBindingTransformFunc.html" class="delegate">PropertyBindingTransformFunc</a></span>? transform_from = <span class="main_literal">null</span>)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Delegate used to specify BindingInterface creation in Binder class
+                </span>
+              </div></li>
+          </ul>
+          <h3 class="main_title">Methods:</h3>
+          <ul class="navi_inline">
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="GData.get_version.html" class="method">get_version</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Returns string representation of library version</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.INFORMATION.html" class="method">INFORMATION</a></b> (<span class="main_basic_type"><span class="class">string</span></span> facility, <span class="main_basic_type"><span class="class">string</span></span> message, <span class="main_basic_type"><span class="class">string</span></span> details = <span class="main_literal">""</span>)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.cond_INFORMATION.html" class="method">cond_INFORMATION</a></b> (<span class="main_basic_type"><span class="struct">bool</span></span> emit, <span class="main_basic_type"><span class="class">string</span></span> facility, <span class="main_basic_type"><span class="class">string</span></span> message, <span class="main_basic_type"><span class="class">string</span></span> details = <span class="main_literal">""</span>)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.WARNING.html" class="method">WARNING</a></b> (<span class="main_basic_type"><span class="class">string</span></span> facility, <span class="main_basic_type"><span class="class">string</span></span> message, <span class="main_basic_type"><span class="class">string</span></span> details = <span class="main_literal">""</span>)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.cond_WARNING.html" class="method">cond_WARNING</a></b> (<span class="main_basic_type"><span class="struct">bool</span></span> emit, <span class="main_basic_type"><span class="class">string</span></span> facility, <span class="main_basic_type"><span class="class">string</span></span> message, <span class="main_basic_type"><span class="class">string</span></span> details = <span class="main_literal">""</span>)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.CRITICAL.html" class="method">CRITICAL</a></b> (<span class="main_basic_type"><span class="class">string</span></span> facility, <span class="main_basic_type"><span class="class">string</span></span> message, <span class="main_basic_type"><span class="class">string</span></span> details = <span class="main_literal">""</span>)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.cond_CRITICAL.html" class="method">cond_CRITICAL</a></b> (<span class="main_basic_type"><span class="struct">bool</span></span> emit, <span class="main_basic_type"><span class="class">string</span></span> facility, <span class="main_basic_type"><span class="class">string</span></span> message, <span class="main_basic_type"><span class="class">string</span></span> details = <span class="main_literal">""</span>)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.FATAL.html" class="method">FATAL</a></b> (<span class="main_basic_type"><span class="class">string</span></span> facility, <span class="main_basic_type"><span class="class">string</span></span> message, <span class="main_basic_type"><span class="class">string</span></span> details)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.cond_FATAL.html" class="method">cond_FATAL</a></b> (<span class="main_basic_type"><span class="struct">bool</span></span> emit, <span class="main_basic_type"><span class="class">string</span></span> facility, <span class="main_basic_type"><span class="class">string</span></span> message, <span class="main_basic_type"><span class="class">string</span></span> details = <span class="main_literal">""</span>)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.set_debug_flags.html" class="method">set_debug_flags</a></b> (<span class="main_type"><a href="GData.DebugMessageType.html" class="enum">DebugMessageType</a></span> flags)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.GLIB_DEBUG_OUTPUT.html" class="method">GLIB_DEBUG_OUTPUT</a></b> (<span class="main_type"><a href="GData.DebugMessageType.html" class="enum">DebugMessageType</a></span> type, <span class="main_basic_type"><span class="class">string</span></span> facility, <span class="main_basic_type"><span class="class">string</span></span> message, <span class="main_basic_type"><span class="class">string</span></span> details)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.set_debug_state.html" class="method">set_debug_state</a></b> (<span class="main_basic_type"><span class="struct">bool</span></span> active)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.add_property_attribute.html" class="method">add_property_attribute</a></b> (<span class="main_type"><span class="class">ParamSpec</span></span> pspec, <span class="main_type"><a href="GData.Attribute.html" class="class">Attribute</a></span> attr)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Adds attribute to ParamSpec</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.remove_property_attribute.html" class="method">remove_property_attribute</a></b> (<span class="main_type"><span class="class">ParamSpec</span></span> pspec, <span class="main_type"><a href="GData.Attribute.html" class="class">Attribute</a></span> attr)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Removes attribute from ParamSpec attributes</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.remove_property_attribute_by_type.html" class="method">remove_property_attribute_by_type</a></b> (<span class="main_type"><span class="class">ParamSpec</span></span> pspec, <span class="main_type"><span class="struct">Type</span></span> attr_type)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Removes all attributes of specified type from ParamSpec attributes
+                </span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GData.Attribute.html" class="class">Attribute</a></span>[] <b><a href="GData.find_property_attributes.html" class="method">find_property_attributes</a></b> (<span class="main_type"><span class="class">ParamSpec</span></span> pspec, <span class="main_type"><span class="struct">Type</span></span> attr_type)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Finds all attributes of specified type in ParamSpec attributes. If 
+                  not found zero length array is returned</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.add_type_attribute.html" class="method">add_type_attribute</a></b> (<span class="main_type"><span class="struct">Type</span></span> data_type, <span class="main_type"><a href="GData.Attribute.html" class="class">Attribute</a></span> attr)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Adds attribute to Type</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.remove_type_attribute.html" class="method">remove_type_attribute</a></b> (<span class="main_type"><span class="struct">Type</span></span> data_type, <span class="main_type"><a href="GData.Attribute.html" class="class">Attribute</a></span> attr)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Removes attribute from Type attributes</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.remove_type_attribute_by_type.html" class="method">remove_type_attribute_by_type</a></b> (<span class="main_type"><span class="struct">Type</span></span> data_type, <span class="main_type"><span class="struct">Type</span></span> attr_type)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Removes all attributes of specified type from Type attributes</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GData.Attribute.html" class="class">Attribute</a></span>[] <b><a href="GData.find_type_attributes.html" class="method">find_type_attributes</a></b> (<span class="main_type"><span class="struct">Type</span></span> data_type, <span class="main_type"><span class="struct">Type</span></span> attr_type)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Finds all attributes of specified type in Type attributes. If not 
+                  found zero length array is returned</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.add_instance_attribute.html" class="method">add_instance_attribute</a></b> (<span class="main_type"><span class="class">Object</span></span>? instance, <span class="main_type"><a href="GData.Attribute.html" class="class">Attribute</a></span> attr)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Adds attribute to Object instance</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.remove_instance_attribute.html" class="method">remove_instance_attribute</a></b> (<span class="main_type"><span class="class">Object</span></span>? instance, <span class="main_type"><a href="GData.Attribute.html" class="class">Attribute</a></span> attr)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Removes attribute from Object instance attributes</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.remove_instance_attribute_by_type.html" class="method">remove_instance_attribute_by_type</a></b> (<span class="main_type"><span class="class">Object</span></span>? instance, <span class="main_type"><span class="struct">Type</span></span> attr_type)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Removes all attributes of specified type from Object instance 
+                  attributes</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GData.Attribute.html" class="class">Attribute</a></span>[] <b><a href="GData.find_instance_attributes.html" class="method">find_instance_attributes</a></b> (<span class="main_type"><span class="class">Object</span></span>? instance, <span class="main_type"><span class="struct">Type</span></span> attr_type)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Finds all attributes of specified type in Object instance 
+                  attributes. If not found zero length array is returned</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><span class="struct">Type</span></span> <b><a href="GData.safe_get_type.html" class="method">safe_get_type</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GData.can_translate_value_type.html" class="method">can_translate_value_type</a></b> (<span class="main_type"><span class="struct">Type</span></span> val1, <span class="main_type"><span class="struct">Type</span></span> val2)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GData.can_translate_value.html" class="method">can_translate_value</a></b> (<span class="main_type"><span class="struct">Value</span></span> val1, <span class="main_type"><span class="struct">Value</span></span> val2)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GData.copy_or_transform_value.html" class="method">copy_or_transform_value</a></b> (<span class="main_type"><span class="struct">Value</span></span> val1, <span class="main_keyword">ref</span> <span class="main_type"><span class="struct">Value</span></span> val2)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="GData.get_hierarchy_gap.html" class="method">get_hierarchy_gap</a></b> (<span class="main_type"><span class="struct">Type</span></span> from, <span class="main_type"><span class="struct">Type</span></span> to)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GData.is_binding_pointer.html" class="method">is_binding_pointer</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Checks if object is BindingPointer or its subclass</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GData.is_binding_contract.html" class="method">is_binding_contract</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Checks if object is BindingContract or its subclass</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GData.is_object_information.html" class="method">is_object_information</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Checks if object is ObjectInformation or its subclass</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GData.is_state_object.html" class="method">is_state_object</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Checks if object is CustomBindingSourceState or its subclass</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GData.is_binding_object.html" class="method">is_binding_object</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Checks if object is CustomPropertyNotificationBindingSource or its 
+                  subclass</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="GData.has_description.html" class="method">has_description</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Checks if object is implementing HasDescription interface</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GData.BindingPointer.html" class="class">BindingPointer</a></span>? <b><a href="GData.as_pointer.html" class="method">as_pointer</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Casts object as BindingPointer</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GData.BindingContract.html" class="class">BindingContract</a></span>? <b><a href="GData.as_contract.html" class="method">as_contract</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Casts object as BindingContract</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><span class="class">Object</span></span>? <b><a href="GData.as_pointer_source.html" class="method">as_pointer_source</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Safe casts object as BindingPointer and returns get_source() if 
+                  possible</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><span class="class">Object</span></span>? <b><a href="GData.as_pointer_data.html" class="method">as_pointer_data</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Safe casts object as BindingContract and returns "data" if possible
+                </span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><span class="class">Object</span></span>? <b><a href="GData.as_contract_source.html" class="method">as_contract_source</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Safe casts object as BindingPointer and returns get_source() if 
+                  possible</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><span class="class">Object</span></span>? <b><a href="GData.as_contract_data.html" class="method">as_contract_data</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Safe casts object as BindingPointer and returns "data" if possible
+                </span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GData.CustomBindingSourceState.html" class="class">CustomBindingSourceState</a></span>? <b><a href="GData.as_state_object.html" class="method">as_state_object</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Casts object as CustomBindingSourceState</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GData.CustomPropertyNotificationBindingSource.html" class="class">CustomPropertyNotificationBindingSource</a></span>? <b><a href="GData.as_binding_object.html" class="method">as_binding_object</a></b> (<span class="main_type"><span class="class">Object</span></span>? obj)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Casts object as CustomPropertyNotificationBindingSource</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.get_reference_count.html" class="method">get_reference_count</a></b> (<span class="main_type"><a href="GData.BindingPointer.html" class="class">BindingPointer</a></span> pointer, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> ptr_ref, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> data_ref, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> source_ref)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Returns ref_count for pointer, its data and get_source()</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData._get_reference_count.html" class="method">_get_reference_count</a></b> (<span class="main_type"><a href="GData.StrictWeakRef.html" class="class">StrictWeakRef</a></span> pointer, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> ptr_ref, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> data_ref, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> source_ref)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Returns ref_count for pointer, its data and get_source()</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData.debug_references.html" class="method">debug_references</a></b> (<span class="main_basic_type"><span class="class">string</span></span> text, <span class="main_type"><a href="GData.BindingPointer.html" class="class">BindingPointer</a></span> pointer)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="GData._debug_references.html" class="method">_debug_references</a></b> (<span class="main_basic_type"><span class="class">string</span></span> text, <span class="main_type"><a href="GData.StrictWeakRef.html" class="class">StrictWeakRef</a></span> pointer)
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+          </ul>
+        </ul>
+      </div>
+    </div><br/>
+    <div class="site_footer">Generated by <a href="http://www.valadoc.org/">Valadoc</a>
+    </div>
+  </body>
+</html>

@@ -9,9 +9,8 @@ namespace GData
 	 * 
 	 * Example:
 	 * 
-	 * void handle_signal()
-	 * {
-	 *     myptr.data_changed (myptr, "something-chaged");
+	 * void handle_signal() {
+	 * myptr.data_changed (myptr, "something-chaged");
 	 * }
 	 * 
 	 * myptr = new TimerControlledBindingPointer(500);

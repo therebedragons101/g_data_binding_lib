@@ -397,7 +397,7 @@ namespace GData
 		 * @since 0.1
 		 * 
 		 * @param type Object type
-		 * @param signal_name
+		 * @param signal_name Signal name
 		 * @return Signal id or 0 if not found
 		 */
 		public uint get_signal_by_name_from_type (Type type, string signal_name)
@@ -425,7 +425,7 @@ namespace GData
 		 * @since 0.1
 		 * 
 		 * @param type Object type
-		 * @param signal_name
+		 * @param signal_name Signal name
 		 * @return Signal id or 0 if not found
 		 */
 		public uint get_signal_by_name_from_ref (Object? obj, string signal_name)

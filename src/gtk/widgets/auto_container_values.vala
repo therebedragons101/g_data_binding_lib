@@ -211,10 +211,10 @@ namespace GDataGtk
 		 * If there is a need to override label creation, this is perfectly
 		 * simple once known how it works.
 		 * - For every ParamSpec it finds in specified layout it resolves
-		 *   unique bindable PropertyInfoAttribute and binds label ti its nick
-		 *   property
+		 * unique bindable PropertyInfoAttribute and binds label ti its nick
+		 * property
 		 * - By default no custom creation method is specified, so build falls
-		 *   down to resolving typeof(string) widget
+		 * down to resolving typeof(string) widget
 		 * 
 		 * Solution is simple. Simply register custom method for
 		 * PropertyInfoAttribute and "nick" property

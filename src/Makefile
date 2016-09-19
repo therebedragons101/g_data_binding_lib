@@ -11,6 +11,7 @@ GTK_LIBRARY_NAME := ${COMMON_NAME}_gtk${NAME_SUFFIX}
 INCLUDES := ../includes/
 BIN := ../bin/
 RESOURCE := ../resources/
+DOCDIR := ../doc/
 
 LIB_MAJOR := 0
 LIB_MINOR := 1
@@ -18,8 +19,11 @@ LIB_VERSION := ${LIB_MAJOR}.${LIB_MINOR}
 
 all: resources \
      ${LIBRARY_NAME}.so \
+     ${LIBRARY_NAME}.doc \
      ${COMMON_NAME}_generics${NAME_SUFFIX}.so \
+     ${COMMON_NAME}_generics${NAME_SUFFIX}.doc \
      ${COMMON_NAME}_gtk${NAME_SUFFIX}.so \
+     ${COMMON_NAME}_gtk${NAME_SUFFIX}.doc \
      demo-and-tutorial \
      demo-address-book \
      tests \
@@ -132,9 +136,9 @@ GENERICS_SOURCES := ${COMMON_NAME}_generics${NAME_SUFFIX}.vala \
 	generics/property/alias_array.vala \
 	generics/property/property_alias.vala
 
-#	${RESOURCE}${COMMON_NAME}_gtk${NAME_SUFFIX}.*
+GTK_RESOURCES := ${RESOURCE}${COMMON_NAME}_gtk${NAME_SUFFIX}.*
+
 GTK_SOURCES := ${COMMON_NAME}_gtk${NAME_SUFFIX}.vala \
-	${RESOURCE}${COMMON_NAME}_gtk${NAME_SUFFIX}.* \
 	${COMMON_INTERNAL} \
 	gtk/contracts/gtk_buildable_mapper.vala \
 	gtk/contracts/gtk_buildable_contract_mapper.vala \
@@ -234,6 +238,12 @@ ${LIBRARY_NAME}.so:
 	${PACKAGES} \
 	${SOURCES}
 
+${LIBRARY_NAME}.doc:
+	valadoc \
+		--force \
+		${PACKAGES} \
+		${SOURCES} \
+		--directory=${DOCDIR}${LIBRARY_NAME}
 
 ${COMMON_NAME}_generics${NAME_SUFFIX}.so:
 	valac \
@@ -251,6 +261,14 @@ ${COMMON_NAME}_generics${NAME_SUFFIX}.so:
 		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
 	${PACKAGES} \
 	${GENERICS_SOURCES}
+
+${COMMON_NAME}_generics${NAME_SUFFIX}.doc:
+	valadoc \
+		--force \
+		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
+		${PACKAGES} \
+		${GENERICS_SOURCES} \
+		--directory=${DOCDIR}${COMMON_NAME}_generics${NAME_SUFFIX}
 
 ${COMMON_NAME}_gtk${NAME_SUFFIX}.so:
 	valac \
@@ -270,9 +288,20 @@ ${COMMON_NAME}_gtk${NAME_SUFFIX}.so:
 		-X ${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.so \
 		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
 		${INCLUDES}${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.vapi \
+	${GTK_RESOURCES} \
 	${PACKAGES} \
 	${GTK_PACKAGES} \
 	${GTK_SOURCES}
+
+${COMMON_NAME}_gtk${NAME_SUFFIX}.doc:
+	valadoc \
+		--force \
+		${INCLUDES}${LIBRARY_NAME}${LIB_MAJOR}.vapi \
+		${INCLUDES}${COMMON_NAME}_generics${NAME_SUFFIX}${LIB_MAJOR}.vapi \
+		${PACKAGES} \
+		${GTK_PACKAGES} \
+		${GTK_SOURCES} \
+		--directory=${DOCDIR}${COMMON_NAME}_gtk${NAME_SUFFIX}
 
 hack-for-gir-bug:
 	sh gir_temporary_fix.sh

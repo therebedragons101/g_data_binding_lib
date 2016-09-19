@@ -108,9 +108,9 @@ namespace GData
 		 * Control of data flood detection is done by
 		 * - flood_detection     (bool) enable/disable this flag in binding
 		 * - flood_interval      (uint) which specifies minimum interval between
-		 *                              processing data transfers
+		 * processing data transfers
 		 * - promote_flood_limit (uint) defines how many events should be 
-		 *                              processed before flooding takes effect
+		 * processed before flooding takes effect
 		 * 
 		 * Main purpose of flood detection is having option to detect when gui
 		 * updates would be hogging cpu in some unwanted manner
@@ -138,9 +138,9 @@ namespace GData
 		 * Control of data flood detection is done by
 		 * - flood_detection     (bool) enable/disable this flag in binding
 		 * - flood_interval      (uint) which specifies minimum interval between
-		 *                              processing data transfers
+		 * processing data transfers
 		 * - promote_flood_limit (uint) defines how many events should be 
-		 *                              processed before flooding takes effect
+		 * processed before flooding takes effect
 		 * 
 		 * Main purpose of flood detection is having option to detect when gui
 		 * updates would be hogging cpu in some unwanted manner
@@ -156,9 +156,9 @@ namespace GData
 		 */
 		TARGET_UPDATE_FLOOD_DETECTION, //TODO handling
 		/**
-		 * FLOOD_DETECTION is equal to specifying both 
+		 * FLOOD_DETECTION is equal to specifying both
 		 * SOURCE_UPDATE_FLOOD_DETECTION and TARGET_UPDATE_FLOOD_DETECTION
-		 *  
+		 * 
 		 * WARNING! flood data detection is disabled by default
 		 * 
 		 * Detects data flood and emits signal flood_detected to enable gui
@@ -168,9 +168,9 @@ namespace GData
 		 * Control of data flood detection is done by
 		 * - flood_detection     (bool) enable/disable this flag in binding
 		 * - flood_interval      (uint) which specifies minimum interval between
-		 *                              processing data transfers
+		 * processing data transfers
 		 * - promote_flood_limit (uint) defines how many events should be 
-		 *                              processed before flooding takes effect
+		 * processed before flooding takes effect
 		 * 
 		 * Main purpose of flood detection is having option to detect when gui
 		 * updates would be hogging cpu in some unwanted manner

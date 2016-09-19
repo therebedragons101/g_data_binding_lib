@@ -16,17 +16,17 @@ namespace GData
 	 * 
 	 * void handle_signal()
 	 * {
-	 *     myptr.data_changed (myptr, "something-chaged");
+	 * myptr.data_changed (myptr, "something-chaged");
 	 * }
 	 * 
 	 * myptr = new SignalControlledBindingPointer();
 	 * myptr.connect_notifications ((obj) => {
-	 *     if (get_source() != null)
-	 *         ((MyType) get_source()).some_signal.connect (handle_signal);
+	 * if (get_source() != null)
+	 * ((MyType) get_source()).some_signal.connect (handle_signal);
 	 * ));
 	 * myptr.disconnect_notifications ((obj) => {
-	 *     if (get_source() != null)
-	 *         ((MyType) get_source()).some_signal.disconnect (handle_signal);
+	 * if (get_source() != null)
+	 * ((MyType) get_source()).some_signal.disconnect (handle_signal);
 	 * ));
 	 * 
 	 * This is all that is needed to understand how custom signals per binding

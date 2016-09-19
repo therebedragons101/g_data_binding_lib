@@ -5,10 +5,10 @@ namespace GData.Generics
 	 * things. 
 	 * 
 	 * - Target is always correct as it is connected to pointed object with
-	 *   weak_ref
+	 * weak_ref
 	 * 
 	 * - It can specify delegate which is notified when target is invalid. Note 
-	 *   that at time of delegate invocation target points to null
+	 * that at time of delegate invocation target points to null
 	 *
 	 * @since 0.1
 	 */

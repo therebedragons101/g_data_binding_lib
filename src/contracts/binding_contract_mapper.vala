@@ -12,14 +12,14 @@ namespace GData
 	 * 
 	 * When to use one or another?
 	 * - Read documentation about passive and active bindings. Whenever passive
-	 *   is more suitable BinderMapper should be used, for active using
-	 *   BindingContractMapper trough contract is better
+	 * is more suitable BinderMapper should be used, for active using
+	 * BindingContractMapper trough contract is better
 	 * - For binding things that don't require changing persistence BinderMapper
-	 *   is correct choice. Under this fall things like main gui or list box
-	 *   rows
+	 * is correct choice. Under this fall things like main gui or list box
+	 * rows
 	 * - For binding things that track current selection like for example having
-	 *   listbox with items where your main gui needs to handle current
-	 *   selection BindingContractMapper is correct choice
+	 * listbox with items where your main gui needs to handle current
+	 * selection BindingContractMapper is correct choice
 	 * 
 	 * @since 0.1
 	 */

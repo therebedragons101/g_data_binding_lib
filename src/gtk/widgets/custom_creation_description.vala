@@ -96,7 +96,7 @@ namespace GDataGtk
 		 * @param mode Mode this widget generation is for (VIEW/EDIT)
 		 * @param pspec ParamSpec for certain widget which needs special
 		 *              treatment on widget generation
-		 * @method Method creating new widget
+		 * @param method Method creating new widget
 		 */
 		public CustomCreationDescription.for_property (EditMode mode, ParamSpec pspec, CreateCustomWidgetDelegate method)
 		{
@@ -113,7 +113,8 @@ namespace GDataGtk
 		 * 
 		 * @param mode Mode this widget generation is for (VIEW/EDIT)
 		 * @param data_type Value type handled by generated widget
-		 * @method Method creating new widget
+		 * @param method Method creating new widget
+		 * @param condition_check Condition check delegate method
 		 */
 		public CustomCreationDescription.for_type (EditMode mode, Type data_type, CreateCustomTypeWidgetDelegate method, ConditionCheckDelegate? condition_check)
 		{

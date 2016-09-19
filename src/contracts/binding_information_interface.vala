@@ -95,7 +95,7 @@ namespace GData
 		 * is true, then newly converted value is assigned to property, if
 		 * return is false, then that doesn't happen which can be used to assign
 		 * property values directly and avoiding value conversion
-		 *   
+		 * 
 		 * @since 0.1
 		 * @param source_property Source property name
 		 * @param target Target object
@@ -131,7 +131,7 @@ namespace GData
 		 * is true, then newly converted value is assigned to property, if
 		 * return is false, then that doesn't happen which can be used to assign
 		 * property values directly and avoiding value conversion
-		 *   
+		 * 
 		 * @since 0.1
 		 * @param source_property Source property name
 		 * @param target Target object

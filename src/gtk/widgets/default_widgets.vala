@@ -52,9 +52,9 @@ namespace GDataGtk
 	 * Libraries should most probably generate following structure
 	 * - its own registry instance
 	 * - that has fallback in get_default(). With this setup library can set up
-	 *   as many custom creations as wanted and never impact the application,
-	 *   while at the same time take advantage of all custom defaults made by
-	 *   application.
+	 * as many custom creations as wanted and never impact the application,
+	 * while at the same time take advantage of all custom defaults made by
+	 * application.
 	 * 
 	 * @since 0.1
 	 */

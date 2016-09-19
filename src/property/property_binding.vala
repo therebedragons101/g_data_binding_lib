@@ -201,7 +201,7 @@ namespace GData
 		/**
 		 * Source object data is being transfered from
 		 * 
-		 * @delay 0.1
+		 * @since 0.1
 		 */
 		public Object? source {
 			get { return (_source_transfer.get_object()); }
@@ -219,7 +219,7 @@ namespace GData
 		/**
 		 * Target object data is being transfered to
 		 * 
-		 * @delay 0.1
+		 * @since 0.1
 		 */
 		public Object? target {
 			get { return (_target_transfer.get_object()); }
@@ -691,7 +691,7 @@ namespace GData
 		 * is true, then newly converted value is assigned to property, if
 		 * return is false, then that doesn't happen which can be used to assign
 		 * property values directly and avoiding value conversion
-		 *   
+		 * 
 		 * @since 0.1
 		 * @param source Source object
 		 * @param source_property Source property name

@@ -83,12 +83,12 @@ namespace GData
 		 * Specifies how references are being handled for data that is pointed
 		 * with BindingPointer
 		 * 
-		 * WEAK - no reference is ever made on that object with exception of 
-		 *        weak_ref(). This is default and suggested behaviour
+		 * WEAK - no reference is ever made on that object with exception of
+		 * weak_ref(). This is default and suggested behaviour
 		 * STRONG - exactly one reference is made to data object
 		 * DEFAULT - handling is resolved from end of chain. Note that this can
-		 *           end unpredictable if end of chain changes its handling.
-		 *           use with extreme caution
+		 * end unpredictable if end of chain changes its handling.
+		 * use with extreme caution
 		 * 
 		 * @since 0.1
 		 */
@@ -110,7 +110,7 @@ namespace GData
 		 * Value can be
 		 * PROPERTY - connection to events is made on property notify
 		 * MANUAL - events will be triggered manually by calling
-		 *          data_changed() signal
+		 * data_changed() signal
 		 * 
 		 * @since 0.1
 		 */

@@ -3,8 +3,8 @@ namespace GData
 	/**
 	 * Binder class is multipurpose class that can be used for different reasons
 	 * - Controlling property binding creation for either debugging purposes or
-	 *   simply because there is a need for different binding than the one 
-	 *   provided by PropertyBinding
+	 * simply because there is a need for different binding than the one 
+	 * provided by PropertyBinding
 	 * - It can be interchangeable and specified per contract
 	 * 
 	 * In most all cases Binder is probably not needed. BindingContract uses it
@@ -16,7 +16,7 @@ namespace GData
 	 * 
 	 * The only reason where more than one Binder is needed is when application
 	 * requires fine grained tapping into events in only selected group of
-	 * contracts 
+	 * contracts
 	 * 
 	 * @since 0.1
 	 */
@@ -109,7 +109,7 @@ namespace GData
 		 * is true, then newly converted value is assigned to property, if
 		 * return is false, then that doesn't happen which can be used to assign
 		 * property values directly and avoiding value conversion
-		 *   
+		 * 
 		 * @since 0.1
 		 * @param source Source object
 		 * @param source_property Source property name
